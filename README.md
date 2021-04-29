@@ -51,12 +51,8 @@
 A backend made just for politicians in my country to rate their performance by the public. This is to let the public or the citizens critic and rate politicians based on how satisfied they are.
 
 Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should element DRY principles to the rest of your life :smile:
-
-Politics in the Philippines is becoming hot these past few months because of social media. 
-A lot of fake news has been spreading. 
+* Politics in the Philippines is becoming hot these past few months because of social media. 
+* A lot of fake news have been spreading. 
   1. Credit Grabbing 
   2. Demonizing other politicians
   3. Undermining works of other politicians
