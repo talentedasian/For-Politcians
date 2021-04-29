@@ -59,7 +59,7 @@ Here's why:
 
 This project aims to let the public decide whether this politician did good in their job.
 
-<>  (A list of commonly used resources that I find helpful are listed in the acknowledgements.)
+[//]: <>  (A list of commonly used resources that I find helpful are listed in the acknowledgements.)
 
 ### Built With
 
