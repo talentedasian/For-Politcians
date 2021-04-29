@@ -76,24 +76,13 @@ This section should list any major frameworks that you built your project using.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-1. Install a database of your choice(mine if postgresql). Populate the spring datasource properties.
-
-### Prerequisites
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-You can use this project using an API tool. I prefer using Postman as it is very easy and user friendly to use. You could also use online API tools on the web.
-
-
+1. Install a database of your choice(mine is postgresql).
+2. Populate the spring datasource properties.
 
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
+* Add Oauth2 
 
 
 
