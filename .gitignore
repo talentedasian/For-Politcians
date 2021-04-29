@@ -31,7 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
-/src/main/java/com/example/demo/ApplicationListener.java
+src/main/java/com/example/demo/ApplicationListener.java
 mvnw
 mvnw.cmd
 .mvn/
