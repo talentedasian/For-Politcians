@@ -35,3 +35,4 @@ src/main/java/com/example/demo/ApplicationListener.java
 mvnw
 mvnw.cmd
 .mvn/
+src/main/resources/application.yml
