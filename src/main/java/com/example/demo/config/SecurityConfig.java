@@ -16,7 +16,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.csrf()
 				.disable()
 				.httpBasic()
-					.disable();
+					.disable()
+			.oauth2Login();
 	}
 
 }
