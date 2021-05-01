@@ -32,7 +32,7 @@ public class PoliticiansRating {
 	
 	@ManyToOne
 	@JoinColumn(nullable = false, name = "politician_id")
-	private Politicians politicians;
+	private Politicians politician;
 	
 
 	public Integer getId() {
