@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import org.springframework.stereotype.Component;
 
+import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.model.Politicians;
 import com.example.demo.repository.PoliticiansRepository;
@@ -23,8 +24,18 @@ public class PoliticiansService {
 	}
 	
 	public Politicians findPoliticianByName(String name) {
-		Politicians politician = politiciansRepo.findByName(name))
+		Politicians politician = politiciansRepo.findByName(name)
 				.orElseThrow(() -> new PoliticianNotFoundException("No politician found using the given Name"));
+		
+		return politician;
+	}
+	
+	public Politicians savePolitician(AddPoliticianDTORequest dto) {
+		var politicianToBeSaved = new Politicians(
+				dto.getRating().doubleValue(), 
+				dto.getName());
+		
+		Politicians politician = politiciansRepo.save(politicianToBeSaved);
 		
 		return politician;
 	}

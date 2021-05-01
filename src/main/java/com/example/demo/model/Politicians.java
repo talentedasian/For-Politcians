@@ -6,8 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.example.demo.model.enums.Rating;
-
 @Entity
 public class Politicians {
 
@@ -18,7 +16,7 @@ public class Politicians {
 //	public Rating rating;
 	
 	@Column(nullable = false, precision = 3, scale = 2)
-	public Float rating;
+	public Double rating;
 	
 	@Column(nullable = false, name = "politician_name")
 	public String name;
@@ -31,11 +29,11 @@ public class Politicians {
 		this.id = id;
 	}
 
-	public Float getRating() {
+	public Double getRating() {
 		return rating;
 	}
 
-	public void setRating(Float rating) {
+	public void setRating(Double rating) {
 		this.rating = rating;
 	}
 
@@ -52,9 +50,8 @@ public class Politicians {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Politicians(Integer id, Float rating, String name) {
+	public Politicians(Double rating, String name) {
 		super();
-		this.id = id;
 		this.rating = rating;
 		this.name = name;
 	}
