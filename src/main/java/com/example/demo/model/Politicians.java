@@ -14,19 +14,19 @@ public class Politicians {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Integer id;
+	private Integer id;
 	
-//	public Rating rating;
+//	private Rating rating;
 	
 	@Column(nullable = false, precision = 3, scale = 2)
-	public Double rating;
+	private Double rating;
 	
 	@Column(nullable = false, unique = true, name = "politician_name")
-	public String name;
+	private String name;
 	
 	@OneToMany(mappedBy = "politician")
 	List<PoliticiansRating> politiciansRating;
-	
+
 	public Integer getId() {
 		return id;
 	}
