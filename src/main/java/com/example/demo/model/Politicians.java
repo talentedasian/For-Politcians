@@ -1,10 +1,13 @@
 package com.example.demo.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Politicians {
@@ -20,6 +23,9 @@ public class Politicians {
 	
 	@Column(nullable = false, name = "politician_name")
 	public String name;
+	
+	@OneToMany(mappedBy = "politician")
+	List<PoliticiansRating> politiciansRating;
 	
 	public Integer getId() {
 		return id;

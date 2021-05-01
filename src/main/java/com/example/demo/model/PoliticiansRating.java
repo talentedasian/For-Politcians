@@ -7,9 +7,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import com.example.demo.model.enums.PoliticalParty;
-import com.example.demo.model.enums.Rating;
 
 @Entity
 public class PoliticiansRating {
@@ -21,13 +22,18 @@ public class PoliticiansRating {
 //	private Rating rating;
 	
 	@Column(nullable = false, precision = 3, scale = 2)
-	private Float rating; 
+	private Double rating; 
 	
-	@Column(nullable = false, name = "user")
+	@Column(nullable = false, name = "user_name")
 	private String username;
 	
 	@Enumerated(EnumType.STRING)
 	private PoliticalParty politicalParties;
+	
+	@ManyToOne
+	@JoinColumn(nullable = false, name = "politician_id")
+	private Politicians politicians;
+	
 
 	public Integer getId() {
 		return id;
@@ -37,11 +43,11 @@ public class PoliticiansRating {
 		this.id = id;
 	}
 
-	public Float getRating() {
+	public Double getRating() {
 		return rating;
 	}
 
-	public void setRating(Float rating) {
+	public void setRating(Double rating) {
 		this.rating = rating;
 	}
 
@@ -66,7 +72,7 @@ public class PoliticiansRating {
 		// TODO Auto-generated constructor stub
 	}
 
-	public PoliticiansRating(Integer id, Float rating, String username, PoliticalParty politicalParties) {
+	public PoliticiansRating(Integer id, Double rating, String username, PoliticalParty politicalParties) {
 		super();
 		this.id = id;
 		this.rating = rating;

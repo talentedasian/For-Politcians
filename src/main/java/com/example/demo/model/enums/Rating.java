@@ -2,7 +2,7 @@ package com.example.demo.model.enums;
 
 public enum Rating {
 	
-	LOW("Disastisifed",1), DECENT("Satisfied",5), HIGH("Highly Satisfied",10);
+	LOW("Disastisifed"), DECENT("Satisfied"), HIGH("Highly Satisfied");
 
 	private String satisfaction;
 	private int satisfactionRate;
@@ -27,9 +27,8 @@ public enum Rating {
 	}
 
 
-	Rating(String satisfaction, int satisfactionRate) {
+	Rating(String satisfaction) {
 		this.satisfaction = satisfaction;
-		this.satisfactionRate = satisfactionRate;
 	}
 	
 }
