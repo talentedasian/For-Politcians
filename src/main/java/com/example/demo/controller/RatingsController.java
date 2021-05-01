@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/ratings")
 public class RatingsController {
 	
-	@GetMapping("/working")
-	public String work() {
-		return "working";
-	}
+//	@GetMapping("/add-ratings")
+//	public Rat
+//	}
 
 }

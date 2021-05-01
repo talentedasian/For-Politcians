@@ -21,7 +21,7 @@ public class Politicians {
 	@Column(nullable = false, precision = 3, scale = 2)
 	public Double rating;
 	
-	@Column(nullable = false, name = "politician_name")
+	@Column(nullable = false, unique = true, name = "politician_name")
 	public String name;
 	
 	@OneToMany(mappedBy = "politician")

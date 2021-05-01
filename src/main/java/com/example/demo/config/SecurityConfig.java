@@ -17,14 +17,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.disable()
 			.httpBasic()
 				.disable()
-			.authorizeRequests()
-					.and()
-					.antMatcher("/**")
-						.authorizeRequests()
-							.anyRequest()
-								.authenticated()
-			.and()
-			.oauth2Login();
+//			.authorizeRequests()
+//					.and()
+//					.antMatcher("/**")
+//						.authorizeRequests()
+//							.anyRequest()
+//								.authenticated()
+			;
+//			.oauth2Login();
 	}
 
 }

@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,14 +28,14 @@ public class PoliticianController {
 	}
 
 	@PostMapping("add-politician")
-	public PoliticianDTO savePolitician(@Valid @RequestBody AddPoliticianDTORequest request) {
+	public ResponseEntity<PoliticianDTO> savePolitician(@Valid @RequestBody AddPoliticianDTORequest request) {
 		Politicians politicianSaved = politiciansService.savePolitician(request);
 		
 		DTOMapper<PoliticianDTO, Politicians> mapper = new PoliticiansDtoMapper();
 		
 		PoliticianDTO politician = mapper.mapToDTO(politicianSaved);
 		
-		return politician;
+		return new ResponseEntity<PoliticianDTO>(politician, HttpStatus.CREATED);
 	}
 	
 

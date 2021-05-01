@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.controller.PoliticianController;
@@ -52,9 +53,9 @@ public class PoliticianControllerTest {
 	public void shouldEqualDTOOutputs() {
 		when(service.savePolitician(politicianDTORequest)).thenReturn(politician);
 		
-		PoliticianDTO politicianResponse = controller.savePolitician(politicianDTORequest);
+		ResponseEntity<PoliticianDTO> politicianResponse = controller.savePolitician(politicianDTORequest);
 		
-		assertThat(politician.getRating(), equalTo(politicianResponse.rating()));
+		assertThat(politician.getRating(), equalTo(politicianResponse.getBody().getRating()));
 	}			
 	
 }
