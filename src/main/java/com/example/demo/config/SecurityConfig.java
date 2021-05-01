@@ -15,11 +15,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http
 			.csrf()
 				.disable()
+			.httpBasic()
+				.disable()
 			.authorizeRequests()
-				.antMatchers("/api/ratings/**")
-					.authenticated()
-						.anyRequest()
-							.permitAll()
+					.and()
+					.antMatcher("/**")
+						.authorizeRequests()
+							.anyRequest()
+								.authenticated()
 			.and()
 			.oauth2Login();
 	}
