@@ -1,5 +1,7 @@
 package com.example.demo.unit;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,6 +15,7 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.controller.PoliticianController;
+import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.model.Politicians;
 import com.example.demo.service.PoliticiansService;
@@ -24,22 +27,34 @@ public class PoliticianControllerTest {
 	public PoliticiansService service;
 	public PoliticianController controller;
 	public Politicians politician;
+	public AddPoliticianDTORequest politicianDTORequest;
 	
 	@BeforeEach
 	public void setUp() {
 		controller = new PoliticianController(service);
-		politician =  new Politicians(9.67D, "Mirriam Defensor");
+		politician =  new Politicians
+				(9.67D, "Mirriam Defensor");
+		
+		politicianDTORequest = new AddPoliticianDTORequest
+		("Mirriam Defensor", 
+		BigDecimal.valueOf(9.67D));
 	}
 	
 	@Test
 	public void shouldCallSaveFromServiceWhenSaved() {
-		var politicianDTORequest = new AddPoliticianDTORequest
-				("Mirriam Defensor", 
-				BigDecimal.valueOf(9.67D));
 		when(service.savePolitician(politicianDTORequest)).thenReturn(politician);
 		controller.savePolitician(politicianDTORequest);
 		
 		verify(service, times(1)).savePolitician(politicianDTORequest);
 	}
+	
+	@Test
+	public void shouldEqualDTOOutputs() {
+		when(service.savePolitician(politicianDTORequest)).thenReturn(politician);
+		
+		PoliticianDTO politicianResponse = controller.savePolitician(politicianDTORequest);
+		
+		assertThat(politician.getRating(), equalTo(politicianResponse.rating()));
+	}			
 	
 }
