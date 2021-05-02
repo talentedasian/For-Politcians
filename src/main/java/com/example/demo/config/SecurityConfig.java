@@ -18,12 +18,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.disable()
 			.httpBasic()
 				.disable()
-					.antMatcher("/**")
 						.authorizeRequests()
-							.anyRequest()
-								.permitAll()
-									.antMatchers(HttpMethod.POST, "/api/politicians/**")
-										.authenticated()
+									.antMatchers("/api/politicianByName")
+											.permitAll()
+												.anyRequest()
+													.authenticated()
 			.and()
 			.oauth2Login();
 	}

@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,7 @@ public class PoliticianController {
 
 	@PostMapping("add-politician")
 	public ResponseEntity<PoliticianDTO> savePolitician(@Valid @RequestBody AddPoliticianDTORequest request) {
-		Politicians politicianSaved = politiciansService.savePolitician(request);
+		var politicianSaved = politiciansService.savePolitician(request);
 		
 		DTOMapper<PoliticianDTO, Politicians> mapper = new PoliticiansDtoMapper();
 		
@@ -38,5 +39,15 @@ public class PoliticianController {
 		return new ResponseEntity<PoliticianDTO>(politician, HttpStatus.CREATED);
 	}
 	
+	@GetMapping("/politicianByName")
+	public ResponseEntity<PoliticianDTO> politicianByName(String name) {
+		var politicianByName = politiciansService.findPoliticianByName(name);
+		
+		DTOMapper<PoliticianDTO, Politicians> mapper = new PoliticiansDtoMapper();
+		
+		PoliticianDTO politician = mapper.mapToDTO(politicianByName);
+		
+		return new ResponseEntity<PoliticianDTO>(politician, HttpStatus.CREATED);
+	}
 
 }
