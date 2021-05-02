@@ -42,7 +42,7 @@ public class PoliticianController {
 	}
 	
 	@GetMapping("/politicianByName")
-	public ResponseEntity<PoliticianDTO> politicianByName(String name, @AuthenticationPrincipal OAuth2User user) {
+	public ResponseEntity<PoliticianDTO> politicianByName(String name) {
 		var politicianByName = politiciansService.findPoliticianByName(name);
 		
 		DTOMapper<PoliticianDTO, Politicians> mapper = new PoliticiansDtoMapper();

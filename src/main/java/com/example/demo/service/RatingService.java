@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -41,7 +40,7 @@ public class RatingService {
 		return rating;
 	}
 	
-	@Transactional(readOnly = true)
+	@Transactional
 	public PoliticiansRating saveRatings(AddRatingDTORequest dto) {
 		Authentication authentication =
 			    SecurityContextHolder
@@ -55,6 +54,7 @@ public class RatingService {
 			    clientService.loadAuthorizedClient(
 			            oauthToken.getAuthorizedClientRegistrationId(),
 			            oauthToken.getName());
+		
 		Politicians politician = politicianRepo.findByName(dto.getPoliticianName())
 				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by " + dto.getPoliticianName()));
 		
@@ -66,23 +66,22 @@ public class RatingService {
 		}
 		
 		politician.setTotalRating(politician.getRating() + dto.getRating().doubleValue());
-		if (politician.getPoliticiansRating().isEmpty()) {
-			politician.setRating(0.00D);
-		} else {
-			politician.setRating(politician.getTotalRating() / politician.getPoliticiansRating().size());
-		}
+		System.out.println(politician.getPoliticiansRating().size() + 1);
+		System.out.println(politician.getTotalRating() / Double.valueOf(politician.getPoliticiansRating().size() + 1D));
+		politician.setRating(politician.getTotalRating() / Double.valueOf(String.valueOf(politician.getPoliticiansRating().size() + 1)));
 		
 		politicianRepo.save(politician);
 		
+		OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
 		var rating = new PoliticiansRating();
-		var userRater = new UserRater(client.getPrincipalName(), politicalParty);
+		var userRater = new UserRater(oauth2User.getAttribute("name"), politicalParty);
 		rating.setPolitician(politician);
 		rating.setRater(userRater);
 		rating.setRating(dto.getRating().doubleValue());
 		
 		ratingRepo.save(rating);
 		
-		System.out.println(client.getPrincipalName());
+		
 		
 		return rating;
 	}
