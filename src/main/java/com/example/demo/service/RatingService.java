@@ -47,14 +47,6 @@ public class RatingService {
 			        .getContext()
 			        .getAuthentication();
 
-		OAuth2AuthenticationToken oauthToken =
-		    (OAuth2AuthenticationToken) authentication;
-			
-		OAuth2AuthorizedClient client =
-			    clientService.loadAuthorizedClient(
-			            oauthToken.getAuthorizedClientRegistrationId(),
-			            oauthToken.getName());
-		
 		Politicians politician = politicianRepo.findByName(dto.getPoliticianName())
 				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by " + dto.getPoliticianName()));
 		
@@ -79,8 +71,6 @@ public class RatingService {
 		rating.setRating(dto.getRating().doubleValue());
 		
 		ratingRepo.save(rating);
-		
-		
 		
 		return rating;
 	}
