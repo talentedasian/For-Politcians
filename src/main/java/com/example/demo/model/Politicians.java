@@ -26,6 +26,25 @@ public class Politicians {
 	
 	@OneToMany(mappedBy = "politician")
 	List<PoliticiansRating> politiciansRating;
+	
+	@Column(nullable = false, precision = 3, scale = 2)
+	private Double totalRating;
+	
+	public List<PoliticiansRating> getPoliticiansRating() {
+		return politiciansRating;
+	}
+
+	public void setPoliticiansRating(List<PoliticiansRating> politiciansRating) {
+		this.politiciansRating = politiciansRating;
+	}
+
+	public Double getTotalRating() {
+		return totalRating;
+	}
+
+	public void setTotalRating(Double totalRating) {
+		this.totalRating = totalRating;
+	}
 
 	public Integer getId() {
 		return id;
@@ -56,15 +75,20 @@ public class Politicians {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Politicians(Double rating, String name) {
+	public Politicians(Integer id, Double rating, String name, List<PoliticiansRating> politiciansRating,
+			Double totalRating) {
 		super();
+		this.id = id;
 		this.rating = rating;
 		this.name = name;
+		this.politiciansRating = politiciansRating;
+		this.totalRating = totalRating;
 	}
 
 	@Override
 	public String toString() {
-		return "Politicians [id=" + id + ", rating=" + rating + ", name=" + name + "]";
+		return "Politicians [id=" + id + ", rating=" + rating + ", name=" + name + ", politiciansRating="
+				+ politiciansRating + ", totalRating=" + totalRating + "]";
 	}
 	
 }

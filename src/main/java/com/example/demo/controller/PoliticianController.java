@@ -48,7 +48,6 @@ public class PoliticianController {
 		DTOMapper<PoliticianDTO, Politicians> mapper = new PoliticiansDtoMapper();
 		
 		PoliticianDTO politician = mapper.mapToDTO(politicianByName);
-		System.out.println("tanginamo " + user.getAttributes());
 		
 		return new ResponseEntity<PoliticianDTO>(politician, HttpStatus.OK);
 	}

@@ -27,32 +27,27 @@ public class PoliticiansRating {
 	@ManyToOne
 	@JoinColumn(nullable = false, name = "politician_id")
 	private Politicians politician;
-
-
+	
+	
 	public Integer getId() {
 		return id;
 	}
-
 
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-
 	public Double getRating() {
 		return rating;
 	}
-
 
 	public void setRating(Double rating) {
 		this.rating = rating;
 	}
 
-
 	public UserRater getRater() {
 		return rater;
 	}
-
 
 	public void setRater(UserRater rater) {
 		this.rater = rater;
@@ -62,7 +57,6 @@ public class PoliticiansRating {
 	public Politicians getPolitician() {
 		return politician;
 	}
-
 
 	public void setPolitician(Politicians politician) {
 		this.politician = politician;

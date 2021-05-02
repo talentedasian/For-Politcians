@@ -46,6 +46,10 @@ public class RatingService {
 			}
 		}
 		
+		politician.setTotalRating(politician.getRating() + dto.getRating().doubleValue());
+		politician.setRating(politician.getTotalRating() / politicianRepo.getOne(politician.getId()).getPoliticiansRating().size());
+		politicianRepo.save(politician);
+		
 		var rating = new PoliticiansRating();
 		var userRater = new UserRater(user.getAttribute("name"), politicalParty);
 		rating.setPolitician(politician);
