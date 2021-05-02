@@ -33,8 +33,9 @@ public class PoliticianControllerTest {
 	@BeforeEach
 	public void setUp() {
 		controller = new PoliticianController(service);
-		politician =  new Politicians
-				(9.67D, "Mirriam Defensor");
+		politician =  new Politicians();
+		politician.setRating(9.67D);
+		politician.setName("Mirriam Defensor");
 		
 		politicianDTORequest = new AddPoliticianDTORequest
 		("Mirriam Defensor", 

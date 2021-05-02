@@ -37,9 +37,10 @@ public class PoliticiansService {
 	
 	public Politicians savePolitician(AddPoliticianDTORequest dto) {
 		try {
-			var politicianToBeSaved = new Politicians(
-					dto.getRating().doubleValue(), 
-					dto.getName());
+			var politicianToBeSaved = new Politicians();
+			politicianToBeSaved.setName(dto.getName());
+			politicianToBeSaved.setRating(dto.getRating().doubleValue());
+			politicianToBeSaved.setTotalRating(dto.getRating().doubleValue());
 			
 			Politicians politician = politiciansRepo.save(politicianToBeSaved);
 			

@@ -32,7 +32,7 @@ public class RatingsController {
 	@PostMapping("/add-ratings")
 	public ResponseEntity<RatingDTO> saveRating(@Valid AddRatingDTORequest request, 
 			@AuthenticationPrincipal OAuth2User user) {
-		PoliticiansRating politicianRatiingSaved = ratingService.saveRatings(request, user);
+		PoliticiansRating politicianRatiingSaved = ratingService.saveRatings(request);
 		
 		RatingDTOMapper mapper = new RatingDtoMapper();
 		

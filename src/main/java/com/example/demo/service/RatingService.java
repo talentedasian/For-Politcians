@@ -1,6 +1,11 @@
 package com.example.demo.service;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +24,13 @@ public class RatingService {
 
 	private final RatingRepository ratingRepo;
 	private final PoliticiansRepository politicianRepo;
+	private final OAuth2AuthorizedClientService clientService;
 
-	public RatingService(RatingRepository ratingRepo, PoliticiansRepository politicianRepo) {
+	public RatingService(RatingRepository ratingRepo, PoliticiansRepository politicianRepo,
+			OAuth2AuthorizedClientService clientService) {
 		this.ratingRepo = ratingRepo;
 		this.politicianRepo = politicianRepo;
+		this.clientService = clientService;
 	}
 	
 	@Transactional(readOnly = true)
@@ -34,8 +42,19 @@ public class RatingService {
 	}
 	
 	@Transactional(readOnly = true)
-	public PoliticiansRating saveRatings(AddRatingDTORequest dto, 
-			@AuthenticationPrincipal OAuth2User user) {
+	public PoliticiansRating saveRatings(AddRatingDTORequest dto) {
+		Authentication authentication =
+			    SecurityContextHolder
+			        .getContext()
+			        .getAuthentication();
+
+		OAuth2AuthenticationToken oauthToken =
+		    (OAuth2AuthenticationToken) authentication;
+			
+		OAuth2AuthorizedClient client =
+			    clientService.loadAuthorizedClient(
+			            oauthToken.getAuthorizedClientRegistrationId(),
+			            oauthToken.getName());
 		Politicians politician = politicianRepo.findByName(dto.getPoliticianName())
 				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by " + dto.getPoliticianName()));
 		
@@ -47,16 +66,23 @@ public class RatingService {
 		}
 		
 		politician.setTotalRating(politician.getRating() + dto.getRating().doubleValue());
-		politician.setRating(politician.getTotalRating() / politicianRepo.getOne(politician.getId()).getPoliticiansRating().size());
+		if (politician.getPoliticiansRating().isEmpty()) {
+			politician.setRating(0.00D);
+		} else {
+			politician.setRating(politician.getTotalRating() / politician.getPoliticiansRating().size());
+		}
+		
 		politicianRepo.save(politician);
 		
 		var rating = new PoliticiansRating();
-		var userRater = new UserRater(user.getAttribute("name"), politicalParty);
+		var userRater = new UserRater(client.getPrincipalName(), politicalParty);
 		rating.setPolitician(politician);
 		rating.setRater(userRater);
 		rating.setRating(dto.getRating().doubleValue());
 		
 		ratingRepo.save(rating);
+		
+		System.out.println(client.getPrincipalName());
 		
 		return rating;
 	}
