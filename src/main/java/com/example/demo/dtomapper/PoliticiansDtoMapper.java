@@ -1,11 +1,11 @@
 package com.example.demo.dtomapper;
 
 import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dtomapper.interfaces.PoliticiansDTOMapper;
+import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
 import com.example.demo.model.Politicians;
 import com.example.demo.model.enums.Rating;
 
-public class PoliticiansDtoMapper implements PoliticiansDTOMapper{
+public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 
 	@Override
 	public PoliticianDTO mapToDTO(Politicians entity) {

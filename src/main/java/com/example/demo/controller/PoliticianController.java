@@ -4,6 +4,8 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,14 +42,15 @@ public class PoliticianController {
 	}
 	
 	@GetMapping("/politicianByName")
-	public ResponseEntity<PoliticianDTO> politicianByName(String name) {
+	public ResponseEntity<PoliticianDTO> politicianByName(String name, @AuthenticationPrincipal OAuth2User user) {
 		var politicianByName = politiciansService.findPoliticianByName(name);
 		
 		DTOMapper<PoliticianDTO, Politicians> mapper = new PoliticiansDtoMapper();
 		
 		PoliticianDTO politician = mapper.mapToDTO(politicianByName);
+		System.out.println("tanginamo " + user.getAttributes());
 		
-		return new ResponseEntity<PoliticianDTO>(politician, HttpStatus.CREATED);
+		return new ResponseEntity<PoliticianDTO>(politician, HttpStatus.OK);
 	}
 
 }

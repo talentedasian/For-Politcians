@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
@@ -10,7 +10,7 @@ import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.model.Politicians;
 import com.example.demo.repository.PoliticiansRepository;
 
-@Component
+@Service
 public class PoliticiansService {
 
 	private final PoliticiansRepository politiciansRepo;

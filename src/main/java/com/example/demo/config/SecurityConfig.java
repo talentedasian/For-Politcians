@@ -1,7 +1,8 @@
 package com.example.demo.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 												.anyRequest()
 													.authenticated()
 			.and()
-			.oauth2Login();
+			.oauth2Login(withDefaults());
 	}
 
 }
