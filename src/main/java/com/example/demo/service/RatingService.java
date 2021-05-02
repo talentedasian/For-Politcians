@@ -66,8 +66,6 @@ public class RatingService {
 		}
 		
 		politician.setTotalRating(politician.getTotalRating() + dto.getRating().doubleValue());
-		System.out.println(politician.getTotalRating());
-		System.out.println(politician.getTotalRating() / Double.valueOf(politician.getPoliticiansRating().size() + 1));
 		politician.setRating(politician.getTotalRating() / Double.valueOf(String.valueOf(politician.getPoliticiansRating().size() + 1)));
 		
 		politicianRepo.save(politician);
