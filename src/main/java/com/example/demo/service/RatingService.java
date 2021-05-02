@@ -65,15 +65,16 @@ public class RatingService {
 			}
 		}
 		
-		politician.setTotalRating(politician.getRating() + dto.getRating().doubleValue());
-		System.out.println(politician.getPoliticiansRating().size() + 1);
-		System.out.println(politician.getTotalRating() / Double.valueOf(politician.getPoliticiansRating().size() + 1D));
+		politician.setTotalRating(politician.getTotalRating() + dto.getRating().doubleValue());
+		System.out.println(politician.getTotalRating());
+		System.out.println(politician.getTotalRating() / Double.valueOf(politician.getPoliticiansRating().size() + 1));
 		politician.setRating(politician.getTotalRating() / Double.valueOf(String.valueOf(politician.getPoliticiansRating().size() + 1)));
 		
 		politicianRepo.save(politician);
 		
 		OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
 		var rating = new PoliticiansRating();
+		
 		var userRater = new UserRater(oauth2User.getAttribute("name"), politicalParty);
 		rating.setPolitician(politician);
 		rating.setRater(userRater);
