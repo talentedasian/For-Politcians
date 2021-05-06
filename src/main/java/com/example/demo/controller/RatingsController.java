@@ -31,12 +31,13 @@ public class RatingsController {
 
 
 	@PostMapping("/add-rating")
-	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request) {
+	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request, @AuthenticationPrincipal OAuth2User user) {
 		PoliticiansRating politicianRatiingSaved = ratingService.saveRatings(request);
 		
 		RatingDTOMapper mapper = new RatingDtoMapper();
 		
 		RatingDTO politicianRating = mapper.mapToDTO(politicianRatiingSaved);
+		System.out.println(user.getAttributes());
 		
 		return new ResponseEntity<RatingDTO>(politicianRating, HttpStatus.OK);
 	}
