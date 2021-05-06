@@ -1,7 +1,6 @@
 package com.example.demo.oauth2;
 
 import java.time.Instant;
-import java.time.temporal.TemporalAccessor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistration.Builder;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
@@ -22,7 +20,7 @@ import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 
 public class AuthorizedRequestsRepository implements OAuth2AuthorizedClientRepository{
 
-	private static ClientRegistration clientRegistration = ClientRegistration.withRegistrationId("facebook")
+	private static final ClientRegistration clientRegistration = ClientRegistration.withRegistrationId("facebook")
 	        .clientId("697702354184763")
 	        .clientSecret("88e0d00193984f18f0a21f234091702d")
 	        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
@@ -39,7 +37,7 @@ public class AuthorizedRequestsRepository implements OAuth2AuthorizedClientRepos
 	public <T extends OAuth2AuthorizedClient> T loadAuthorizedClient(String clientRegistrationId,
 			Authentication principal, HttpServletRequest request) {
 		Map<String, String> cookieRequestHolder = new HashMap<>();
-		List<String> parameterLists = List.of("accessTokenValue", "accessTokenExpiresAt","accessTokenIssuedAt", "refreshTokenValue", "refreshTokenIssuedAt", "principalName");
+		List<String> parameterLists = List.of("accessTokenValue", "accessTokenExpiresAt","accessTokenIssuedAt", "principalName");
 		for (Cookie cookies : request.getCookies()) {
 			System.out.println(cookies.getValue());
 			if (parameterLists.contains(cookies.getName())) {
@@ -51,9 +49,8 @@ public class AuthorizedRequestsRepository implements OAuth2AuthorizedClientRepos
 				(clientRegistration, 
 				clientRegistrationId, 
 				new OAuth2AccessToken(TokenType.BEARER, cookieRequestHolder.get("accessTokenValue"), 
-						Instant.ofEpochSecond(Long.valueOf(cookieRequestHolder.get("accessTokenIssuedAt"))), Instant.ofEpochSecond(Long.valueOf(cookieRequestHolder.get("accessTokenExpiresAt")))),
-				new OAuth2RefreshToken(cookieRequestHolder.get("refreshTokenValue"), 
-						Instant.ofEpochSecond(Long.valueOf(cookieRequestHolder.get("refreshIssuedAt")))));
+						Instant.ofEpochSecond(Long.valueOf(cookieRequestHolder.get("accessTokenIssuedAt"))),
+						Instant.ofEpochSecond(Long.valueOf(cookieRequestHolder.get("accessTokenExpiresAt")))));
 		
 		return (T) oauth2AuthorizedClient;
 	}
@@ -72,12 +69,6 @@ public class AuthorizedRequestsRepository implements OAuth2AuthorizedClientRepos
 		Cookie accessTokenIssuedAtCookie = new Cookie("accessTokenIssuedAt", 
 				String.valueOf(authorizedClient.getAccessToken().getIssuedAt().getEpochSecond()));
 		accessTokenIssuedAtCookie.setHttpOnly(true);
-		Cookie refreshTokenValueCookie = new Cookie("refreshTokenValue", 
-				authorizedClient.getRefreshToken().getTokenValue());
-		refreshTokenValueCookie.setHttpOnly(true);
-		Cookie refreshTokenIssuedAtCookie = new Cookie("refreshTokenIssuedAt",
-				String.valueOf(authorizedClient.getRefreshToken().getIssuedAt().getEpochSecond()));
-		refreshTokenValueCookie.setHttpOnly(true);
 		Cookie principalNameCookie = new Cookie("principalName",
 				authorizedClient.getPrincipalName());
 		principalNameCookie.setHttpOnly(true);
@@ -85,8 +76,6 @@ public class AuthorizedRequestsRepository implements OAuth2AuthorizedClientRepos
 		response.addCookie(accessTokenValueCookie);
 		response.addCookie(accessTokenExpiresAtCookie);
 		response.addCookie(accessTokenIssuedAtCookie);
-		response.addCookie(refreshTokenValueCookie);
-		response.addCookie(refreshTokenIssuedAtCookie);
 		response.addCookie(principalNameCookie);		
 	}
 

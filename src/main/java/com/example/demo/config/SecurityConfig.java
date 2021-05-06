@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Bean
     public ClientRegistrationRepository clientRegistrationRepository() {
-        return new InMemoryClientRegistrationRepository(this.googleClientRegistration());
+        return new InMemoryClientRegistrationRepository(this.facebookClientRegistration());
     }
 	
 	@Bean
@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 	
 
-	private ClientRegistration googleClientRegistration() {
+	private ClientRegistration facebookClientRegistration() {
         return ClientRegistration.withRegistrationId("facebook")
             .clientId("697702354184763")
             .clientSecret("88e0d00193984f18f0a21f234091702d")
