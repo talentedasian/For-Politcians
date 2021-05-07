@@ -17,7 +17,7 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AccessToken.TokenType;
 
-public class AuthorizedRequestsRepository implements OAuth2AuthorizedClientRepository{
+public class CustomOauth2AuthorizedClientsRepository implements OAuth2AuthorizedClientRepository{
 
 	private static final ClientRegistration clientRegistration = ClientRegistration.withRegistrationId("facebook")
 	        .clientId("697702354184763")
@@ -69,7 +69,7 @@ public class AuthorizedRequestsRepository implements OAuth2AuthorizedClientRepos
 				String.valueOf(authorizedClient.getAccessToken().getIssuedAt().getEpochSecond()));
 		accessTokenIssuedAtCookie.setHttpOnly(true);
 		Cookie principalNameCookie = new Cookie("principalName",
-				authorizedClient.getPrincipalName());
+				principal.getName());
 		principalNameCookie.setHttpOnly(true);
 		
 		response.addCookie(accessTokenValueCookie);

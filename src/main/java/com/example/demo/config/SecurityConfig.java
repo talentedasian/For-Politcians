@@ -11,11 +11,15 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 
 import com.example.demo.oauth2.AuthorizedRequestsRepository;
+import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
+import com.example.demo.oauth2.Oauth2AuthorizationRequestsRepository;
 import com.example.demo.oauth2.Oauth2CustomSuccessHandler;
 
 
@@ -37,7 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.disable()
 			.httpBasic()
 				.disable()
-				.oauth2Client();
+				.oauth2Client()
+					.authorizedClientRepository(this.authorizedClientRepo());
 				
 	}
 	
@@ -53,9 +58,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Bean
 	public OAuth2AuthorizedClientRepository authorizedClientRepo() {
-		return new AuthorizedRequestsRepository();
+		return new CustomOauth2AuthorizedClientsRepository();
 	}
 	
+	@Bean
+	public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestsRepository() {
+		return new Oauth2AuthorizationRequestsRepository();
+	}
 
 	private ClientRegistration facebookClientRegistration() {
         return ClientRegistration.withRegistrationId("facebook")

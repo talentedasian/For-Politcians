@@ -10,7 +10,7 @@ public class Oauth2AuthorizationRequestsRepository implements AuthorizationReque
 
 	@Override
 	public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
-		// TODO Auto-generated method stub
+		 System.out.println("tanginamo ulit");
 		return null;
 	}
 
@@ -18,12 +18,13 @@ public class Oauth2AuthorizationRequestsRepository implements AuthorizationReque
 	public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request,
 			HttpServletResponse response) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("tanginamo");
 	}
 
 	@Override
 	public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request) {
 		// TODO Auto-generated method stub
+		System.out.println("tanginamo ulit");
 		return null;
 	}
 
