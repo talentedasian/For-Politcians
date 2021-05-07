@@ -1,31 +1,30 @@
 package com.example.demo.oauth2;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 
-import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
-
-public class Oauth2AuthorizationRequestsRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest>{
+public class Oauth2AuthorizationRequestsRepository implements OAuth2AuthorizedClientService{
 
 	@Override
-	public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
-		 System.out.println("tanginamo ulit");
+	public <T extends OAuth2AuthorizedClient> T loadAuthorizedClient(String clientRegistrationId,
+			String principalName) {
+		System.out.println("tanginamo");
 		return null;
 	}
 
 	@Override
-	public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request,
-			HttpServletResponse response) {
-		// TODO Auto-generated method stub
-		System.out.println("tanginamo");
-	}
-
-	@Override
-	public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request) {
+	public void saveAuthorizedClient(OAuth2AuthorizedClient authorizedClient, Authentication principal) {
 		// TODO Auto-generated method stub
 		System.out.println("tanginamo ulit");
-		return null;
 	}
+
+	@Override
+	public void removeAuthorizedClient(String clientRegistrationId, String principalName) {
+		// TODO Auto-generated method stub
+		System.out.println("tanginamo ulit ulit");
+	}
+
+	
 
 }

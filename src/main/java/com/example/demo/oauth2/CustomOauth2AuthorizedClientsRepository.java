@@ -75,14 +75,14 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 		response.addCookie(accessTokenValueCookie);
 		response.addCookie(accessTokenExpiresAtCookie);
 		response.addCookie(accessTokenIssuedAtCookie);
-		response.addCookie(principalNameCookie);		
+		response.addCookie(principalNameCookie);
 	}
 
 	@Override
 	public void removeAuthorizedClient(String clientRegistrationId, Authentication principal,
 			HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("Not really removing anything");
-		
+		this.loadAuthorizedClient(clientRegistrationId, principal, request);
 	} 
 
 }

@@ -11,17 +11,14 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 
-import com.example.demo.oauth2.AuthorizedRequestsRepository;
+import com.example.demo.filter.RemoveSessionFilter;
 import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
 import com.example.demo.oauth2.Oauth2AuthorizationRequestsRepository;
-import com.example.demo.oauth2.Oauth2CustomSuccessHandler;
-
 
 @Configuration
 @EnableWebSecurity
@@ -33,6 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http
 			.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.sessionFixation()
+					.none()
 			.and()
 			.requestCache()
 				.requestCache(new NullRequestCache())
@@ -42,7 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.httpBasic()
 				.disable()
 				.oauth2Client()
-					.authorizedClientRepository(this.authorizedClientRepo());
+			.and()
+			.addFilterAfter(new RemoveSessionFilter(), OAuth2AuthorizationRequestRedirectFilter.class);
 				
 	}
 	
@@ -62,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 	
 	@Bean
-	public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestsRepository() {
+	public OAuth2AuthorizedClientService authorizedClientService() {
 		return new Oauth2AuthorizationRequestsRepository();
 	}
 
