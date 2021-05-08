@@ -1,22 +1,33 @@
 package com.example.demo.jwt;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
 public class JwtProvider {
 
-	public static String createJwt(String sub, String id) {
+	public static String createJwtWithFixedExpirationDate(String sub, String id) {
 		
 		String jwts = Jwts.builder()
 				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
 				.setSubject(sub)
 				.setId(id)
 				.setExpiration(new Date(System.currentTimeMillis() + 3600000L))
+				.setHeaderParam("login_mechanism", "facebook")
+				.compact();
+		
+		return jwts;
+	}
+	
+	public static String createJwtWithFixedDynamicExpirationDate(String sub, String id, Date expirationDate) {
+		
+		String jwts = Jwts.builder()
+				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
+				.setSubject(sub)
+				.setId(id)
+				.setExpiration(expirationDate)
 				.setHeaderParam("login_mechanism", "facebook")
 				.compact();
 		
@@ -32,5 +43,6 @@ public class JwtProvider {
 
 		return jwts;
 	}
+	
 }
 
