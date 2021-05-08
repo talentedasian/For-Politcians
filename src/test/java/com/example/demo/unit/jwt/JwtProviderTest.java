@@ -18,15 +18,16 @@ public class JwtProviderTest {
 
 	@Test
 	public void assertEqualsId() {
+		Date dateNow = new Date(System.currentTimeMillis() + 3600000L);
 		String actualJwts = Jwts.builder()
 				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
 				.setSubject("test@gmail.com")
 				.setId("test")
-				.setExpiration(new Date(System.currentTimeMillis() + 3600000L))
+				.setExpiration(dateNow)
 				.setHeaderParam("login_mechanism", "facebook")
 				.compact();
 		
-		String jwts =JwtProvider.createJwt("test@gmail.com", "id");
+		String jwts =JwtProvider.createJwtWithDynamicExpirationDate("test@gmail.com", "test", dateNow);
 		
 		assertThat(actualJwts, equalTo(jwts));
 	}

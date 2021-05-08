@@ -21,7 +21,7 @@ public class JwtProvider {
 		return jwts;
 	}
 	
-	public static String createJwtWithFixedDynamicExpirationDate(String sub, String id, Date expirationDate) {
+	public static String createJwtWithDynamicExpirationDate(String sub, String id, Date expirationDate) {
 		
 		String jwts = Jwts.builder()
 				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
