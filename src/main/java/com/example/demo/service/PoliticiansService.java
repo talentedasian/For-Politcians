@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,13 @@ public class PoliticiansService {
 	public Politicians findPoliticianByName(String name) {
 		Politicians politician = politiciansRepo.findByName(name)
 				.orElseThrow(() -> new PoliticianNotFoundException("No politician found using the given Name"));
+		
+		return politician;
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Politicians> allPoliticians() {
+		List<Politicians> politician = politiciansRepo.findAll();
 		
 		return politician;
 	}

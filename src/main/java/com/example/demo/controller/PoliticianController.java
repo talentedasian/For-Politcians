@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -48,6 +51,19 @@ public class PoliticianController {
 		PoliticianDTO politician = mapper.mapToDTO(politicianByName);
 		
 		return new ResponseEntity<PoliticianDTO>(politician, HttpStatus.OK);
+	}
+	
+	@GetMapping("/all")
+	public ResponseEntity<List<PoliticianDTO>> allPoliticians() {
+		List<Politicians> allPoliticians = politiciansService.allPoliticians();
+		List<PoliticianDTO> politician = new ArrayList<>();
+		
+		DTOMapper<PoliticianDTO, Politicians> mapper = new PoliticiansDtoMapper();
+		for (Politicians politicians : allPoliticians) {
+			politician.add(mapper.mapToDTO(politicians));
+		}
+		
+		return new ResponseEntity<List<PoliticianDTO>>(politician, HttpStatus.OK);
 	}
 
 }

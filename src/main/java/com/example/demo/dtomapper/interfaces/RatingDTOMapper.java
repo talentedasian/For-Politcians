@@ -5,4 +5,5 @@ import com.example.demo.model.PoliticiansRating;
 
 public interface RatingDTOMapper extends DTOMapper<RatingDTO, PoliticiansRating>{
 
+	
 }
