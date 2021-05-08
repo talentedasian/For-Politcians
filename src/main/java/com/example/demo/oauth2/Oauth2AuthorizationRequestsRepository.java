@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest.Builder;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 
 public class Oauth2AuthorizationRequestsRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest>{
@@ -62,8 +61,7 @@ public class Oauth2AuthorizationRequestsRepository implements AuthorizationReque
 
 	@Override
 	public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request) {
-		 System.out.println("tanginamo remove");
-		return null;
+		return this.loadAuthorizationRequest(request);
 	}
 
 
