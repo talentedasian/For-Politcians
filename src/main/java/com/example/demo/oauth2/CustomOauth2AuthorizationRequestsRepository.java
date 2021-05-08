@@ -11,13 +11,12 @@ import org.springframework.security.oauth2.client.web.AuthorizationRequestReposi
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 
-public class Oauth2AuthorizationRequestsRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest>{
+public class CustomOauth2AuthorizationRequestsRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest>{
 
 	private static final String clientId = "697702354184763";
 	
 	@Override
 	public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
-		System.out.println("loading");
 		Map<String, String> cookieHolder = new HashMap<>();
 		Cookie[] cookies = request.getCookies();
 		for (Cookie cookie : cookies) {
@@ -79,8 +78,5 @@ public class Oauth2AuthorizationRequestsRepository implements AuthorizationReque
 	public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request) {
 		return this.loadAuthorizationRequest(request);
 	}
-
-
-	
 	
 }

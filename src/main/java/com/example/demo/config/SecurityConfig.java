@@ -3,7 +3,6 @@ package com.example.demo.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
@@ -13,16 +12,14 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationCodeGrantFilter;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.NullRequestCache;
 
 import com.example.demo.filter.RemoveSessionFilter;
+import com.example.demo.oauth2.CustomOauth2AuthorizationRequestsRepository;
 import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
-import com.example.demo.oauth2.Oauth2AuthorizationRequestsRepository;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
@@ -70,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Bean
 	public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestsRepo() {
-		return new Oauth2AuthorizationRequestsRepository();
+		return new CustomOauth2AuthorizationRequestsRepository();
 	}
 
 	private ClientRegistration facebookClientRegistration() {
