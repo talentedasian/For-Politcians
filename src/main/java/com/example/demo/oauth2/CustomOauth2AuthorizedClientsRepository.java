@@ -59,7 +59,6 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 	public void saveAuthorizedClient(OAuth2AuthorizedClient authorizedClient, Authentication principal,
 			HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
-		System.out.println(" tanginamo client");
 		Cookie accessTokenValueCookie = new Cookie("accessTokenValue", 
 				authorizedClient.getAccessToken().getTokenValue());
 		accessTokenValueCookie.setHttpOnly(true);
@@ -82,7 +81,6 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 	@Override
 	public void removeAuthorizedClient(String clientRegistrationId, Authentication principal,
 			HttpServletRequest request, HttpServletResponse response) {
-		System.out.println("Not really removing anything");
 		this.loadAuthorizedClient(clientRegistrationId, principal, request);
 	} 
 

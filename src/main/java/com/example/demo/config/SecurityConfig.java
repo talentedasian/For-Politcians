@@ -44,10 +44,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.httpBasic()
 				.disable()
 			.oauth2Client()
-				.authorizedClientRepository(this.authorizedClientRepo())
 				.authorizationCodeGrant()
-					.authorizationRequestRepository(this.authorizationRequestsRepo())
-					.and()
+				.authorizationRequestRepository(this.authorizationRequestsRepo())
+				.and()
+				.authorizedClientRepository(this.authorizedClientRepo())
 			.and()
 				.addFilterAfter(new RemoveSessionFilter(), OAuth2AuthorizationCodeGrantFilter.class);
 				
