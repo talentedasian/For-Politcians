@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 	
 	@Bean
-    public ClientRegistrationRepository clientRegistrationRepository() {
+    public ClientRegistrationRepository clientRegistrationRepository() { 
         return new InMemoryClientRegistrationRepository(this.facebookClientRegistration());
     }
 	

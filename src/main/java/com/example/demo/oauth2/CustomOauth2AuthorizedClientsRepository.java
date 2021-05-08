@@ -58,7 +58,6 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 	@Override
 	public void saveAuthorizedClient(OAuth2AuthorizedClient authorizedClient, Authentication principal,
 			HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
 		Cookie accessTokenValueCookie = new Cookie("accessTokenValue", 
 				authorizedClient.getAccessToken().getTokenValue());
 		accessTokenValueCookie.setHttpOnly(true);

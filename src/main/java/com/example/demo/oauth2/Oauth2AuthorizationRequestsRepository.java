@@ -17,6 +17,7 @@ public class Oauth2AuthorizationRequestsRepository implements AuthorizationReque
 	
 	@Override
 	public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
+		System.out.println("loading");
 		Map<String, String> cookieHolder = new HashMap<>();
 		Cookie[] cookies = request.getCookies();
 		for (Cookie cookie : cookies) {
@@ -24,18 +25,22 @@ public class Oauth2AuthorizationRequestsRepository implements AuthorizationReque
 				cookieHolder.put("authorizationRequestUri", cookie.getValue());
 			} else if (cookie.getName().equalsIgnoreCase("authorizationUri")) {
 				cookieHolder.put("authorizationUri", cookie.getValue());
-			} else if (cookie.getName().equalsIgnoreCase("authorizationRedirectUri")) {
-				cookieHolder.put("authorizationRedirectUri", cookie.getValue());
+			} else if (cookie.getName().equalsIgnoreCase("redirectUri")) {
+				cookieHolder.put("redirectUri", cookie.getValue());
+			} else if (cookie.getName().equalsIgnoreCase("state")) {
+				cookieHolder.put("state", cookie.getValue());
 			}
 		}
 		
 		Map<String, Object> attributes = new HashMap<>();
-		attributes.put(OAuth2ParameterNames.REGISTRATION_ID, clientId);
+		attributes.put(OAuth2ParameterNames.REGISTRATION_ID, "facebook");
 		OAuth2AuthorizationRequest oauth2AuthorizationRequest = OAuth2AuthorizationRequest.authorizationCode()
+				.clientId(clientId)
 				.attributes(attributes)
 				.authorizationUri(cookieHolder.get("authorizationUri"))
 				.authorizationRequestUri(cookieHolder.get("authorizationRequestUri"))
-				.redirectUri(cookieHolder.get("authorizationRedirectUri"))
+				.redirectUri(cookieHolder.get("redirectUri"))
+				.state(cookieHolder.get("state"))
 				.build();
 		
 		
@@ -48,14 +53,25 @@ public class Oauth2AuthorizationRequestsRepository implements AuthorizationReque
 		String authorizationRequestUri = authorizationRequest.getAuthorizationRequestUri();
 		String authorizationUri = authorizationRequest.getAuthorizationUri();
 		String redirectUri = authorizationRequest.getRedirectUri();
+		String state = authorizationRequest.getState();
 		
 		Cookie authorizationRequestUriCookie = new Cookie("authorizationRequestUri", authorizationRequestUri);
+		authorizationRequestUriCookie.setHttpOnly(true);
+		authorizationRequestUriCookie.setPath("/");
 		Cookie authorizationUriCookie = new Cookie("authorizationUri", authorizationUri);
+		authorizationUriCookie.setHttpOnly(true);
+		authorizationUriCookie.setPath("/");
 		Cookie authorizationRedirectUriCookie = new Cookie("redirectUri", redirectUri);
+		authorizationRedirectUriCookie.setHttpOnly(true);
+		authorizationRedirectUriCookie.setPath("/");
+		Cookie stateCookie = new Cookie("state", state);
+		stateCookie.setHttpOnly(true);
+		stateCookie.setPath("/");
 		
 		response.addCookie(authorizationRequestUriCookie);
 		response.addCookie(authorizationUriCookie);
 		response.addCookie(authorizationRedirectUriCookie);
+		response.addCookie(stateCookie);
 		
 	}
 
