@@ -11,9 +11,13 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationCodeGrantFilter;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 
 import com.example.demo.filter.RemoveSessionFilter;
@@ -34,15 +38,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 					.none()
 			.and()
 			.requestCache()
-				.requestCache(new NullRequestCache())
+				.requestCache(this.statelessRequestCache())
 			.and()
 			.csrf()
 				.disable()
 			.httpBasic()
 				.disable()
-				.oauth2Client()
+			.oauth2Client()
+				.authorizedClientRepository(this.authorizedClientRepo())
+				.authorizationCodeGrant()
+					.authorizationRequestRepository(this.authorizationRequestsRepo())
+					.and()
 			.and()
-			.addFilterAfter(new RemoveSessionFilter(), OAuth2AuthorizationRequestRedirectFilter.class);
+				.addFilterAfter(new RemoveSessionFilter(), OAuth2AuthorizationCodeGrantFilter.class);
 				
 	}
 	
@@ -62,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 	
 	@Bean
-	public OAuth2AuthorizedClientService authorizedClientService() {
+	public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestsRepo() {
 		return new Oauth2AuthorizationRequestsRepository();
 	}
 
@@ -80,4 +88,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             .build();
 	    }
 
+	private HttpSessionRequestCache statelessRequestCache() {
+		HttpSessionRequestCache cache = new HttpSessionRequestCache();
+		cache.setCreateSessionAllowed(false);
+		return cache;
+	}
+	
 }
