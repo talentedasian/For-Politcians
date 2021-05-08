@@ -1,8 +1,10 @@
 package com.example.demo.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
@@ -11,18 +13,21 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizationCodeGrantFilter;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.web.client.RestTemplate;
 
-import com.example.demo.filter.RemoveSessionFilter;
 import com.example.demo.oauth2.CustomOauth2AuthorizationRequestsRepository;
 import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
+	
+	@Autowired
+	private RestTemplate template;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -45,8 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.authorizationRequestRepository(this.authorizationRequestsRepo())
 				.and()
 				.authorizedClientRepository(this.authorizedClientRepo())
-			.and()
-				.addFilterAfter(new RemoveSessionFilter(), OAuth2AuthorizationCodeGrantFilter.class);
+			.and();
 				
 	}
 	
@@ -60,9 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         return new InMemoryClientRegistrationRepository(this.facebookClientRegistration());
     }
 	
-	@Bean
 	public OAuth2AuthorizedClientRepository authorizedClientRepo() {
-		return new CustomOauth2AuthorizedClientsRepository();
+		return new CustomOauth2AuthorizedClientsRepository(template);
 	}
 	
 	@Bean
@@ -83,7 +86,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             .clientName("Facebook")
             .build();
 	    }
-
+	
+	@Bean
+	public RestTemplate template() {
+		return new RestTemplate();
+	}
+	
 	private HttpSessionRequestCache statelessRequestCache() {
 		HttpSessionRequestCache cache = new HttpSessionRequestCache();
 		cache.setCreateSessionAllowed(false);

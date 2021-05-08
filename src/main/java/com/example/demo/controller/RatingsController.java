@@ -4,8 +4,6 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,15 +29,14 @@ public class RatingsController {
 
 
 	@PostMapping("/add-rating")
-	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request, @AuthenticationPrincipal OAuth2User user) {
+	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request) {
 		PoliticiansRating politicianRatiingSaved = ratingService.saveRatings(request);
 		
 		RatingDTOMapper mapper = new RatingDtoMapper();
 		
 		RatingDTO politicianRating = mapper.mapToDTO(politicianRatiingSaved);
-		System.out.println(user.getAttributes());
 		
-		return new ResponseEntity<RatingDTO>(politicianRating, HttpStatus.OK);
+		return new ResponseEntity<RatingDTO>(politicianRating, HttpStatus.CREATED);
 	}
 
 }

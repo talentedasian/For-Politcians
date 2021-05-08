@@ -1,5 +1,7 @@
 package com.example.demo.oauth2;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +11,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -16,8 +22,22 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AccessToken.TokenType;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
+import com.example.demo.dto.FacebookUserInfo;
+import com.example.demo.jwt.JwtProvider;
+
+@Component
 public class CustomOauth2AuthorizedClientsRepository implements OAuth2AuthorizedClientRepository{
+	
+	private RestTemplate restTemplate;
+	
+	public CustomOauth2AuthorizedClientsRepository(RestTemplate restTemplate) {
+		super();
+		this.restTemplate = restTemplate;
+	}
 
 	private static final ClientRegistration clientRegistration = ClientRegistration.withRegistrationId("facebook")
 	        .clientId("697702354184763")
@@ -35,21 +55,20 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 	@Override
 	public <T extends OAuth2AuthorizedClient> T loadAuthorizedClient(String clientRegistrationId,
 			Authentication principal, HttpServletRequest request) {
-		Map<String, String> cookieRequestHolder = new HashMap<>();
+		Map<String, String> cookieHolder = new HashMap<>();
 		List<String> parameterLists = List.of("accessTokenValue", "accessTokenExpiresAt","accessTokenIssuedAt", "principalName");
 		for (Cookie cookies : request.getCookies()) {
-			System.out.println(cookies.getValue());
 			if (parameterLists.contains(cookies.getName())) {
-				cookieRequestHolder.put(cookies.getName(), cookies.getValue());
+				cookieHolder.put(cookies.getName(), cookies.getValue());
 			}
 		}
 		
 		OAuth2AuthorizedClient oauth2AuthorizedClient = new OAuth2AuthorizedClient
 				(clientRegistration, 
-				clientRegistrationId, 
-				new OAuth2AccessToken(TokenType.BEARER, cookieRequestHolder.get("accessTokenValue"), 
-						Instant.ofEpochSecond(Long.valueOf(cookieRequestHolder.get("accessTokenIssuedAt"))),
-						Instant.ofEpochSecond(Long.valueOf(cookieRequestHolder.get("accessTokenExpiresAt")))));
+				cookieHolder.get("principalName"), 
+				new OAuth2AccessToken(TokenType.BEARER, cookieHolder.get("accessTokenValue"), 
+						Instant.ofEpochSecond(Long.valueOf(cookieHolder.get("accessTokenIssuedAt"))),
+						Instant.ofEpochSecond(Long.valueOf(cookieHolder.get("accessTokenExpiresAt")))));
 		
 		return (T) oauth2AuthorizedClient;
 	}
@@ -58,23 +77,28 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 	@Override
 	public void saveAuthorizedClient(OAuth2AuthorizedClient authorizedClient, Authentication principal,
 			HttpServletRequest request, HttpServletResponse response) {
-		Cookie accessTokenValueCookie = new Cookie("accessTokenValue", 
-				authorizedClient.getAccessToken().getTokenValue());
-		accessTokenValueCookie.setHttpOnly(true);
-		Cookie accessTokenExpiresAtCookie = new Cookie("accessTokenExpiresAt", 
-				String.valueOf(authorizedClient.getAccessToken().getExpiresAt().getEpochSecond()));
-		accessTokenExpiresAtCookie.setHttpOnly(true);
-		Cookie accessTokenIssuedAtCookie = new Cookie("accessTokenIssuedAt", 
-				String.valueOf(authorizedClient.getAccessToken().getIssuedAt().getEpochSecond()));
-		accessTokenIssuedAtCookie.setHttpOnly(true);
-		Cookie principalNameCookie = new Cookie("principalName",
-				principal.getName());
-		principalNameCookie.setHttpOnly(true);
+		this.saveAuthorizedClientsInCookie(authorizedClient, response);
 		
-		response.addCookie(accessTokenValueCookie);
-		response.addCookie(accessTokenExpiresAtCookie);
-		response.addCookie(accessTokenIssuedAtCookie);
-		response.addCookie(principalNameCookie);
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setBearerAuth(authorizedClient.getAccessToken().getTokenValue());
+			RequestEntity<Object> requestEntity = new RequestEntity<>(headers,
+					HttpMethod.GET, new URI("https://graph.facebook.com/me?fields=id,email,name"));
+			
+			ResponseEntity<FacebookUserInfo> responseEntity = restTemplate.exchange(requestEntity, FacebookUserInfo.class);
+			String jwt = JwtProvider.createJwtWithFixedExpirationDate(responseEntity.getBody().getEmail(),
+					responseEntity.getBody().getName());
+							
+			Cookie jwtCookie = new Cookie("accessJwt", jwt);
+			jwtCookie.setHttpOnly(true);
+			jwtCookie.setPath("/");
+			
+			response.addCookie(jwtCookie);
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+	
+		
 	}
 
 	@Override
@@ -83,4 +107,27 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 		this.loadAuthorizedClient(clientRegistrationId, principal, request);
 	} 
 
+	private void saveAuthorizedClientsInCookie(OAuth2AuthorizedClient authorizedClient, HttpServletResponse response) {
+		Cookie accessTokenValueCookie = new Cookie("accessTokenValue", 
+				authorizedClient.getAccessToken().getTokenValue());
+		accessTokenValueCookie.setHttpOnly(true);
+		accessTokenValueCookie.setPath("/");
+		Cookie accessTokenExpiresAtCookie = new Cookie("accessTokenExpiresAt", 
+				String.valueOf(authorizedClient.getAccessToken().getExpiresAt().getEpochSecond()));
+		accessTokenExpiresAtCookie.setHttpOnly(true);
+		accessTokenExpiresAtCookie.setPath("/");
+		Cookie accessTokenIssuedAtCookie = new Cookie("accessTokenIssuedAt", 
+				String.valueOf(authorizedClient.getAccessToken().getIssuedAt().getEpochSecond()));
+		accessTokenIssuedAtCookie.setHttpOnly(true);
+		accessTokenIssuedAtCookie.setPath("/");
+		Cookie principalNameCookie = new Cookie("principalName",
+				authorizedClient.getPrincipalName());
+		principalNameCookie.setPath("/");
+		principalNameCookie.setHttpOnly(true);
+		
+		response.addCookie(accessTokenValueCookie);
+		response.addCookie(accessTokenExpiresAtCookie);
+		response.addCookie(accessTokenIssuedAtCookie);
+		response.addCookie(principalNameCookie);
+	}
 }
