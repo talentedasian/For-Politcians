@@ -36,4 +36,5 @@ mvnw
 mvnw.cmd
 .mvn/
 src/main/resources/application.yml
+src/main/resources/application-localDevelopment.properties
 *.log

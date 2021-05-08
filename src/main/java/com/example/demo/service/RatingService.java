@@ -21,13 +21,10 @@ public class RatingService {
 
 	private final RatingRepository ratingRepo;
 	private final PoliticiansRepository politicianRepo;
-	private final OAuth2AuthorizedClientService clientService;
 
-	public RatingService(RatingRepository ratingRepo, PoliticiansRepository politicianRepo,
-			OAuth2AuthorizedClientService clientService) {
+	public RatingService(RatingRepository ratingRepo, PoliticiansRepository politicianRepo) {
 		this.ratingRepo = ratingRepo;
 		this.politicianRepo = politicianRepo;
-		this.clientService = clientService;
 	}
 	
 	@Transactional(readOnly = true)
@@ -40,11 +37,6 @@ public class RatingService {
 	
 	@Transactional
 	public PoliticiansRating saveRatings(AddRatingDTORequest dto) {
-		Authentication authentication =
-			    SecurityContextHolder
-			        .getContext()
-			        .getAuthentication();
-
 		Politicians politician = politicianRepo.findByName(dto.getPoliticianName())
 				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by " + dto.getPoliticianName()));
 		
@@ -60,10 +52,9 @@ public class RatingService {
 		
 		politicianRepo.save(politician);
 		
-		OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
 		var rating = new PoliticiansRating();
 		
-		var userRater = new UserRater(oauth2User.getAttribute("name"), politicalParty);
+		var userRater = new UserRater("test name", politicalParty);
 		rating.setPolitician(politician);
 		rating.setRater(userRater);
 		rating.setRating(dto.getRating().doubleValue());
