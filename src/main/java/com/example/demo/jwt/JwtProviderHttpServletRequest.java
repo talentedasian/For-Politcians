@@ -2,15 +2,15 @@ package com.example.demo.jwt;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.util.Assert;
 
 import com.example.demo.exceptions.JwtNotFoundException;
+import com.example.demo.exceptions.JwtTamperedExpcetion;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.SignatureException;
 
 public class JwtProviderHttpServletRequest {
 
@@ -33,6 +33,12 @@ public class JwtProviderHttpServletRequest {
 					Authorization Header did not start with "Bearer"
 					""", 
 					e);
+		} catch (SignatureException e) {
+			throw new JwtTamperedExpcetion("""
+					Jwt retrieved had a signature exception or was tampered.
+					Server might have restarted without prior knowledge
+					""", 
+					e); 
 		}
 		
 		return jwts;	
