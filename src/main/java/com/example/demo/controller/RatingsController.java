@@ -5,14 +5,17 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.dtomapper.RatingDtoMapper;
+import com.example.demo.dtomapper.interfaces.DTOMapper;
 import com.example.demo.dtomapper.interfaces.RatingDTOMapper;
 import com.example.demo.model.PoliticiansRating;
 import com.example.demo.service.RatingService;
@@ -27,17 +30,26 @@ public class RatingsController {
 		this.ratingService = ratingService;
 	}
 
-
-
 	@PostMapping("/add-rating")
 	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request, HttpServletRequest req) {
-		PoliticiansRating politicianRatiingSaved = ratingService.saveRatings(request, req);
+		PoliticiansRating politicianRatingSaved = ratingService.saveRatings(request, req);
 		
-		RatingDTOMapper mapper = new RatingDtoMapper();
+		DTOMapper<RatingDTO, PoliticiansRating> mapper = new RatingDtoMapper();
 		
-		RatingDTO politicianRating = mapper.mapToDTO(politicianRatiingSaved);
+		RatingDTO politicianRating = mapper.mapToDTO(politicianRatingSaved);
 		
 		return new ResponseEntity<RatingDTO>(politicianRating, HttpStatus.CREATED);
+	}
+	
+	@GetMapping("/ratingById")
+	public ResponseEntity<RatingDTO> getRatingById(@RequestParam String id) {
+		PoliticiansRating politicianRatingQueried = ratingService.findById(id);
+		
+		DTOMapper<RatingDTO, PoliticiansRating> mapper = new RatingDtoMapper();
+		
+		RatingDTO politicianRating = mapper.mapToDTO(politicianRatingQueried);
+		
+		return new ResponseEntity<RatingDTO>(politicianRating, HttpStatus.OK);
 	}
 
 }

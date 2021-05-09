@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
@@ -63,6 +65,13 @@ public class RatingService {
 		ratingRepo.save(rating);
 		
 		return rating;
+	}
+	
+	@Transactional(readOnly = true)
+	public List<PoliticiansRating> findRatingsByFacebookName(String facebookName) {
+		List<PoliticiansRating> ratingsByRater = ratingRepo.findByRater_FacebookName(facebookName);
+		
+		return ratingsByRater;
 	}
 
 }
