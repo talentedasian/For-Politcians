@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.PoliticianNotFoundException;
+import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.model.Politicians;
 import com.example.demo.model.PoliticiansRating;
@@ -29,7 +30,7 @@ public class RatingService {
 	@Transactional(readOnly = true)
 	public PoliticiansRating findById(String id) {
 		PoliticiansRating rating = ratingRepo.findById(Integer.valueOf(id))
-				.orElseThrow(null);
+				.orElseThrow(() -> new RatingsNotFoundException("No rating found by Id"));
 		
 		return rating;
 	}

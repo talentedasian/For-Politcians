@@ -1,9 +1,11 @@
 package com.example.demo.unit.service;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,7 +17,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.dtoRequest.AddRatingDTORequest;
@@ -29,7 +30,6 @@ import com.example.demo.repository.RatingRepository;
 import com.example.demo.service.RatingService;
 
 @ExtendWith(SpringExtension.class)
-@ActiveProfiles({"test", "localDevelopment"})
 public class RatingServiceTest {
 
 	@Mock
@@ -40,21 +40,23 @@ public class RatingServiceTest {
 	public HttpServletRequest req;
 	
 	public RatingService service;
+	public PoliticiansRating ratingToBeSaved;
+	public Politicians politicianToBeSaved;
 	
 	@BeforeEach
 	public void setup() {
 		service = new RatingService(ratingRepo, politicianRepo);
+		
+		politicianToBeSaved = new Politicians(1, 0.00D,"Mirriam Defensor", List.of(new PoliticiansRating()), 0.00D);
+		ratingToBeSaved = new PoliticiansRating();
+		ratingToBeSaved.setId(1);
+		ratingToBeSaved.setPolitician(politicianToBeSaved);
+		ratingToBeSaved.setRater(new UserRater("test", PoliticalParty.DDS));
+		ratingToBeSaved.setRating(0.00D);
 	}
 	
 	@Test
 	public void verifyRatingRepoCalledSaved() {
-		PoliticiansRating ratingToBeSaved = new PoliticiansRating();
-		Politicians politicianToBeSaved = new Politicians(1, 0.00D,"Mirriam Defensor", List.of(ratingToBeSaved), 0.00D);
-		
-		ratingToBeSaved.setPolitician(politicianToBeSaved);
-		ratingToBeSaved.setRater(new UserRater("test", PoliticalParty.DDS));
-		ratingToBeSaved.setRating(0.00D);
-		
 		when(politicianRepo.findByName("Mirriam Defensor")).thenReturn(Optional.of(politicianToBeSaved));
 		when(ratingRepo.save(any())).thenReturn(ratingToBeSaved);
 		
@@ -67,4 +69,16 @@ public class RatingServiceTest {
 		
 		verify(ratingRepo, times(1)).save(any());
 	}
+	
+	@Test
+	public void assertEqualsSavedRepoAndQueriedRepo() {
+		when(ratingRepo.findById(1)).thenReturn(Optional.of(ratingToBeSaved));
+		
+		PoliticiansRating ratings = service.findById("1");
+		
+		assertThat(ratings, 
+				equalTo(ratingToBeSaved));
+		
+	}
+	
 }
