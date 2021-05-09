@@ -13,7 +13,7 @@ public class AddPoliticianDTORequest {
 	
 	@NotNull
 	@DecimalMin("0.01")
-	@DecimalMax("10.00")
+	@DecimalMax("9.99")
 	private BigDecimal rating;
 
 	public String getName() {

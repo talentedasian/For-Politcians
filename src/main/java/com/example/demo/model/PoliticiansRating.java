@@ -17,7 +17,7 @@ public class PoliticiansRating {
 
 //	private Rating rating;
 	
-	@Column(nullable = false, precision = 3, scale = 2)
+	@Column(nullable = false, precision = 1, scale = 2)
 	private Double rating; 
 	
 	@Column(nullable = false)

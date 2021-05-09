@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -49,7 +51,7 @@ public class PoliticiansService {
 			var politicianToBeSaved = new Politicians();
 			politicianToBeSaved.setName(dto.getName());
 			politicianToBeSaved.setRating(dto.getRating().doubleValue());
-			politicianToBeSaved.setTotalRating(dto.getRating().doubleValue());
+			politicianToBeSaved.setTotalRating(dto.getRating().round(new MathContext(1, RoundingMode.HALF_DOWN)).doubleValue());
 			
 			Politicians politician = politiciansRepo.save(politicianToBeSaved);
 			
