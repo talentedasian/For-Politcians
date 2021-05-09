@@ -75,7 +75,6 @@ public class PoliticiansRating {
 		this.politician = politician;
 	}
 
-
 	@Override
 	public String toString() {
 		return "PoliticiansRating [id=" + id + ", rating=" + rating + ", rater=" + rater + ", politician=" + politician

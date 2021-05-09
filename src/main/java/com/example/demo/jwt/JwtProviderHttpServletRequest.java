@@ -2,11 +2,13 @@ package com.example.demo.jwt;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.util.Assert;
 
 import com.example.demo.exceptions.JwtNotFoundException;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
@@ -14,6 +16,8 @@ public class JwtProviderHttpServletRequest {
 
 	public static Jws<Claims> decodeJwt(HttpServletRequest req) {
 		Jws<Claims> jwts = null;
+		Assert.state(req.getHeader("Authorization") != null, 
+				"No jwt found on authorization header");
 		Assert.state(req.getHeader("Authorization").startsWith("Bearer "), 
 				"Authorization Header must start with \"Bearer\"");
 		try {
@@ -33,4 +37,5 @@ public class JwtProviderHttpServletRequest {
 		
 		return jwts;	
 	}
+	
 }

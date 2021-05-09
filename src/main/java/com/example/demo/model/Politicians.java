@@ -87,8 +87,7 @@ public class Politicians {
 
 	@Override
 	public String toString() {
-		return "Politicians [id=" + id + ", rating=" + rating + ", name=" + name + ", politiciansRating="
-				+ politiciansRating + ", totalRating=" + totalRating + "]";
+		return "Politicians [id=" + id + ", rating=" + rating + ", name=" + name + ", totalRating=" + totalRating + "]";
 	}
-	
+
 }

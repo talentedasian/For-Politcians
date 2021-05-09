@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -29,8 +30,8 @@ public class RatingsController {
 
 
 	@PostMapping("/add-rating")
-	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request) {
-		PoliticiansRating politicianRatiingSaved = ratingService.saveRatings(request);
+	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request, HttpServletRequest req) {
+		PoliticiansRating politicianRatiingSaved = ratingService.saveRatings(request, req);
 		
 		RatingDTOMapper mapper = new RatingDtoMapper();
 		
