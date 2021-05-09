@@ -22,20 +22,16 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AccessToken.TokenType;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.dto.FacebookUserInfo;
 import com.example.demo.jwt.JwtProvider;
 
-@Component
 public class CustomOauth2AuthorizedClientsRepository implements OAuth2AuthorizedClientRepository{
 	
 	private RestTemplate restTemplate;
 	
 	public CustomOauth2AuthorizedClientsRepository(RestTemplate restTemplate) {
-		super();
 		this.restTemplate = restTemplate;
 	}
 
@@ -77,28 +73,8 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 	@Override
 	public void saveAuthorizedClient(OAuth2AuthorizedClient authorizedClient, Authentication principal,
 			HttpServletRequest request, HttpServletResponse response) {
-		this.saveAuthorizedClientsInCookie(authorizedClient, response);
-		
-		try {
-			HttpHeaders headers = new HttpHeaders();
-			headers.setBearerAuth(authorizedClient.getAccessToken().getTokenValue());
-			RequestEntity<Object> requestEntity = new RequestEntity<>(headers,
-					HttpMethod.GET, new URI("https://graph.facebook.com/me?fields=id,email,name"));
-			
-			ResponseEntity<FacebookUserInfo> responseEntity = restTemplate.exchange(requestEntity, FacebookUserInfo.class);
-			String jwt = JwtProvider.createJwtWithFixedExpirationDate(responseEntity.getBody().getEmail(),
-					responseEntity.getBody().getName());
-							
-			Cookie jwtCookie = new Cookie("accessJwt", jwt);
-			jwtCookie.setHttpOnly(true);
-			jwtCookie.setPath("/");
-			
-			response.addCookie(jwtCookie);
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-	
-		
+		saveAuthorizedClientsInCookie(authorizedClient, response);
+		addJwtCookie(authorizedClient, response);
 	}
 
 	@Override
@@ -130,4 +106,27 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 		response.addCookie(accessTokenIssuedAtCookie);
 		response.addCookie(principalNameCookie);
 	}
+	
+	private void addJwtCookie(OAuth2AuthorizedClient authorizedClient, HttpServletResponse response) {
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setBearerAuth(authorizedClient.getAccessToken().getTokenValue());
+			RequestEntity<Object> requestEntity = new RequestEntity<>(headers,
+					HttpMethod.GET, new URI("https://graph.facebook.com/me?fields=id,email,name"));
+			
+			ResponseEntity<FacebookUserInfo> responseEntity = restTemplate.exchange(requestEntity, FacebookUserInfo.class);
+			String jwt = JwtProvider.createJwtWithFixedExpirationDate(responseEntity.getBody().getEmail(),
+					responseEntity.getBody().getName());
+							
+			Cookie jwtCookie = new Cookie("accessJwt", jwt);
+			jwtCookie.setHttpOnly(true);
+			jwtCookie.setPath("/");
+			
+			response.addCookie(jwtCookie);
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
 }

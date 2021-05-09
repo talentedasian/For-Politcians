@@ -24,7 +24,6 @@ import com.example.demo.repository.RatingRepository;
 import com.example.demo.service.RatingService;
 
 @ExtendWith(SpringExtension.class)
-@With
 public class RatingServiceTest {
 
 	@Mock
