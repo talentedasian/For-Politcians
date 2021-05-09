@@ -1,14 +1,13 @@
 package com.example.demo.service;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.PoliticianNotFoundException;
+import com.example.demo.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.model.Politicians;
 import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;
@@ -36,13 +35,13 @@ public class RatingService {
 	}
 	
 	@Transactional
-	public PoliticiansRating saveRatings(AddRatingDTORequest dto) {
+	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) {
 		Politicians politician = politicianRepo.findByName(dto.getPoliticianName())
 				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by " + dto.getPoliticianName()));
 		
 		PoliticalParty politicalParty = null;
 		for (PoliticalParty politicalParties : PoliticalParty.values()) {
-			if (dto.getPoliticialParty().equals(politicalParties.toString())) {
+			if (dto.getPoliticialParty().equalsIgnoreCase(politicalParties.toString())) {
 				politicalParty = politicalParties;
 			}
 		}
@@ -54,7 +53,8 @@ public class RatingService {
 		
 		var rating = new PoliticiansRating();
 		
-		var userRater = new UserRater("test name", politicalParty);
+		var userRater = new UserRater(JwtProviderHttpServletRequest.decodeJwt(req).getBody().getId(),
+				politicalParty);
 		rating.setPolitician(politician);
 		rating.setRater(userRater);
 		rating.setRating(dto.getRating().doubleValue());
