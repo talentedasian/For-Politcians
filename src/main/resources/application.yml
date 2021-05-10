@@ -4,5 +4,5 @@ spring:
       client:
         registration:
           facebook:
-            clientId: 697702354184763
-            clientSecret: 88e0d00193984f18f0a21f234091702d
+            clientId: ${OAUTH2_CLIENT_ID}
+            clientSecret: ${OAUTH2_CLIENT_SECRET}
