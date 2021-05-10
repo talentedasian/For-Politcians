@@ -80,6 +80,7 @@ This section should list any major frameworks that you built your project using.
 
 1. Install a database of your choice(mine is postgresql).
 2. Populate the spring datasource properties.
+3. Add an `Oauth2Provider` of your own and populate it in a properties file. Mine includes a local-development profile specific property for Oauth2 in my own machine. Not adding any Oauth2 properties would ignore all Oauth2 specific configuration in the `SecurityConfig` class.
 
 <!-- ROADMAP -->
 ## Roadmap
