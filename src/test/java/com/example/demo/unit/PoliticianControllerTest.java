@@ -56,7 +56,8 @@ public class PoliticianControllerTest {
 		
 		ResponseEntity<PoliticianDTO> politicianResponse = controller.savePolitician(politicianDTORequest);
 		
-		assertThat(politician.getRating(), equalTo(politicianResponse.getBody().getRating()));
+		assertThat(politician.getRating(),
+				equalTo(politicianResponse.getBody().getRating()));
 	}			
 	
 }

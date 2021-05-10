@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.annotation.Commit;
 
 import com.example.demo.model.Politicians;
 import com.example.demo.repository.PoliticiansRepository;
@@ -27,8 +25,6 @@ public class PoliticianRepoTest {
 	private PoliticiansRepository repo;
 	
 	@Test
-	@Commit
-	@Order(1)
 	public void shouldBeEqualOnSavedEntity() {
 		var politicianToBeSaved = new Politicians();
 		politicianToBeSaved.setRating(0.00D);
@@ -36,11 +32,11 @@ public class PoliticianRepoTest {
 		
 		Politicians politician = repo.save(politicianToBeSaved);
 		
-		assertThat(politicianToBeSaved, equalTo(politician));
+		assertThat(politicianToBeSaved, 
+				equalTo(politician));
 	}
 	
 	@Test
-	@Order(2)
 	public void shouldThrowDataIntegrityException() {
 		var politicianToBeSaved = new Politicians();
 		politicianToBeSaved.setRating(0.00D);
