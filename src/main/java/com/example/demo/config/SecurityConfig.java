@@ -3,18 +3,13 @@ package com.example.demo.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.web.client.RestTemplate;
@@ -24,6 +19,7 @@ import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
 
 @Configuration
 @EnableWebSecurity
+@Profile("production")
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
@@ -53,17 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.and();
 				
 	}
-	
-	@Bean
-	public OAuth2AuthorizedClientService clientService() {
-		return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository());
-	}
-	
-	@Bean
-    public ClientRegistrationRepository clientRegistrationRepository() { 
-        return new InMemoryClientRegistrationRepository(this.facebookClientRegistration());
-    }
-	
+		
 	public OAuth2AuthorizedClientRepository authorizedClientRepo() {
 		return new CustomOauth2AuthorizedClientsRepository(template);
 	}
@@ -72,20 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestsRepo() {
 		return new CustomOauth2AuthorizationRequestsRepository();
 	}
-
-	private ClientRegistration facebookClientRegistration() {
-        return ClientRegistration.withRegistrationId("facebook")
-            .clientId("697702354184763")
-            .clientSecret("88e0d00193984f18f0a21f234091702d")
-            .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-            .redirectUri("{baseUrl}/login/oauth2/code/facebook")
-            .authorizationUri("https://www.facebook.com/dialog/oauth")
-            .tokenUri("https://graph.facebook.com/v10.0/oauth/access_token")
-            .userInfoUri("https://graph.facebook.com/me")
-            .userNameAttributeName("id,email")
-            .clientName("Facebook")
-            .build();
-	    }
 	
 	@Bean
 	public RestTemplate template() {
