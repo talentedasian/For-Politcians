@@ -1,11 +1,14 @@
 package com.example.demo.unit.service;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,15 +23,20 @@ import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
+import com.example.demo.repository.RatingRepository;
 import com.example.demo.service.PoliticiansService;
+import com.example.demo.service.RatingService;
 
 @ExtendWith(SpringExtension.class)
 public class PoliticianServiceTest {
 
 	@Mock
 	public PoliticiansRepository repo;
+	@Mock
+	public RatingRepository ratingRepo;
 	
 	public PoliticiansService service;
+	public RatingService ratingService;
 	
 	public PoliticiansRating rating;
 	public Politicians politician;
@@ -36,16 +44,17 @@ public class PoliticianServiceTest {
 	@BeforeEach
 	public void setup() {
 		service = new PoliticiansService(repo);
+		ratingService = new RatingService(ratingRepo, repo);
 		
+		politician =  new Politicians
+				(null, 0.00D,
+						"Mirriam Defensor", 
+						List.of(new PoliticiansRating()),
+						0.00D);
 		rating = new PoliticiansRating
 				(1, 8.023D, 
 				new UserRater("test", PoliticalParty.DDS),
 				politician);
-		politician =  new Politicians
-				(null, 0.00D,
-				"Mirriam Defensor", 
-				List.of(rating),
-				0.00D);
 	}
 	
 	@Test
@@ -56,5 +65,20 @@ public class PoliticianServiceTest {
 		
 		verify(repo, times(1)).save(Mockito.any());
 		
+	}
+	
+	@Test
+	public void shouldAddTotalRating() {
+		when(repo.save(politician)).thenReturn(politician);
+		when(ratingRepo.save(rating)).thenReturn(rating);
+		when(ratingRepo.findById(1)).thenReturn(Optional.of(rating));
+		when(repo.save(politician)).thenReturn(politician);
+		
+		PoliticiansRating ratingQueried = ratingService.findById("1");
+		politician.setTotalRating(politician.getTotalRating() + rating.getRating());
+		politician.setRating(politician.getTotalRating() / Double.valueOf(politician.getPoliticiansRating().size()));
+		
+		assertThat(ratingQueried.getPolitician().getRating(),
+				equalTo(politician.getRating()));
 	}
 }
