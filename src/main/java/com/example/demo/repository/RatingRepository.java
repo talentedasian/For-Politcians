@@ -8,6 +8,6 @@ import com.example.demo.model.PoliticiansRating;
 
 public interface RatingRepository extends JpaRepository<PoliticiansRating, Integer>{
 	
-	List<PoliticiansRating> findByRater_FacebookName(String facebookName);
+	List<PoliticiansRating> findByRater_Email(String email);
 
 }

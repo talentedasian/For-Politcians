@@ -23,7 +23,6 @@ public class PoliticiansRating {
 	@Column(nullable = false)
 	private UserRater rater;
 	
-	
 	@ManyToOne
 	@JoinColumn(nullable = false, name = "politician_id")
 	private Politicians politician;

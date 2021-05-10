@@ -18,6 +18,8 @@ import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;
 
+import io.jsonwebtoken.Claims;
+
 @Service
 public class RatingService {
 
@@ -56,8 +58,11 @@ public class RatingService {
 		
 		var rating = new PoliticiansRating();
 		
-		var userRater = new UserRater(JwtProviderHttpServletRequest.decodeJwt(req).getBody().getId(),
-				politicalParty);
+		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
+		var userRater = new UserRater
+				(JwtProviderHttpServletRequest.decodeJwt(req).getBody().getId(),
+				politicalParty,
+				jwt.getSubject());
 		rating.setPolitician(politician);
 		rating.setRater(userRater);
 		rating.setRating(dto.getRating().doubleValue());
@@ -68,8 +73,8 @@ public class RatingService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<PoliticiansRating> findRatingsByFacebookName(String facebookName) {
-		List<PoliticiansRating> ratingsByRater = ratingRepo.findByRater_FacebookName(facebookName);
+	public List<PoliticiansRating> findRatingsByFacebookName(String email) {
+		List<PoliticiansRating> ratingsByRater = ratingRepo.findByRater_Email(email);
 		
 		return ratingsByRater;
 	}

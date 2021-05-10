@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -16,7 +18,6 @@ import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.dtomapper.interfaces.DTOMapper;
-import com.example.demo.dtomapper.interfaces.RatingDTOMapper;
 import com.example.demo.model.PoliticiansRating;
 import com.example.demo.service.RatingService;
 
@@ -50,6 +51,11 @@ public class RatingsController {
 		RatingDTO politicianRating = mapper.mapToDTO(politicianRatingQueried);
 		
 		return new ResponseEntity<RatingDTO>(politicianRating, HttpStatus.OK);
+	}
+	
+	@GetMapping("/ratingByRater")
+	public ResponseEntity<List<RatingDTO>> getRatingByRater(@RequestParam String email) {
+		PoliticiansRating politicianRatingQueried = ratingService.findRatingsByFacebookName(email)
 	}
 
 }
