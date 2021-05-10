@@ -69,16 +69,13 @@ public class PoliticianServiceTest {
 	
 	@Test
 	public void shouldAddTotalRating() {
-		when(repo.save(politician)).thenReturn(politician);
-		when(ratingRepo.save(rating)).thenReturn(rating);
-		when(ratingRepo.findById(1)).thenReturn(Optional.of(rating));
-		when(repo.save(politician)).thenReturn(politician);
-		
-		PoliticiansRating ratingQueried = ratingService.findById("1");
-		politician.setTotalRating(politician.getTotalRating() + rating.getRating());
+		politician.setTotalRating(8.023D);
 		politician.setRating(politician.getTotalRating() / Double.valueOf(politician.getPoliticiansRating().size()));
+		when(repo.findByName("Mirriam Defensor")).thenReturn(Optional.of(politician));
+			
+		Politicians politicianQueried = service.findPoliticianByName("Mirriam Defensor");
 		
-		assertThat(ratingQueried.getPolitician().getRating(),
-				equalTo(politician.getRating()));
+		assertThat(8.023D,
+				equalTo(politicianQueried.getRating()));
 	}
 }
