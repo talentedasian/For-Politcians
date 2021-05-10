@@ -17,14 +17,14 @@ public class AddRatingDTORequest {
 	private String politicianName;
 	
 	@NotNull
-	private String politicialParty;
+	private String politicalParty;
 
-	public String getPoliticialParty() {
-		return politicialParty;
+	public String getPoliticalParty() {
+		return politicalParty;
 	}
 
-	public void setPoliticialParty(String politicialParty) {
-		this.politicialParty = politicialParty;
+	public void setPoliticialParty(String politicalParty) {
+		this.politicalParty = politicalParty;
 	}
 
 	public BigDecimal getRating() {
@@ -49,17 +49,17 @@ public class AddRatingDTORequest {
 	}
 
 	public AddRatingDTORequest(@NotNull @DecimalMin("0.01") @DecimalMax("10.00") BigDecimal rating,
-			@NotNull String politicianName, @NotNull String politicialParty) {
+			@NotNull String politicianName, @NotNull String politicalParty) {
 		super();
 		this.rating = rating;
 		this.politicianName = politicianName;
-		this.politicialParty = politicialParty;
+		this.politicalParty = politicalParty;
 	}
 
 	@Override
 	public String toString() {
-		return "AddRatingDTORequest [rating=" + rating + ", politicianName=" + politicianName + ", politicialParty="
-				+ politicialParty + "]";
+		return "AddRatingDTORequest [rating=" + rating + ", politicianName=" + politicianName + ", politicalParty="
+				+ politicalParty + "]";
 	}
 	
 }

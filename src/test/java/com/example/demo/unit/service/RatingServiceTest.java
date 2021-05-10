@@ -80,4 +80,19 @@ public class RatingServiceTest {
 				equalTo(ratingToBeSaved));
 	}
 	
+	@Test
+	public void verifyFindByMethodNameWorks() {
+		List<PoliticiansRating> listOfPoliticiansRating = List.of(ratingToBeSaved);
+		when(ratingRepo.findByRater_Email("test@gmail.com")).thenReturn(listOfPoliticiansRating);
+		
+		String jsonWebToken = JwtProvider.createJwtWithFixedExpirationDate("test@gmail.com", "test");
+		when(req.getHeader("Authorization")).thenReturn("Bearer " + jsonWebToken);
+		
+		List<PoliticiansRating> politicianRatingQueried = service.findRatingsByFacebookEmail("test@gmail.com");
+		
+		assertThat(listOfPoliticiansRating,
+				equalTo(politicianRatingQueried));
+		
+	}
+	
 }
