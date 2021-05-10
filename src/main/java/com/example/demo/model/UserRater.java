@@ -42,5 +42,33 @@ public class UserRater {
 	public String toString() {
 		return "UserRater [facebookName=" + facebookName + ", politicalParties=" + politicalParties + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((facebookName == null) ? 0 : facebookName.hashCode());
+		result = prime * result + ((politicalParties == null) ? 0 : politicalParties.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserRater other = (UserRater) obj;
+		if (facebookName == null) {
+			if (other.facebookName != null)
+				return false;
+		} else if (!facebookName.equals(other.facebookName))
+			return false;
+		if (politicalParties != other.politicalParties)
+			return false;
+		return true;
+	}
 	
 }

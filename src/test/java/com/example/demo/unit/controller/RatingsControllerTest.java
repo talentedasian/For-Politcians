@@ -55,12 +55,8 @@ public class RatingsControllerTest {
 		
 		ResponseEntity<RatingDTO> response = controller.getRatingById("1");
 		
-		assertThat(response.getBody().getRater().getFacebookName(), 
-				equalTo(ratingDTO.getRater().getFacebookName()));
-		assertThat(response.getBody().getRater().getPoliticalParties(), 
-				equalTo(ratingDTO.getRater().getPoliticalParties()));
-		assertThat(response.getBody().getRating(), 
-				equalTo(ratingDTO.getRating()));
+		assertThat(ratingDTO,
+				equalTo(response.getBody()));
 	}
 
 }
