@@ -35,6 +35,5 @@ src/main/java/com/example/demo/ApplicationListener.java
 mvnw
 mvnw.cmd
 .mvn/
-src/main/resources/application.yml
-src/main/resources/application-localDevelopment.properties
 *.log
+src/main/java/com/example/demo/testConfigurations/SecurityConfigTest.java

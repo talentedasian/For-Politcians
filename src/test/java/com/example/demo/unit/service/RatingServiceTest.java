@@ -78,7 +78,6 @@ public class RatingServiceTest {
 		
 		assertThat(ratings, 
 				equalTo(ratingToBeSaved));
-		
 	}
 	
 }
