@@ -84,7 +84,6 @@ This section should list any major frameworks that you built your project using.
 <!-- ROADMAP -->
 ## Roadmap
 
-* Add Oauth2 
 
 
 
