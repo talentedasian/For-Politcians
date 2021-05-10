@@ -73,7 +73,7 @@ public class RatingService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<PoliticiansRating> findRatingsByFacebookName(String email) {
+	public List<PoliticiansRating> findRatingsByFacebookEmail(String email) {
 		List<PoliticiansRating> ratingsByRater = ratingRepo.findByRater_Email(email);
 		
 		return ratingsByRater;

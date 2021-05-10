@@ -51,7 +51,7 @@ public class RatingServiceTest {
 		ratingToBeSaved = new PoliticiansRating();
 		ratingToBeSaved.setId(1);
 		ratingToBeSaved.setPolitician(politicianToBeSaved);
-		ratingToBeSaved.setRater(new UserRater("test", PoliticalParty.DDS));
+		ratingToBeSaved.setRater(new UserRater("test", PoliticalParty.DDS, "test@gmail.com"));
 		ratingToBeSaved.setRating(0.00D);
 	}
 	

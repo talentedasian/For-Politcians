@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +56,16 @@ public class RatingsController {
 	
 	@GetMapping("/ratingByRater")
 	public ResponseEntity<List<RatingDTO>> getRatingByRater(@RequestParam String email) {
-		PoliticiansRating politicianRatingQueried = ratingService.findRatingsByFacebookName(email)
+		List<PoliticiansRating> politicianRatingQueried = ratingService.findRatingsByFacebookEmail(email);
+		List<RatingDTO> politicianRating = new ArrayList<>();
+		
+		DTOMapper<RatingDTO, PoliticiansRating> mapper = new RatingDtoMapper();
+		
+		for (PoliticiansRating politiciansRatings : politicianRatingQueried) {
+			politicianRating.add(mapper.mapToDTO(politiciansRatings));
+		}
+		
+		return new ResponseEntity<List<RatingDTO>>(politicianRating, HttpStatus.OK);
 	}
 
 }

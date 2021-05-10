@@ -48,7 +48,7 @@ public class PoliticianServiceTest {
 						0.00D);
 		rating = new PoliticiansRating
 				(1, 8.023D, 
-				new UserRater("test", PoliticalParty.DDS),
+				new UserRater("test", PoliticalParty.DDS, "test@gmail.com"),
 				politician);
 	}
 	
