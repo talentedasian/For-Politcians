@@ -16,6 +16,8 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 
+[![Java CI with Maven](https://github.com/talentedasian/For-Politcians/actions/workflows/maven.yml/badge.svg)](https://github.com/talentedasian/For-Politcians/actions/workflows/maven.yml)
+
 <!-- TABLE OF CONTENTS -->
 <details open="open">
   <summary>Table of Contents</summary>
