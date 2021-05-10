@@ -1,8 +1,0 @@
-spring:
-  security:
-    oauth2:
-      client:
-        registration:
-          facebook:
-            clientId: ${OAUTH2_CLIENT_ID}
-            clientSecret: ${OAUTH2_CLIENT_SECRET}

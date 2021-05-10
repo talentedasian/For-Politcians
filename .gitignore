@@ -37,3 +37,4 @@ mvnw.cmd
 .mvn/
 *.log
 src/main/java/com/example/demo/testConfigurations/SecurityConfigTest.java
+src/main/resources/application-test.properties
