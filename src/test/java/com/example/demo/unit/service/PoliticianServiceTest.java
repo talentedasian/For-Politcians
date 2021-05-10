@@ -2,6 +2,7 @@ package com.example.demo.unit.service;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,9 +24,7 @@ import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
-import com.example.demo.repository.RatingRepository;
 import com.example.demo.service.PoliticiansService;
-import com.example.demo.service.RatingService;
 
 @ExtendWith(SpringExtension.class)
 public class PoliticianServiceTest {
@@ -79,6 +78,16 @@ public class PoliticianServiceTest {
 		when(repo.findByName("Mirriam Defensor")).thenReturn(Optional.of(politician)); 
 			
 		Politicians politicianQueried = service.findPoliticianByName("Mirriam Defensor");
+		
+		assertThat(politician,
+				equalTo(politicianQueried));
+	}
+	
+	@Test
+	public void shouldEqualDTOOutputsWhenSaved() {
+		when(repo.save(any(Politicians.class))).thenReturn(politician); 
+			
+		Politicians politicianQueried = service.savePolitician(new AddPoliticianDTORequest("Mirriam Defensor", BigDecimal.valueOf(1D)));
 		
 		assertThat(politician,
 				equalTo(politicianQueried));
