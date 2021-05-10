@@ -32,11 +32,8 @@ public class PoliticianServiceTest {
 
 	@Mock
 	public PoliticiansRepository repo;
-	@Mock
-	public RatingRepository ratingRepo;
 	
 	public PoliticiansService service;
-	public RatingService ratingService;
 	
 	public PoliticiansRating rating;
 	public Politicians politician;
@@ -44,7 +41,6 @@ public class PoliticianServiceTest {
 	@BeforeEach
 	public void setup() {
 		service = new PoliticiansService(repo);
-		ratingService = new RatingService(ratingRepo, repo);
 		
 		politician =  new Politicians
 				(null, 0.00D,
@@ -68,14 +64,24 @@ public class PoliticianServiceTest {
 	}
 	
 	@Test
-	public void shouldAddTotalRating() {
+	public void shouldAddTotalRatingAndCorrectAverageRating() {
 		politician.setTotalRating(8.023D);
 		politician.setRating(politician.getTotalRating() / Double.valueOf(politician.getPoliticiansRating().size()));
 		when(repo.findByName("Mirriam Defensor")).thenReturn(Optional.of(politician));
-			
 		Politicians politicianQueried = service.findPoliticianByName("Mirriam Defensor");
 		
 		assertThat(8.023D,
 				equalTo(politicianQueried.getRating()));
 	}
+	
+	@Test
+	public void shouldEqualDTOOutputs() {
+		when(repo.findByName("Mirriam Defensor")).thenReturn(Optional.of(politician)); 
+			
+		Politicians politicianQueried = service.findPoliticianByName("Mirriam Defensor");
+		
+		assertThat(politician,
+				equalTo(politicianQueried));
+	}
+	
 }
