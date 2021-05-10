@@ -46,7 +46,7 @@ public class RatingService {
 		
 		PoliticalParty politicalParty = null;
 		for (PoliticalParty politicalParties : PoliticalParty.values()) {
-			if (dto.getPoliticialParty().equalsIgnoreCase(politicalParties.toString())) {
+			if (dto.getPoliticalParty().equalsIgnoreCase(politicalParties.toString())) {
 				politicalParty = politicalParties;
 			}
 		}
