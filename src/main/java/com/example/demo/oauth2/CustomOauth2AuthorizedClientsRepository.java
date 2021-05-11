@@ -20,7 +20,6 @@ import org.springframework.security.oauth2.client.ClientAuthorizationRequiredExc
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AccessToken.TokenType;
 import org.springframework.web.client.RestTemplate;
@@ -31,22 +30,12 @@ import com.example.demo.jwt.JwtProvider;
 public class CustomOauth2AuthorizedClientsRepository implements OAuth2AuthorizedClientRepository{
 	
 	private RestTemplate restTemplate;
+	private ClientRegistration clientRegistrationFacebook;
 	
-	public CustomOauth2AuthorizedClientsRepository(RestTemplate restTemplate) {
+	public CustomOauth2AuthorizedClientsRepository(RestTemplate restTemplate, ClientRegistration clientRegistrationFacebook) {
 		this.restTemplate = restTemplate;
+		this.clientRegistrationFacebook = clientRegistrationFacebook; 
 	}
-
-	private static final ClientRegistration clientRegistration = ClientRegistration.withRegistrationId("facebook")
-	        .clientId("697702354184763")
-	        .clientSecret("88e0d00193984f18f0a21f234091702d")
-	        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-	        .redirectUri("{baseUrl}/login/oauth2/code/facebook")
-	        .authorizationUri("https://www.facebook.com/dialog/oauth")
-	        .tokenUri("https://graph.facebook.com/v10.0/oauth/access_token")
-	        .userInfoUri("https://graph.facebook.com/me")
-	        .userNameAttributeName("id,email")
-	        .clientName("Facebook")
-	        .build();
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -61,7 +50,7 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 		}
 		
 		OAuth2AuthorizedClient oauth2AuthorizedClient = new OAuth2AuthorizedClient
-				(clientRegistration, 
+				(clientRegistrationFacebook, 
 				cookieHolder.get("principalName"), 
 				new OAuth2AccessToken(TokenType.BEARER, cookieHolder.get("accessTokenValue"), 
 						Instant.ofEpochSecond(Long.valueOf(cookieHolder.get("accessTokenIssuedAt"))),
