@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.demo.controller.PoliticianController;
@@ -28,6 +29,7 @@ import com.example.demo.service.PoliticiansService;
 
 @WebMvcTest(PoliticianController.class)
 @AutoConfigureMockMvc(addFilters = true, printOnlyOnFailure = false,print = MockMvcPrint.DEFAULT)
+@ActiveProfiles("test")
 public class AddPoliticianFilterTest {
 
 	@Autowired
