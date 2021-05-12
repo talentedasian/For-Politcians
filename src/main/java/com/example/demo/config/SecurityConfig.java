@@ -12,9 +12,11 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.demo.filter.AddPoliticianFilter;
 import com.example.demo.filter.ProtectedResourceOuath2JwtFilter;
 import com.example.demo.oauth2.CustomOauth2AuthorizationRequestsRepository;
 import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
@@ -51,7 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.and()
 				.authorizedClientRepository(this.authorizedClientRepo())
 			.and()
-				.addFilter(new ProtectedResourceOuath2JwtFilter());
+				.addFilterBefore(new ProtectedResourceOuath2JwtFilter(), UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(new AddPoliticianFilter(), ProtectedResourceOuath2JwtFilter.class);
 				
 	}
 		
