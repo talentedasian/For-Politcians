@@ -57,11 +57,11 @@ public class AddPoliticianFilterTest {
 				.header("Politician-Access", "oo")
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isUnauthorized())
+			.andExpect(status().isForbidden())
 			.andExpect(jsonPath("err", 
 					equalTo("Authorization Required")))
 			.andExpect(jsonPath("code", 
-					equalTo("401")));
+					equalTo("403")));
 	}
 	
 	@Test 
@@ -71,11 +71,11 @@ public class AddPoliticianFilterTest {
 		mvc.perform(post(URI.create("/api/politicians/add-politician"))
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isUnauthorized())
+			.andExpect(status().isForbidden())
 			.andExpect(jsonPath("err", 
 					equalTo("Authorization Required")))
 			.andExpect(jsonPath("code", 
-					equalTo("401")));
+					equalTo("403")));
 	}
 	
 	@Test 
