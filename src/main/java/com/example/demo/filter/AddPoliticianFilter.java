@@ -45,10 +45,10 @@ public class AddPoliticianFilter implements Filter{
 
 	private void handleAddPoliticianAccessDenied(HttpServletRequest req, HttpServletResponse res) throws JsonProcessingException, IOException {
 		ExceptionModel exceptionModel = new ExceptionModel();
-		exceptionModel.setCode("403");
+		exceptionModel.setCode("401");
 		exceptionModel.setErr("Authorization Required");
 		
-		res.setStatus(403);
+		res.setStatus(401);
 		res.setContentType("application/json");
 		res.getWriter().write(new ObjectMapper().writeValueAsString(exceptionModel));
 	}
