@@ -49,7 +49,7 @@ public class PoliticiansService {
 		try {
 			var politicianToBeSaved = new Politicians();
 			politicianToBeSaved.setName(dto.getName());
-			politicianToBeSaved.setRating(dto.getRating().doubleValue());
+			politicianToBeSaved.setRating(dto.getRating().setScale(2,RoundingMode.HALF_DOWN).doubleValue());
 			politicianToBeSaved.setTotalRating(dto.getRating().setScale(2,RoundingMode.HALF_DOWN).doubleValue());
 			
 			Politicians politician = politiciansRepo.save(politicianToBeSaved);
