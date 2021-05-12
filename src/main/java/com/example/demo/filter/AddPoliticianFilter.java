@@ -24,12 +24,12 @@ public class AddPoliticianFilter implements Filter{
 		
 		if (req.getServletPath().equalsIgnoreCase("/api/politicians/add-politician")) {
 			if (req.getHeader("Politician-Access") != null) {
-				if (!req.getHeader("Politician-Access").equalsIgnoreCase("password")) {
+				if (req.getHeader("Politician-Access").equalsIgnoreCase("password")) {
+					
+				} else {
 					handleAddPoliticianAccessDenied(req, res);
-					return;
+					return;					
 				}
-				
-				return;
 				
 			} else {
 				handleAddPoliticianAccessDenied(req, res);
