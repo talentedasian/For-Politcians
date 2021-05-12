@@ -14,27 +14,29 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.example.demo.controller.PoliticianController;
+import com.example.demo.filter.AddPoliticianFilter;
 import com.example.demo.model.Politicians;
 import com.example.demo.model.PoliticiansRating;
 import com.example.demo.service.PoliticiansService;
 
 @WebMvcTest(PoliticianController.class)
-@AutoConfigureMockMvc(addFilters = true, printOnlyOnFailure = false,print = MockMvcPrint.DEFAULT)
 public class AddPoliticianFilterTest {
 
-	@Autowired
 	public MockMvc mvc;
 	
 	@MockBean
 	public PoliticiansService service;
+	
+	@Autowired
+	public WebApplicationContext wac;
 	
 	private final String content = """
 			{
@@ -47,6 +49,9 @@ public class AddPoliticianFilterTest {
 	@BeforeEach
 	public void setup() {
 		politician = new Politicians(1, 9.00D, "test name", List.of(new PoliticiansRating()), 9.00D);
+		mvc = MockMvcBuilders.webAppContextSetup(wac)
+				.addFilter(new AddPoliticianFilter(), "/api/politicians/add-politician")
+				.build();
 	}
 	
 	@Test 
