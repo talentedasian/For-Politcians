@@ -22,7 +22,7 @@ import com.example.demo.oauth2.CustomOauth2AuthorizationRequestsRepository;
 import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @Profile("production")
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
