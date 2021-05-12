@@ -50,7 +50,7 @@ public class AddPoliticianFilterTest {
 	}
 	
 	@Test 
-	public void shouldReturn401AuthorizationRequiredMessage() throws URISyntaxException, Exception {
+	public void shouldReturn401AuthorizationRequiredMessageIfAuthorizationIsIncorrect() throws URISyntaxException, Exception {
 		when(service.savePolitician(any())).thenReturn(politician);
 		
 		mvc.perform(post(URI.create("/api/politicians/add-politician"))

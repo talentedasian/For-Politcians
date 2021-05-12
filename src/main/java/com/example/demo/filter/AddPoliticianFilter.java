@@ -15,6 +15,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class AddPoliticianFilter implements Filter{
+	
+	//Should be changed to an environment variable
+	private final String password = "password";
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -24,7 +27,7 @@ public class AddPoliticianFilter implements Filter{
 		
 		if (req.getRequestURI().equalsIgnoreCase("/api/politicians/add-politician")) {
 			if (req.getHeader("Politician-Access") != null) {
-				if (req.getHeader("Politician-Access").equalsIgnoreCase("password")) {
+				if (req.getHeader("Politician-Access").equalsIgnoreCase(password)) {
 					
 				} else {
 					handleAddPoliticianAccessDenied(req, res);
