@@ -65,6 +65,20 @@ public class AddPoliticianFilterTest {
 	}
 	
 	@Test 
+	public void shouldReturn401AuthorizationRequiredMessageIfHeaderRequiredIsNull() throws URISyntaxException, Exception {
+		when(service.savePolitician(any())).thenReturn(politician);
+		
+		mvc.perform(post(URI.create("/api/politicians/add-politician"))
+				.content(content)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isUnauthorized())
+			.andExpect(jsonPath("err", 
+					equalTo("Authorization Required")))
+			.andExpect(jsonPath("code", 
+					equalTo("401")));
+	}
+	
+	@Test 
 	public void shouldReturn201CreatedIfAuthorizationIsCorrect() throws URISyntaxException, Exception {
 		when(service.savePolitician(any())).thenReturn(politician);
 		
