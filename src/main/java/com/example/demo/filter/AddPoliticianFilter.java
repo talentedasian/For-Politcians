@@ -28,7 +28,7 @@ public class AddPoliticianFilter implements Filter{
 		if (req.getRequestURI().equalsIgnoreCase("/api/politicians/add-politician")) {
 			if (req.getHeader("Politician-Access") != null) {
 				if (req.getHeader("Politician-Access").equalsIgnoreCase(password)) {
-					
+					//essentially do nothing
 				} else {
 					handleAddPoliticianAccessDenied(req, res);
 					return;					
