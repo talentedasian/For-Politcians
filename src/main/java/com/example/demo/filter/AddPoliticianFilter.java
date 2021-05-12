@@ -30,6 +30,7 @@ public class AddPoliticianFilter implements Filter{
 			if (req.getHeader("Politician-Access") != null) {
 				if (req.getHeader("Politician-Access").equalsIgnoreCase(password)) {
 					//essentially do nothing
+					Logger.getLogger("Add Politician Filter").log(java.util.logging.Level.INFO, String.valueOf(res.getStatus()) + " tanginamo");
 				} else {
 					handleAddPoliticianAccessDenied(req, res);
 					return;					
@@ -52,8 +53,6 @@ public class AddPoliticianFilter implements Filter{
 		res.setStatus(401);
 		res.setContentType("application/json");
 		res.getWriter().write(new ObjectMapper().writeValueAsString(exceptionModel));
-		Logger.getLogger("Add Politician Filter").log(java.util.logging.Level.INFO, String.valueOf(res.getStatus()) + " tanginamo");
-		
 	}
 
 }
