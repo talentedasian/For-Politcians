@@ -22,7 +22,7 @@ public class AddPoliticianFilter implements Filter{
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		
-		if (req.getServletPath().equalsIgnoreCase("/api/politicians/add-politician")) {
+		if (req.getRequestURI().equalsIgnoreCase("/api/politicians/add-politician")) {
 			if (req.getHeader("Politician-Access") != null) {
 				if (req.getHeader("Politician-Access").equalsIgnoreCase("password")) {
 					
@@ -33,6 +33,7 @@ public class AddPoliticianFilter implements Filter{
 				
 			} else {
 				handleAddPoliticianAccessDenied(req, res);
+				return;
 			}
 		}
 		
