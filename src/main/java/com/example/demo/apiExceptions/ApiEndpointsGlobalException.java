@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.demo.exceptions.JwtNotFoundException;
+import com.example.demo.exceptions.PoliticianAlreadyExistsException;
 
 @RestControllerAdvice	
 public class ApiEndpointsGlobalException extends ResponseEntityExceptionHandler{
@@ -19,4 +20,14 @@ public class ApiEndpointsGlobalException extends ResponseEntityExceptionHandler{
 		
 		return new ResponseEntity<ExceptionModel>(exceptionModel, HttpStatus.UNAUTHORIZED);
 	}
+	
+	@ExceptionHandler(PoliticianAlreadyExistsException.class)
+	public ResponseEntity<ExceptionModel> handlePoliticianAlreadyExistsException() {
+		var exceptionModel = new ExceptionModel();
+		exceptionModel.setCode("409");
+		exceptionModel.setErr("Politician Already exists in the database");
+		
+		return new ResponseEntity<ExceptionModel>(exceptionModel, HttpStatus.CONFLICT);
+	}
+	
 }
