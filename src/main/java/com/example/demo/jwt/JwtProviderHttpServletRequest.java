@@ -4,12 +4,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.util.Assert;
 
+import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
 import com.example.demo.exceptions.JwtTamperedExpcetion;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 
 public class JwtProviderHttpServletRequest {
@@ -19,7 +21,7 @@ public class JwtProviderHttpServletRequest {
 		Assert.state(req.getHeader("Authorization") != null, 
 				"No jwt found on authorization header");
 		Assert.state(req.getHeader("Authorization").startsWith("Bearer "), 
-				"Authorization Header must start with \"Bearer\"");
+				"Authorization Header must start with Bearer");
 		try {
 			jwts = Jwts.parserBuilder()
 					.setSigningKey(JwtKeys.getJwtKeyPair().getPublic())
@@ -39,6 +41,8 @@ public class JwtProviderHttpServletRequest {
 					Server might have restarted without prior knowledge
 					""", 
 					e); 
+		} catch (MalformedJwtException e) {
+			throw new JwtMalformedFormatException(e.getLocalizedMessage());
 		}
 		
 		return jwts;	

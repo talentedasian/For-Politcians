@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.demo.filter.ProtectedResourceOuath2JwtFilter;
 import com.example.demo.oauth2.CustomOauth2AuthorizationRequestsRepository;
 import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
 
@@ -49,7 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.authorizationRequestRepository(this.authorizationRequestsRepo())
 				.and()
 				.authorizedClientRepository(this.authorizedClientRepo())
-			.and();
+			.and()
+				.addFilter(new ProtectedResourceOuath2JwtFilter());
 				
 	}
 		
