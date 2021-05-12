@@ -1,6 +1,7 @@
 package com.example.demo.filter;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -51,6 +52,8 @@ public class AddPoliticianFilter implements Filter{
 		res.setStatus(401);
 		res.setContentType("application/json");
 		res.getWriter().write(new ObjectMapper().writeValueAsString(exceptionModel));
+		Logger.getLogger("Add Politician Filter").log(java.util.logging.Level.INFO, String.valueOf(res.getStatus()) + " tanginamo");
+		
 	}
 
 }
