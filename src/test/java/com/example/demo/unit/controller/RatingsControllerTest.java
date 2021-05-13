@@ -61,25 +61,16 @@ public class RatingsControllerTest {
 	}
 	
 	@Test
-	public void	assertEqualsReturnedDto() {
+	public void assertEqualsDtoOutputs() throws Exception {
 		when(service.findById("1")).thenReturn(politiciansRating);
 		
 		ResponseEntity<RatingDTO> response = controller.getRatingById("1");
 		
-		assertThat(ratingDTO,
-				equalTo(response.getBody()));
+		RatingDTO politicianResponse = response.getBody();
+		
+		assertThat(politicianResponse.getRating(),
+				equalTo(politiciansRating.getRating()));
 	}
-	
-	
-//	@Test
-//	public void assertEqualsDtoOutputs() throws Exception {
-//		when(service.findById("1")).thenReturn(politiciansRating);
-//		
-//		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
-//			.andExpect(status().isOk())
-//			.andExpect(jsonPath("rating", 
-//				equalTo(politiciansRating.getRating())));
-//	}
 	
 	@Test
 	public void assertEqualsDtoOutputsOnPoliticians() throws Exception {
