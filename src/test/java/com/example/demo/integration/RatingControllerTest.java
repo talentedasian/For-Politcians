@@ -110,7 +110,9 @@ public class RatingControllerTest {
 			.andExpect(jsonPath("politician.name", 
 				equalTo(politiciansRating.getPolitician().getName())))
 			.andExpect(jsonPath("politician.rating", 
-				equalTo(politiciansRating.getPolitician().getRating())));
+				equalTo(politiciansRating.getPolitician().getRating())))
+			.andExpect(jsonPath("politician.satisfaction_rate", 
+				equalTo(Rating.LOW.toString())));
 	}
 	
 //	@Test
