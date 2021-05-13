@@ -51,8 +51,8 @@ public class UserRater {
 
 	@Override
 	public String toString() {
-		return "UserRater [facebookName=" + facebookName + ", politicalParties=" + politicalParties + ", email=" + email
-				+ "]";
+		return "{facebookName=" + facebookName + ", politicalParties=" + politicalParties + ", email=" + email
+				+ "}";
 	}
 
 	@Override

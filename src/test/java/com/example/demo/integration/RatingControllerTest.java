@@ -1,18 +1,20 @@
 package com.example.demo.integration;
 
 import static java.net.URI.create;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.math.BigDecimal;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,13 +28,15 @@ import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
-import com.example.demo.jwt.JwtProvider;
+import com.example.demo.dtomapper.RatingDtoMapper;
+import com.example.demo.dtomapper.interfaces.DTOMapper;
 import com.example.demo.model.Politicians;
 import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.model.enums.Rating;
 import com.example.demo.service.RatingService;
+import com.jayway.jsonpath.JsonPath;
 
 @WebMvcTest(RatingsController.class)
 @AutoConfigureMockMvc(addFilters = false, printOnlyOnFailure = false, print = MockMvcPrint.DEFAULT)
@@ -76,7 +80,7 @@ public class RatingControllerTest {
 	}
 	
 	@Test
-	public void shouldReturn201IsCreatedStatusCode() throws Exception {
+	public void shouldReturn201IsCreated() throws Exception {
 		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenReturn(politiciansRating);
 		
 		mvc.perform(post(create("/api/ratings/add-rating"))
@@ -84,4 +88,17 @@ public class RatingControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated());
 	}
+	
+	@Test
+	public void assertEqualsDtoOutputs() throws Exception {
+		when(service.findById("1")).thenReturn(politiciansRating);
+		
+		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("rating", 
+				equalTo(politiciansRating.getRating())))
+			.andExpect(jsonPath("politician.satisfaction_rate", 
+				equalTo(Rating.LOW.toString())));
+	}
+	
 }
