@@ -61,5 +61,42 @@ public class AddRatingDTORequest {
 		return "AddRatingDTORequest [rating=" + rating + ", politicianName=" + politicianName + ", politicalParty="
 				+ politicalParty + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((politicalParty == null) ? 0 : politicalParty.hashCode());
+		result = prime * result + ((politicianName == null) ? 0 : politicianName.hashCode());
+		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AddRatingDTORequest other = (AddRatingDTORequest) obj;
+		if (politicalParty == null) {
+			if (other.politicalParty != null)
+				return false;
+		} else if (!politicalParty.equals(other.politicalParty))
+			return false;
+		if (politicianName == null) {
+			if (other.politicianName != null)
+				return false;
+		} else if (!politicianName.equals(other.politicianName))
+			return false;
+		if (rating == null) {
+			if (other.rating != null)
+				return false;
+		} else if (!rating.equals(other.rating))
+			return false;
+		return true;
+	}
 	
 }

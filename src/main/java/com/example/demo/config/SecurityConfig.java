@@ -19,7 +19,6 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.filter.AddPoliticianFilter;
-import com.example.demo.filter.ProtectedResourceOuath2JwtFilter;
 import com.example.demo.oauth2.CustomOauth2AuthorizationRequestsRepository;
 import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
 
