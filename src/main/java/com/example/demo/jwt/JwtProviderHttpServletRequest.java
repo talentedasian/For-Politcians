@@ -18,23 +18,26 @@ public class JwtProviderHttpServletRequest {
 
 	public static Jws<Claims> decodeJwt(HttpServletRequest req) {
 		Jws<Claims> jwts = null;
-		Assert.state(req.getHeader("Authorization") != null, 
-				"No jwt found on authorization header");
-		Assert.state(req.getHeader("Authorization").startsWith("Bearer "), 
-				"Authorization Header must start with Bearer");
+		try {
+			Assert.state(req.getHeader("Authorization") != null, 
+					"No jwt found on authorization header");			
+		} catch (IllegalStateException e) {
+			throw new JwtNotFoundException(e.getMessage(), e);
+		} 
+		
+		try {
+			Assert.state(req.getHeader("Authorization").startsWith("Bearer "), 
+					"Authorization Header must start with Bearer");			
+		} catch (IllegalStateException e) {
+			throw new JwtMalformedFormatException(e.getMessage(), e);
+		}
+		
 		try {
 			jwts = Jwts.parserBuilder()
 					.setSigningKey(JwtKeys.getJwtKeyPair().getPublic())
 					.setAllowedClockSkewSeconds(60 * 3)
 					.build()
 					.parseClaimsJws(req.getHeader("Authorization").substring(7));
-
-		} catch (IllegalStateException e) {
-			throw new JwtNotFoundException("""
-					No jwt found on authorization Header or Authorization or 
-					Authorization Header did not start with "Bearer"
-					""", 
-					e);
 		} catch (SignatureException e) {
 			throw new JwtTamperedExpcetion("""
 					Jwt retrieved had a signature exception or was tampered.
