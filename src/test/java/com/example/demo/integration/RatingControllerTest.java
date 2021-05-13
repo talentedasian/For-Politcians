@@ -101,4 +101,16 @@ public class RatingControllerTest {
 				equalTo(Rating.LOW.toString())));
 	}
 	
+	@Test
+	public void assertEqualsUserRaterDtoOutputs() throws Exception {
+		when(service.findById("1")).thenReturn(politiciansRating);
+		
+		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("rater.facebook_name",
+				equalTo(politiciansRating.getRater().getFacebookName())))
+			.andExpect(jsonPath("rater.political_party",
+				equalTo(politiciansRating.getRater().getPoliticalParties().toString())));
+	}
+	
 }

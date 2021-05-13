@@ -3,12 +3,15 @@ package com.example.demo.model;
 import javax.persistence.Embeddable;
 
 import com.example.demo.model.enums.PoliticalParty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Embeddable
 public class UserRater {
 
+	@JsonProperty("facebook_name")
 	private String facebookName;
 	
+	@JsonProperty("political_party")
 	private PoliticalParty politicalParties;
 	
 	private String email;
