@@ -45,7 +45,7 @@ public class JwtProviderHttpServletRequest {
 					""", 
 					e); 
 		} catch (MalformedJwtException e) {
-			throw new JwtMalformedFormatException(e.getLocalizedMessage());
+			throw new JwtTamperedExpcetion(e.getLocalizedMessage());
 		}
 		
 		return jwts;	
