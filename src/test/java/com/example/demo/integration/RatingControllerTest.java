@@ -1,7 +1,6 @@
 package com.example.demo.integration;
 
 import static java.net.URI.create;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -12,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,15 +26,12 @@ import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
-import com.example.demo.dtomapper.RatingDtoMapper;
-import com.example.demo.dtomapper.interfaces.DTOMapper;
 import com.example.demo.model.Politicians;
 import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.model.enums.Rating;
 import com.example.demo.service.RatingService;
-import com.jayway.jsonpath.JsonPath;
 
 @WebMvcTest(RatingsController.class)
 @AutoConfigureMockMvc(addFilters = false, printOnlyOnFailure = false, print = MockMvcPrint.DEFAULT)
@@ -52,6 +47,7 @@ public class RatingControllerTest {
 	public PoliticiansRating politiciansRating;
 	public RatingDTO ratingDTO;
 	public PoliticianDTO politicianDTO;
+	public UserRater userRater;
 	
 	private final String content = """
 			{
@@ -72,11 +68,13 @@ public class RatingControllerTest {
 		politician.setRating(0.01D);
 		politician.setTotalRating(0.01D);
 		
-		politiciansRating = new PoliticiansRating(1, 0.01D, new UserRater("test", PoliticalParty.DDS, "test@gmail.com"), politician);
+		userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com");
+		
+		politiciansRating = new PoliticiansRating(1, 0.01D, userRater, politician);
 				
 		politicianDTO = new PoliticianDTO("test", "1", 0.01D, Rating.LOW);
 		
-		ratingDTO = new RatingDTO(0.00D, new UserRater("test", PoliticalParty.DDS, "test@gmail.com"), politicianDTO);
+		ratingDTO = new RatingDTO(0.00D, userRater, politicianDTO);
 	}
 	
 	@Test
@@ -100,6 +98,35 @@ public class RatingControllerTest {
 			.andExpect(jsonPath("politician.satisfaction_rate", 
 				equalTo(Rating.LOW.toString())));
 	}
+	
+	@Test
+	public void assertEqualsDtoOutputsOnPoliticians() throws Exception {
+		when(service.findById("1")).thenReturn(politiciansRating);
+		
+		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("politician.id", 
+				equalTo(politiciansRating.getPolitician().getId().toString())))
+			.andExpect(jsonPath("politician.name", 
+				equalTo(politiciansRating.getPolitician().getName())))
+			.andExpect(jsonPath("politician.rating", 
+				equalTo(politiciansRating.getPolitician().getRating())));
+	}
+	
+//	@Test
+//	public void assertEqualsListOfDtoOutputs() throws Exception {
+//		var politiciansRating2 = new PoliticiansRating(1, 0.01D, userRater, politician);
+//		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
+//		
+//		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
+//
+//		mvc.perform(get(create("/api/ratings/ratingByRater?email=test@gmail.com")))
+//			.andExpect(status().isOk())
+//			.andExpect(jsonPath("[0].politician.id",
+//				equalTo(politiciansRating.getPolitician().getId().toString())))
+//		.andExpect(jsonPath("[0].politician.name",
+//				equalTo(politiciansRating.getPolitician().getId().toString())));
+//	}
 	
 	@Test
 	public void assertEqualsUserRaterDtoOutputs() throws Exception {
