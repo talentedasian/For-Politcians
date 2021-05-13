@@ -81,7 +81,7 @@ public class RatingServiceTest {
 	}
 	
 	@Test
-	public void verifyFindByMethodNameWorks() {
+	public void assertEqualsDtoOutputs() {
 		List<PoliticiansRating> listOfPoliticiansRating = List.of(ratingToBeSaved);
 		when(ratingRepo.findByRater_Email("test@gmail.com")).thenReturn(listOfPoliticiansRating);
 		
