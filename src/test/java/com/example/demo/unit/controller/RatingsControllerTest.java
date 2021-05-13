@@ -150,20 +150,19 @@ public class RatingsControllerTest {
 //			.andExpect(jsonPath("[1].rating",
 //				equalTo(listOfPoliticiansRating.get(1).getRating())));
 //	}
-//	
-//	@Test
-//	public void assertEqualsUserRaterDtoOutputs() throws Exception {
-//		when(service.findById("1")).thenReturn(politiciansRating);
-//		
-//		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
-//		.andExpect(status().isOk())
-//		.andExpect(jsonPath("rater.facebook_name",
-//				equalTo(politiciansRating.getRater().getFacebookName())))
-//		.andExpect(jsonPath("rater.political_party",
-//				equalTo(politiciansRating.getRater().getPoliticalParties().toString())))
-//		.andExpect(jsonPath("rater.email",
-//				equalTo(politiciansRating.getRater().getEmail())));
-//	}
+	
+	@Test
+	public void assertEqualsUserRaterDtoOutputs() throws Exception {
+		when(service.findById("1")).thenReturn(politiciansRating);
+		
+		ResponseEntity<RatingDTO> response = controller.getRatingById("1");
+		assertThat(response.getBody().getRater().getFacebookName(),
+				equalTo(politiciansRating.getRater().getFacebookName()));
+		assertThat(response.getBody().getRater().getPoliticalParties().toString(),
+				equalTo(politiciansRating.getRater().getPoliticalParties().toString()));
+		assertThat(response.getBody().getRater().getEmail(),
+				equalTo(politiciansRating.getRater().getEmail()));
+	}
 	
 	@Test
 	public void assertEqualsUserRaterListOfDtoOutputs() throws Exception {
@@ -175,8 +174,8 @@ public class RatingsControllerTest {
 
 		ResponseEntity<List<RatingDTO>> response = controller.getRatingByRater("test@gmail.com");
 		
-		PoliticiansRating politicianResponse = listOfPoliticiansRating.get(0);
-		PoliticiansRating politicianResponse2 = listOfPoliticiansRating.get(1);
+		RatingDTO politicianResponse = response.getBody().get(0);
+		RatingDTO politicianResponse2 = response.getBody().get(1);
 		
 		assertThat(politicianResponse.getRater().getEmail(), 
 				equalTo(listOfPoliticiansRating.get(0).getRater().getEmail()));
