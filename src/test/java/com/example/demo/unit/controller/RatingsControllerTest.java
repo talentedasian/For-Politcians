@@ -1,12 +1,8 @@
 package com.example.demo.unit.controller;
 
-import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
 
@@ -20,8 +16,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
-import com.example.demo.dtomapper.RatingDtoMapper;
-import com.example.demo.dtomapper.interfaces.DTOMapper;
 import com.example.demo.model.Politicians;
 import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;

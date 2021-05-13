@@ -1,6 +1,7 @@
 package com.example.demo.integration;
 
 import static java.net.URI.create;
+import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,6 +30,7 @@ import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
+import com.example.demo.exceptions.JwtNotFoundException;
 import com.example.demo.model.Politicians;
 import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;
@@ -80,114 +83,17 @@ public class RatingControllerTest {
 	}
 	
 	@Test
-	public void shouldReturn201IsCreated() throws Exception {
-		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenReturn(politiciansRating);
+	public void shouldReturn401IsUnAuthorized() throws Exception {
+		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(JwtNotFoundException.class);
 		
 		mvc.perform(post(create("/api/ratings/add-rating"))
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isCreated());
-	}
-	
-	@Test
-	public void assertEqualsDtoOutputs() throws Exception {
-		when(service.findById("1")).thenReturn(politiciansRating);
-		
-		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("rating", 
-				equalTo(politiciansRating.getRating())));
-	}
-	
-	@Test
-	public void assertEqualsDtoOutputsOnPoliticians() throws Exception {
-		when(service.findById("1")).thenReturn(politiciansRating);
-		
-		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("politician.id", 
-				equalTo(politiciansRating.getPolitician().getId().toString())))
-			.andExpect(jsonPath("politician.name", 
-				equalTo(politiciansRating.getPolitician().getName())))
-			.andExpect(jsonPath("politician.rating", 
-				equalTo(politiciansRating.getPolitician().getRating())))
-			.andExpect(jsonPath("politician.satisfaction_rate", 
-				equalTo(Rating.LOW.toString())));
-	}
-	
-	@Test
-	public void assertEqualsPoliticiansListOfDtoOutputs() throws Exception {
-		var politiciansRating2 = new PoliticiansRating(1, 0.01D, userRater, politician);
-		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
-		
-		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
-
-		mvc.perform(get(create("/api/ratings/ratingByRater?email=test@gmail.com")))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("[0].politician.id",
-				equalTo(listOfPoliticiansRating.get(0).getPolitician().getId().toString())))
-			.andExpect(jsonPath("[0].politician.name",
-				equalTo(listOfPoliticiansRating.get(0).getPolitician().getName())))
-			.andExpect(jsonPath("[0].politician.rating",
-				equalTo(listOfPoliticiansRating.get(0).getPolitician().getRating())))
-			.andExpect(jsonPath("[1].politician.id",
-				equalTo(listOfPoliticiansRating.get(1).getPolitician().getId().toString())))
-			.andExpect(jsonPath("[1].politician.name",
-				equalTo(listOfPoliticiansRating.get(1).getPolitician().getName())))
-			.andExpect(jsonPath("[1].politician.rating",
-				equalTo(listOfPoliticiansRating.get(1).getPolitician().getRating())));
-	}
-	
-	@Test
-	public void assertEqualsListOfDtoOutputs() throws Exception {
-		var politiciansRating2 = new PoliticiansRating(1, 0.01D, userRater, politician);
-		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
-		
-		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
-
-		mvc.perform(get(create("/api/ratings/ratingByRater?email=test@gmail.com")))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("[0].rating",
-				equalTo(listOfPoliticiansRating.get(0).getRating())))
-			.andExpect(jsonPath("[1].rating",
-				equalTo(listOfPoliticiansRating.get(1).getRating())));
-	}
-	
-	@Test
-	public void assertEqualsUserRaterDtoOutputs() throws Exception {
-		when(service.findById("1")).thenReturn(politiciansRating);
-		
-		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("rater.facebook_name",
-				equalTo(politiciansRating.getRater().getFacebookName())))
-		.andExpect(jsonPath("rater.political_party",
-				equalTo(politiciansRating.getRater().getPoliticalParties().toString())))
-		.andExpect(jsonPath("rater.email",
-				equalTo(politiciansRating.getRater().getEmail())));
-	}
-	
-	@Test
-	public void assertEqualsUserRaterListOfDtoOutputs() throws Exception {
-		var politiciansRating2 = new PoliticiansRating(1, 0.01D, userRater, politician);
-		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
-		
-		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
-
-		mvc.perform(get(create("/api/ratings/ratingByRater?email=test@gmail.com")))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("[0].rater.email",
-				equalTo(listOfPoliticiansRating.get(0).getRater().getEmail())))
-			.andExpect(jsonPath("[0].rater.facebook_name",
-				equalTo(listOfPoliticiansRating.get(0).getRater().getFacebookName())))
-			.andExpect(jsonPath("[0].rater.political_party",
-				equalTo(listOfPoliticiansRating.get(0).getRater().getPoliticalParties().toString())))
-			.andExpect(jsonPath("[1].rater.email",
-				equalTo(listOfPoliticiansRating.get(1).getRater().getEmail())))
-			.andExpect(jsonPath("[1].rater.facebook_name",
-				equalTo(listOfPoliticiansRating.get(1).getRater().getFacebookName())))
-			.andExpect(jsonPath("[1].rater.political_party",
-				equalTo(listOfPoliticiansRating.get(1).getRater().getPoliticalParties().toString())));
+			.andExpect(status().isUnauthorized())
+			.andExpect(jsonPath("err", 
+					containsStringIgnoringCase("No jwt found on authorization header")))
+			.andExpect(jsonPath("code", 
+				containsStringIgnoringCase("401")));
 	}
 	
 }
