@@ -56,8 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.and()
 				.authorizedClientRepository(this.authorizedClientRepo())
 			.and()
-				.addFilterBefore(new ProtectedResourceOuath2JwtFilter(), UsernamePasswordAuthenticationFilter.class)
-				.addFilterBefore(new AddPoliticianFilter(), ProtectedResourceOuath2JwtFilter.class);
+				.addFilterBefore(new AddPoliticianFilter(), UsernamePasswordAuthenticationFilter.class);
 				
 	}
 		
