@@ -80,29 +80,32 @@ public class RatingsControllerTest {
 //			.andExpect(jsonPath("rating", 
 //				equalTo(politiciansRating.getRating())));
 //	}
-//	
-//	@Test
-//	public void assertEqualsDtoOutputsOnPoliticians() throws Exception {
-//		when(service.findById("1")).thenReturn(politiciansRating);
-//		
-//		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
-//			.andExpect(status().isOk())
-//			.andExpect(jsonPath("politician.id", 
-//				equalTo(politiciansRating.getPolitician().getId().toString())))
-//			.andExpect(jsonPath("politician.name", 
-//				equalTo(politiciansRating.getPolitician().getName())))
-//			.andExpect(jsonPath("politician.rating", 
-//				equalTo(politiciansRating.getPolitician().getRating())))
-//			.andExpect(jsonPath("politician.satisfaction_rate", 
-//				equalTo(Rating.LOW.toString())));
-//	}
-//	
+	
+	@Test
+	public void assertEqualsDtoOutputsOnPoliticians() throws Exception {
+		when(service.findById("1")).thenReturn(politiciansRating);
+		
+		ResponseEntity<RatingDTO> response = controller.getRatingById("1");
+		
+		RatingDTO politiciaResponse = response.getBody();
+		
+		assertThat(politiciaResponse.getPolitician().getId().toString(),
+				equalTo(politiciansRating.getPolitician().getId().toString()));
+		assertThat(politiciaResponse.getPolitician().getName(),
+				equalTo(politiciansRating.getPolitician().getName()));
+		assertThat(politiciaResponse.getPolitician().getRating(),
+				equalTo(politiciansRating.getPolitician().getRating()));
+		assertThat(politiciaResponse.getPolitician().getSatisfactionRate().toString(),
+				equalTo(Rating.LOW.toString()));
+	}
+	
 	@Test
 	public void assertEqualsPoliticiansListOfDtoOutputs() throws Exception {
 		var politiciansRating2 = new PoliticiansRating(1, 0.01D, userRater, politician);
 		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
 		
 		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
+		
 		ResponseEntity<List<RatingDTO>> response = controller.getRatingByRater("test@gmail.com");
 		RatingDTO politicianResponse = response.getBody().get(0);
 		RatingDTO politicianResponse2 = response.getBody().get(1);
@@ -144,6 +147,7 @@ public class RatingsControllerTest {
 		when(service.findById("1")).thenReturn(politiciansRating);
 		
 		ResponseEntity<RatingDTO> response = controller.getRatingById("1");
+		
 		assertThat(response.getBody().getRater().getFacebookName(),
 				equalTo(politiciansRating.getRater().getFacebookName()));
 		assertThat(response.getBody().getRater().getPoliticalParties().toString(),
