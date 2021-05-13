@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -94,9 +96,7 @@ public class RatingControllerTest {
 		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("rating", 
-				equalTo(politiciansRating.getRating())))
-			.andExpect(jsonPath("politician.satisfaction_rate", 
-				equalTo(Rating.LOW.toString())));
+				equalTo(politiciansRating.getRating())));
 	}
 	
 	@Test
@@ -115,20 +115,20 @@ public class RatingControllerTest {
 				equalTo(Rating.LOW.toString())));
 	}
 	
-//	@Test
-//	public void assertEqualsListOfDtoOutputs() throws Exception {
-//		var politiciansRating2 = new PoliticiansRating(1, 0.01D, userRater, politician);
-//		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
-//		
-//		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
-//
-//		mvc.perform(get(create("/api/ratings/ratingByRater?email=test@gmail.com")))
-//			.andExpect(status().isOk())
-//			.andExpect(jsonPath("[0].politician.id",
-//				equalTo(politiciansRating.getPolitician().getId().toString())))
-//		.andExpect(jsonPath("[0].politician.name",
-//				equalTo(politiciansRating.getPolitician().getId().toString())));
-//	}
+	@Test
+	public void assertEqualsListOfDtoOutputs() throws Exception {
+		var politiciansRating2 = new PoliticiansRating(1, 0.01D, userRater, politician);
+		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
+		
+		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
+
+		mvc.perform(get(create("/api/ratings/ratingByRater?email=test@gmail.com")))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("[0].rating",
+				equalTo(listOfPoliticiansRating.get(0).getRating())))
+			.andExpect(jsonPath("[1].rating",
+				equalTo(listOfPoliticiansRating.get(1).getRating())));
+	}
 	
 	@Test
 	public void assertEqualsUserRaterDtoOutputs() throws Exception {
