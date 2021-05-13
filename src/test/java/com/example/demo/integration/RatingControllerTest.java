@@ -116,6 +116,29 @@ public class RatingControllerTest {
 	}
 	
 	@Test
+	public void assertEqualsPoliticiansListOfDtoOutputs() throws Exception {
+		var politiciansRating2 = new PoliticiansRating(1, 0.01D, userRater, politician);
+		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
+		
+		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
+
+		mvc.perform(get(create("/api/ratings/ratingByRater?email=test@gmail.com")))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("[0].politician.id",
+				equalTo(listOfPoliticiansRating.get(0).getPolitician().getId().toString())))
+			.andExpect(jsonPath("[0].politician.name",
+				equalTo(listOfPoliticiansRating.get(0).getPolitician().getName())))
+			.andExpect(jsonPath("[0].politician.rating",
+				equalTo(listOfPoliticiansRating.get(0).getPolitician().getRating())))
+			.andExpect(jsonPath("[1].politician.id",
+				equalTo(listOfPoliticiansRating.get(1).getPolitician().getId().toString())))
+			.andExpect(jsonPath("[1].politician.name",
+				equalTo(listOfPoliticiansRating.get(1).getPolitician().getName())))
+			.andExpect(jsonPath("[1].politician.rating",
+				equalTo(listOfPoliticiansRating.get(1).getPolitician().getRating())));
+	}
+	
+	@Test
 	public void assertEqualsListOfDtoOutputs() throws Exception {
 		var politiciansRating2 = new PoliticiansRating(1, 0.01D, userRater, politician);
 		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
@@ -128,6 +151,20 @@ public class RatingControllerTest {
 				equalTo(listOfPoliticiansRating.get(0).getRating())))
 			.andExpect(jsonPath("[1].rating",
 				equalTo(listOfPoliticiansRating.get(1).getRating())));
+	}
+	
+	@Test
+	public void assertEqualsUserRaterDtoOutputs() throws Exception {
+		when(service.findById("1")).thenReturn(politiciansRating);
+		
+		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("rater.facebook_name",
+				equalTo(politiciansRating.getRater().getFacebookName())))
+		.andExpect(jsonPath("rater.political_party",
+				equalTo(politiciansRating.getRater().getPoliticalParties().toString())))
+		.andExpect(jsonPath("rater.email",
+				equalTo(politiciansRating.getRater().getEmail())));
 	}
 	
 	@Test
@@ -151,20 +188,6 @@ public class RatingControllerTest {
 				equalTo(listOfPoliticiansRating.get(1).getRater().getFacebookName())))
 			.andExpect(jsonPath("[1].rater.political_party",
 				equalTo(listOfPoliticiansRating.get(1).getRater().getPoliticalParties().toString())));
-	}
-	
-	@Test
-	public void assertEqualsUserRaterDtoOutputs() throws Exception {
-		when(service.findById("1")).thenReturn(politiciansRating);
-		
-		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("rater.facebook_name",
-				equalTo(politiciansRating.getRater().getFacebookName())))
-			.andExpect(jsonPath("rater.political_party",
-				equalTo(politiciansRating.getRater().getPoliticalParties().toString())))
-			.andExpect(jsonPath("rater.email",
-					equalTo(politiciansRating.getRater().getEmail())));
 	}
 	
 }
