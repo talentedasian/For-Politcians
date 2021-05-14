@@ -23,7 +23,7 @@ public class AddRatingDTORequest {
 		return politicalParty;
 	}
 
-	public void setPoliticialParty(String politicalParty) {
+	public void setPoliticalParty(String politicalParty) {
 		this.politicalParty = politicalParty;
 	}
 

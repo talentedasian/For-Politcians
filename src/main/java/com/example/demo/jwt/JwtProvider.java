@@ -34,6 +34,18 @@ public class JwtProvider {
 		return jwts;
 	}
 	
+	public static String createJwtWithNoExpirationDate(String sub, String id) {
+		
+		String jwts = Jwts.builder()
+				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
+				.setSubject(sub)
+				.setId(id)
+				.setHeaderParam("login_mechanism", "facebook")
+				.compact();
+		
+		return jwts;
+	}
+	
 	public static Jws<Claims> decodeJwt(String jwt) {
 		Jws<Claims> jwts = Jwts.parserBuilder()
 				.setSigningKey(JwtKeys.getJwtKeyPair().getPublic())

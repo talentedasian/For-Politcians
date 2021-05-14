@@ -30,7 +30,6 @@ public class AddPoliticianFilter implements Filter{
 			if (req.getHeader("Politician-Access") != null) {
 				if (req.getHeader("Politician-Access").equalsIgnoreCase(password)) {
 					//essentially do nothing
-					Logger.getLogger("Add Politician Filter").log(java.util.logging.Level.INFO, String.valueOf(res.getStatus()) + " tanginamo");
 				} else {
 					handleAddPoliticianAccessDenied(req, res);
 					return;					
@@ -46,6 +45,9 @@ public class AddPoliticianFilter implements Filter{
 	}
 
 	private void handleAddPoliticianAccessDenied(HttpServletRequest req, HttpServletResponse res) throws JsonProcessingException, IOException {
+		Logger.getLogger("Add Politician Filter")
+			.log(java.util.logging.Level.INFO, 
+					"IP Address "  + req.getRemoteAddr() + "accessed a resource protected securly");
 		ExceptionModel exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("401");
 		exceptionModel.setErr("Authorization Required");

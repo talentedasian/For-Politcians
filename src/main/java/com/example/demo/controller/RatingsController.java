@@ -22,6 +22,9 @@ import com.example.demo.dtomapper.interfaces.DTOMapper;
 import com.example.demo.model.PoliticiansRating;
 import com.example.demo.service.RatingService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("/api/ratings")
 public class RatingsController {
@@ -32,6 +35,7 @@ public class RatingsController {
 		this.ratingService = ratingService;
 	}
 
+	@Operation(security = { @SecurityRequirement(name = "add-rating") })
 	@PostMapping("/add-rating")
 	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request, HttpServletRequest req) {
 		PoliticiansRating politicianRatingSaved = ratingService.saveRatings(request, req);
