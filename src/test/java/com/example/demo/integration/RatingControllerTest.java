@@ -2,19 +2,14 @@ package com.example.demo.integration;
 
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -24,13 +19,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.example.demo.apiExceptions.RatingExceptionHandling;
 import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
+import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
+import com.example.demo.jwt.JwtProvider;
 import com.example.demo.model.Politicians;
 import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;
@@ -40,6 +39,7 @@ import com.example.demo.service.RatingService;
 
 @WebMvcTest(RatingsController.class)
 @AutoConfigureMockMvc(addFilters = false, printOnlyOnFailure = false, print = MockMvcPrint.DEFAULT)
+@ContextConfiguration(classes = { RatingsController.class, RatingExceptionHandling.class })
 public class RatingControllerTest {
 	
 	@Autowired
@@ -84,14 +84,30 @@ public class RatingControllerTest {
 	
 	@Test
 	public void shouldReturn401IsUnAuthorized() throws Exception {
-		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(JwtNotFoundException.class);
+		String message = "No jwt found on authorization header";
+		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(new JwtNotFoundException(message));
 		
 		mvc.perform(post(create("/api/ratings/add-rating"))
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnauthorized())
 			.andExpect(jsonPath("err", 
-					containsStringIgnoringCase("No jwt found on authorization header")))
+					containsStringIgnoringCase("no jwt found on authorization header")))
+			.andExpect(jsonPath("code", 
+				containsStringIgnoringCase("401")));
+	}
+	
+	@Test
+	public void shouldReturn401IsUnAuthorizedWithBearerNotStart() throws Exception {
+		String message = "Authorization Header must start with Bearer";
+		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(new JwtMalformedFormatException(message));
+		
+		mvc.perform(post(create("/api/ratings/add-rating"))
+				.content(content)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isUnauthorized())
+			.andExpect(jsonPath("err", 
+					containsStringIgnoringCase("must start with bearer")))
 			.andExpect(jsonPath("code", 
 				containsStringIgnoringCase("401")));
 	}
