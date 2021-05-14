@@ -29,7 +29,6 @@ import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
-import com.example.demo.jwt.JwtProvider;
 import com.example.demo.model.Politicians;
 import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;

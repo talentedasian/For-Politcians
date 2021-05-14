@@ -48,7 +48,7 @@ public class PoliticianControllerTest {
 	@Test
 	public void shouldCallSaveFromServiceWhenSaved() {
 		when(service.savePolitician(politicianDTORequest)).thenReturn(politician);
-		controller.savePolitician(politicianDTORequest);
+		controller.savePolitician(politicianDTORequest, "password");
 		
 		verify(service, times(1)).savePolitician(politicianDTORequest);
 	}
@@ -57,7 +57,7 @@ public class PoliticianControllerTest {
 	public void shouldEqualDTOOutputsWhenSaved() {
 		when(service.savePolitician(politicianDTORequest)).thenReturn(politician);
 		
-		ResponseEntity<PoliticianDTO> politicianResponse = controller.savePolitician(politicianDTORequest);
+		ResponseEntity<PoliticianDTO> politicianResponse = controller.savePolitician(politicianDTORequest, "password");
 		
 		assertThat(politician.getRating(),
 				equalTo(politicianResponse.getBody().getRating()));
