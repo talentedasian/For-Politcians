@@ -25,7 +25,7 @@ public class PoliticsApplication {
 	public OpenAPI openApi() {
 		String jwt = JwtProvider.createJwtWithNoExpirationDate("test@gmail.com", "test");
 		Info info = new Info();
-		info.setDescription("Use this jwt " + jwt + " in using the \"add-rating\" endpoint from the RatingController");
+		info.setDescription("Use this jwt `" + jwt + "` in using the \"add-rating\" endpoint from the RatingController");
 		var openApi = new OpenAPI()
 				.components(new Components()
 						.addSecuritySchemes("add-rating", new SecurityScheme()

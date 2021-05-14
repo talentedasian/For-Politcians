@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +54,8 @@ public class RatingService {
 		}
 		
 		politician.setTotalRating(politician.getTotalRating() + dto.getRating().doubleValue());
-		politician.setRating(politician.getTotalRating() / Double.valueOf(String.valueOf(politician.getPoliticiansRating().size() + 1)));
+		politician.setRating(BigDecimal.valueOf(politician.getTotalRating() / Double.valueOf(String.valueOf(politician.getPoliticiansRating().size() + 1)))
+				.setScale(2, RoundingMode.HALF_DOWN).doubleValue());
 		
 		politicianRepo.save(politician);
 		
