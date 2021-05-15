@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.politics</groupId>
 	<artifactId>politics</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>politics</name>
 	<description>Project for the people</description>
 	<properties>
