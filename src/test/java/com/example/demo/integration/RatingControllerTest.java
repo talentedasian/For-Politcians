@@ -122,9 +122,11 @@ public class RatingControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnauthorized())
 			.andExpect(jsonPath("err", 
-					containsStringIgnoringCase("don't even think about it")))
+					containsStringIgnoringCase("used in a non swagger environment")))
 			.andExpect(jsonPath("code", 
-				containsStringIgnoringCase("401")));
+				containsStringIgnoringCase("401")))
+			.andExpect(jsonPath("optional", 
+				containsStringIgnoringCase("don't even think about it")));
 	}
 	
 }
