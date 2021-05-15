@@ -9,6 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.example.demo.controller.RatingsController;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
+import com.example.demo.exceptions.SwaggerJWTUsedNotInSwagger;
 
 @RestControllerAdvice(assignableTypes = { RatingsController.class })
 public class RatingExceptionHandling extends ResponseEntityExceptionHandler{
@@ -28,8 +29,17 @@ public class RatingExceptionHandling extends ResponseEntityExceptionHandler{
 	public ExceptionModel handleJwtMalformedException(JwtMalformedFormatException e) {
 		var exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("401");
-		System.out.println(e.getMessage() + " tanginamo");
 		exceptionModel.setErr(e.getMessage());
+		
+		return exceptionModel;
+	}
+	
+	@ExceptionHandler(SwaggerJWTUsedNotInSwagger.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public ExceptionModel handleMisuseOfSwaggerJWTException(SwaggerJWTUsedNotInSwagger e) {
+		var exceptionModel = new ExceptionModel();
+		exceptionModel.setCode("401");
+		exceptionModel.setErr("Don't even think about it");
 		
 		return exceptionModel;
 	}
