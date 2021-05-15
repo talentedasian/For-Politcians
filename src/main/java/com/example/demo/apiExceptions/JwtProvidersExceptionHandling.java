@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.demo.exceptions.JwtNotFoundException;
+import com.example.demo.exceptions.JwtTamperedExpcetion;
 import com.example.demo.jwt.JwtProvider;
 
 @RestControllerAdvice(assignableTypes = { JwtProvider.class, JwtProvidersExceptionHandling.class })
@@ -22,4 +23,15 @@ public class JwtProvidersExceptionHandling extends ResponseEntityExceptionHandle
 		
 		return new ResponseEntity<ExceptionModel>(exceptionModel, HttpStatus.UNAUTHORIZED);
 	}
+	
+	@ExceptionHandler(JwtTamperedExpcetion.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public ResponseEntity<ExceptionModel> handleJwtTamperedException(JwtTamperedExpcetion e) {
+		var exceptionModel = new ExceptionModel();
+		exceptionModel.setCode("401");
+		exceptionModel.setErr(e.getMessage());
+		
+		return new ResponseEntity<ExceptionModel>(exceptionModel, HttpStatus.UNAUTHORIZED);
+	}
+	
 }
