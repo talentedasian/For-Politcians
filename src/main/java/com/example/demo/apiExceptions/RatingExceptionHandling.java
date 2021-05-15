@@ -11,6 +11,8 @@ import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
 import com.example.demo.exceptions.SwaggerJWTUsedNotInSwagger;
 
+import io.jsonwebtoken.ExpiredJwtException;
+
 @RestControllerAdvice(assignableTypes = { RatingsController.class })
 public class RatingExceptionHandling extends ResponseEntityExceptionHandler{
 
@@ -27,6 +29,16 @@ public class RatingExceptionHandling extends ResponseEntityExceptionHandler{
 	@ExceptionHandler(JwtMalformedFormatException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public ExceptionModel handleJwtMalformedException(JwtMalformedFormatException e) {
+		var exceptionModel = new ExceptionModel();
+		exceptionModel.setCode("401");
+		exceptionModel.setErr(e.getMessage());
+		
+		return exceptionModel;
+	}
+	
+	@ExceptionHandler(ExpiredJwtException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public ExceptionModel handleJwtMalformedException(ExpiredJwtException e) {
 		var exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("401");
 		exceptionModel.setErr(e.getMessage());
