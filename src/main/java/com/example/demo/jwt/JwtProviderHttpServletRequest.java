@@ -4,12 +4,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.util.Assert;
 
+import com.example.demo.exceptions.JwtExpiredException;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
 import com.example.demo.exceptions.JwtTamperedExpcetion;
 import com.example.demo.exceptions.SwaggerJWTUsedNotInSwagger;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -37,6 +39,8 @@ public class JwtProviderHttpServletRequest {
 					"Authorization Header must start with Bearer");			
 		} catch (IllegalStateException e) {
 			throw new JwtMalformedFormatException(e.getMessage(), e);
+		} catch (ExpiredJwtException e) {
+			throw new JwtExpiredException(e.getMessage(), e);
 		}
 		
 		try {
@@ -82,6 +86,8 @@ public class JwtProviderHttpServletRequest {
 					.parseClaimsJws(req.getHeader("Authorization").substring(7));
 		}  catch (MalformedJwtException e) {
 			throw new JwtTamperedExpcetion(e.getLocalizedMessage());
+		}  catch (ExpiredJwtException e) {
+			throw new JwtExpiredException(e.getMessage(), e);
 		}
 		
 		return jwts;
