@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.demo.controller.PoliticianController;
-import com.example.demo.exceptions.JwtNotFoundException;
 import com.example.demo.exceptions.PoliticianAlreadyExistsException;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 
