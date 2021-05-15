@@ -29,6 +29,7 @@ import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
+import com.example.demo.exceptions.SwaggerJWTUsedNotInSwagger;
 import com.example.demo.model.Politicians;
 import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;
@@ -107,6 +108,21 @@ public class RatingControllerTest {
 			.andExpect(status().isUnauthorized())
 			.andExpect(jsonPath("err", 
 					containsStringIgnoringCase("must start with bearer")))
+			.andExpect(jsonPath("code", 
+				containsStringIgnoringCase("401")));
+	}
+	
+	@Test
+	public void shouldReturn401IsUnAuthorizedWithSwagger() throws Exception {
+		String message = "JWT for swagger is used in a non swagger environment";
+		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(new SwaggerJWTUsedNotInSwagger(message));
+		
+		mvc.perform(post(create("/api/ratings/add-rating"))
+				.content(content)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isUnauthorized())
+			.andExpect(jsonPath("err", 
+					containsStringIgnoringCase("don't even think about it")))
 			.andExpect(jsonPath("code", 
 				containsStringIgnoringCase("401")));
 	}

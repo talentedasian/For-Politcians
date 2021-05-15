@@ -51,7 +51,8 @@ public class RatingExceptionHandling extends ResponseEntityExceptionHandler{
 	public ExceptionModel handleMisuseOfSwaggerJWTException(SwaggerJWTUsedNotInSwagger e) {
 		var exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("401");
-		exceptionModel.setErr("Don't even think about it");
+		exceptionModel.setErr(e.getMessage());
+		exceptionModel.setOptional("Don't even think about it");
 		
 		return exceptionModel;
 	}
