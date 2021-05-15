@@ -17,6 +17,7 @@ import io.jsonwebtoken.security.SignatureException;
 public class JwtProviderHttpServletRequest {
 
 	public static Jws<Claims> decodeJwt(HttpServletRequest req) {
+		System.out.println(req.getRemoteHost() + " tanginamo");
 		Jws<Claims> jwts = null;
 		try {
 			Assert.state(req.getHeader("Authorization") != null, 
