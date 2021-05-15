@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.example.demo.controller.RatingsController;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
 
-@RestControllerAdvice
+@RestControllerAdvice(assignableTypes = { RatingsController.class })
 public class RatingExceptionHandling extends ResponseEntityExceptionHandler{
 
 	@ExceptionHandler(JwtNotFoundException.class)

@@ -7,22 +7,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.example.demo.controller.PoliticianController;
 import com.example.demo.exceptions.JwtNotFoundException;
 import com.example.demo.exceptions.PoliticianAlreadyExistsException;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 
-@RestControllerAdvice	
-public class ApiEndpointsGlobalException extends ResponseEntityExceptionHandler{
-
-	@ExceptionHandler(JwtNotFoundException.class)
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public ResponseEntity<ExceptionModel> handleNoJwtFoundOnHeaderException() {
-		var exceptionModel = new ExceptionModel();
-		exceptionModel.setCode("401");
-		exceptionModel.setErr("Accessing protected resource. No jwt found on authorization Header");
-		
-		return new ResponseEntity<ExceptionModel>(exceptionModel, HttpStatus.UNAUTHORIZED);
-	}
+@RestControllerAdvice(assignableTypes = { PoliticianController.class })
+public class PoliticianExceptionHandling extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(PoliticianAlreadyExistsException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
