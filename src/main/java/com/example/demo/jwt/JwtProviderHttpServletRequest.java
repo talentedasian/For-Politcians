@@ -1,7 +1,13 @@
 package com.example.demo.jwt;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import com.example.demo.exceptions.JwtExpiredException;
@@ -9,6 +15,7 @@ import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
 import com.example.demo.exceptions.JwtTamperedExpcetion;
 import com.example.demo.exceptions.SwaggerJWTException;
+import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -17,11 +24,19 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 
 public class JwtProviderHttpServletRequest {
+	
+	private static final CustomOauth2AuthorizedClientsRepository customClientRepo;
+
+	public JwtProviderHttpServletRequest(CustomOauth2AuthorizedClientsRepository customClientRepo) {
+		super();
+		this.customClientRepo = customClientRepo;
+	}
 
 	public static Jws<Claims> decodeJwt(HttpServletRequest req) {
 		if (req.getHeader("Referer").contains("swagger")) {
 			return decodeJwtUtilMethodSwagger(req);
 		}
+		
 		return decodeJwtUtilMethod(req);
 	}
 	
@@ -97,6 +112,10 @@ public class JwtProviderHttpServletRequest {
 		}  catch (MalformedJwtException e) {
 			throw new JwtTamperedExpcetion(e.getLocalizedMessage());
 		}  catch (ExpiredJwtException e) {
+			LocalDateTime dateTime = LocalDateTime.now().minusHours(1L);
+			if (jwts.getBody().getExpiration().before(Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant()))) {
+				customClientRepo.loadAuthorizedClient("facebook", null, req);
+			}
 			throw new JwtExpiredException(e.getMessage(), e);
 		}  catch (IllegalStateException e) {
 			throw new SwaggerJWTException("JWT for swagger not valid");

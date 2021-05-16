@@ -29,12 +29,13 @@ import com.example.demo.jwt.JwtProvider;
 
 public class CustomOauth2AuthorizedClientsRepository implements OAuth2AuthorizedClientRepository{
 	
-	private RestTemplate restTemplate;
-	private ClientRegistration clientRegistrationFacebook;
+	private final ClientRegistration clientRegistrationFacebook;
+	private final FacebookOauth2UserInfoUtility userInfoEndpointUtil;
 	
-	public CustomOauth2AuthorizedClientsRepository(RestTemplate restTemplate, ClientRegistration clientRegistrationFacebook) {
-		this.restTemplate = restTemplate;
-		this.clientRegistrationFacebook = clientRegistrationFacebook; 
+	public CustomOauth2AuthorizedClientsRepository(ClientRegistration clientRegistrationFacebook, 
+			FacebookOauth2UserInfoUtility userInfoEndpointUtil) {
+		this.clientRegistrationFacebook = clientRegistrationFacebook;
+		this.userInfoEndpointUtil = userInfoEndpointUtil; 
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -101,17 +102,10 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setBearerAuth(authorizedClient.getAccessToken().getTokenValue());
-			RequestEntity<Object> requestEntity = new RequestEntity<>(headers,
-					HttpMethod.GET, new URI("https://graph.facebook.com/me?fields=id,email,name"));
-			ResponseEntity<FacebookUserInfo> responseEntity = restTemplate.exchange(requestEntity, FacebookUserInfo.class);
-			
-			if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-				//This causes a redirect to a spring security filter that handles oauth2 authentications
-				throw new ClientAuthorizationRequiredException("facebook");
-				}
-			
-			String jwt = JwtProvider.createJwtWithFixedExpirationDate(responseEntity.getBody().getEmail(),
-					responseEntity.getBody().getName());
+						
+			FacebookUserInfo userInfo = userInfoEndpointUtil.fetchUserInfo(authorizedClient);
+			String jwt = JwtProvider.createJwtWithFixedExpirationDate(userInfo.getEmail(),
+					userInfo.getName());
 							
 			Cookie jwtCookie = new Cookie("accessJwt", jwt);
 			jwtCookie.setHttpOnly(true);
