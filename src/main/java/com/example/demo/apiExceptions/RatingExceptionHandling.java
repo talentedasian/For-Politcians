@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.example.demo.controller.RatingsController;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
-import com.example.demo.exceptions.SwaggerJWTUsedNotInSwagger;
+import com.example.demo.exceptions.SwaggerJWTException;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
@@ -46,9 +46,9 @@ public class RatingExceptionHandling extends ResponseEntityExceptionHandler{
 		return exceptionModel;
 	}
 	
-	@ExceptionHandler(SwaggerJWTUsedNotInSwagger.class)
+	@ExceptionHandler(SwaggerJWTException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public ExceptionModel handleMisuseOfSwaggerJWTException(SwaggerJWTUsedNotInSwagger e) {
+	public ExceptionModel handleMisuseOfSwaggerJWTException(SwaggerJWTException e) {
 		var exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("401");
 		exceptionModel.setErr(e.getMessage());

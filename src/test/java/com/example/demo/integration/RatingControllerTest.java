@@ -29,7 +29,7 @@ import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
-import com.example.demo.exceptions.SwaggerJWTUsedNotInSwagger;
+import com.example.demo.exceptions.SwaggerJWTException;
 import com.example.demo.model.Politicians;
 import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;
@@ -115,7 +115,7 @@ public class RatingControllerTest {
 	@Test
 	public void shouldReturn401IsUnAuthorizedWithSwagger() throws Exception {
 		String message = "JWT for swagger is used in a non swagger environment";
-		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(new SwaggerJWTUsedNotInSwagger(message));
+		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(new SwaggerJWTException(message));
 		
 		mvc.perform(post(create("/api/ratings/add-rating"))
 				.content(content)
