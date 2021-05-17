@@ -11,6 +11,7 @@ import org.springframework.util.Assert;
 import com.example.demo.exceptions.JwtExpiredException;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
+import com.example.demo.exceptions.JwtNotFromServerException;
 import com.example.demo.exceptions.JwtTamperedExpcetion;
 import com.example.demo.exceptions.RefreshTokenException;
 import com.example.demo.exceptions.SwaggerJWTException;
@@ -20,6 +21,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 
 public class JwtProviderHttpServletRequest {
 
@@ -38,14 +40,14 @@ public class JwtProviderHttpServletRequest {
 		try {
 			Assert.state(req.getHeader("Authorization") != null, 
 					"No jwt found on authorization header");			
-		} catch (IllegalStateException e) {
+		}	catch (IllegalStateException e) {
 			throw new JwtNotFoundException(e.getMessage(), e);
 		} 
 		
 		try {
 			Assert.state(req.getHeader("Authorization").startsWith("Bearer "), 
 					"Authorization Header must start with Bearer");			
-		} catch (IllegalStateException e) {
+		}	catch (IllegalStateException e) {
 			throw new JwtMalformedFormatException(e.getMessage(), e);
 		}
 		
@@ -55,8 +57,12 @@ public class JwtProviderHttpServletRequest {
 					.setAllowedClockSkewSeconds(60 * 3)
 					.build()
 					.parseClaimsJws(req.getHeader("Authorization").substring(7));
-		}  catch (MalformedJwtException e) {
+		}	catch (MalformedJwtException e) {
 			throw new JwtTamperedExpcetion(e.getLocalizedMessage());
+		}	catch (SignatureException e) {
+			throw new JwtNotFromServerException("""
+					JWT tampered. Server might have restarted without prior knowledge
+					""");
 		}
 		
 		return jwts;
