@@ -2,7 +2,6 @@ package com.example.demo.jwt;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Base64;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -112,7 +111,7 @@ public class JwtProviderHttpServletRequest {
 						.build()
 						.parseClaimsJws(jwt);
 			}
-			
+			System.out.println("gago");
 			throw new JwtExpiredException(e.getMessage(), e);
 		}  catch (IllegalStateException e) {
 			throw new SwaggerJWTException("JWT for swagger not valid");
@@ -122,8 +121,9 @@ public class JwtProviderHttpServletRequest {
 	}
 	
 	private static boolean checkIfJwtIsOneHourFresh(Date date) {
-		LocalDateTime dateTime = LocalDateTime.now().plusHours(1L);
-		return date.before(Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant()));
+		LocalDateTime dateTime = LocalDateTime.now().minusHours(1L);
+		
+		return date.after(Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant()));
 	}
 	
 }

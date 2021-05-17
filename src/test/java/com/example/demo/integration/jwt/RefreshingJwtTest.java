@@ -1,5 +1,6 @@
 package com.example.demo.integration.jwt;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.demo.exceptions.JwtExpiredException;
 import com.example.demo.jwt.JwtProvider;
 import com.example.demo.jwt.JwtProviderHttpServletRequest;
 
@@ -24,15 +26,14 @@ public class RefreshingJwtTest {
 	
 	@Test
 	public void shouldReturnFreshJwtWithOneHourExpiration() throws Exception {
-		String message = "No jwt found on authorization header";
-		LocalDateTime dateTime = LocalDateTime.now().minusMinutes(30L);
+		LocalDateTime dateTime = LocalDateTime.now().minusHours(1L);
 		Date date = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
 		String jwt = JwtProvider.createJwtWithDynamicExpirationDate("test@gmail.com", "test", date);
-		
 		when(req.getHeader("Referer")).thenReturn("ds");
 		when(req.getHeader("Authorization")).thenReturn("Bearer " + jwt);
 		
-		JwtProviderHttpServletRequest.decodeJwt(req);
+		assertThrows(JwtExpiredException.class,
+				() -> JwtProviderHttpServletRequest.decodeJwt(req));
 	}
 	
 }
