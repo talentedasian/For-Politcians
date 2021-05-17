@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.web.util.NestedServletException;
 
 import com.example.demo.exceptions.RefreshTokenException;
 import com.example.demo.filter.RefreshJwtFilter;
@@ -44,13 +45,14 @@ public class RefreshingJwtTest {
 		
 		when(req.getHeader("Referer")).thenReturn("ds");
 		when(req.getHeader("Authorization")).thenReturn("Bearer " + jwt);
-		System.out.println(req.getHeader("Authorization").substring(7));
 		RefreshJwtFilter filter = new RefreshJwtFilter();
 		FilterChain filterChain = Mockito.mock(FilterChain.class);
-		doThrow(new RefreshTokenException(JwtProviderHttpServletRequest.decodeJwt(req).getBody())).when(filterChain).doFilter(req, res);
+		doThrow(new NestedServletException("nice",
+				new RefreshTokenException(JwtProviderHttpServletRequest.decodeJwt(req).getBody()))).when(filterChain).doFilter(req, res);
 		
 		filter.doFilter(req, res, filterChain);
-		verify(res, times(1)).addCookie(any(Cookie.class));;
+		verify(res, times(1)).addCookie(any(Cookie.class));
+		
 	}
 	
 }

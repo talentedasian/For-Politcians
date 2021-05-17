@@ -16,8 +16,8 @@ public class RefreshTokenException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	public RefreshTokenException(Claims claims) {
-		super();
 		this.claims = claims;
+		
 	}
 
 	public RefreshTokenException(String message, Throwable cause, boolean enableSuppression,

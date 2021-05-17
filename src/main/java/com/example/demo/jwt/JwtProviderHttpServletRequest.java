@@ -94,7 +94,6 @@ public class JwtProviderHttpServletRequest {
 				// RefreshJwtFilter does apppropriate refreshing of JsobWeb Tokens
 				throw new RefreshTokenException(e.getClaims());
 			}
-			
 			throw new JwtExpiredException(e.getMessage(), e);
 		}  catch (IllegalStateException e) {
 			throw new SwaggerJWTException("JWT for swagger not valid");

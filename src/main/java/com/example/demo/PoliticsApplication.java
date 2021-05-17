@@ -1,5 +1,9 @@
 package com.example.demo;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +21,9 @@ import io.swagger.v3.oas.models.security.SecurityScheme.Type;
 public class PoliticsApplication {
 	
 	public static void main(String[] args) {
+		LocalDateTime dateTime = LocalDateTime.now().minusMinutes(30L);
+		Date date = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
+		System.out.println(JwtProvider.createJwtWithDynamicExpirationDate("james@gmail.com", "james", date));
 		SpringApplication.run(PoliticsApplication.class, args);
 	}
 	
