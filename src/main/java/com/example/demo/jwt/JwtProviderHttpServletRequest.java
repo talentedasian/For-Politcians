@@ -12,6 +12,7 @@ import com.example.demo.exceptions.JwtExpiredException;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
 import com.example.demo.exceptions.JwtTamperedExpcetion;
+import com.example.demo.exceptions.RefreshTokenException;
 import com.example.demo.exceptions.SwaggerJWTException;
 
 import io.jsonwebtoken.Claims;
@@ -23,8 +24,10 @@ import io.jsonwebtoken.MalformedJwtException;
 public class JwtProviderHttpServletRequest {
 
 	public static Jws<Claims> decodeJwt(HttpServletRequest req) {
-		if (req.getHeader("Referer").contains("swagger")) {
-			return decodeJwtUtilMethodSwagger(req);
+		if (req.getHeader("Referer") != null) {
+			if (req.getHeader("Referer").equalsIgnoreCase("swagger")) {
+				return decodeJwtUtilMethodSwagger(req);				
+			}
 		}
 		
 		return decodeJwtUtilMethod(req);
@@ -70,7 +73,7 @@ public class JwtProviderHttpServletRequest {
 		
 		try {
 			Assert.state(req.getHeader("Authorization").startsWith("Bearer "), 
-					"Authorization Header must start with Bearer");			
+					"Authorization Header must start with Bearer");
 		} catch (IllegalStateException e) {
 			throw new JwtMalformedFormatException(e.getMessage(), e);
 		}
@@ -88,13 +91,8 @@ public class JwtProviderHttpServletRequest {
 			throw new JwtTamperedExpcetion(e.getLocalizedMessage());
 		}  catch (ExpiredJwtException e) {
 			if (checkIfJwtIsOneHourFresh(e.getClaims().getExpiration())) {
-				String jwt = JwtProvider.createJwtWithFixedExpirationDate(e.getClaims().getSubject(), e.getClaims().getId());
-				
-				return Jwts.parserBuilder()
-						.setSigningKey(JwtKeys.getJwtKeyPair().getPublic())
-						.setAllowedClockSkewSeconds(60 * 3)
-						.build()
-						.parseClaimsJws(jwt);
+				// RefreshJwtFilter does apppropriate refreshing of JsobWeb Tokens
+				throw new RefreshTokenException(e.getClaims());
 			}
 			
 			throw new JwtExpiredException(e.getMessage(), e);

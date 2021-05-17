@@ -3,7 +3,7 @@ package com.example.demo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.jwt.JwtProvider;
 
@@ -14,11 +14,15 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.security.SecurityScheme.Type;
 
 @SpringBootApplication
-@Configuration
 public class PoliticsApplication {
 	
 	public static void main(String[] args) {
 		SpringApplication.run(PoliticsApplication.class, args);
+	}
+	
+	@Bean
+	public RestTemplate template() {
+		return new RestTemplate();
 	}
 	
 	@Bean
