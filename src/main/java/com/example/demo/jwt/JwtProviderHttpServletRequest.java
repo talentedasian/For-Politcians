@@ -33,19 +33,6 @@ public class JwtProviderHttpServletRequest {
 	private static Jws<Claims> decodeJwtUtilMethodSwagger(HttpServletRequest req) {
 		Jws<Claims> jwts = null;
 		try {
-			jwts = Jwts.parserBuilder()
-					.setSigningKey(JwtKeys.getJwtKeyPair().getPublic())
-					.setAllowedClockSkewSeconds(60 * 3)
-					.build()
-					.parseClaimsJws(req.getHeader("Authorization").substring(7));
-			
-			Assert.state(req.getHeader("Authorization") != null, 
-					"Jwt used cannot be used in a swagger environment");
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-		try {
 			Assert.state(req.getHeader("Authorization") != null, 
 					"No jwt found on authorization header");			
 		} catch (IllegalStateException e) {
@@ -57,8 +44,6 @@ public class JwtProviderHttpServletRequest {
 					"Authorization Header must start with Bearer");			
 		} catch (IllegalStateException e) {
 			throw new JwtMalformedFormatException(e.getMessage(), e);
-		} catch (ExpiredJwtException e) {
-			throw new JwtExpiredException(e.getMessage(), e);
 		}
 		
 		try {

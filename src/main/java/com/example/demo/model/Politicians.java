@@ -16,8 +16,6 @@ public class Politicians {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
-//	private Rating rating;
-	
 	@Column(nullable = false, precision = 3, scale = 2)
 	private Double rating;
 	
