@@ -2,6 +2,7 @@ package com.example.demo.jwt;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Base64;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -102,8 +103,8 @@ public class JwtProviderHttpServletRequest {
 		}  catch (MalformedJwtException e) {
 			throw new JwtTamperedExpcetion(e.getLocalizedMessage());
 		}  catch (ExpiredJwtException e) {
-			if (checkIfJwtIsOneHourFresh(jwts)) {
-				String jwt = JwtProvider.createJwtWithFixedExpirationDate(jwts.getBody().getSubject(), jwts.getBody().getId());
+			if (checkIfJwtIsOneHourFresh(e.getClaims().getExpiration())) {
+				String jwt = JwtProvider.createJwtWithFixedExpirationDate(e.getClaims().getSubject(), e.getClaims().getId());
 				
 				return Jwts.parserBuilder()
 						.setSigningKey(JwtKeys.getJwtKeyPair().getPublic())
@@ -120,9 +121,9 @@ public class JwtProviderHttpServletRequest {
 		return jwts;
 	}
 	
-	private static boolean checkIfJwtIsOneHourFresh(Jws<Claims> jwts) {
+	private static boolean checkIfJwtIsOneHourFresh(Date date) {
 		LocalDateTime dateTime = LocalDateTime.now().plusHours(1L);
-		return jwts.getBody().getExpiration().before(Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant()));
+		return date.before(Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant()));
 	}
 	
 }

@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import com.example.demo.filter.AddPoliticianFilter;
 import com.example.demo.oauth2.CustomOauth2AuthorizationRequestsRepository;
 import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
+import com.example.demo.oauth2.FacebookOauth2UserInfoUtility;
 
 @Configuration
 @EnableWebSecurity
@@ -60,8 +61,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 		
 	public OAuth2AuthorizedClientRepository authorizedClientRepo() {
-		return new CustomOauth2AuthorizedClientsRepository(template, this.facebookClientRegistration());
+		return new CustomOauth2AuthorizedClientsRepository(this.facebookClientRegistration(), this.facebookUserInfoEndpointUtility());
 	}
+	
+	@Bean
+	public FacebookOauth2UserInfoUtility facebookUserInfoEndpointUtility() {
+		return new FacebookOauth2UserInfoUtility(template);
+	} 
 	
 	@Bean
 	public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestsRepo() {
