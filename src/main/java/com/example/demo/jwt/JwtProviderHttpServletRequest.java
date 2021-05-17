@@ -111,7 +111,7 @@ public class JwtProviderHttpServletRequest {
 						.build()
 						.parseClaimsJws(jwt);
 			}
-			System.out.println("gago");
+			
 			throw new JwtExpiredException(e.getMessage(), e);
 		}  catch (IllegalStateException e) {
 			throw new SwaggerJWTException("JWT for swagger not valid");
