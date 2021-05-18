@@ -17,18 +17,11 @@ class PoliticsApplicationTests {
 
 	@Autowired
 	public MockMvc mvc;
-	
-	@Test
-	public void shouldReturn200IsOk() throws Exception {
-		mvc.perform(get("/swagger-ui/index.html"))
-			.andExpect(status().isOk());
-	}
-	
+
 	@Test
 	public void shouldReturnExpectedInfo() throws Exception {
 		String infoMessage = "use this jwt ";
 		mvc.perform(get("/v3/api-docs"))
-			.andExpect(status().isOk())
 			.andExpect(jsonPath("info.description", 
 					containsStringIgnoringCase(infoMessage)));
 	}
