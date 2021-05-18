@@ -8,7 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.example.demo.exceptions.RefreshTokenException;
@@ -16,7 +15,6 @@ import com.example.demo.jwt.JwtProvider;
 
 public class RefreshJwtFilter implements Filter{
 
-	@SuppressWarnings("preview")
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
@@ -24,7 +22,8 @@ public class RefreshJwtFilter implements Filter{
 		try {
 			chain.doFilter(request, response);			
 		} catch (Exception ex) {
-			if (ex.getCause() instanceof RefreshTokenException e) {
+			if (ex.getCause() instanceof RefreshTokenException) {
+				RefreshTokenException e = (RefreshTokenException) ex.getCause();
 				String jwt = JwtProvider.createJwtWithFixedExpirationDate(e.getClaims().getSubject(),
 						e.getClaims().getId());
 								

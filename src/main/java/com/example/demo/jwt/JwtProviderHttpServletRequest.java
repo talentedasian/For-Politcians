@@ -26,8 +26,9 @@ import io.jsonwebtoken.security.SignatureException;
 public class JwtProviderHttpServletRequest {
 
 	public static Jws<Claims> decodeJwt(HttpServletRequest req) {
+		final String swagger = "http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config";
 		if (req.getHeader("Referer") != null) {
-			if (req.getHeader("Referer").equalsIgnoreCase("swagger")) {
+			if (req.getHeader("Referer").equalsIgnoreCase(swagger)) {
 				return decodeJwtUtilMethodSwagger(req);				
 			}
 		}

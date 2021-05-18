@@ -1,6 +1,7 @@
 package com.example.demo.apiExceptions;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
@@ -8,6 +9,7 @@ public class ExceptionModel {
 
 	private String err,code;
 	
+	@JsonProperty(value = "additional_information")
 	private String Optional;
 
 	public String getErr() {
