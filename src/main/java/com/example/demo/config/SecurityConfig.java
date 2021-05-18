@@ -19,6 +19,7 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.filter.AddPoliticianFilter;
+import com.example.demo.filter.RefreshJwtFilter;
 import com.example.demo.oauth2.CustomOauth2AuthorizationRequestsRepository;
 import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
 import com.example.demo.oauth2.FacebookOauth2UserInfoUtility;
@@ -56,7 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.and()
 				.authorizedClientRepository(this.authorizedClientRepo())
 			.and()
-				.addFilterBefore(new AddPoliticianFilter(), UsernamePasswordAuthenticationFilter.class);
+				.addFilterBefore(new AddPoliticianFilter(), UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(new RefreshJwtFilter(), UsernamePasswordAuthenticationFilter.class);
 				
 	}
 		
