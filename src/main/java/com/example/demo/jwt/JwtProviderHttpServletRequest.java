@@ -8,15 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.exceptions.JwtExpiredException;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
-import com.example.demo.exceptions.JwtNotFromServerException;
 import com.example.demo.exceptions.JwtTamperedExpcetion;
 import com.example.demo.exceptions.RefreshTokenException;
-import com.example.demo.exceptions.SwaggerJWTException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -27,11 +24,6 @@ import io.jsonwebtoken.security.SignatureException;
 
 @Component
 public class JwtProviderHttpServletRequest {
-
-	
-	public JwtProviderHttpServletRequest(RestTemplate template) {
-		JwtProviderHttpServletRequest.restTemplate = template;
-	}
 
 	public static Jws<Claims> decodeJwt(HttpServletRequest req) {
 		return decodeJwtUtilMethod(req);

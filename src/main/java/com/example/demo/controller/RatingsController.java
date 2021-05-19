@@ -35,7 +35,7 @@ public class RatingsController {
 		this.ratingService = ratingService;
 	}
 
-	@Operation(security = { @SecurityRequirement(name = "oauth2") })
+	
 	@PostMapping("/add-rating")
 	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request, HttpServletRequest req) {
 		PoliticiansRating politicianRatingSaved = ratingService.saveRatings(request, req);
