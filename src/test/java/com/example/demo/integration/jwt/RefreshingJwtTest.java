@@ -43,7 +43,6 @@ public class RefreshingJwtTest {
 		Date date = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
 		String jwt = JwtProvider.createJwtWithDynamicExpirationDate("nanay@gmail.com", "nanay", date);
 		
-		when(req.getHeader("Referer")).thenReturn("ds");
 		when(req.getHeader("Authorization")).thenReturn("Bearer " + jwt);
 		RefreshJwtFilter filter = new RefreshJwtFilter();
 		FilterChain filterChain = Mockito.mock(FilterChain.class);
