@@ -17,7 +17,8 @@ public class SpringDoc {
 		Info info = new Info();
 		info.setVersion("1.0.0");
 		info.setDescription("""
-				Login with facebook first to get a Json Web Token to be used in the `add-rating` endpoint from the
+				Login with <a href="http:localhost:8080/login/authorization/facebook">facebook</a> first to get a
+				 Json Web Token to be used in the `add-rating` endpoint from the
 				`Ratings Controller`
 				""");
 		
