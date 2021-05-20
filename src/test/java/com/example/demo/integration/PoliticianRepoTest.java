@@ -1,4 +1,4 @@
-package com.example.demo.unit;
+package com.example.demo.integration;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,8 +32,10 @@ public class PoliticianRepoTest {
 		
 		Politicians politician = repo.save(politicianToBeSaved);
 		
-		assertThat(politicianToBeSaved, 
-				equalTo(politician));
+		assertThat(politicianToBeSaved.getName(), 
+				equalTo(politician.getName()));
+		assertThat(politicianToBeSaved.getRating(), 
+				equalTo(politician.getRating()));
 	}
 	
 	@Test
