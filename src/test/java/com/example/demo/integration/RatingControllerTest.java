@@ -4,6 +4,7 @@ import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,17 +20,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-
-import com.example.demo.apiExceptions.RatingExceptionHandling;
-import com.example.demo.controller.RatingsController;
+import org.springframework.test.web.servlet.MockMvc;import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
-import com.example.demo.exceptions.SwaggerJWTException;
+import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.model.Politicians;
 import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;
@@ -39,7 +36,6 @@ import com.example.demo.service.RatingService;
 
 @WebMvcTest(RatingsController.class)
 @AutoConfigureMockMvc(addFilters = false, printOnlyOnFailure = false, print = MockMvcPrint.DEFAULT)
-@ContextConfiguration(classes = { RatingsController.class, RatingExceptionHandling.class })
 public class RatingControllerTest {
 	
 	@Autowired
@@ -113,20 +109,15 @@ public class RatingControllerTest {
 	}
 	
 	@Test
-	public void shouldReturn401IsUnAuthorizedWithSwagger() throws Exception {
-		String message = "JWT for swagger is used in a non swagger environment";
-		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(new SwaggerJWTException(message));
+	public void shouldReturn404NotFound() throws Exception {
+		when(service.findById("1")).thenThrow(new RatingsNotFoundException("No rating found by Id"));
 		
-		mvc.perform(post(create("/api/ratings/add-rating"))
-				.content(content)
-				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isUnauthorized())
-			.andExpect(jsonPath("err", 
-					containsStringIgnoringCase("used in a non swagger environment")))
-			.andExpect(jsonPath("code", 
-				containsStringIgnoringCase("401")))
-			.andExpect(jsonPath("optional", 
-				containsStringIgnoringCase("don't even think about it")));
+		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("code",
+					containsStringIgnoringCase("404")))
+			.andExpect(jsonPath("err",
+				containsStringIgnoringCase("no rating found")));
 	}
 	
 }

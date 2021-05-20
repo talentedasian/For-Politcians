@@ -15,7 +15,7 @@ import com.example.demo.exceptions.SwaggerJWTException;
 import io.jsonwebtoken.ExpiredJwtException;
 
 @RestControllerAdvice(assignableTypes = { RatingsController.class })
-public class RatingExceptionHandling extends ResponseEntityExceptionHandler{
+public class RatingJwtExceptionHandling extends ResponseEntityExceptionHandler{
 
 	@ExceptionHandler(JwtNotFoundException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
