@@ -109,10 +109,22 @@ public class RatingControllerTest {
 	}
 	
 	@Test
-	public void shouldReturn404NotFound() throws Exception {
+	public void shouldReturn404NotFoundbyId() throws Exception {
 		when(service.findById("1")).thenThrow(new RatingsNotFoundException("No rating found by Id"));
 		
 		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("code",
+					containsStringIgnoringCase("404")))
+			.andExpect(jsonPath("err",
+				containsStringIgnoringCase("no rating found")));
+	}
+	
+	@Test
+	public void shouldReturn404NotFoundByRater() throws Exception {
+		when(service.findRatingsByFacebookEmail("dasdsa@gmail.com")).thenThrow(new RatingsNotFoundException("No rating found by Rater"));
+		
+		mvc.perform(get(create("/api/ratings/ratingByRater?email=dasdsa@gmail.com")))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("code",
 					containsStringIgnoringCase("404")))

@@ -78,6 +78,9 @@ public class RatingService {
 	@Transactional(readOnly = true)
 	public List<PoliticiansRating> findRatingsByFacebookEmail(String email) {
 		List<PoliticiansRating> ratingsByRater = ratingRepo.findByRater_Email(email);
+		if (ratingsByRater.isEmpty()) {
+			throw new RatingsNotFoundException("No rating found by Rater"); 
+		}
 		
 		return ratingsByRater;
 	}
