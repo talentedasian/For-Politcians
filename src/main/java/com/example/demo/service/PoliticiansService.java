@@ -48,7 +48,8 @@ public class PoliticiansService {
 	public Politicians savePolitician(AddPoliticianDTORequest dto) {
 		try {
 			var politicianToBeSaved = new Politicians();
-			politicianToBeSaved.setName(dto.getName());
+			politicianToBeSaved.setFirstName(dto.getFirstName());
+			politicianToBeSaved.setLastName(dto.getLastName());
 			politicianToBeSaved.setRating(dto.getRating().setScale(2,RoundingMode.HALF_DOWN).doubleValue());
 			politicianToBeSaved.setTotalRating(dto.getRating().setScale(2,RoundingMode.HALF_DOWN).doubleValue());
 			

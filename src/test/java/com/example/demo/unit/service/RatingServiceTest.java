@@ -47,7 +47,7 @@ public class RatingServiceTest {
 	public void setup() {
 		service = new RatingService(ratingRepo, politicianRepo);
 		
-		politicianToBeSaved = new Politicians(1, 0.00D,"Mirriam Defensor", List.of(new PoliticiansRating()), 0.00D);
+		politicianToBeSaved = new Politicians(1, 0.00D,"Mirriam", "Defensor", List.of(new PoliticiansRating()), 0.00D);
 		ratingToBeSaved = new PoliticiansRating();
 		ratingToBeSaved.setId(1);
 		ratingToBeSaved.setPolitician(politicianToBeSaved);

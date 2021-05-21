@@ -18,7 +18,7 @@ public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 			satisfactionRate = Rating.HIGH;
 		}
 		var politicianDTO =  new PoliticianDTO(
-				entity.getName(), 
+				entity.getFirstName() + " " + entity.getLastName(), 
 				String.valueOf(entity.getId()), 
 				entity.getRating().doubleValue(),
 				satisfactionRate);

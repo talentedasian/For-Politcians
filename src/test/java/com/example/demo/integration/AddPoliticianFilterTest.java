@@ -40,7 +40,8 @@ public class AddPoliticianFilterTest {
 	
 	private final String content = """
 			{
-			    "name": "test name",
+			    "firstName": "test",
+			    "lastName": "name",
 			    "rating": 9.00
 			}
 			""";
@@ -48,7 +49,7 @@ public class AddPoliticianFilterTest {
 	
 	@BeforeEach
 	public void setup() {
-		politician = new Politicians(1, 9.00D, "test name", List.of(new PoliticiansRating()), 9.00D);
+		politician = new Politicians(1, 9.00D, "test", "name", List.of(new PoliticiansRating()), 9.00D);
 		mvc = MockMvcBuilders.webAppContextSetup(wac)
 				.addFilter(new AddPoliticianFilter(), "/api/politicians/add-politician")
 				.build();

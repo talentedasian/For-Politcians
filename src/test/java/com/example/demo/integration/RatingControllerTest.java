@@ -65,7 +65,8 @@ public class RatingControllerTest {
 	public void setup() {
 		politician = new Politicians();
 		politician.setId(1);
-		politician.setName("Mirriam Defensor");
+		politician.setFirstName("Mirriam");
+		politician.setLastName("Defensor");
 		politician.setRating(0.01D);
 		politician.setTotalRating(0.01D);
 		

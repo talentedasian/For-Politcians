@@ -38,10 +38,12 @@ public class PoliticianControllerTest {
 		
 		politician =  new Politicians();
 		politician.setRating(9.67D);
-		politician.setName("Mirriam Defensor");
+		politician.setFirstName("Mirriam");
+		politician.setLastName("Defensor");
 		
 		politicianDTORequest = new AddPoliticianDTORequest
-		("Mirriam Defensor", 
+		("Mirriam", 
+		"Defensor", 
 		BigDecimal.valueOf(9.67D));
 	}
 	

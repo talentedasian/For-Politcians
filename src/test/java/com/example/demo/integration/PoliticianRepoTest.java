@@ -28,12 +28,15 @@ public class PoliticianRepoTest {
 	public void shouldBeEqualOnSavedEntity() {
 		var politicianToBeSaved = new Politicians();
 		politicianToBeSaved.setRating(0.00D);
-		politicianToBeSaved.setName("Rodrigo Duterte");
+		politicianToBeSaved.setFirstName("Rodrigo");
+		politicianToBeSaved.setLastName("Duterte");
 		
 		Politicians politician = repo.save(politicianToBeSaved);
 		
-		assertThat(politicianToBeSaved.getName(), 
-				equalTo(politician.getName()));
+		assertThat(politicianToBeSaved.getFirstName(), 
+				equalTo(politician.getFirstName()));
+		assertThat(politicianToBeSaved.getLastName(), 
+				equalTo(politician.getLastName()));
 		assertThat(politicianToBeSaved.getRating(), 
 				equalTo(politician.getRating()));
 	}
@@ -42,7 +45,8 @@ public class PoliticianRepoTest {
 	public void shouldThrowDataIntegrityException() {
 		var politicianToBeSaved = new Politicians();
 		politicianToBeSaved.setRating(0.00D);
-		politicianToBeSaved.setName("Rodrigo Duterte");
+		politicianToBeSaved.setFirstName("Rodrigo");
+		politicianToBeSaved.setLastName("Duterte");
 		
 		assertThrows(DataIntegrityViolationException.class,
 				() -> repo.saveAndFlush(politicianToBeSaved));

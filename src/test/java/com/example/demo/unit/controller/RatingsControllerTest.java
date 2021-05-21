@@ -43,7 +43,8 @@ public class RatingsControllerTest {
 		
 		politician = new Politicians();
 		politician.setId(1);
-		politician.setName("Mirriam Defensor");
+		politician.setFirstName("Mirriam");
+		politician.setLastName("Defensor");
 		politician.setRating(0.00D);
 		politician.setTotalRating(0.00D);
 		
@@ -77,7 +78,7 @@ public class RatingsControllerTest {
 		assertThat(politiciaResponse.getPolitician().getId().toString(),
 				equalTo(politiciansRating.getPolitician().getId().toString()));
 		assertThat(politiciaResponse.getPolitician().getName(),
-				equalTo(politiciansRating.getPolitician().getName()));
+				equalTo(politiciansRating.getPolitician().getFirstName() + " " + politiciansRating.getPolitician().getLastName()));
 		assertThat(politiciaResponse.getPolitician().getRating(),
 				equalTo(politiciansRating.getPolitician().getRating()));
 		assertThat(politiciaResponse.getPolitician().getSatisfactionRate().toString(),
@@ -98,13 +99,13 @@ public class RatingsControllerTest {
 		assertThat(politicianResponse.getPolitician().getId().toString(),
 				equalTo(listOfPoliticiansRating.get(0).getPolitician().getId().toString()));
 		assertThat(politicianResponse.getPolitician().getName(),
-				equalTo(listOfPoliticiansRating.get(0).getPolitician().getName()));
+				equalTo(listOfPoliticiansRating.get(0).getPolitician().getFirstName() + " " + listOfPoliticiansRating.get(0).getPolitician().getLastName()));
 		assertThat(politicianResponse.getPolitician().getRating(),
 				equalTo(listOfPoliticiansRating.get(0).getPolitician().getRating()));
 		assertThat(politicianResponse2.getPolitician().getId().toString(),
 				equalTo(listOfPoliticiansRating.get(1).getPolitician().getId().toString()));
 		assertThat(politicianResponse2.getPolitician().getName(),
-				equalTo(listOfPoliticiansRating.get(1).getPolitician().getName()));
+				equalTo(listOfPoliticiansRating.get(1).getPolitician().getFirstName() + " " + listOfPoliticiansRating.get(1).getPolitician().getLastName()));
 		assertThat(politicianResponse2.getPolitician().getRating(),
 				equalTo(listOfPoliticiansRating.get(1).getPolitician().getRating()));
 	}

@@ -43,7 +43,8 @@ public class PoliticianServiceTest {
 		
 		politician =  new Politicians
 				(null, 0.00D,
-						"Mirriam Defensor", 
+						"Mirriam", 
+						"Defensor", 
 						List.of(new PoliticiansRating()),
 						0.00D);
 		rating = new PoliticiansRating
@@ -56,7 +57,7 @@ public class PoliticianServiceTest {
 	public void verifyRepoCalledSaveMethod() {
 		when(repo.save(politician)).thenReturn(politician); 
 		
-		service.savePolitician(new AddPoliticianDTORequest("Mirriam Defensor", BigDecimal.valueOf(0.00D)));
+		service.savePolitician(new AddPoliticianDTORequest("Mirriam", "Defensor", BigDecimal.valueOf(0.00D)));
 		
 		verify(repo, times(1)).save(Mockito.any());
 		
@@ -87,7 +88,7 @@ public class PoliticianServiceTest {
 	public void shouldEqualDTOOutputsWhenSaved() {
 		when(repo.save(any(Politicians.class))).thenReturn(politician); 
 			
-		Politicians politicianQueried = service.savePolitician(new AddPoliticianDTORequest("Mirriam Defensor", BigDecimal.valueOf(1D)));
+		Politicians politicianQueried = service.savePolitician(new AddPoliticianDTORequest("Mirriam", "Defensor", BigDecimal.valueOf(1D)));
 		
 		assertThat(politician,
 				equalTo(politicianQueried));

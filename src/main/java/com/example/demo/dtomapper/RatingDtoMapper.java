@@ -22,7 +22,7 @@ public class RatingDtoMapper implements RatingDTOMapper{
 		}
 		
 		var politicianDTO = new PoliticianDTO
-				(politician.getName(), 
+				(politician.getFirstName() + " " + politician.getLastName(), 
 				politician.getId().toString(),
 				politician.getRating(),
 				satisfactionRate);

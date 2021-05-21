@@ -72,12 +72,20 @@ public class Politicians {
 		this.rating = getTotalRating() / getPoliticiansRating().size();
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public Politicians() {
@@ -85,27 +93,30 @@ public class Politicians {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Politicians(Integer id, Double rating, String name, List<PoliticiansRating> politiciansRating,
-			Double totalRating) {
+	public Politicians(Integer id, Double rating, String firstName, String lastName,
+			List<PoliticiansRating> politiciansRating, Double totalRating) {
 		super();
 		this.id = id;
 		this.rating = rating;
-		this.name = name;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.politiciansRating = politiciansRating;
 		this.totalRating = totalRating;
 	}
 
 	@Override
 	public String toString() {
-		return "Politicians [id=" + id + ", rating=" + rating + ", name=" + name + ", totalRating=" + totalRating + "]";
+		return "Politicians [id=" + id + ", rating=" + rating + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", politiciansRating=" + politiciansRating + ", totalRating=" + totalRating + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((politiciansRating == null) ? 0 : politiciansRating.hashCode());
 		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
 		result = prime * result + ((totalRating == null) ? 0 : totalRating.hashCode());
@@ -121,15 +132,20 @@ public class Politicians {
 		if (getClass() != obj.getClass())
 			return false;
 		Politicians other = (Politicians) obj;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (name == null) {
-			if (other.name != null)
+		if (lastName == null) {
+			if (other.lastName != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!lastName.equals(other.lastName))
 			return false;
 		if (politiciansRating == null) {
 			if (other.politiciansRating != null)
