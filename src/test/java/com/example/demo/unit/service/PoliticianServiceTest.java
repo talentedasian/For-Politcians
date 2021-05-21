@@ -66,7 +66,7 @@ public class PoliticianServiceTest {
 	@Test
 	public void shouldAddTotalRatingAndCorrectAverageRating() {
 		politician.setTotalRating(8.023D);
-		politician.setRating(politician.getTotalRating() / Double.valueOf(politician.getPoliticiansRating().size()));
+		politician.setRating();
 		when(repo.findByName("Mirriam Defensor")).thenReturn(Optional.of(politician));
 		Politicians politicianQueried = service.findPoliticianByName("Mirriam Defensor");
 		
@@ -80,9 +80,10 @@ public class PoliticianServiceTest {
 			
 		Politicians politicianQueried = service.findPoliticianByName("Mirriam Defensor");
 		
-		assertThat(politician,
-				equalTo(politicianQueried));
+		assertDtoOutputsUtil(politician, politicianQueried);
 	}
+	
+	
 	
 	@Test
 	public void shouldEqualDTOOutputsWhenSaved() {
@@ -90,8 +91,20 @@ public class PoliticianServiceTest {
 			
 		Politicians politicianQueried = service.savePolitician(new AddPoliticianDTORequest("Mirriam", "Defensor", BigDecimal.valueOf(1D)));
 		
-		assertThat(politician,
-				equalTo(politicianQueried));
+		assertDtoOutputsUtil(politician, politicianQueried);
+	}
+	
+	public void assertDtoOutputsUtil(Politicians politicianToAssert, Politicians politicianToCompare) {
+		assertThat(politicianToAssert.getId(),
+				equalTo(politicianToCompare.getId()));
+		assertThat(politicianToAssert.getFirstName(),
+				equalTo(politicianToCompare.getFirstName()));
+		assertThat(politicianToAssert.getLastName(),
+				equalTo(politicianToCompare.getLastName()));
+		assertThat(politicianToAssert.getRating(),
+				equalTo(politicianToCompare.getRating()));
+		assertThat(politicianToAssert.getTotalRating(),
+				equalTo(politicianToCompare.getTotalRating()));
 	}
 	
 }
