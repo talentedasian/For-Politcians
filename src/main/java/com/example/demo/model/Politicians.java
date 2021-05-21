@@ -1,10 +1,10 @@
 package com.example.demo.model;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,10 +20,13 @@ public class Politicians {
 	@Column(nullable = false, precision = 3, scale = 2)
 	private Double rating;
 	
-	@Column(nullable = false, unique = true, name = "politician_name")
-	private String name;
+	@Column(nullable = false, unique = true, name = "politician_first_name")
+	private String firstName;
 	
-	@OneToMany(mappedBy = "politician")
+	@Column(nullable = false, unique = true, name = "politician_last_name")
+	private String lastName;
+	
+	@OneToMany(mappedBy = "politician", fetch = FetchType.EAGER)
 	List<PoliticiansRating> politiciansRating;
 	
 	@Column(nullable = false, precision = 3, scale = 2)
