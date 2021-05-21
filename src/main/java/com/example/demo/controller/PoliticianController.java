@@ -45,8 +45,8 @@ public class PoliticianController {
 	}
 	
 	@GetMapping("/politicianByName")
-	public ResponseEntity<PoliticianDTO> politicianByName(String name) {
-		var politicianByName = politiciansService.findPoliticianByName(name);
+	public ResponseEntity<PoliticianDTO> politicianByName(String lastName, String firstName) {
+		var politicianByName = politiciansService.findPoliticianByName(lastName, firstName);
 		
 		DTOMapper<PoliticianDTO, Politicians> mapper = new PoliticiansDtoMapper();
 		

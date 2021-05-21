@@ -41,7 +41,7 @@ public class RatingService {
 	
 	@Transactional
 	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) {
-		Politicians politician = politicianRepo.findByName(dto.getPoliticianName())
+		Politicians politician = politicianRepo.findByLastName(dto.getPoliticianName())
 				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by " + dto.getPoliticianName()));
 		
 		PoliticalParty politicalParty = null;
@@ -51,10 +51,8 @@ public class RatingService {
 			}
 		}
 		
-		politician.setTotalRating(dto.getRating().doubleValue());
-		politician.setRating();
-		
-		politicianRepo.save(politician);
+		politician.calculateTotalAmountOfRating(dto.getRating().doubleValue());
+		politician.calculateAverageRating();
 		
 		var rating = new PoliticiansRating();
 		
@@ -67,6 +65,9 @@ public class RatingService {
 		rating.setRater(userRater);
 		rating.setRating(dto.getRating().doubleValue());
 		
+		politician.setListOfRaters(rating);
+		
+		politicianRepo.save(politician);
 		ratingRepo.save(rating);
 		
 		return rating;

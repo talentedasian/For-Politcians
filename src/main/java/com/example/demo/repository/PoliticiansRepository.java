@@ -8,5 +8,16 @@ import com.example.demo.model.Politicians;
 
 public interface PoliticiansRepository extends JpaRepository<Politicians, Integer>{
 
-	Optional<Politicians> findByName(String name);
+	Optional<Politicians> findByFirstName(String firstName);
+	
+	Optional<Politicians> findByLastName(String lastName);
+	
+	Optional<Politicians> findByLastNameAndFirstName(String lastName, String firstName);
+	
+	Optional<Politicians> findByFullName(String name);
+	
+	long countByLastName(String lastName);
+
+	long countByLastNameAndFirstName(String lastName, String firstName);
+	
 }

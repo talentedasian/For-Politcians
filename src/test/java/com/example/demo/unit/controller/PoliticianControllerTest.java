@@ -69,9 +69,9 @@ public class PoliticianControllerTest {
 	
 	@Test
 	public void shouldEqualDTOOutputs() {
-		when(service.findPoliticianByName("Mirriam Defensor")).thenReturn(politician);
+		when(service.findPoliticianByName("Mirriam", "Defensor")).thenReturn(politician);
 		
-		ResponseEntity<PoliticianDTO> politicianResponse = controller.politicianByName("Mirriam Defensor");
+		ResponseEntity<PoliticianDTO> politicianResponse = controller.politicianByName("Mirriam", "Defensor");
 		PoliticianDTO politicianDTO = new PoliticiansDtoMapper().mapToDTO(politician);
 		
 		assertThat(politicianDTO,

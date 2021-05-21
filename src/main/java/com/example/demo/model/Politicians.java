@@ -4,15 +4,20 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.demo.repository.PoliticiansRepository;
+
 @Entity
 public class Politicians implements PoliticianMethods{
 
+	@Autowired transient PoliticiansRepository repo;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
@@ -20,18 +25,33 @@ public class Politicians implements PoliticianMethods{
 	@Column(nullable = false, precision = 3, scale = 2)
 	private Double rating;
 	
-	@Column(nullable = false, unique = true, name = "politician_first_name")
+	@Column(nullable = false, name = "politician_first_name")
 	private String firstName;
 	
-	@Column(nullable = false, unique = true, name = "politician_last_name")
+	@Column(nullable = false, name = "politician_last_name")
 	private String lastName;
 	
-	@OneToMany(mappedBy = "politician", fetch = FetchType.EAGER)
+	@Column(nullable = false, unique = true, name = "full_name")
+	private String fullName;
+	
+	@OneToMany(mappedBy = "politician")
 	List<PoliticiansRating> politiciansRating;
 	
 	@Column(nullable = false, precision = 3, scale = 2)
 	private Double totalRating;
-	
+
+	public void setRepo(PoliticiansRepository repo) {
+		this.repo = repo;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
 	public List<PoliticiansRating> getPoliticiansRating() {
 		return politiciansRating;
 	}
@@ -95,6 +115,18 @@ public class Politicians implements PoliticianMethods{
 		this.politiciansRating = politiciansRating;
 		this.totalRating = totalRating;
 	}
+	
+	public Politicians(Integer id, Double rating, String firstName, String lastName,
+			List<PoliticiansRating> politiciansRating, Double totalRating, PoliticiansRepository repo) {
+		super();
+		this.id = id;
+		this.rating = rating;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.politiciansRating = politiciansRating;
+		this.totalRating = totalRating;
+		this.repo = repo;
+	}
 
 	@Override
 	public String toString() {
@@ -107,6 +139,7 @@ public class Politicians implements PoliticianMethods{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((politiciansRating == null) ? 0 : politiciansRating.hashCode());
@@ -128,6 +161,11 @@ public class Politicians implements PoliticianMethods{
 			if (other.firstName != null)
 				return false;
 		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (fullName == null) {
+			if (other.fullName != null)
+				return false;
+		} else if (!fullName.equals(other.fullName))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -158,27 +196,48 @@ public class Politicians implements PoliticianMethods{
 	}
 
 	@Override
-	public void setAverageRating() {
-		setRating(getTotalRating() / returnCountsOfRatings() + 1);
+	public void calculateAverageRating() {
+		setRating(getTotalRating() / (convertLongToDouble(returnCountsOfRatings()) + 1D));
+	}
+	
+	private Double convertLongToDouble(long longValue) {
+		return Double.valueOf(String.valueOf(longValue));
 	}
 
 	@Override
-	public void setTotalAmountOfRating(Double rating) {
+	public void calculateTotalAmountOfRating(Double rating) {
 		setTotalRating(getTotalRating() + rating);
 	}
 
 	@Override
-	public int returnCountsOfRatings() {
-		if (emptyCountOfRatings()) {
+	public long returnCountsOfRatings() {
+		if (isEmptyCountOfRatings()) {
 			return 0;
 		}
 		
-		return getPoliticiansRating().size();
+		return returnCountsOfRatings(lastName,firstName);
 	}
 
 	@Override
-	public boolean emptyCountOfRatings() {
-		return getPoliticiansRating().isEmpty();
+	public boolean isEmptyCountOfRatings() {
+		return repo.countByLastNameAndFirstName(lastName, firstName) == 0L;
 	}
 
+	@Override
+	public void setListOfRaters(PoliticiansRating rater) {
+		List<PoliticiansRating> listOfPoliticiansRating = getPoliticiansRating();
+		listOfPoliticiansRating.add(rater);
+		setPoliticiansRating(listOfPoliticiansRating);
+	}
+	
+	private long returnCountsOfRatings(String lastName, String firstName) {
+		return repo.countByLastNameAndFirstName(lastName, firstName);
+	}
+
+	@Override
+	public String calculateFullName() {
+		setFullName(this.firstName + this.lastName);
+		return this.fullName;
+	}
+	
 }

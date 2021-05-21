@@ -57,7 +57,7 @@ public class RatingServiceTest {
 	
 	@Test
 	public void verifyRatingRepoCalledSaved() {
-		when(politicianRepo.findByName("Mirriam Defensor")).thenReturn(Optional.of(politicianToBeSaved));
+		when(politicianRepo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politicianToBeSaved));
 		when(ratingRepo.save(any())).thenReturn(ratingToBeSaved);
 		
 		String jsonWebToken = JwtProvider.createJwtWithFixedExpirationDate("test@gmail.com", "test");

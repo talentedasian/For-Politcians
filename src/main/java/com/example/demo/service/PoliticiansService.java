@@ -31,8 +31,8 @@ public class PoliticiansService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Politicians findPoliticianByName(String name) {
-		Politicians politician = politiciansRepo.findByName(name)
+	public Politicians findPoliticianByName(String lastName, String firstName) {
+		Politicians politician = politiciansRepo.findByLastNameAndFirstName(lastName, firstName)
 				.orElseThrow(() -> new PoliticianNotFoundException("No politician found using the given Name"));
 		
 		return politician;
@@ -48,13 +48,15 @@ public class PoliticiansService {
 	public Politicians savePolitician(AddPoliticianDTORequest dto) {
 		try {
 			var politicianToBeSaved = new Politicians();
+			politicianToBeSaved.setRepo(politiciansRepo);
 			politicianToBeSaved.setFirstName(dto.getFirstName());
 			politicianToBeSaved.setLastName(dto.getLastName());
-			politicianToBeSaved.setRating(dto.getRating().setScale(2,RoundingMode.HALF_DOWN).doubleValue());
+			politicianToBeSaved.calculateFullName();
 			politicianToBeSaved.setTotalRating(dto.getRating().setScale(2,RoundingMode.HALF_DOWN).doubleValue());
+			politicianToBeSaved.calculateTotalAmountOfRating(dto.getRating().setScale(2,RoundingMode.HALF_DOWN).doubleValue());
+			politicianToBeSaved.calculateAverageRating();
 			
 			Politicians politician = politiciansRepo.save(politicianToBeSaved);
-			
 			return politician;
 		} catch (DataIntegrityViolationException e) {
 			throw new PoliticianAlreadyExistsException("Politician Already exists in the database");

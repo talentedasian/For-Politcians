@@ -8,12 +8,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -41,34 +43,38 @@ public class PoliticianServiceTest {
 	public void setup() {
 		service = new PoliticiansService(repo);
 		
+		List<PoliticiansRating> listOfPoliticiansRating = new ArrayList<>();
 		politician =  new Politicians
-				(null, 0.00D,
-						"Mirriam", 
-						"Defensor", 
-						List.of(new PoliticiansRating()),
-						0.00D);
+				(null,
+				0.00D,
+				"Mirriam", 
+				"Defensor", 
+				listOfPoliticiansRating,
+				0.01D,
+				repo);
+		politician.setTotalRating(0.01D);
 		rating = new PoliticiansRating
 				(1, 8.023D, 
 				new UserRater("test", PoliticalParty.DDS, "test@gmail.com"),
 				politician);
+		politician.setListOfRaters(rating);
 	}
 	
 	@Test
 	public void verifyRepoCalledSaveMethod() {
 		when(repo.save(politician)).thenReturn(politician); 
+		when(repo.countByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(1L);
+		service.savePolitician(new AddPoliticianDTORequest("Mirriam", "Defensor", BigDecimal.valueOf(0.01D)));
 		
-		service.savePolitician(new AddPoliticianDTORequest("Mirriam", "Defensor", BigDecimal.valueOf(0.00D)));
-		
-		verify(repo, times(1)).save(Mockito.any());
-		
+		verify(repo, times(1)).save(Mockito.any());	
 	}
 	
 	@Test
 	public void shouldAddTotalRatingAndCorrectAverageRating() {
 		politician.setTotalRating(8.023D);
-		politician.setRating();
-		when(repo.findByName("Mirriam Defensor")).thenReturn(Optional.of(politician));
-		Politicians politicianQueried = service.findPoliticianByName("Mirriam Defensor");
+		politician.calculateAverageRating();
+		when(repo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politician));
+		Politicians politicianQueried = service.findPoliticianByName("Mirriam", "Defensor");
 		
 		assertThat(8.023D,
 				equalTo(politicianQueried.getRating()));
@@ -76,9 +82,9 @@ public class PoliticianServiceTest {
 	
 	@Test
 	public void shouldEqualDTOOutputs() {
-		when(repo.findByName("Mirriam Defensor")).thenReturn(Optional.of(politician)); 
-			
-		Politicians politicianQueried = service.findPoliticianByName("Mirriam Defensor");
+		when(repo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politician));
+		
+		Politicians politicianQueried = service.findPoliticianByName("Mirriam", "Defensor");
 		
 		assertDtoOutputsUtil(politician, politicianQueried);
 	}
@@ -88,8 +94,8 @@ public class PoliticianServiceTest {
 	@Test
 	public void shouldEqualDTOOutputsWhenSaved() {
 		when(repo.save(any(Politicians.class))).thenReturn(politician); 
-			
-		Politicians politicianQueried = service.savePolitician(new AddPoliticianDTORequest("Mirriam", "Defensor", BigDecimal.valueOf(1D)));
+		when(repo.countByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(1L);			
+		Politicians politicianQueried = service.savePolitician(new AddPoliticianDTORequest("Mirriam", "Defensor", BigDecimal.valueOf(0.01D)));
 		
 		assertDtoOutputsUtil(politician, politicianQueried);
 	}

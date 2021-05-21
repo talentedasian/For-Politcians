@@ -2,11 +2,15 @@ package com.example.demo.model;
 
 public interface PoliticianMethods {
 
-	void setAverageRating();
+	void calculateAverageRating();
 	
-	void setTotalAmountOfRating(Double rating);
+	void calculateTotalAmountOfRating(Double rating);
 	
-	int returnCountsOfRatings();
+	long returnCountsOfRatings();
 	
-	boolean emptyCountOfRatings();
+	boolean isEmptyCountOfRatings();
+	
+	void setListOfRaters(PoliticiansRating rater);
+	
+	String calculateFullName();
 }
