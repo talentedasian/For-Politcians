@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Politicians {
+public class Politicians implements PoliticianMethods{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,10 +47,6 @@ public class Politicians {
 	public void setTotalRating(Double totalRating) {
 		this.totalRating = totalRating;
 	}
-	
-	public void setTotalRatingMethod(Double totalRating) {
-		this.totalRating += getTotalRating() + totalRating;
-	}
 
 	public Integer getId() {
 		return id;
@@ -66,10 +62,6 @@ public class Politicians {
 
 	public void setRating(Double rating) {
 		this.rating = rating;
-	}
-	
-	public void setRating() {
-		this.rating = getTotalRating() / getPoliticiansRating().size();
 	}
 
 	public String getFirstName() {
@@ -163,6 +155,30 @@ public class Politicians {
 		} else if (!totalRating.equals(other.totalRating))
 			return false;
 		return true;
+	}
+
+	@Override
+	public void setAverageRating() {
+		setRating(getTotalRating() / returnCountsOfRatings() + 1);
+	}
+
+	@Override
+	public void setTotalAmountOfRating(Double rating) {
+		setTotalRating(getTotalRating() + rating);
+	}
+
+	@Override
+	public int returnCountsOfRatings() {
+		if (emptyCountOfRatings()) {
+			return 0;
+		}
+		
+		return getPoliticiansRating().size();
+	}
+
+	@Override
+	public boolean emptyCountOfRatings() {
+		return getPoliticiansRating().isEmpty();
 	}
 
 }
