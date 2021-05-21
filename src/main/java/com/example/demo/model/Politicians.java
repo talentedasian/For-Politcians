@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -65,7 +67,8 @@ public class Politicians implements PoliticianMethods{
 	}
 
 	public void setTotalRating(Double totalRating) {
-		this.totalRating = totalRating;
+		this.totalRating = BigDecimal.valueOf(totalRating)
+				.setScale(2, RoundingMode.HALF_DOWN).doubleValue();
 	}
 
 	public Integer getId() {
@@ -197,7 +200,8 @@ public class Politicians implements PoliticianMethods{
 
 	@Override
 	public void calculateAverageRating() {
-		setRating(getTotalRating() / (convertLongToDouble(returnCountsOfRatings()) + 1D));
+		setRating(BigDecimal.valueOf(getTotalRating() / (convertLongToDouble(returnCountsOfRatings()) + 1D))
+				.setScale(2, RoundingMode.HALF_DOWN).doubleValue());
 	}
 	
 	private Double convertLongToDouble(long longValue) {
@@ -206,7 +210,9 @@ public class Politicians implements PoliticianMethods{
 
 	@Override
 	public void calculateTotalAmountOfRating(Double rating) {
-		setTotalRating(getTotalRating() + rating);
+		System.out.println(getTotalRating() + " wow");
+		setTotalRating(BigDecimal.valueOf(getTotalRating() + rating)
+				.setScale(2, RoundingMode.HALF_DOWN).doubleValue());
 	}
 
 	@Override

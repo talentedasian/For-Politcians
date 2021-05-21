@@ -15,7 +15,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -72,11 +71,11 @@ public class PoliticianServiceTest {
 	@Test
 	public void shouldAddTotalRatingAndCorrectAverageRating() {
 		politician.setTotalRating(8.023D);
+		politician.calculateTotalAmountOfRating(9.023D);
 		politician.calculateAverageRating();
 		when(repo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politician));
 		Politicians politicianQueried = service.findPoliticianByName("Mirriam", "Defensor");
-		
-		assertThat(8.023D,
+		assertThat(17.04D,
 				equalTo(politicianQueried.getRating()));
 	}
 	
@@ -98,6 +97,14 @@ public class PoliticianServiceTest {
 		Politicians politicianQueried = service.savePolitician(new AddPoliticianDTORequest("Mirriam", "Defensor", BigDecimal.valueOf(0.01D)));
 		
 		assertDtoOutputsUtil(politician, politicianQueried);
+	}
+	
+	@Test
+	public void shouldEqualTotalRating() {
+		politician.calculateTotalAmountOfRating(8.023D);
+		
+		assertThat(politician.getTotalRating(),
+				equalTo(8.03D));
 	}
 	
 	public void assertDtoOutputsUtil(Politicians politicianToAssert, Politicians politicianToCompare) {
