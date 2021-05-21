@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -43,6 +44,10 @@ public class Politicians {
 	public void setTotalRating(Double totalRating) {
 		this.totalRating = totalRating;
 	}
+	
+	public void setTotalRatingMethod(Double totalRating) {
+		this.totalRating += getTotalRating() + totalRating;
+	}
 
 	public Integer getId() {
 		return id;
@@ -58,6 +63,10 @@ public class Politicians {
 
 	public void setRating(Double rating) {
 		this.rating = rating;
+	}
+	
+	public void setRating() {
+		this.rating = getTotalRating() / getPoliticiansRating().size();
 	}
 
 	public String getName() {

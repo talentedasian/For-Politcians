@@ -53,9 +53,8 @@ public class RatingService {
 			}
 		}
 		
-		politician.setTotalRating(politician.getTotalRating() + dto.getRating().doubleValue());
-		politician.setRating(BigDecimal.valueOf(politician.getTotalRating() / Double.valueOf(String.valueOf(politician.getPoliticiansRating().size() + 1)))
-				.setScale(2, RoundingMode.HALF_DOWN).doubleValue());
+		politician.setTotalRating(dto.getRating().doubleValue());
+		politician.setRating();
 		
 		politicianRepo.save(politician);
 		
