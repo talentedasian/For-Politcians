@@ -199,9 +199,12 @@ public class Politicians implements PoliticianMethods{
 	}
 
 	@Override
-	public void calculateAverageRating() {
-		setRating(BigDecimal.valueOf(getTotalRating() / (convertLongToDouble(returnCountsOfRatings()) + 1D))
-				.setScale(2, RoundingMode.HALF_DOWN).doubleValue());
+	public double calculateAverageRating() {
+		double rating = BigDecimal.valueOf(getTotalRating() / (convertLongToDouble(returnCountsOfRatings()) + 1D))
+			.setScale(2, RoundingMode.HALF_DOWN).doubleValue();
+		setRating(rating);
+		
+		return rating;
 	}
 	
 	private Double convertLongToDouble(long longValue) {
@@ -209,10 +212,12 @@ public class Politicians implements PoliticianMethods{
 	}
 
 	@Override
-	public void calculateTotalAmountOfRating(Double rating) {
-		System.out.println(getTotalRating() + " wow");
-		setTotalRating(BigDecimal.valueOf(getTotalRating() + rating)
-				.setScale(2, RoundingMode.HALF_DOWN).doubleValue());
+	public double calculateTotalAmountOfRating(Double rating) {
+		double totalAmount = BigDecimal.valueOf(getTotalRating() + rating)
+			.setScale(2, RoundingMode.HALF_DOWN).doubleValue();
+		setTotalRating(totalAmount);
+		
+		return totalAmount;
 	}
 
 	@Override
@@ -230,10 +235,12 @@ public class Politicians implements PoliticianMethods{
 	}
 
 	@Override
-	public void setListOfRaters(PoliticiansRating rater) {
+	public List<PoliticiansRating> setListOfRaters(PoliticiansRating rater) {
 		List<PoliticiansRating> listOfPoliticiansRating = getPoliticiansRating();
 		listOfPoliticiansRating.add(rater);
 		setPoliticiansRating(listOfPoliticiansRating);
+		
+		return listOfPoliticiansRating;
 	}
 	
 	private long returnCountsOfRatings(String lastName, String firstName) {

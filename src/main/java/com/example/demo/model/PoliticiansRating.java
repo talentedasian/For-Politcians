@@ -9,13 +9,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class PoliticiansRating {
+public class PoliticiansRating implements PoliticiansRatingMethods{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-
-//	private Rating rating;
 	
 	@Column(nullable = false, precision = 1, scale = 2)
 	private Double rating; 
