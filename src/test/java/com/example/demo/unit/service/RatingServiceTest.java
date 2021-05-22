@@ -162,14 +162,23 @@ public class RatingServiceTest {
 		List<PoliticiansRating> listOfPoliticiansRating = List.of(ratingToBeSaved);
 		when(ratingRepo.findByRater_Email("test@gmail.com")).thenReturn(listOfPoliticiansRating);
 		
-		String jsonWebToken = JwtProvider.createJwtWithFixedExpirationDate("test@gmail.com", "test");
-		when(req.getHeader("Authorization")).thenReturn("Bearer " + jsonWebToken);
-		
 		List<PoliticiansRating> politicianRatingQueried = service.findRatingsByFacebookEmail("test@gmail.com");
 		
 		assertThat(listOfPoliticiansRating,
 				equalTo(politicianRatingQueried));
 		
+	}
+	
+	@Test
+	public void assertAverageRatingLogic() {
+		Politicians pol = new Politicians();
+		pol.setRepo(politicianRepo);
+		pol.setTotalRating(0.00D);
+		pol.calculateTotalAmountOfRating(2.20D);
+		double averageRating = pol.calculateAverageRating();
+		
+		assertThat(averageRating,
+				equalTo(2.2D));
 	}
 	
 	private void stubSaveRepo() {
