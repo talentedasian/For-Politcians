@@ -49,7 +49,8 @@ public class RatingServiceTest {
 		service = new RatingService(ratingRepo, politicianRepo);
 		
 		List<PoliticiansRating> listOfPoliticiansRating = new ArrayList<>();
-		politicianToBeSaved = new Politicians(1, 0.00D,"Mirriam", "Defensor", listOfPoliticiansRating, 0.01D, politicianRepo);
+		politicianToBeSaved = new Politicians(1, 0.01D,"Mirriam", "Defensor", listOfPoliticiansRating, 0.01D, politicianRepo);
+		
 		ratingToBeSaved = new PoliticiansRating();
 		ratingToBeSaved.setId(1);
 		ratingToBeSaved.setPolitician(politicianToBeSaved);
@@ -59,11 +60,7 @@ public class RatingServiceTest {
 	
 	@Test
 	public void verifyRatingRepoCalledSaved() {
-		when(politicianRepo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politicianToBeSaved));
-		when(ratingRepo.save(any())).thenReturn(ratingToBeSaved);
-		
-		String jsonWebToken = JwtProvider.createJwtWithFixedExpirationDate("test@gmail.com", "test");
-		when(req.getHeader("Authorization")).thenReturn("Bearer " + jsonWebToken);
+		stubSaveRepo();
 		
 		service.saveRatings(new AddRatingDTORequest(BigDecimal.valueOf(0.00D), 
 				"Mirriam", "Defensor", PoliticalParty.DDS.toString()),
@@ -73,13 +70,91 @@ public class RatingServiceTest {
 	}
 	
 	@Test
-	public void assertEqualsSavedRepoAndQueriedRepo() {
+	public void assertSavedRepo() {
+		stubSaveRepo(); 
+		
+		PoliticiansRating rating = service.saveRatings(new AddRatingDTORequest(BigDecimal.valueOf(0.01D), 
+				"Mirriam", "Defensor", PoliticalParty.DDS.toString()),
+				req);
+		
+		assertThat(rating.getRating(),
+				equalTo(ratingToBeSaved.getRating()));
+	}
+	
+	@Test
+	public void assertSavedRepoUserRater() {
+		stubSaveRepo();
+		
+		PoliticiansRating rating = service.saveRatings(new AddRatingDTORequest(BigDecimal.valueOf(0.01D), 
+				"Mirriam", "Defensor", PoliticalParty.DDS.toString()),
+				req);
+		
+		assertThat(rating.getRater().getEmail(),
+				equalTo(ratingToBeSaved.getRater().getEmail()));
+		assertThat(rating.getRater().getFacebookName(),
+				equalTo(ratingToBeSaved.getRater().getFacebookName()));
+		assertThat(rating.getRater().getPoliticalParties(),
+				equalTo(ratingToBeSaved.getRater().getPoliticalParties()));
+	}
+	
+	@Test
+	public void assertEqualsQueriedRepo() {
 		when(ratingRepo.findById(1)).thenReturn(Optional.of(ratingToBeSaved));
 		
 		PoliticiansRating ratings = service.findById("1");
 		
-		assertThat(ratings, 
-				equalTo(ratingToBeSaved));
+		assertThat(ratings.getRating(), 
+				equalTo(ratingToBeSaved.getRating()));
+	}
+	
+	@Test
+	public void assertEqualsQueriedRepoUserRater() {
+		when(ratingRepo.findById(1)).thenReturn(Optional.of(ratingToBeSaved));
+		
+		PoliticiansRating ratings = service.findById("1");
+		UserRater rater = ratings.getRater();
+		
+		assertThat(rater.getEmail(), 
+				equalTo(ratingToBeSaved.getRater().getEmail()));
+		assertThat(rater.getFacebookName(), 
+				equalTo(ratingToBeSaved.getRater().getFacebookName()));
+		assertThat(rater.getPoliticalParties(), 
+				equalTo(ratingToBeSaved.getRater().getPoliticalParties()));
+	}
+	
+	@Test
+	public void assertEqualsQueriedRepoPolitician() {
+		when(ratingRepo.findById(1)).thenReturn(Optional.of(ratingToBeSaved));
+		
+		PoliticiansRating ratings = service.findById("1");
+		Politicians pol = ratings.getPolitician();
+		String polFullName = pol.calculateFullName();
+		
+		assertThat(pol.getFirstName(), 
+				equalTo(ratingToBeSaved.getPolitician().getFirstName()));
+		assertThat(pol.getLastName(), 
+				equalTo(ratingToBeSaved.getPolitician().getLastName()));
+		assertThat(polFullName, 
+				equalTo(ratingToBeSaved.getPolitician().getFullName()));
+		assertThat(pol.getRating(), 
+				equalTo(ratingToBeSaved.getPolitician().getRating()));
+		assertThat(pol.getTotalRating(), 
+				equalTo(ratingToBeSaved.getPolitician().getTotalRating()));
+	}
+	
+	@Test
+	public void assertEqualsQueriedRepoPoliticianRatings() {
+		when(ratingRepo.findById(1)).thenReturn(Optional.of(ratingToBeSaved));
+		
+		PoliticiansRating ratings = service.findById("1");
+		Politicians pol = ratings.getPolitician();
+		pol.calculateTotalAmountOfRating(ratingToBeSaved.getRating());
+		pol.calculateAverageRating();
+		
+		assertThat(pol.getTotalRating(),
+				equalTo(ratingToBeSaved.getPolitician().getTotalRating()));
+		assertThat(pol.getRating(),
+				equalTo(ratingToBeSaved.getPolitician().getRating()));
 	}
 	
 	@Test
@@ -95,6 +170,14 @@ public class RatingServiceTest {
 		assertThat(listOfPoliticiansRating,
 				equalTo(politicianRatingQueried));
 		
+	}
+	
+	private void stubSaveRepo() {
+		when(politicianRepo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politicianToBeSaved));
+		when(ratingRepo.save(any())).thenReturn(ratingToBeSaved);
+		
+		String jsonWebToken = JwtProvider.createJwtWithFixedExpirationDate("test@gmail.com", "test");
+		when(req.getHeader("Authorization")).thenReturn("Bearer " + jsonWebToken);
 	}
 	
 }

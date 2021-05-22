@@ -249,8 +249,10 @@ public class Politicians implements PoliticianMethods{
 
 	@Override
 	public String calculateFullName() {
-		setFullName(this.firstName + this.lastName);
-		return this.fullName;
+		String fullName = this.firstName + "\s" + this.lastName;
+		setFullName(fullName);
+		
+		return fullName;
 	}
 	
 }
