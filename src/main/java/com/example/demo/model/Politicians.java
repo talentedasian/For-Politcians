@@ -13,12 +13,12 @@ import javax.persistence.OneToMany;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.demo.repository.PoliticiansRepository;
+import com.example.demo.repository.RatingRepository;
 
 @Entity
 public class Politicians implements PoliticianMethods{
 
-	@Autowired transient PoliticiansRepository repo;
+	@Autowired transient RatingRepository repo;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,12 +37,12 @@ public class Politicians implements PoliticianMethods{
 	private String fullName;
 	
 	@OneToMany(mappedBy = "politician")
-	List<PoliticiansRating> politiciansRating;
+	private List<PoliticiansRating> politiciansRating;
 	
 	@Column(nullable = false, precision = 3, scale = 2)
 	private Double totalRating;
 
-	public void setRepo(PoliticiansRepository repo) {
+	public void setRepo(RatingRepository repo) {
 		this.repo = repo;
 	}
 
@@ -120,7 +120,7 @@ public class Politicians implements PoliticianMethods{
 	}
 	
 	public Politicians(Integer id, Double rating, String firstName, String lastName,
-			List<PoliticiansRating> politiciansRating, Double totalRating, PoliticiansRepository repo) {
+			List<PoliticiansRating> politiciansRating, Double totalRating, RatingRepository repo) {
 		super();
 		this.id = id;
 		this.rating = rating;
@@ -213,6 +213,11 @@ public class Politicians implements PoliticianMethods{
 
 	@Override
 	public double calculateTotalAmountOfRating(Double rating) {
+		if (getTotalRating() == null) {
+			setTotalRating(BigDecimal.valueOf(rating)
+			.setScale(2, RoundingMode.HALF_DOWN).doubleValue());
+		}
+		
 		double totalAmount = BigDecimal.valueOf(getTotalRating() + rating)
 			.setScale(2, RoundingMode.HALF_DOWN).doubleValue();
 		setTotalRating(totalAmount);
@@ -226,12 +231,12 @@ public class Politicians implements PoliticianMethods{
 			return 0;
 		}
 		
-		return returnCountsOfRatings(lastName,firstName);
+		return returnCountsOfRatings(this.id);
 	}
 
 	@Override
 	public boolean isEmptyCountOfRatings() {
-		return repo.countByLastNameAndFirstName(lastName, firstName) == 0L;
+		return this.returnCountsOfRatings(this.id) == 0L;
 	}
 
 	@Override
@@ -243,8 +248,8 @@ public class Politicians implements PoliticianMethods{
 		return listOfPoliticiansRating;
 	}
 	
-	private long returnCountsOfRatings(String lastName, String firstName) {
-		return repo.countByLastNameAndFirstName(lastName, firstName);
+	private long returnCountsOfRatings(Integer id) {
+		return repo.countByPolitician_Id(id);
 	}
 
 	@Override

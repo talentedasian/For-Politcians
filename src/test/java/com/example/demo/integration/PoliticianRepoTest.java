@@ -13,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.annotation.Commit;
 
 import com.example.demo.model.Politicians;
 import com.example.demo.repository.PoliticiansRepository;
@@ -27,7 +26,6 @@ public class PoliticianRepoTest {
 	private PoliticiansRepository repo;
 	
 	@Test
-	@Commit
 	@Order(1)
 	public void shouldBeEqualOnSavedEntity() {
 		System.out.println(1);

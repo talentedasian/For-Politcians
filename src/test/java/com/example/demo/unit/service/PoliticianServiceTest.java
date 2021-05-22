@@ -25,6 +25,7 @@ import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
+import com.example.demo.repository.RatingRepository;
 import com.example.demo.service.PoliticiansService;
 
 @ExtendWith(SpringExtension.class)
@@ -32,6 +33,8 @@ public class PoliticianServiceTest {
 
 	@Mock
 	public PoliticiansRepository repo;
+	@Mock
+	public RatingRepository ratingRepo;
 	
 	public PoliticiansService service;
 	
@@ -44,13 +47,13 @@ public class PoliticianServiceTest {
 		
 		List<PoliticiansRating> listOfPoliticiansRating = new ArrayList<>();
 		politician =  new Politicians
-				(null,
+				(1,
 				0.00D,
 				"Mirriam", 
 				"Defensor", 
 				listOfPoliticiansRating,
 				0.01D,
-				repo);
+				ratingRepo);
 		politician.setTotalRating(0.01D);
 		rating = new PoliticiansRating
 				(1, 8.023D, 
@@ -74,7 +77,9 @@ public class PoliticianServiceTest {
 		politician.calculateTotalAmountOfRating(9.023D);
 		politician.calculateAverageRating();
 		when(repo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politician));
+		
 		Politicians politicianQueried = service.findPoliticianByName("Mirriam", "Defensor");
+		
 		assertThat(17.04D,
 				equalTo(politicianQueried.getRating()));
 	}
@@ -93,7 +98,8 @@ public class PoliticianServiceTest {
 	@Test
 	public void shouldEqualDTOOutputsWhenSaved() {
 		when(repo.save(any(Politicians.class))).thenReturn(politician); 
-		when(repo.countByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(1L);			
+		when(repo.countByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(1L);
+		
 		Politicians politicianQueried = service.savePolitician(new AddPoliticianDTORequest("Mirriam", "Defensor", BigDecimal.valueOf(0.01D)));
 		
 		assertDtoOutputsUtil(politician, politicianQueried);

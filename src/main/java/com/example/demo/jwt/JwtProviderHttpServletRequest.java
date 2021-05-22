@@ -28,7 +28,6 @@ public class JwtProviderHttpServletRequest {
 	public static Jws<Claims> decodeJwt(HttpServletRequest req) {
 		return decodeJwtUtilMethod(req);
 	}
-	
 
 	private static Jws<Claims> decodeJwtUtilMethod(HttpServletRequest req) {
 		Jws<Claims> jwts = null;
@@ -52,7 +51,6 @@ public class JwtProviderHttpServletRequest {
 					.setAllowedClockSkewSeconds(60 * 3)
 					.build()
 					.parseClaimsJws(req.getHeader("Authorization").substring(7));
-			
 			
 		}  catch (MalformedJwtException e) {
 			throw new JwtMalformedFormatException(e.getLocalizedMessage());

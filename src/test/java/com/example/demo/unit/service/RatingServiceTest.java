@@ -49,7 +49,7 @@ public class RatingServiceTest {
 		service = new RatingService(ratingRepo, politicianRepo);
 		
 		List<PoliticiansRating> listOfPoliticiansRating = new ArrayList<>();
-		politicianToBeSaved = new Politicians(1, 0.01D,"Mirriam", "Defensor", listOfPoliticiansRating, 0.01D, politicianRepo);
+		politicianToBeSaved = new Politicians(1, 0.01D,"Mirriam", "Defensor", listOfPoliticiansRating, 0.01D, ratingRepo);
 		
 		ratingToBeSaved = new PoliticiansRating();
 		ratingToBeSaved.setId(1);
@@ -172,13 +172,13 @@ public class RatingServiceTest {
 	@Test
 	public void assertAverageRatingLogic() {
 		Politicians pol = new Politicians();
-		pol.setRepo(politicianRepo);
-		pol.setTotalRating(0.00D);
-		pol.calculateTotalAmountOfRating(2.20D);
+		pol.setRepo(ratingRepo);
+		pol.setTotalRating(0.01D);
+		pol.calculateTotalAmountOfRating(2.22D);
 		double averageRating = pol.calculateAverageRating();
 		
 		assertThat(averageRating,
-				equalTo(2.2D));
+				equalTo(2.23D));
 	}
 	
 	private void stubSaveRepo() {

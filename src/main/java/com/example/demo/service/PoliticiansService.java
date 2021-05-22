@@ -48,17 +48,17 @@ public class PoliticiansService {
 	public Politicians savePolitician(AddPoliticianDTORequest dto) {
 		try {
 			var politicianToBeSaved = new Politicians();
-			politicianToBeSaved.setRepo(politiciansRepo);
 			politicianToBeSaved.setFirstName(dto.getFirstName());
 			politicianToBeSaved.setLastName(dto.getLastName());
 			politicianToBeSaved.calculateFullName();
 			politicianToBeSaved.setTotalRating(dto.getRating().setScale(2,RoundingMode.HALF_DOWN).doubleValue());
-			politicianToBeSaved.calculateTotalAmountOfRating(dto.getRating().setScale(2,RoundingMode.HALF_DOWN).doubleValue());
-			politicianToBeSaved.calculateAverageRating();
+			politicianToBeSaved.setRating(politicianToBeSaved.getTotalRating());
 			
 			Politicians politician = politiciansRepo.save(politicianToBeSaved);
+			
 			return politician;
 		} catch (DataIntegrityViolationException e) {
+			System.out.println(e.getMessage());
 			throw new PoliticianAlreadyExistsException("Politician Already exists in the database");
 		}
 	}

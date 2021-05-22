@@ -10,4 +10,6 @@ public interface RatingRepository extends JpaRepository<PoliticiansRating, Integ
 	
 	List<PoliticiansRating> findByRater_Email(String email);
 
+	long countByPolitician_Id(Integer id);
+
 }

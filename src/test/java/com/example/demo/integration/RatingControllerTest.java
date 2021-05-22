@@ -52,7 +52,8 @@ public class RatingControllerTest {
 	
 	private final String content = """
 			{
-				"politicianName": "test",
+				"politicianLastName": "name",
+				"politicianFirstName": "test",
 				"rating": 1.00,
 				"politicalParty": "dds"
 			}
