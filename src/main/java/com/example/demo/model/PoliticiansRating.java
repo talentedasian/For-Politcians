@@ -1,5 +1,8 @@
 package com.example.demo.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.example.demo.model.enums.PoliticalParty;
 
 @Entity
 public class PoliticiansRating implements PoliticiansRatingMethods{
@@ -119,6 +124,32 @@ public class PoliticiansRating implements PoliticiansRatingMethods{
 		} else if (!rating.equals(other.rating))
 			return false;
 		return true;
+	}
+
+	@Override
+	public double calculateRating(double rating) {
+		double rate = BigDecimal.valueOf(rating).setScale(2, RoundingMode.HALF_DOWN).doubleValue();
+		setRating(rate);
+		
+		return rate;
+	}
+
+	@Override
+	public Politicians calculatePolitician(Politicians politician) {
+		politician.calculateFullName();
+		politician.calculateTotalAmountOfRating(getRating());
+		politician.calculateAverageRating();
+		setPolitician(politician);
+		
+		return politician;
+	}
+
+	@Override
+	public UserRater calculateRater(String subject, String id, PoliticalParty politicalParty) {
+		var userRater = new UserRater(id, politicalParty, subject);
+		setRater(userRater);
+		
+		return userRater;
 	}
 	
 }

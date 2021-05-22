@@ -56,7 +56,7 @@ public class PoliticianServiceTest {
 				(1, 8.023D, 
 				new UserRater("test", PoliticalParty.DDS, "test@gmail.com"),
 				politician);
-		politician.setListOfRaters(rating);
+		politician.calculateListOfRaters(rating);
 	}
 	
 	@Test

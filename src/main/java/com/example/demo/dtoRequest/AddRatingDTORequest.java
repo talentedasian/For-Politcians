@@ -14,18 +14,13 @@ public class AddRatingDTORequest {
 	private BigDecimal rating;
 	
 	@NotNull
-	private String politicianName;
+	private String politicianLastName;
+	
+	@NotNull
+	private String politicianFirstName;
 	
 	@NotNull
 	private String politicalParty;
-
-	public String getPoliticalParty() {
-		return politicalParty;
-	}
-
-	public void setPoliticalParty(String politicalParty) {
-		this.politicalParty = politicalParty;
-	}
 
 	public BigDecimal getRating() {
 		return rating;
@@ -35,12 +30,28 @@ public class AddRatingDTORequest {
 		this.rating = rating;
 	}
 
-	public String getPoliticianName() {
-		return politicianName;
+	public String getPoliticianLastName() {
+		return politicianLastName;
 	}
 
-	public void setPoliticianName(String politicianName) {
-		this.politicianName = politicianName;
+	public void setPoliticianLastName(String politicianLastName) {
+		this.politicianLastName = politicianLastName;
+	}
+
+	public String getPoliticianFirstName() {
+		return politicianFirstName;
+	}
+
+	public void setPoliticianFirstName(String politicianFirstName) {
+		this.politicianFirstName = politicianFirstName;
+	}
+
+	public String getPoliticalParty() {
+		return politicalParty;
+	}
+
+	public void setPoliticalParty(String politicalParty) {
+		this.politicalParty = politicalParty;
 	}
 
 	public AddRatingDTORequest() {
@@ -49,17 +60,18 @@ public class AddRatingDTORequest {
 	}
 
 	public AddRatingDTORequest(@NotNull @DecimalMin("0.01") @DecimalMax("10.00") BigDecimal rating,
-			@NotNull String politicianName, @NotNull String politicalParty) {
+			@NotNull String politicianLastName, @NotNull String politicianFirstName, @NotNull String politicalParty) {
 		super();
 		this.rating = rating;
-		this.politicianName = politicianName;
+		this.politicianLastName = politicianLastName;
+		this.politicianFirstName = politicianFirstName;
 		this.politicalParty = politicalParty;
 	}
 
 	@Override
 	public String toString() {
-		return "AddRatingDTORequest [rating=" + rating + ", politicianName=" + politicianName + ", politicalParty="
-				+ politicalParty + "]";
+		return "AddRatingDTORequest [rating=" + rating + ", politicianLastName=" + politicianLastName
+				+ ", politicianFirstName=" + politicianFirstName + ", politicalParty=" + politicalParty + "]";
 	}
 
 	@Override
@@ -67,7 +79,8 @@ public class AddRatingDTORequest {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((politicalParty == null) ? 0 : politicalParty.hashCode());
-		result = prime * result + ((politicianName == null) ? 0 : politicianName.hashCode());
+		result = prime * result + ((politicianFirstName == null) ? 0 : politicianFirstName.hashCode());
+		result = prime * result + ((politicianLastName == null) ? 0 : politicianLastName.hashCode());
 		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
 		return result;
 	}
@@ -86,10 +99,15 @@ public class AddRatingDTORequest {
 				return false;
 		} else if (!politicalParty.equals(other.politicalParty))
 			return false;
-		if (politicianName == null) {
-			if (other.politicianName != null)
+		if (politicianFirstName == null) {
+			if (other.politicianFirstName != null)
 				return false;
-		} else if (!politicianName.equals(other.politicianName))
+		} else if (!politicianFirstName.equals(other.politicianFirstName))
+			return false;
+		if (politicianLastName == null) {
+			if (other.politicianLastName != null)
+				return false;
+		} else if (!politicianLastName.equals(other.politicianLastName))
 			return false;
 		if (rating == null) {
 			if (other.rating != null)

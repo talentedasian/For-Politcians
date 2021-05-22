@@ -235,7 +235,7 @@ public class Politicians implements PoliticianMethods{
 	}
 
 	@Override
-	public List<PoliticiansRating> setListOfRaters(PoliticiansRating rater) {
+	public List<PoliticiansRating> calculateListOfRaters(PoliticiansRating rater) {
 		List<PoliticiansRating> listOfPoliticiansRating = getPoliticiansRating();
 		listOfPoliticiansRating.add(rater);
 		setPoliticiansRating(listOfPoliticiansRating);

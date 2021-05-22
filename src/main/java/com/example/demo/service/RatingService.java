@@ -13,7 +13,6 @@ import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.model.Politicians;
 import com.example.demo.model.PoliticiansRating;
-import com.example.demo.model.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;
@@ -41,31 +40,19 @@ public class RatingService {
 	
 	@Transactional
 	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) {
-		Politicians politician = politicianRepo.findByLastName(dto.getPoliticianName())
-				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by " + dto.getPoliticianName()));
+		Politicians politician = politicianRepo.findByLastNameAndFirstName(dto.getPoliticianLastName(), dto.getPoliticianFirstName())
+				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by " + dto.getPoliticianFirstName() + "\s" + dto.getPoliticianLastName()));
 		
-		PoliticalParty politicalParty = null;
-		for (PoliticalParty politicalParties : PoliticalParty.values()) {
-			if (dto.getPoliticalParty().equalsIgnoreCase(politicalParties.toString())) {
-				politicalParty = politicalParties;
-			}
-		}
-		
-		politician.calculateTotalAmountOfRating(dto.getRating().doubleValue());
-		politician.calculateAverageRating();
-		
-		var rating = new PoliticiansRating();
+		PoliticalParty politicalParty = PoliticalParty.mapToPoliticalParty(dto.getPoliticalParty());
 		
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
-		var userRater = new UserRater
-				(JwtProviderHttpServletRequest.decodeJwt(req).getBody().getId(),
-				politicalParty,
-				jwt.getSubject());
-		rating.setPolitician(politician);
-		rating.setRater(userRater);
-		rating.setRating(dto.getRating().doubleValue());
 		
-		politician.setListOfRaters(rating);
+		var rating = new PoliticiansRating();
+		rating.calculateRating(dto.getRating().doubleValue());
+		rating.calculatePolitician(politician);
+		rating.calculateRater(jwt.getSubject(), jwt.getId(), politicalParty);
+		
+		politician.calculateListOfRaters(rating);
 		
 		politicianRepo.save(politician);
 		ratingRepo.save(rating);

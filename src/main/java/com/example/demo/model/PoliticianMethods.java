@@ -12,7 +12,7 @@ public interface PoliticianMethods {
 	
 	boolean isEmptyCountOfRatings();
 	
-	List<PoliticiansRating> setListOfRaters(PoliticiansRating rater);
-	
 	String calculateFullName();
+
+	List<PoliticiansRating> calculateListOfRaters(PoliticiansRating rater);
 }

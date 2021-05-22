@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,12 +48,13 @@ public class RatingServiceTest {
 	public void setup() {
 		service = new RatingService(ratingRepo, politicianRepo);
 		
-		politicianToBeSaved = new Politicians(1, 0.00D,"Mirriam", "Defensor", List.of(new PoliticiansRating()), 0.00D);
+		List<PoliticiansRating> listOfPoliticiansRating = new ArrayList<>();
+		politicianToBeSaved = new Politicians(1, 0.00D,"Mirriam", "Defensor", listOfPoliticiansRating, 0.01D, politicianRepo);
 		ratingToBeSaved = new PoliticiansRating();
 		ratingToBeSaved.setId(1);
 		ratingToBeSaved.setPolitician(politicianToBeSaved);
 		ratingToBeSaved.setRater(new UserRater("test", PoliticalParty.DDS, "test@gmail.com"));
-		ratingToBeSaved.setRating(0.00D);
+		ratingToBeSaved.setRating(0.01D);
 	}
 	
 	@Test
@@ -64,7 +66,7 @@ public class RatingServiceTest {
 		when(req.getHeader("Authorization")).thenReturn("Bearer " + jsonWebToken);
 		
 		service.saveRatings(new AddRatingDTORequest(BigDecimal.valueOf(0.00D), 
-				"Mirriam Defensor", PoliticalParty.DDS.toString()),
+				"Mirriam", "Defensor", PoliticalParty.DDS.toString()),
 				req);
 		
 		verify(ratingRepo, times(1)).save(any());
