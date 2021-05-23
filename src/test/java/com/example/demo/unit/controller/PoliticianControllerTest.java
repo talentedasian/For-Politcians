@@ -20,7 +20,7 @@ import com.example.demo.controller.PoliticianController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
-import com.example.demo.model.Politicians;
+import com.example.demo.model.entities.Politicians;
 import com.example.demo.service.PoliticiansService;
 
 @ExtendWith(SpringExtension.class)

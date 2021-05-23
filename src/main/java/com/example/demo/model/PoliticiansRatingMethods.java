@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.enums.PoliticalParty;
 
 public interface PoliticiansRatingMethods {

@@ -19,7 +19,7 @@ import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.dtomapper.interfaces.DTOMapper;
-import com.example.demo.model.PoliticiansRating;
+import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.service.RatingService;
 
 import io.swagger.v3.oas.annotations.Operation;

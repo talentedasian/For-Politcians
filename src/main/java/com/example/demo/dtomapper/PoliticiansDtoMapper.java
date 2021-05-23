@@ -2,7 +2,7 @@ package com.example.demo.dtomapper;
 
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
-import com.example.demo.model.Politicians;
+import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.enums.Rating;
 
 public class PoliticiansDtoMapper implements PoliticianDTOMapper{

@@ -23,8 +23,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.example.demo.controller.PoliticianController;
 import com.example.demo.filter.AddPoliticianFilter;
-import com.example.demo.model.Politicians;
-import com.example.demo.model.PoliticiansRating;
+import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.service.PoliticiansService;
 
 @WebMvcTest(PoliticianController.class)

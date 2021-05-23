@@ -20,9 +20,9 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
-import com.example.demo.model.Politicians;
-import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;
+import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;

@@ -3,8 +3,8 @@ package com.example.demo.dtomapper;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtomapper.interfaces.RatingDTOMapper;
-import com.example.demo.model.Politicians;
-import com.example.demo.model.PoliticiansRating;
+import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.enums.Rating;
 
 public class RatingDtoMapper implements RatingDTOMapper{
@@ -22,7 +22,7 @@ public class RatingDtoMapper implements RatingDTOMapper{
 		}
 		
 		var politicianDTO = new PoliticianDTO
-				(politician.getFirstName() + " " + politician.getLastName(), 
+				(politician.getFirstName() + "\s" + politician.getLastName(), 
 				politician.getId().toString(),
 				politician.getRating(),
 				satisfactionRate);

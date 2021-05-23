@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.exceptions.PoliticianAlreadyExistsException;
 import com.example.demo.exceptions.PoliticianNotFoundException;
-import com.example.demo.model.Politicians;
+import com.example.demo.model.entities.Politicians;
 import com.example.demo.repository.PoliticiansRepository;
 
 @Service

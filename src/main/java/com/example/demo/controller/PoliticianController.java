@@ -18,7 +18,7 @@ import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.dtomapper.interfaces.DTOMapper;
-import com.example.demo.model.Politicians;
+import com.example.demo.model.entities.Politicians;
 import com.example.demo.service.PoliticiansService;
 
 @RestController

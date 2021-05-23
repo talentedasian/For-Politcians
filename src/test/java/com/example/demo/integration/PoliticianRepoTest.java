@@ -14,7 +14,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import com.example.demo.model.Politicians;
+import com.example.demo.model.entities.Politicians;
 import com.example.demo.repository.PoliticiansRepository;
 
 @DataJpaTest

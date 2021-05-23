@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.model.entities;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.example.demo.model.PoliticiansRatingMethods;
+import com.example.demo.model.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
 
 @Entity

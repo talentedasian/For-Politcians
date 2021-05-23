@@ -22,9 +22,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.jwt.JwtProvider;
-import com.example.demo.model.Politicians;
-import com.example.demo.model.PoliticiansRating;
 import com.example.demo.model.UserRater;
+import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;
@@ -171,7 +171,7 @@ public class RatingServiceTest {
 	
 	@Test
 	public void assertAverageRatingLogic() {
-		Politicians pol = new Politicians();
+		Politicians pol = new com.example.demo.model.entities.Politicians();
 		pol.setRepo(ratingRepo);
 		pol.setTotalRating(0.01D);
 		pol.calculateTotalAmountOfRating(2.22D);

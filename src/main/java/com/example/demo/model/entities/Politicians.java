@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.model.entities;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -13,13 +13,27 @@ import javax.persistence.OneToMany;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.demo.model.PoliticianMethods;
+import com.example.demo.model.averageCalculator.AverageCalculator;
+import com.example.demo.model.averageCalculator.DecentSatisfactionAverageCalculator;
+import com.example.demo.model.averageCalculator.HighSatisfactionAverageCalculator;
+import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.repository.RatingRepository;
 
 @Entity
 public class Politicians implements PoliticianMethods{
 
 	@Autowired transient RatingRepository repo;
+	private transient  AverageCalculator averageCalculator;
 	
+	public AverageCalculator getAverageCalculator() {
+		return averageCalculator;
+	}
+	
+	public void setAverageCalculator(AverageCalculator averageCalculator) {
+		this.averageCalculator = averageCalculator;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
@@ -117,6 +131,7 @@ public class Politicians implements PoliticianMethods{
 		this.lastName = lastName;
 		this.politiciansRating = politiciansRating;
 		this.totalRating = totalRating;
+		
 	}
 	
 	public Politicians(Integer id, Double rating, String firstName, String lastName,
@@ -200,8 +215,7 @@ public class Politicians implements PoliticianMethods{
 
 	@Override
 	public double calculateAverageRating() {
-		double rating = BigDecimal.valueOf(getTotalRating() / (convertLongToDouble(returnCountsOfRatings()) + 1D))
-			.setScale(2, RoundingMode.HALF_DOWN).doubleValue();
+		double rating = returnAverageCalculator().calculateAverage();
 		setRating(rating);
 		
 		return rating;
@@ -236,7 +250,7 @@ public class Politicians implements PoliticianMethods{
 
 	@Override
 	public boolean isEmptyCountOfRatings() {
-		return this.returnCountsOfRatings(this.id) == 0L;
+		return returnCountsOfRatings(this.id) == 0L;
 	}
 
 	@Override
@@ -258,6 +272,18 @@ public class Politicians implements PoliticianMethods{
 		setFullName(fullName);
 		
 		return fullName;
+	}
+	
+	private AverageCalculator returnAverageCalculator() {
+		if (this.rating < 5D) {
+			return new LowSatisfactionAverageCalculator(getTotalRating(), convertLongToDouble(returnCountsOfRatings()));
+		} else if (this.rating < 8.89D) {
+			return new DecentSatisfactionAverageCalculator(getTotalRating(), convertLongToDouble(returnCountsOfRatings()));
+		} else if (this.rating >= 8.89D) {
+			return new HighSatisfactionAverageCalculator(getTotalRating(), convertLongToDouble(returnCountsOfRatings()));
+		}
+		
+		return null;
 	}
 	
 }
