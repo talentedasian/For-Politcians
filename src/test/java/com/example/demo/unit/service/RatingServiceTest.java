@@ -54,7 +54,7 @@ public class RatingServiceTest {
 		ratingToBeSaved = new PoliticiansRating();
 		ratingToBeSaved.setId(1);
 		ratingToBeSaved.setPolitician(politicianToBeSaved);
-		ratingToBeSaved.setRater(new UserRater("test", PoliticalParty.DDS, "test@gmail.com"));
+		ratingToBeSaved.calculateRater("test@gmail", "test", PoliticalParty.DDS);
 		ratingToBeSaved.setRating(0.01D);
 	}
 	
@@ -172,13 +172,15 @@ public class RatingServiceTest {
 	@Test
 	public void assertAverageRatingLogic() {
 		Politicians pol = new com.example.demo.model.entities.Politicians();
+		pol.setId(1);
 		pol.setRepo(ratingRepo);
-		pol.setTotalRating(0.01D);
-		pol.calculateTotalAmountOfRating(2.22D);
+		when(ratingRepo.countByPolitician_Id(1)).thenReturn(0L);
+		pol.setTotalRating(0.012D);
+		pol.setRating(4.087D);
 		double averageRating = pol.calculateAverageRating();
 		
 		assertThat(averageRating,
-				equalTo(2.23D));
+				equalTo(0.02D));
 	}
 	
 	private void stubSaveRepo() {
