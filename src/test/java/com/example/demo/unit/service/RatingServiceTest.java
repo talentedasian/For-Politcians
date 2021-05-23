@@ -22,9 +22,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.jwt.JwtProvider;
-import com.example.demo.model.UserRater;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
+import com.example.demo.model.entities.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;

@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-import com.example.demo.model.UserRater;
+import com.example.demo.model.entities.UserRater;
 
 public class RatingDTO {
 

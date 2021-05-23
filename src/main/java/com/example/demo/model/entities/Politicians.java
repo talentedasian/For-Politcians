@@ -1,7 +1,5 @@
 package com.example.demo.model.entities;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -29,9 +27,6 @@ public class Politicians implements PoliticianMethods{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
-	@Column(nullable = false, precision = 3, scale = 2)
-	private Double rating;
-	
 	@Column(nullable = false, name = "politician_first_name")
 	private String firstName;
 	
@@ -43,10 +38,9 @@ public class Politicians implements PoliticianMethods{
 	
 	@OneToMany(mappedBy = "politician")
 	private List<PoliticiansRating> politiciansRating;
-	
-	@Column(nullable = false, precision = 3, scale = 2)
-	private Double totalRating;
 
+	@Column(nullable = false)
+	private Rating rating;
 
 	public RatingRepository getRepo() {
 		return repo;
@@ -55,21 +49,13 @@ public class Politicians implements PoliticianMethods{
 	public void setRepo(RatingRepository repo) {
 		this.repo = repo;
 	}
-
+	
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Double getRating() {
-		return rating;
-	}
-
-	public void setRating(Double rating) {
-		this.rating = rating;
 	}
 
 	public String getFirstName() {
@@ -104,55 +90,52 @@ public class Politicians implements PoliticianMethods{
 		this.politiciansRating = politiciansRating;
 	}
 
-	public Double getTotalRating() {
-		return totalRating;
+	public Rating getRating() {
+		return rating;
 	}
 
-	public void setTotalRating(Double totalRating) {
-		this.totalRating = totalRating;
+	public void setRating(Rating rating) {
+		this.rating = rating;
 	}
 	
-	public Politicians(Integer id, Double rating, String firstName, String lastName,
-			List<PoliticiansRating> politiciansRating, Double totalRating, RatingRepository repo) {
-		super();
-		this.id = id;
-		this.rating = rating;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.politiciansRating = politiciansRating;
-		this.totalRating = totalRating;
-		this.repo = repo;
-	}
-	
-	public Politicians(Integer id, Double rating, String firstName, String lastName,
-			List<PoliticiansRating> politiciansRating, Double totalRating) {
-		super();
-		this.id = id;
-		this.rating = rating;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.politiciansRating = politiciansRating;
-		this.totalRating = totalRating;
-	}
-
 	public Politicians() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
+	public Politicians(Integer id, String firstName, String lastName,
+			List<PoliticiansRating> politiciansRating, Rating rating) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.politiciansRating = politiciansRating;
+		this.rating = rating;
+	}
+	
+	public Politicians(RatingRepository repo, Integer id, String firstName, String lastName,
+			List<PoliticiansRating> politiciansRating, Rating rating) {
+		super();
+		this.repo = repo;
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.politiciansRating = politiciansRating;
+		this.rating = rating;
+	}
+	
 	@Override
 	public String toString() {
-		return "Politicians [id=" + id + ", rating=" + rating + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", fullName=" + fullName + ", totalRating=" + totalRating
-				+ "]";
+		return "Politicians [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", fullName="
+				+ fullName + ", politiciansRating=" + politiciansRating + ", rating=" + rating + "]";
 	}
 
 	@Override
 	public double calculateAverageRating() {
-		double rating = returnAverageCalculator().calculateAverage();
+		Rating rating = getRating().calculateAverage(convertLongToDouble(returnCountsOfRatings()));
 		setRating(rating);
 		
-		return rating;
+		return rating.averageRating;
 	}
 	
 	private Double convertLongToDouble(long longValue) {
@@ -161,16 +144,10 @@ public class Politicians implements PoliticianMethods{
 
 	@Override
 	public double calculateTotalAmountOfRating(Double rating) {
-		if (getTotalRating() == null) {
-			setTotalRating(BigDecimal.valueOf(rating)
-			.setScale(2, RoundingMode.HALF_DOWN).doubleValue());
-		}
+		Rating totalRating = getRating().calculateTotalAmountOfRating(rating, convertLongToDouble(returnCountsOfRatings()));
+		setRating(totalRating);
 		
-		double totalAmount = BigDecimal.valueOf(getTotalRating() + rating)
-			.setScale(2, RoundingMode.HALF_DOWN).doubleValue();
-		setTotalRating(totalAmount);
-		
-		return totalAmount;
+		return totalRating.totalRating;
 	}
 
 	@Override
@@ -208,13 +185,13 @@ public class Politicians implements PoliticianMethods{
 		return fullName;
 	}
 	
-	private AverageCalculator returnAverageCalculator() {
-		if (this.rating < 5D) {
-			return new LowSatisfactionAverageCalculator(getTotalRating(), convertLongToDouble(returnCountsOfRatings()));
-		} else if (this.rating < 8.89D) {
-			return new DecentSatisfactionAverageCalculator(getTotalRating(), convertLongToDouble(returnCountsOfRatings()));
-		} else if (this.rating >= 8.89D) {
-			return new HighSatisfactionAverageCalculator(getTotalRating(), convertLongToDouble(returnCountsOfRatings()));
+	public AverageCalculator returnAverageCalculator(Double count) {
+		if (getRating().averageRating < 5D) {
+			return new LowSatisfactionAverageCalculator(getRating().totalRating, count);
+		} else if (getRating().averageRating < 8.89D) {
+			return new DecentSatisfactionAverageCalculator(getRating().totalRating, count);
+		} else if (getRating().averageRating >= 8.89D) {
+			return new HighSatisfactionAverageCalculator(getRating().totalRating, count);
 		}
 		
 		return null;

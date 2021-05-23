@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.example.demo.model.PoliticiansRatingMethods;
-import com.example.demo.model.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
 
 @Entity

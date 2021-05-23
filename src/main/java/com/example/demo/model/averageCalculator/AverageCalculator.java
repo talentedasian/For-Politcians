@@ -21,12 +21,11 @@ public abstract class AverageCalculator {
 		this.count = count;
 	}
 
-	public abstract double calculateAverage();
-
 	public AverageCalculator(double totalRating, double count) {
 		super();
 		this.totalRating = totalRating;
 		this.count = count;
 	}
 	
+	public abstract double calculateAverage();
 }
