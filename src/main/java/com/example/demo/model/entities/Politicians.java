@@ -81,8 +81,7 @@ public class Politicians implements PoliticianMethods{
 	}
 
 	public void setTotalRating(Double totalRating) {
-		this.totalRating = BigDecimal.valueOf(totalRating)
-				.setScale(2, RoundingMode.HALF_DOWN).doubleValue();
+		this.totalRating = totalRating;
 	}
 
 	public Integer getId() {

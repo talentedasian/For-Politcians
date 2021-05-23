@@ -74,13 +74,13 @@ public class PoliticianServiceTest {
 	@Test
 	public void shouldAddTotalRatingAndCorrectAverageRating() {
 		politician.setTotalRating(8.023D);
-		politician.calculateTotalAmountOfRating(9.023D);
+		politician.setRating(2D);
 		politician.calculateAverageRating();
 		when(repo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politician));
 		
 		Politicians politicianQueried = service.findPoliticianByName("Mirriam", "Defensor");
 		
-		assertThat(17.04D,
+		assertThat(8.03D,
 				equalTo(politicianQueried.getRating()));
 	}
 	
