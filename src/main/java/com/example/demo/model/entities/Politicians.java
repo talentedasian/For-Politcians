@@ -132,10 +132,9 @@ public class Politicians implements PoliticianMethods{
 
 	@Override
 	public double calculateAverageRating() {
-		Rating rating = getRating().calculateAverage(convertLongToDouble(returnCountsOfRatings()));
-		setRating(rating);
+		double rating = getRating().calculateAverage(convertLongToDouble(returnCountsOfRatings()));
 		
-		return rating.averageRating;
+		return rating;
 	}
 	
 	private Double convertLongToDouble(long longValue) {
@@ -144,10 +143,9 @@ public class Politicians implements PoliticianMethods{
 
 	@Override
 	public double calculateTotalAmountOfRating(Double rating) {
-		Rating totalRating = getRating().calculateTotalAmountOfRating(rating, convertLongToDouble(returnCountsOfRatings()));
-		setRating(totalRating);
+		double totalRating = getRating().calculateTotalAmountOfRating(rating, convertLongToDouble(returnCountsOfRatings()));
 		
-		return totalRating.totalRating;
+		return totalRating;
 	}
 
 	@Override

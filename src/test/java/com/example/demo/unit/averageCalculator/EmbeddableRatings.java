@@ -6,16 +6,12 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.demo.model.averageCalculator.AverageCalculator;
-import com.example.demo.model.averageCalculator.DecentSatisfactionAverageCalculator;
-import com.example.demo.model.averageCalculator.HighSatisfactionAverageCalculator;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.Rating;
@@ -24,14 +20,11 @@ import com.example.demo.repository.RatingRepository;
 @ExtendWith(MockitoExtension.class)
 public class EmbeddableRatings {
 
-	@Mock
-	public RatingRepository repo;
+	public Politicians politician;
 	
-	@Test
-	public void test() {
-		when(repo.countByPolitician_Id(1)).thenReturn(0L);
-		
-		Politicians politician = new Politicians();
+	@BeforeEach
+	public void setup() {
+		politician = new Politicians();
 		politician.setRepo(repo);
 		politician.setId(1);
 		politician.setFirstName("Mirriam");
@@ -40,9 +33,25 @@ public class EmbeddableRatings {
 		politician.setRating(new Rating(0.012D,
 				2.022D, 
 				new LowSatisfactionAverageCalculator(0.012D, repo.countByPolitician_Id(1))));
+	}
+	
+	@Mock
+	public RatingRepository repo;
+	
+	@Test
+	public void testLogicOfAverage() {
+		when(repo.countByPolitician_Id(1)).thenReturn(0L);
 		
-		assertThat(politician.getRating().calculateAverage(convertLongToDouble(repo.countByPolitician_Id(1))).getAverageRating(), 
+		assertThat(politician.getRating().calculateAverage(convertLongToDouble(repo.countByPolitician_Id(1))), 
 				equalTo(0.02D));
+	}
+	
+	@Test
+	public void testLogicOfTotalAmount() {
+		when(repo.countByPolitician_Id(1)).thenReturn(0L);
+		
+		assertThat(politician.getRating().calculateTotalAmountOfRating(3.5312D, convertLongToDouble(repo.countByPolitician_Id(1))), 
+				equalTo(3.54D));
 	}
 	
 	private Double convertLongToDouble(long longValue) {
