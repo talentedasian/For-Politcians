@@ -67,7 +67,7 @@ public class AddPoliticianFilterTest {
 				.header("Politician-Access", "oo")
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
-//			.andExpect(status().isUnauthorized())
+			.andExpect(status().isUnauthorized())
 			.andExpect(jsonPath("err", 
 					equalTo("Authorization Required")))
 			.andExpect(jsonPath("code", 

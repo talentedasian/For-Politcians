@@ -103,14 +103,6 @@ public class PoliticianServiceTest {
 		assertDtoOutputsUtil(politician, politicianQueried);
 	}
 	
-	@Test
-	public void shouldEqualTotalRating() {
-		politician.calculateTotalAmountOfRating(8.023D);
-		
-		assertThat(politician.getRating().getTotalRating(),
-				equalTo(8.033D));
-	}
-	
 	public void assertDtoOutputsUtil(Politicians politicianToAssert, Politicians politicianToCompare) {
 		assertThat(politicianToAssert.getFirstName(),
 				equalTo(politicianToCompare.getFirstName()));

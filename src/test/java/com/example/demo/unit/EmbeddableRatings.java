@@ -1,4 +1,4 @@
-package com.example.demo.unit.averageCalculator;
+package com.example.demo.unit;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;

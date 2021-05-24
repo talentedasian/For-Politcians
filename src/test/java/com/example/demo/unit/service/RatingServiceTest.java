@@ -161,21 +161,6 @@ public class RatingServiceTest {
 				equalTo(politicianRatingQueried));
 	}
 	
-	@Test
-	public void assertAverageRatingLogic() {
-		Politicians pol = new com.example.demo.model.entities.Politicians();
-		pol.setId(1);
-		pol.setRepo(ratingRepo);
-		
-		when(ratingRepo.countByPolitician_Id(1)).thenReturn(0L);
-		
-		pol.setRating(new Rating(0.01D, 0.01D, new LowSatisfactionAverageCalculator(0.01D, 0D)));
-		pol.calculateTotalAmountOfRating(9.022D);
-		double averageRating = pol.calculateAverageRating();
-		
-		assertThat(averageRating,
-				equalTo(9.04D));
-	}
 	
 	private void stubSaveRepo() {
 		when(politicianRepo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politicianToBeSaved));
