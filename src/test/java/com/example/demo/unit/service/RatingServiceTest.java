@@ -174,7 +174,7 @@ public class RatingServiceTest {
 		double averageRating = pol.calculateAverageRating();
 		
 		assertThat(averageRating,
-				equalTo(9.03D));
+				equalTo(9.04D));
 	}
 	
 	private void stubSaveRepo() {

@@ -64,7 +64,7 @@ public class PoliticiansService {
 					0.01D, 
 					new LowSatisfactionAverageCalculator(dto.getRating().doubleValue(), 0D)));
 			
-			Politicians politician = politiciansRepo.saveAndFlush(politicianToBeSaved);
+			Politicians politician = politiciansRepo.save(politicianToBeSaved);
 			
 			return politician;
 			

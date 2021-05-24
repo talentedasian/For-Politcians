@@ -108,12 +108,10 @@ public class PoliticianServiceTest {
 		politician.calculateTotalAmountOfRating(8.023D);
 		
 		assertThat(politician.getRating().getTotalRating(),
-				equalTo(8.03D));
+				equalTo(8.033D));
 	}
 	
 	public void assertDtoOutputsUtil(Politicians politicianToAssert, Politicians politicianToCompare) {
-		assertThat(politicianToAssert.getId(),
-				equalTo(politicianToCompare.getId()));
 		assertThat(politicianToAssert.getFirstName(),
 				equalTo(politicianToCompare.getFirstName()));
 		assertThat(politicianToAssert.getLastName(),
