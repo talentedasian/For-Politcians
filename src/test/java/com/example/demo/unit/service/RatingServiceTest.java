@@ -22,8 +22,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.jwt.JwtProvider;
+import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
+import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
@@ -49,7 +51,13 @@ public class RatingServiceTest {
 		service = new RatingService(ratingRepo, politicianRepo);
 		
 		List<PoliticiansRating> listOfPoliticiansRating = new ArrayList<>();
-		politicianToBeSaved = new Politicians(1, 0.01D,"Mirriam", "Defensor", listOfPoliticiansRating, 0.01D, ratingRepo);
+		politicianToBeSaved = new Politicians(
+				ratingRepo, 
+				1,
+				"Mirriam",
+				"Defensor",
+				listOfPoliticiansRating,
+				new Rating(0.01D, 0.01D, new LowSatisfactionAverageCalculator(0.01D, 0D)));
 		
 		ratingToBeSaved = new PoliticiansRating();
 		ratingToBeSaved.setId(1);
@@ -138,23 +146,8 @@ public class RatingServiceTest {
 				equalTo(ratingToBeSaved.getPolitician().getFullName()));
 		assertThat(pol.getRating(), 
 				equalTo(ratingToBeSaved.getPolitician().getRating()));
-		assertThat(pol.getTotalRating(), 
-				equalTo(ratingToBeSaved.getPolitician().getTotalRating()));
-	}
-	
-	@Test
-	public void assertEqualsQueriedRepoPoliticianRatings() {
-		when(ratingRepo.findById(1)).thenReturn(Optional.of(ratingToBeSaved));
-		
-		PoliticiansRating ratings = service.findById("1");
-		Politicians pol = ratings.getPolitician();
-		pol.calculateTotalAmountOfRating(ratingToBeSaved.getRating());
-		pol.calculateAverageRating();
-		
-		assertThat(pol.getTotalRating(),
-				equalTo(ratingToBeSaved.getPolitician().getTotalRating()));
-		assertThat(pol.getRating(),
-				equalTo(ratingToBeSaved.getPolitician().getRating()));
+		assertThat(pol.getRating().getTotalRating(), 
+				equalTo(ratingToBeSaved.getPolitician().getRating().getTotalRating()));
 	}
 	
 	@Test
@@ -166,7 +159,6 @@ public class RatingServiceTest {
 		
 		assertThat(listOfPoliticiansRating,
 				equalTo(politicianRatingQueried));
-		
 	}
 	
 	@Test
@@ -174,13 +166,15 @@ public class RatingServiceTest {
 		Politicians pol = new com.example.demo.model.entities.Politicians();
 		pol.setId(1);
 		pol.setRepo(ratingRepo);
+		
 		when(ratingRepo.countByPolitician_Id(1)).thenReturn(0L);
-		pol.setTotalRating(0.012D);
-		pol.setRating(4.087D);
+		
+		pol.setRating(new Rating(0.01D, 0.01D, new LowSatisfactionAverageCalculator(0.01D, 0D)));
+		pol.calculateTotalAmountOfRating(9.022D);
 		double averageRating = pol.calculateAverageRating();
 		
 		assertThat(averageRating,
-				equalTo(0.02D));
+				equalTo(9.03D));
 	}
 	
 	private void stubSaveRepo() {

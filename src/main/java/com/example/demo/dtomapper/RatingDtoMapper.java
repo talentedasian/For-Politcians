@@ -13,18 +13,19 @@ public class RatingDtoMapper implements RatingDTOMapper{
 	public RatingDTO mapToDTO(PoliticiansRating entity) {
 		Politicians politician = entity.getPolitician();
 		Rating satisfactionRate = null;
-		if (politician.getRating() < 5D) {
+		var rating = politician.getRating().getAverageRating();
+		if (rating < 5D) {
 			satisfactionRate = Rating.LOW;
-		} else if (politician.getRating() < 8.89D) {
+		} else if (rating < 8.89D) {
 			satisfactionRate = Rating.DECENT;
-		} else if (politician.getRating() >= 8.89D) {
+		} else if (rating >= 8.89D) {
 			satisfactionRate = Rating.HIGH;
 		}
 		
 		var politicianDTO = new PoliticianDTO
 				(politician.getFirstName() + "\s" + politician.getLastName(), 
 				politician.getId().toString(),
-				politician.getRating(),
+				politician.getRating().getAverageRating(),
 				satisfactionRate);
 		
 		var ratingDTO = new RatingDTO

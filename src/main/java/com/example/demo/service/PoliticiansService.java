@@ -1,25 +1,32 @@
 package com.example.demo.service;
 
-import java.math.RoundingMode;
 import java.util.List;
 
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.exceptions.PoliticianAlreadyExistsException;
 import com.example.demo.exceptions.PoliticianNotFoundException;
+import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.Rating;
 import com.example.demo.repository.PoliticiansRepository;
+import com.example.demo.repository.RatingRepository;
 
+@EnableTransactionManagement
 @Service
 public class PoliticiansService {
 
 	private final PoliticiansRepository politiciansRepo;
+	private final RatingRepository ratingRepo;
 
-	public PoliticiansService(PoliticiansRepository politiciansRepo) {
+	@Autowired
+	public PoliticiansService(PoliticiansRepository politiciansRepo, RatingRepository ratingRepo) {
 		this.politiciansRepo = politiciansRepo;
+		this.ratingRepo = ratingRepo;
 	}
 	
 	@Transactional(readOnly = true)
@@ -45,20 +52,23 @@ public class PoliticiansService {
 		return politician;
 	}
 	
+	@Transactional
 	public Politicians savePolitician(AddPoliticianDTORequest dto) {
 		try {
 			var politicianToBeSaved = new Politicians();
+			politicianToBeSaved.setRepo(ratingRepo);
 			politicianToBeSaved.setFirstName(dto.getFirstName());
 			politicianToBeSaved.setLastName(dto.getLastName());
 			politicianToBeSaved.calculateFullName();
-			politicianToBeSaved.setTotalRating(dto.getRating().setScale(2,RoundingMode.HALF_DOWN).doubleValue());
-			politicianToBeSaved.setRating(politicianToBeSaved.getTotalRating());
+			politicianToBeSaved.setRating(new Rating(dto.getRating().doubleValue(), 
+					0.01D, 
+					new LowSatisfactionAverageCalculator(dto.getRating().doubleValue(), 0D)));
 			
-			Politicians politician = politiciansRepo.save(politicianToBeSaved);
+			Politicians politician = politiciansRepo.saveAndFlush(politicianToBeSaved);
 			
 			return politician;
-		} catch (DataIntegrityViolationException e) {
-			System.out.println(e.getMessage());
+			
+		} catch (Exception e) {
 			throw new PoliticianAlreadyExistsException("Politician Already exists in the database");
 		}
 	}

@@ -20,7 +20,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;import com.example.demo.controller.RatingsController;
+import org.springframework.test.web.servlet.MockMvc;
+
+import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
@@ -30,8 +32,6 @@ import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.UserRater;
-import com.example.demo.model.enums.PoliticalParty;
-import com.example.demo.model.enums.Rating;
 import com.example.demo.service.RatingService;
 
 @WebMvcTest(RatingsController.class)
@@ -68,16 +68,6 @@ public class RatingControllerTest {
 		politician.setId(1);
 		politician.setFirstName("Mirriam");
 		politician.setLastName("Defensor");
-		politician.setRating(0.01D);
-		politician.setTotalRating(0.01D);
-		
-		userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com");
-		
-		politiciansRating = new PoliticiansRating(1, 0.01D, userRater, politician);
-				
-		politicianDTO = new PoliticianDTO("test", "1", 0.01D, Rating.LOW);
-		
-		ratingDTO = new RatingDTO(0.00D, userRater, politicianDTO);
 	}
 	
 	@Test

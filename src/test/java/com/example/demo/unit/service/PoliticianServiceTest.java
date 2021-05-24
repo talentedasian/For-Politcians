@@ -20,8 +20,10 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
+import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
+import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
@@ -47,14 +49,12 @@ public class PoliticianServiceTest {
 		
 		List<PoliticiansRating> listOfPoliticiansRating = new ArrayList<>();
 		politician =  new Politicians
-				(1,
-				0.00D,
+				(ratingRepo,
+				1,
 				"Mirriam", 
 				"Defensor", 
-				listOfPoliticiansRating,
-				0.01D,
-				ratingRepo);
-		politician.setTotalRating(0.01D);
+				listOfPoliticiansRating);
+		politician.setRating(new Rating(0.01D, 0.01D, new LowSatisfactionAverageCalculator(0.01D, 0L)));
 		rating = new PoliticiansRating
 				(1, 8.023D, 
 				new UserRater("test", PoliticalParty.DDS, "test@gmail.com"),
@@ -73,15 +73,13 @@ public class PoliticianServiceTest {
 	
 	@Test
 	public void shouldAddTotalRatingAndCorrectAverageRating() {
-		politician.setTotalRating(8.023D);
-		politician.setRating(2D);
 		politician.calculateAverageRating();
 		when(repo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politician));
 		
 		Politicians politicianQueried = service.findPoliticianByName("Mirriam", "Defensor");
 		
-		assertThat(8.03D,
-				equalTo(politicianQueried.getRating()));
+		assertThat(0.01D,
+				equalTo(politicianQueried.getRating().getAverageRating()));
 	}
 	
 	@Test
@@ -109,7 +107,7 @@ public class PoliticianServiceTest {
 	public void shouldEqualTotalRating() {
 		politician.calculateTotalAmountOfRating(8.023D);
 		
-		assertThat(politician.getTotalRating(),
+		assertThat(politician.getRating().getTotalRating(),
 				equalTo(8.03D));
 	}
 	
@@ -120,10 +118,10 @@ public class PoliticianServiceTest {
 				equalTo(politicianToCompare.getFirstName()));
 		assertThat(politicianToAssert.getLastName(),
 				equalTo(politicianToCompare.getLastName()));
-		assertThat(politicianToAssert.getRating(),
-				equalTo(politicianToCompare.getRating()));
-		assertThat(politicianToAssert.getTotalRating(),
-				equalTo(politicianToCompare.getTotalRating()));
+		assertThat(politicianToAssert.getRating().getAverageRating(),
+				equalTo(politicianToCompare.getRating().getAverageRating()));
+		assertThat(politicianToAssert.getRating().getTotalRating(),
+				equalTo(politicianToCompare.getRating().getTotalRating()));
 	}
 	
 }

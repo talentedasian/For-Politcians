@@ -40,23 +40,30 @@ public class RatingService {
 	
 	@Transactional
 	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) {
-		Politicians politician = politicianRepo.findByLastNameAndFirstName(dto.getPoliticianLastName(), dto.getPoliticianFirstName())
-				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by " + dto.getPoliticianFirstName() + "\s" + dto.getPoliticianLastName()));
-		politician.setRepo(ratingRepo);
+		try {
+			Politicians politician = politicianRepo.findByLastNameAndFirstName(dto.getPoliticianLastName(), dto.getPoliticianFirstName())
+					.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by " + dto.getPoliticianFirstName() + "\s" + dto.getPoliticianLastName()));
+			politician.setRepo(ratingRepo);
+			
+			PoliticalParty politicalParty = PoliticalParty.mapToPoliticalParty(dto.getPoliticalParty());
 		
-		PoliticalParty politicalParty = PoliticalParty.mapToPoliticalParty(dto.getPoliticalParty());
-	
-		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
-		var rating = new PoliticiansRating();
-		rating.calculateRating(dto.getRating().doubleValue());
-		rating.calculatePolitician(politician);
-		rating.calculateRater(jwt.getSubject(), jwt.getId(), politicalParty);
-		politician.calculateListOfRaters(rating);
-		
-		politicianRepo.save(politician);
-		PoliticiansRating savedRating = ratingRepo.save(rating);
-		
-		return savedRating;
+			
+			Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
+			var rating = new PoliticiansRating();
+			rating.calculateRating(dto.getRating().doubleValue());
+			rating.calculatePolitician(politician);
+			rating.calculateRater(jwt.getSubject(), jwt.getId(), politicalParty);
+			
+			politician.calculateListOfRaters(rating);
+			
+			politicianRepo.save(politician);
+			PoliticiansRating savedRating = ratingRepo.save(rating);
+			
+			return savedRating;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	@Transactional(readOnly = true)

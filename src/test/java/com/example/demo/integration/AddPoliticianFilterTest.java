@@ -23,8 +23,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.example.demo.controller.PoliticianController;
 import com.example.demo.filter.AddPoliticianFilter;
+import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
+import com.example.demo.model.entities.Rating;
 import com.example.demo.service.PoliticiansService;
 
 @WebMvcTest(PoliticianController.class)
@@ -42,14 +44,16 @@ public class AddPoliticianFilterTest {
 			{
 			    "firstName": "test",
 			    "lastName": "name",
-			    "rating": 9.00
+			    "rating": 0.01
 			}
 			""";
 	private Politicians politician; 
 	
 	@BeforeEach
 	public void setup() {
-		politician = new Politicians(1, 9.00D, "test", "name", List.of(new PoliticiansRating()), 9.00D);
+		var calculator = new LowSatisfactionAverageCalculator(0.01D, 0D);
+		politician = new Politicians(1, "test", "name", List.of(new PoliticiansRating()), new Rating(0.01D, 0.01D, calculator));
+		
 		mvc = MockMvcBuilders.webAppContextSetup(wac)
 				.addFilter(new AddPoliticianFilter(), "/api/politicians/add-politician")
 				.build();
@@ -96,7 +100,7 @@ public class AddPoliticianFilterTest {
 			.andExpect(jsonPath("name", 
 					equalTo("test name")))
 			.andExpect(jsonPath("rating", 
-					equalTo(9.0)));
+					equalTo(0.01)));
 	}
 	
 }

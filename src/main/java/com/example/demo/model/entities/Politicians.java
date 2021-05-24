@@ -21,7 +21,7 @@ import com.example.demo.repository.RatingRepository;
 @Entity
 public class Politicians implements PoliticianMethods{
 
-	@Autowired transient RatingRepository repo;
+	@Autowired private transient RatingRepository repo;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,7 +39,7 @@ public class Politicians implements PoliticianMethods{
 	@OneToMany(mappedBy = "politician")
 	private List<PoliticiansRating> politiciansRating;
 
-	@Column(nullable = false)
+	@Column(nullable = false, precision = 3, scale = 2)
 	private Rating rating;
 
 	public RatingRepository getRepo() {
@@ -103,36 +103,15 @@ public class Politicians implements PoliticianMethods{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Politicians(Integer id, String firstName, String lastName,
-			List<PoliticiansRating> politiciansRating, Rating rating) {
-		super();
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.politiciansRating = politiciansRating;
-		this.rating = rating;
-	}
-	
-	public Politicians(RatingRepository repo, Integer id, String firstName, String lastName,
-			List<PoliticiansRating> politiciansRating, Rating rating) {
-		super();
-		this.repo = repo;
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.politiciansRating = politiciansRating;
-		this.rating = rating;
-	}
-	
 	@Override
 	public String toString() {
 		return "Politicians [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", fullName="
-				+ fullName + ", politiciansRating=" + politiciansRating + ", rating=" + rating + "]";
+				+ fullName +  ", rating=" + rating + "]";
 	}
 
 	@Override
 	public double calculateAverageRating() {
-		double rating = getRating().calculateAverage(convertLongToDouble(returnCountsOfRatings()));
+		double rating = getRating().calculateAverage();
 		
 		return rating;
 	}
@@ -178,7 +157,7 @@ public class Politicians implements PoliticianMethods{
 	@Override
 	public String calculateFullName() {
 		String fullName = this.firstName + "\s" + this.lastName;
-		setFullName(fullName);
+		this.fullName = fullName;
 		
 		return fullName;
 	}
