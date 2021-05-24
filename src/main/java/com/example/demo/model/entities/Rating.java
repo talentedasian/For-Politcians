@@ -115,7 +115,7 @@ public class Rating {
 		}
 		
 		double rating = BigDecimal.valueOf(totalRating + ratingToAdd)
-				.setScale(2, RoundingMode.HALF_DOWN).doubleValue();
+				.setScale(3, RoundingMode.UP).doubleValue();
 		this.totalRating = rating;
 		calculator = returnAverageCalculator(countOfRatings);
 		calculator.setTotalRating(rating);

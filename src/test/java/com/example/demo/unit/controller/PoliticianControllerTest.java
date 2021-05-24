@@ -20,7 +20,9 @@ import com.example.demo.controller.PoliticianController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
+import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.Rating;
 import com.example.demo.service.PoliticiansService;
 
 @ExtendWith(SpringExtension.class)
@@ -37,7 +39,7 @@ public class PoliticianControllerTest {
 		controller = new PoliticianController(service);
 		
 		politician =  new Politicians();
-		politician.setRating(9.67D);
+		politician.setRating(new Rating(9.67D, 9.67D, new LowSatisfactionAverageCalculator(9.07D, 0D)));
 		politician.setFirstName("Mirriam");
 		politician.setLastName("Defensor");
 		
@@ -61,7 +63,7 @@ public class PoliticianControllerTest {
 		
 		ResponseEntity<PoliticianDTO> politicianResponse = controller.savePolitician(politicianDTORequest, "password");
 		
-		assertThat(politician.getRating(),
+		assertThat(politician.getRating().getAverageRating(),
 				equalTo(politicianResponse.getBody().getRating()));
 		assertThat(politician.getId(),
 				nullValue());

@@ -41,17 +41,18 @@ public class EmbeddableRatings {
 	@Test
 	public void testLogicOfAverage() {
 		when(repo.countByPolitician_Id(1)).thenReturn(0L);
-		
-		assertThat(politician.getRating().calculateAverage(convertLongToDouble(repo.countByPolitician_Id(1))), 
-				equalTo(0.02D));
+
+		politician.calculateTotalAmountOfRating(9.8722D);
+		assertThat(politician.getRating().calculateAverage(), 
+				equalTo(9.89D));
 	}
 	
 	@Test
 	public void testLogicOfTotalAmount() {
 		when(repo.countByPolitician_Id(1)).thenReturn(0L);
 		
-		assertThat(politician.getRating().calculateTotalAmountOfRating(3.5312D, convertLongToDouble(repo.countByPolitician_Id(1))), 
-				equalTo(3.54D));
+		assertThat(politician.getRating().calculateTotalAmountOfRating(8.8876D, convertLongToDouble(repo.countByPolitician_Id(1))), 
+				equalTo(8.9D));
 	}
 	
 	private Double convertLongToDouble(long longValue) {

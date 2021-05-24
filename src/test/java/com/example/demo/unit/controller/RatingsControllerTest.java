@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
+import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.UserRater;
@@ -45,8 +46,7 @@ public class RatingsControllerTest {
 		politician.setId(1);
 		politician.setFirstName("Mirriam");
 		politician.setLastName("Defensor");
-		politician.setRating(0.00D);
-		politician.setTotalRating(0.00D);
+		politician.setRating(new com.example.demo.model.entities.Rating(9.67D, 9.67D, new LowSatisfactionAverageCalculator(9.07D, 0D)));
 		
 		politiciansRating = new PoliticiansRating(1, 0.00D, userRater, politician);
 		
@@ -80,9 +80,9 @@ public class RatingsControllerTest {
 		assertThat(politiciaResponse.getPolitician().getName(),
 				equalTo(politiciansRating.getPolitician().getFirstName() + " " + politiciansRating.getPolitician().getLastName()));
 		assertThat(politiciaResponse.getPolitician().getRating(),
-				equalTo(politiciansRating.getPolitician().getRating()));
+				equalTo(politiciansRating.getPolitician().getRating().getAverageRating()));
 		assertThat(politiciaResponse.getPolitician().getSatisfactionRate().toString(),
-				equalTo(Rating.LOW.toString()));
+				equalTo(Rating.HIGH.toString()));
 	}
 	
 	@Test
@@ -101,13 +101,13 @@ public class RatingsControllerTest {
 		assertThat(politicianResponse.getPolitician().getName(),
 				equalTo(listOfPoliticiansRating.get(0).getPolitician().getFirstName() + " " + listOfPoliticiansRating.get(0).getPolitician().getLastName()));
 		assertThat(politicianResponse.getPolitician().getRating(),
-				equalTo(listOfPoliticiansRating.get(0).getPolitician().getRating()));
+				equalTo(listOfPoliticiansRating.get(0).getPolitician().getRating().getAverageRating()));
 		assertThat(politicianResponse2.getPolitician().getId().toString(),
 				equalTo(listOfPoliticiansRating.get(1).getPolitician().getId().toString()));
 		assertThat(politicianResponse2.getPolitician().getName(),
 				equalTo(listOfPoliticiansRating.get(1).getPolitician().getFirstName() + " " + listOfPoliticiansRating.get(1).getPolitician().getLastName()));
 		assertThat(politicianResponse2.getPolitician().getRating(),
-				equalTo(listOfPoliticiansRating.get(1).getPolitician().getRating()));
+				equalTo(listOfPoliticiansRating.get(1).getPolitician().getRating().getAverageRating()));
 	}
 	
 	@Test

@@ -102,7 +102,36 @@ public class Politicians implements PoliticianMethods{
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	public Politicians(int i, String firstName, String lastName, List<PoliticiansRating> politiciansRating, Rating rating) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.politiciansRating = politiciansRating;
+		this.rating = rating;
+	}
+
+	public Politicians(RatingRepository repo, Integer id, String firstName, String lastName,
+			List<PoliticiansRating> politiciansRating, Rating rating) {
+		super();
+		this.repo = repo;
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.politiciansRating = politiciansRating;
+		this.rating = rating;
+	}
 	
+	public Politicians(RatingRepository repo, Integer id, String firstName, String lastName,
+			List<PoliticiansRating> politiciansRating) {
+		super();
+		this.repo = repo;
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.politiciansRating = politiciansRating;
+	}
+
 	@Override
 	public String toString() {
 		return "Politicians [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", fullName="
