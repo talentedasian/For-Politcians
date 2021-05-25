@@ -200,7 +200,7 @@ public class Politicians implements PoliticianMethods{
 			return new HighSatisfactionAverageCalculator(getRating().totalRating, count);
 		}
 		
-		return null;
+		return new LowSatisfactionAverageCalculator(getRating().totalRating, count);
 	}
 	
 }

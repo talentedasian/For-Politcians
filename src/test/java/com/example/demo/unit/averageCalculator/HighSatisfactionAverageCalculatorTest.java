@@ -11,7 +11,7 @@ public class HighSatisfactionAverageCalculatorTest extends AbstractAverageCalcul
 
 	@Test
 	public void testLogicOfCalculator() {
-		calculator = new HighSatisfactionAverageCalculator(2.275D, 0D);
+		calculator = new HighSatisfactionAverageCalculator(2.279D, 0D);
 		assertThat(calculator.calculateAverage(),
 				equalTo(2.27D));
 	}

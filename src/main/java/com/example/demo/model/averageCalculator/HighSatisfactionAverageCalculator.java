@@ -26,7 +26,7 @@ public class HighSatisfactionAverageCalculator extends AverageCalculator{
 	
 	private double calculateUtil() {
 		double averageRating = BigDecimal.valueOf(getTotalRating() / (getCount() + 1D))
-				.setScale(2, RoundingMode.HALF_DOWN)
+				.setScale(2, RoundingMode.DOWN)
 				.doubleValue();
 		
 		return averageRating;
