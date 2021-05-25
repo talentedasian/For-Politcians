@@ -89,8 +89,8 @@ This section should list any major frameworks that you built your project using.
       ```
         spring.security.oauth2.client.registration.facebook.clientId=697702354184763
         spring.security.oauth2.client.registration.facebook.clientSecret=${OAUTH2_CLIENT_SECRET}
-      ```
-  Or do it programatically,<br/>
+      ``` <br/>
+  Or do it programatically: 
     ```java
      gg
      ```
