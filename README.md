@@ -80,7 +80,7 @@ This section should list any major frameworks that you built your project using.
 1. This project uses jdk 15 and maven as the build tool.
 2. Install a database of your choice(mine is postgresql).
 3. Populate the spring datasource properties.
-    ```
+    ```java
     spring.datasource.url=jdbc:postgresql://localhost:5432/politics
     spring.datasource.username=politics
     spring.datasource.password=politics
