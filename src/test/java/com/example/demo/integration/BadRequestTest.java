@@ -4,11 +4,13 @@ import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.everyItem;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.startsWithIgnoringCase;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,10 +20,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.example.demo.controller.PoliticianController;
 import com.example.demo.controller.RatingsController;
+import com.example.demo.service.PoliticiansService;
 import com.example.demo.service.RatingService;
 
-@WebMvcTest(RatingsController.class)
+@WebMvcTest({ RatingsController.class, PoliticianController.class })
 @AutoConfigureMockMvc(addFilters = false, printOnlyOnFailure = false, print = MockMvcPrint.DEFAULT)
 public class BadRequestTest {
 
@@ -30,9 +34,12 @@ public class BadRequestTest {
 
 	@MockBean
 	public RatingService service;
+	@MockBean
+	public PoliticiansService politicianService;
 
 
-	private final String content = """
+
+	private final String ratingContent = """
 			{
 				"politicianLastName": "name",
 				"politicianFirstName": "test",
@@ -41,10 +48,18 @@ public class BadRequestTest {
 			}
 			""";
 	
+	private final String politicianContent = """
+			{
+				"lastNames": "name",
+				"firstNames": "test",
+				"rating": 0.09
+			}
+			""";
+	
 	@Test
-	public void shouldReturn400BadRequest() throws Exception {
+	public void shouldReturn400BadRequestOnRatingEndpoint() throws Exception {
 		mvc.perform(post(create("/api/ratings/add-rating"))
-				.content(content)
+				.content(ratingContent)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("code", 
@@ -53,5 +68,22 @@ public class BadRequestTest {
 					containsStringIgnoringCase("bad request")))
 			.andExpect(jsonPath("message", 
 					everyItem(startsWithIgnoringCase("Error on"))));
+	}
+	
+	@Test
+	public void shouldReturn400BadRequestOnPoliticianEndpoint() throws Exception {
+		mvc.perform(post(create("/api/politicians/add-politician"))
+				.header("Politician-Access", "password")
+				.content(politicianContent)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("code", 
+					equalTo("400")))
+			.andExpect(jsonPath("err", 
+					containsStringIgnoringCase("bad request")))
+			.andExpect(jsonPath("message", 
+					hasItem(startsWithIgnoringCase("error on lastName"))))
+			.andExpect(jsonPath("message", 
+					hasItem(startsWithIgnoringCase("error on firstName"))));
 	}
 }
