@@ -11,11 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.example.demo.model.PoliticiansRatingMethods;
 import com.example.demo.model.enums.PoliticalParty;
 
 @Entity
-public class PoliticiansRating implements PoliticiansRatingMethods{
+public class PoliticiansRating {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -127,7 +126,6 @@ public class PoliticiansRating implements PoliticiansRatingMethods{
 		return true;
 	}
 
-	@Override
 	public double calculateRating(double rating) {
 		double rate = BigDecimal.valueOf(rating).setScale(2, RoundingMode.HALF_DOWN).doubleValue();
 		setRating(rate);
@@ -135,7 +133,6 @@ public class PoliticiansRating implements PoliticiansRatingMethods{
 		return rate;
 	}
 
-	@Override
 	public Politicians calculatePolitician(Politicians politician) {
 		politician.calculateFullName();
 		politician.calculateTotalAmountOfRating(getRating());
@@ -145,9 +142,9 @@ public class PoliticiansRating implements PoliticiansRatingMethods{
 		return politician;
 	}
 
-	@Override
-	public UserRater calculateRater(String subject, String id, PoliticalParty politicalParty) {
-		var userRater = new UserRater(id, politicalParty, subject);
+	public UserRater calculateRater(String subject, String id, String politicalParty) {
+		PoliticalParty party = PoliticalParty.mapToPoliticalParty(politicalParty);
+		var userRater = new UserRater(id, party, subject);
 		setRater(userRater);
 		
 		return userRater;

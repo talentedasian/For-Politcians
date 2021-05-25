@@ -10,7 +10,6 @@ import com.example.demo.controller.RatingsController;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
 import com.example.demo.exceptions.JwtNotFromServerException;
-import com.example.demo.exceptions.SwaggerJWTException;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
@@ -53,17 +52,6 @@ public class RatingJwtExceptionHandling extends ResponseEntityExceptionHandler{
 		var exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("401");
 		exceptionModel.setErr(e.getMessage());
-		
-		return exceptionModel;
-	}
-	
-	@ExceptionHandler(SwaggerJWTException.class)
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public ExceptionModel handleMisuseOfSwaggerJWTException(SwaggerJWTException e) {
-		var exceptionModel = new ExceptionModel();
-		exceptionModel.setCode("401");
-		exceptionModel.setErr(e.getMessage());
-		exceptionModel.setOptional("Don't even think about it");
 		
 		return exceptionModel;
 	}

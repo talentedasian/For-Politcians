@@ -45,7 +45,7 @@ public class PoliticianServiceTest {
 	
 	@BeforeEach
 	public void setup() {
-		service = new PoliticiansService(repo, ratingRepo);
+		service = new PoliticiansService(repo);
 		
 		List<PoliticiansRating> listOfPoliticiansRating = new ArrayList<>();
 		politician =  new Politicians

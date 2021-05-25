@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,19 +15,16 @@ import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.repository.PoliticiansRepository;
-import com.example.demo.repository.RatingRepository;
 
 @EnableTransactionManagement
 @Service
 public class PoliticiansService {
 
 	private final PoliticiansRepository politiciansRepo;
-	private final RatingRepository ratingRepo;
 
 	@Autowired
-	public PoliticiansService(PoliticiansRepository politiciansRepo, RatingRepository ratingRepo) {
+	public PoliticiansService(PoliticiansRepository politiciansRepo) {
 		this.politiciansRepo = politiciansRepo;
-		this.ratingRepo = ratingRepo;
 	}
 	
 	@Transactional(readOnly = true)
@@ -56,7 +54,6 @@ public class PoliticiansService {
 	public Politicians savePolitician(AddPoliticianDTORequest dto) {
 		try {
 			var politicianToBeSaved = new Politicians();
-			politicianToBeSaved.setRepo(ratingRepo);
 			politicianToBeSaved.setFirstName(dto.getFirstName());
 			politicianToBeSaved.setLastName(dto.getLastName());
 			politicianToBeSaved.calculateFullName();
@@ -68,7 +65,7 @@ public class PoliticiansService {
 			
 			return politician;
 			
-		} catch (Exception e) {
+		} catch (DataIntegrityViolationException e) {
 			throw new PoliticianAlreadyExistsException("Politician Already exists in the database");
 		}
 	}

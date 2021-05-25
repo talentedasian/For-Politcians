@@ -61,7 +61,7 @@ public class JwtProviderHttpServletRequest {
 			}
 			throw new JwtExpiredException(e.getMessage(), e);
 		}  catch (SignatureException e) {
-			throw new JwtTamperedExpcetion(e.getLocalizedMessage());
+			throw new JwtTamperedExpcetion("Jwt is tampered. Server might have restarted without prior knowledge");
 		}
 		
 		return jwts;

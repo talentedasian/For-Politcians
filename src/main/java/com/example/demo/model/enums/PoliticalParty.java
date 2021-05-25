@@ -4,7 +4,7 @@ public enum PoliticalParty {
 	DDS, DILAWAN, GREY_ZONE;
 	
 	public static PoliticalParty mapToPoliticalParty(String party) {
-		PoliticalParty politicalParty = null;
+		PoliticalParty politicalParty = GREY_ZONE;
 		for (PoliticalParty politicalParties : PoliticalParty.values()) {
 			if (party.equalsIgnoreCase(politicalParties.toString())) {
 				politicalParty = politicalParties;
