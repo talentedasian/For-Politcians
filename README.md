@@ -92,8 +92,19 @@ This section should list any major frameworks that you built your project using.
       ```  
 Or do it programatically:  
   ```java
-  spring.datasource.url=jdbc:postgresql://localhost:5432/politics
-  spring.datasource.username=politics
+  private ClientRegistration facebookClientRegistration() {
+        return ClientRegistration.withRegistrationId("facebook")
+            .clientId("id")
+            .clientSecret("secret")
+            .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+            .redirectUri("{baseUrl}/login/oauth2/code/facebook")
+            .authorizationUri("https://www.facebook.com/dialog/oauth")
+            .tokenUri("https://graph.facebook.com/v10.0/oauth/access_token")
+            .userInfoUri("https://graph.facebook.com/me")
+            .userNameAttributeName("id,email")
+            .clientName("Facebook")
+            .build();
+	    }
   ```
 
 <!-- ROADMAP -->
