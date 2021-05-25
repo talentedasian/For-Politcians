@@ -41,6 +41,17 @@ public class Politicians implements PoliticianMethods{
 
 	@Column(nullable = false, precision = 3, scale = 2)
 	private Rating rating;
+	
+	@Column(nullable = false, unique = true)
+	private String politicianNumber;
+
+	public String getPoliticianNumber() {
+		return politicianNumber;
+	}
+
+	public void setPoliticianNumber(String politicianNumber) {
+		this.politicianNumber = politicianNumber;
+	}
 
 	public RatingRepository getRepo() {
 		return repo;
