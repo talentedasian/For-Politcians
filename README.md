@@ -90,7 +90,7 @@ This section should list any major frameworks that you built your project using.
         spring.security.oauth2.client.registration.facebook.clientId=697702354184763
         spring.security.oauth2.client.registration.facebook.clientSecret=${OAUTH2_CLIENT_SECRET}
       ```
-  Or do it programatically,
+  Or do it programatically,\n
       ```java
       private ClientRegistration facebookClientRegistration() {
         return ClientRegistration.withRegistrationId("facebook")
