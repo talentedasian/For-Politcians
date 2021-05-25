@@ -91,21 +91,9 @@ This section should list any major frameworks that you built your project using.
         spring.security.oauth2.client.registration.facebook.clientSecret=${OAUTH2_CLIENT_SECRET}
       ```
   Or do it programatically,<br/>
-      ```java
-      private ClientRegistration facebookClientRegistration() {
-        return ClientRegistration.withRegistrationId("facebook")
-            .clientId("client_id")
-            .clientSecret("client_secret")
-            .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-            .redirectUri("{baseUrl}/login/oauth2/code/facebook")
-            .authorizationUri("https://www.facebook.com/dialog/oauth")
-            .tokenUri("https://graph.facebook.com/v10.0/oauth/access_token")
-            .userInfoUri("https://graph.facebook.com/me")
-            .userNameAttributeName("id,email")
-            .clientName("Facebook")
-            .build();
-	    }
-      ```
+	  ```java
+	  gg
+	  ```
 
 <!-- ROADMAP -->
 ## Roadmap
