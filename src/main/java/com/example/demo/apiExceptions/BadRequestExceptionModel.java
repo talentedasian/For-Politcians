@@ -2,16 +2,33 @@ package com.example.demo.apiExceptions;
 
 import java.util.List;
 
-import org.springframework.validation.ObjectError;
+import org.springframework.validation.FieldError;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BadRequestExceptionModel extends ExceptionModel{
 
 	@JsonIgnore
-	protected List<ObjectError> objectErrors;
+	private List<FieldError> FieldErrors;
 	
-	protected List<String> message;
+	private List<String> message;
+
+	@JsonIgnore
+	public List<FieldError> getFieldErrors() {
+		return FieldErrors;
+	}
+
+	protected void setFieldErrors(List<FieldError> FieldErrors) {
+		this.FieldErrors = FieldErrors;
+	}
+
+	public List<String> getMessage() {
+		return message;
+	}
+
+	protected void setMessage(List<String> message) {
+		this.message = message;
+	}
 
 	public BadRequestExceptionModel() {
 		super();
@@ -23,16 +40,16 @@ public class BadRequestExceptionModel extends ExceptionModel{
 		// TODO Auto-generated constructor stub
 	}
 
-	public BadRequestExceptionModel(List<ObjectError> objectErrors, List<String> message) {
+	public BadRequestExceptionModel(List<FieldError> FieldErrors, List<String> message) {
 		super();
-		this.objectErrors = objectErrors;
+		this.FieldErrors = FieldErrors;
 		this.message = message;
 	}
 	
 	public BadRequestExceptionModel(String err, String code, String optional,
-			List<ObjectError> objectErrors, List<String> message) {
+			List<FieldError> FieldErrors, List<String> message) {
 		super(err, code, optional);
-		this.objectErrors = objectErrors;
+		this.FieldErrors = FieldErrors;
 		this.message = message;
 	}
 
