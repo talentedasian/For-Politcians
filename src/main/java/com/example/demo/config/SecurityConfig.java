@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private RestTemplate template;
 	
-	@Value("${spring.security.oauth2.client.registration.facebook.clientSecret}")
+	@Value("${facebook.clientSecret}")
 	private String OAUTH2_SECRET;
 
 	@Override
