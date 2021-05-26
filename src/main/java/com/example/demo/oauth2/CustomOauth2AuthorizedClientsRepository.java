@@ -23,12 +23,12 @@ import com.example.demo.jwt.JwtProvider;
 
 public class CustomOauth2AuthorizedClientsRepository implements OAuth2AuthorizedClientRepository{
 	
-	private final ClientRegistration clientRegistrationFacebook;
+	private final ClientRegistration facebookClientRegistration;
 	private final FacebookOauth2UserInfoUtility userInfoEndpointUtil;
 	
-	public CustomOauth2AuthorizedClientsRepository(ClientRegistration clientRegistrationFacebook, 
+	public CustomOauth2AuthorizedClientsRepository(ClientRegistration clientRegistration, 
 			FacebookOauth2UserInfoUtility userInfoEndpointUtil) {
-		this.clientRegistrationFacebook = clientRegistrationFacebook;
+		this.facebookClientRegistration = clientRegistration;
 		this.userInfoEndpointUtil = userInfoEndpointUtil; 
 	}
 	
@@ -45,7 +45,7 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 		}
 		
 		OAuth2AuthorizedClient oauth2AuthorizedClient = new OAuth2AuthorizedClient
-				(clientRegistrationFacebook, 
+				(facebookClientRegistration, 
 				cookieHolder.get("principalName"), 
 				new OAuth2AccessToken(TokenType.BEARER, cookieHolder.get("accessTokenValue"), 
 						Instant.ofEpochSecond(Long.valueOf(cookieHolder.get("accessTokenIssuedAt"))),
@@ -59,7 +59,12 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 	public void saveAuthorizedClient(OAuth2AuthorizedClient authorizedClient, Authentication principal,
 			HttpServletRequest request, HttpServletResponse response) {
 		saveAuthorizedClientsInCookie(authorizedClient, response);
-		addJwtCookie(authorizedClient, response);
+		try {
+			addJwtCookie(authorizedClient, response);
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -92,24 +97,19 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 		response.addCookie(principalNameCookie);
 	}
 	
-	private void addJwtCookie(OAuth2AuthorizedClient authorizedClient, HttpServletResponse response) {
-		try {
-			HttpHeaders headers = new HttpHeaders();
-			headers.setBearerAuth(authorizedClient.getAccessToken().getTokenValue());
+	private void addJwtCookie(OAuth2AuthorizedClient authorizedClient, HttpServletResponse response) throws URISyntaxException {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBearerAuth(authorizedClient.getAccessToken().getTokenValue());
+					
+		FacebookUserInfo userInfo = userInfoEndpointUtil.fetchUserInfo(authorizedClient);
+		String jwt = JwtProvider.createJwtWithFixedExpirationDate(userInfo.getEmail(),
+				userInfo.getName());
 						
-			FacebookUserInfo userInfo = userInfoEndpointUtil.fetchUserInfo(authorizedClient);
-			String jwt = JwtProvider.createJwtWithFixedExpirationDate(userInfo.getEmail(),
-					userInfo.getName());
-							
-			Cookie jwtCookie = new Cookie("accessJwt", jwt);
-			jwtCookie.setHttpOnly(true);
-			jwtCookie.setPath("/");
-			
-			response.addCookie(jwtCookie);
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-
+		Cookie jwtCookie = new Cookie("accessJwt", jwt);
+		jwtCookie.setHttpOnly(true);
+		jwtCookie.setPath("/");
+		
+		response.addCookie(jwtCookie);
 	}
 	
 }

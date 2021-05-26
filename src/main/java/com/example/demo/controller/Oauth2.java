@@ -28,6 +28,7 @@ public class Oauth2 {
 	public ResponseEntity<JwtClaims> returnCredentials(HttpServletRequest req, 
 			HttpServletResponse res) throws IOException {
 		Map<String, String> cookieMap = new HashMap<>();
+		
 		for (Cookie cookies : req.getCookies()) {
 			if (cookies.getName().equalsIgnoreCase("accessJwt")) {
 				cookieMap.put("jwt", cookies.getValue());
@@ -35,7 +36,6 @@ public class Oauth2 {
 		}
 		
 		Jws<Claims> jwt = JwtProvider.decodeJwt(cookieMap.get("jwt"));
-		
 		JwtClaims jwtResponse = new JwtClaims();
 		jwtResponse.setJwt(cookieMap.get("jwt"));
 		jwtResponse.setExpiration(jwt.getBody().getExpiration());

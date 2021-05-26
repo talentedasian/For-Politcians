@@ -9,12 +9,10 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.ClientAuthorizationRequiredException;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.dto.FacebookUserInfo;
 
-@Component
 public class FacebookOauth2UserInfoUtility {
 	
 	private final RestTemplate restTemplate;

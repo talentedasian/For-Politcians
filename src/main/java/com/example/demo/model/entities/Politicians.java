@@ -33,7 +33,7 @@ public class Politicians implements PoliticianMethods{
 	@Column(nullable = false, name = "politician_last_name")
 	private String lastName;
 	
-	@Column(nullable = false, unique = true, name = "full_name")
+	@Column(nullable = false, name = "full_name")
 	private String fullName;
 	
 	@OneToMany(mappedBy = "politician")

@@ -6,10 +6,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -25,8 +26,7 @@ import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
 import com.example.demo.oauth2.FacebookOauth2UserInfoUtility;
 
 @Configuration
-@EnableWebSecurity
-@Profile({ "production,githubActions" })
+@Profile(value = { "production" })
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
@@ -51,6 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.disable()
 			.httpBasic()
 				.disable()
+			.oauth2Login()
+				.disable()
 			.oauth2Client()
 				.authorizationCodeGrant()
 				.authorizationRequestRepository(this.authorizationRequestsRepo())
@@ -61,9 +63,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.addFilterBefore(new RefreshJwtFilter(), UsernamePasswordAuthenticationFilter.class);
 				
 	}
-		
+	
+	@Bean
+	public ClientRegistrationRepository clientRepo() {
+		return new InMemoryClientRegistrationRepository(this.facebookClientRegistration());
+	}
+	
 	public OAuth2AuthorizedClientRepository authorizedClientRepo() {
-		return new CustomOauth2AuthorizedClientsRepository(this.facebookClientRegistration(), this.facebookUserInfoEndpointUtility());
+		return new CustomOauth2AuthorizedClientsRepository(this.facebookClientRegistration(),
+				this.facebookUserInfoEndpointUtility());
 	}
 	
 	@Bean
@@ -89,11 +97,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             .clientName("Facebook")
             .build();
 	    }
-	
-	@Bean
-	public RestTemplate template() {
-		return new RestTemplate();
-	}
 	
 	private HttpSessionRequestCache statelessRequestCache() {
 		HttpSessionRequestCache cache = new HttpSessionRequestCache();
