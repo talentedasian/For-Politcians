@@ -26,7 +26,7 @@ import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
 import com.example.demo.oauth2.FacebookOauth2UserInfoUtility;
 
 @Configuration
-@Profile(value = { "production" })
+@Profile(value = { "production, githubActions" })
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
