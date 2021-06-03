@@ -21,28 +21,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 
 @RestController
-@RequestMapping("/login/oauth2/code/facebook")
 public class Oauth2 {
 
-	@GetMapping
-	public ResponseEntity<JwtClaims> returnCredentials(HttpServletRequest req, 
-			HttpServletResponse res) throws IOException {
-		Map<String, String> cookieMap = new HashMap<>();
-		
-		for (Cookie cookies : req.getCookies()) {
-			if (cookies.getName().equalsIgnoreCase("accessJwt")) {
-				cookieMap.put("jwt", cookies.getValue());
-			}
-		}
-		
-		Jws<Claims> jwt = JwtProvider.decodeJwt(cookieMap.get("jwt"));
-		JwtClaims jwtResponse = new JwtClaims();
-		jwtResponse.setJwt(cookieMap.get("jwt"));
-		jwtResponse.setExpiration(jwt.getBody().getExpiration());
-		jwtResponse.setId(jwt.getBody().getId());
-		jwtResponse.setSubject(jwt.getBody().getSubject());
-		
-		return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
-	}
+	
 	
 }
