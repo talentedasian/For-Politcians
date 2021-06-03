@@ -86,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	private ClientRegistration facebookClientRegistration() {
         return ClientRegistration.withRegistrationId("facebook")
-            .clientId("697702354184763")
+            .clientId("761966061136844")
             .clientSecret(OAUTH2_SECRET)
             .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
             .redirectUri("{baseUrl}/login/oauth2/code/facebook")
