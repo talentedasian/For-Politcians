@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.endpoint.AbstractOAuth2AuthorizationGrantRequest;
+import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
@@ -18,6 +21,7 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.filter.AddPoliticianFilter;
@@ -34,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private RestTemplate template;
 	
-	@Value("${facebook.clientSecret}")
+	@Value("${OAUTH2_CLIENT_SECRET}")
 	private String OAUTH2_SECRET;
 
 	@Override
@@ -57,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.disable()
 			.oauth2Client()
 				.authorizationCodeGrant()
+				.accessTokenResponseClient(accessTokenClient())
 				.authorizationRequestRepository(this.authorizationRequestsRepo())
 				.and()
 				.authorizedClientRepository(this.authorizedClientRepo())
@@ -106,4 +111,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		return cache;
 	}
 	
+	private DefaultAuthorizationCodeTokenResponseClient accessTokenClient() {
+		DefaultAuthorizationCodeTokenResponseClient responseClient = new DefaultAuthorizationCodeTokenResponseClient();
+		responseClient.setRestOperations(template);
+		
+		return responseClient;
+	}
 }
