@@ -23,10 +23,4 @@ public abstract class AbstractPoliticianNumber implements PoliticianNumberInterf
 		this.fullName = fullName;
 	}
 
-	@Override
-	public String calculatePoliticianNumber() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
