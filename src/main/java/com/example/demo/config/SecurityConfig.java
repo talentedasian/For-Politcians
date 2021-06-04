@@ -26,7 +26,7 @@ import com.example.demo.oauth2.CustomOauth2AuthorizationRequestsRepository;
 import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
 import com.example.demo.oauth2.FacebookOauth2UserInfoUtility;
 
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @Configuration
 @Profile(value = { "production" })
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
