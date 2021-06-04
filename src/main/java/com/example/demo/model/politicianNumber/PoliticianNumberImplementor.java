@@ -13,7 +13,7 @@ public class PoliticianNumberImplementor extends AbstractPoliticianNumber{
 	}
 
 	@Override
-	public PoliticianNumberImplementor calculatePoliticianNumber(int sequenceNumber) {
+	public PoliticianNumberImplementor calculatePoliticianNumber(int sequenceNumbers) {
 		String politicianNumber = pattern.substring(0, lastString(pattern));
 		
 		return new PoliticianNumberImplementor(getFirstName(), getLastName(), getFullName(), politicianNumber);
