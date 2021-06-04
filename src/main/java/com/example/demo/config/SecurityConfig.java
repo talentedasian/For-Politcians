@@ -38,8 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private RestTemplate template;
 	
-	@Value("${OAUTH2_CLIENT_SECRET}")
-	private String OAUTH2_SECRET;
+//	@Value("${OAUTH2_CLIENT_SECRET}")
+	private String OAUTH2_SECRET = "bc9fb319c8102071263231f658d5692b";
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
