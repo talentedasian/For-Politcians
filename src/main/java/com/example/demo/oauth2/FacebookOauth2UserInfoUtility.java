@@ -1,6 +1,7 @@
 package com.example.demo.oauth2;
 
-import java.net.URI;
+import static java.net.URI.create;
+
 import java.net.URISyntaxException;
 
 import org.springframework.http.HttpHeaders;
@@ -15,20 +16,19 @@ import com.example.demo.dto.FacebookUserInfo;
 
 public class FacebookOauth2UserInfoUtility {
 	
-	private final RestTemplate restTemplate;
-	
-	public FacebookOauth2UserInfoUtility(RestTemplate restTemplate) {
-		this.restTemplate = restTemplate;
-	}
+	private RestTemplate restTemplate = new RestTemplate();
 	
 	public FacebookUserInfo fetchUserInfo(OAuth2AuthorizedClient client) throws URISyntaxException {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(client.getAccessToken().getTokenValue());
+		
 		RequestEntity<Object> requestEntity = new RequestEntity<>(headers,
-				HttpMethod.GET, new URI("https://graph.facebook.com/me?fields=id,email,name"));
+				HttpMethod.GET, 
+				create("https://graph.facebook.com/me?fields=id,name,email"));
+		
 		ResponseEntity<FacebookUserInfo> responseEntity = restTemplate.exchange(requestEntity, FacebookUserInfo.class);
+		//redirect user back to a filter that initiates oauth2 authentication if response is not 2xx
 		if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-			//This causes a redirect to a spring security filter that handles oauth2 authentications
 			throw new ClientAuthorizationRequiredException("facebook");
 		}
 		

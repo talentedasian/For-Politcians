@@ -40,6 +40,7 @@ public class Oauth2 {
 		jwtResponse.setExpiration(jwt.getBody().getExpiration());
 		jwtResponse.setId(jwt.getBody().getId());
 		jwtResponse.setSubject(jwt.getBody().getSubject());
+		jwtResponse.setName(jwt.getBody().get("name", String.class));
 		
 		return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
 	}

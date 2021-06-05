@@ -12,6 +12,16 @@ public class JwtClaims {
 	
 	private Date expiration;
 	
+	private String name;
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public String getJwt() {
 		return jwt;
 	}
@@ -49,17 +59,18 @@ public class JwtClaims {
 		// TODO Auto-generated constructor stub
 	}
 
-	public JwtClaims(String jwt, String id, String subject, Date expiration) {
+	public JwtClaims(String jwt, String id, String subject, Date expiration, String name) {
 		super();
 		this.jwt = jwt;
 		this.id = id;
 		this.subject = subject;
 		this.expiration = expiration;
+		this.name = name;
 	}
 
 	@Override
 	public String toString() {
-		return "JwtClaims [jwt=" + jwt + ", id=" + id + ", subject=" + subject + ", expiration=" + expiration + "]";
+		return "JwtClaims [jwt=" + jwt + ", id=" + id + ", subject=" + subject + ", expiration=" + expiration + ", name=" + name + "]";
 	}
 	
 }

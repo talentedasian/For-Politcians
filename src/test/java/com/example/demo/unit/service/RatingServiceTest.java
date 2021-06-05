@@ -166,7 +166,7 @@ public class RatingServiceTest {
 		when(politicianRepo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politicianToBeSaved));
 		when(ratingRepo.save(any())).thenReturn(ratingToBeSaved);
 		
-		String jsonWebToken = JwtProvider.createJwtWithFixedExpirationDate("test@gmail.com", "test");
+		String jsonWebToken = JwtProvider.createJwtWithFixedExpirationDate("test@gmail.com", "test", "000");
 		when(req.getHeader("Authorization")).thenReturn("Bearer " + jsonWebToken);
 	}
 	

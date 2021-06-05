@@ -8,11 +8,12 @@ import io.jsonwebtoken.Jwts;
 
 public class JwtProvider {
 
-	public static String createJwtWithFixedExpirationDate(String sub, String id) {
+	public static String createJwtWithFixedExpirationDate(String sub, String id, String name) {
 		
 		String jwts = Jwts.builder()
 				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
 				.setSubject(sub)
+				.claim("name", name)
 				.setId(id)
 				.setExpiration(new Date(System.currentTimeMillis() + 3600000L))
 				.setHeaderParam("login_mechanism", "facebook")
