@@ -11,6 +11,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.LoggerFactory;
+
 import com.example.demo.apiExceptions.ExceptionModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,9 +47,9 @@ public class AddPoliticianFilter implements Filter{
 	}
 
 	private void handleAddPoliticianAccessDenied(HttpServletRequest req, HttpServletResponse res) throws JsonProcessingException, IOException {
-		Logger.getLogger("Add Politician Filter")
-			.log(java.util.logging.Level.INFO, 
-					"IP Address "  + req.getRemoteAddr() + " accessed a resource protected securly");
+		LoggerFactory.getLogger("Add Politician Filter")
+			.info("IP Address "  + req.getRemoteAddr() + " accessed a resource protected securly");
+		
 		ExceptionModel exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("401");
 		exceptionModel.setErr("Authorization Required");
