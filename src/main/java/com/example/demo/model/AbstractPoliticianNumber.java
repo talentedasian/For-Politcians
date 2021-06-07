@@ -2,7 +2,7 @@ package com.example.demo.model;
 
 public abstract class AbstractPoliticianNumber implements PoliticianNumberInterface{
 
-	private final String firstName, lastName, fullName;
+	private final String firstName, lastName;
 
 	public String getFirstName() {
 		return firstName;
@@ -12,15 +12,11 @@ public abstract class AbstractPoliticianNumber implements PoliticianNumberInterf
 		return lastName;
 	}
 
-	public String getFullName() {
-		return fullName;
-	}
 
-	public AbstractPoliticianNumber(String firstName, String lastName, String fullName) {
+	public AbstractPoliticianNumber(String firstName, String lastName) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.fullName = fullName;
 	}
 
 }
