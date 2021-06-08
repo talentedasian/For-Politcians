@@ -18,7 +18,9 @@ import com.example.demo.jwt.JwtProvider;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.swagger.v3.oas.annotations.Hidden;
 
+@Hidden
 @RestController
 @RequestMapping("/login/oauth2/code/facebook")
 public class Oauth2 {
