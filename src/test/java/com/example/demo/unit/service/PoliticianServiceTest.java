@@ -62,7 +62,9 @@ public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
 	
 	@Test
 	public void shouldAddTotalRatingAndCorrectAverageRating() {
+		when(calculator.calculateAverage()).thenReturn(0.01D);
 		politician.calculateAverageRating();
+		
 		when(politicianRepo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politician));
 		
 		Politicians politicianQueried = politicianService.findPoliticianByName("Mirriam", "Defensor");

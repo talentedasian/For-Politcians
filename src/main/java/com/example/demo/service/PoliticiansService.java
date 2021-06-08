@@ -53,13 +53,14 @@ public class PoliticiansService {
 	@Transactional
 	public Politicians savePolitician(AddPoliticianDTORequest dto) {
 		try {
-			var politicianToBeSaved = new Politicians();
-			politicianToBeSaved.setFirstName(dto.getFirstName());
-			politicianToBeSaved.setLastName(dto.getLastName());
-			politicianToBeSaved.calculateFullName();
-			politicianToBeSaved.setRating(new Rating(dto.getRating().doubleValue(), 
+			var politicianToBeSaved = new Politicians.PoliticiansBuilder()
+					.setFirstName(dto.getFirstName())
+					.setLastName(dto.getLastName())
+					.setFullName()
+					.setRating(new Rating(dto.getRating().doubleValue(), 
 					0.01D, 
-					new LowSatisfactionAverageCalculator(dto.getRating().doubleValue(), 0D)));
+					new LowSatisfactionAverageCalculator(dto.getRating().doubleValue(), 0D)))
+					.build();
 			
 			Politicians politician = politiciansRepo.save(politicianToBeSaved);
 			

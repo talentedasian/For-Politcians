@@ -220,18 +220,6 @@ public class Politicians implements PoliticianMethods{
 			// TODO Auto-generated constructor stub
 		}
 
-		public PoliticiansBuilder(Integer id, String firstName, String lastName, String fullName,
-				List<PoliticiansRating> politiciansRating, Rating rating, String politicianNumber) {
-			super();
-			this.id = id;
-			this.firstName = firstName;
-			this.lastName = lastName;
-			this.fullName = fullName;
-			this.politiciansRating = politiciansRating;
-			this.rating = rating;
-			this.politicianNumber = politicianNumber;
-		}
-
 		public PoliticiansBuilder setId(Integer id) {
 			this.id = id;
 			return this;
@@ -247,8 +235,8 @@ public class Politicians implements PoliticianMethods{
 			return this;
 		}
 
-		public PoliticiansBuilder setFullName(String fullName) {
-			this.fullName = fullName;
+		public PoliticiansBuilder setFullName() {
+			this.fullName = firstName + " " + lastName;
 			return this;
 		}
 
