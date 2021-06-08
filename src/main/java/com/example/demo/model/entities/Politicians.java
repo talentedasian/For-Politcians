@@ -16,6 +16,7 @@ import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.averageCalculator.DecentSatisfactionAverageCalculator;
 import com.example.demo.model.averageCalculator.HighSatisfactionAverageCalculator;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
+import com.example.demo.model.entities.Politicians.PoliticiansBuilder;
 import com.example.demo.repository.RatingRepository;
 
 @Entity
@@ -111,10 +112,20 @@ public class Politicians implements PoliticianMethods{
 	
 	public Politicians() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
-	
-	
+
+	public Politicians(RatingRepository repo, Integer id, String firstName, String lastName, String fullName,
+			List<PoliticiansRating> politiciansRating, Rating rating, String politicianNumber) {
+		super();
+		this.repo = repo;
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.fullName = fullName;
+		this.politiciansRating = politiciansRating;
+		this.rating = rating;
+		this.politicianNumber = politicianNumber;
+	}
 
 	@Override
 	public String toString() {
@@ -185,6 +196,86 @@ public class Politicians implements PoliticianMethods{
 		}
 		
 		return new LowSatisfactionAverageCalculator(getRating().totalRating, count);
+	}
+	
+	public static class PoliticiansBuilder {
+		private RatingRepository ratingRepo;
+		
+		private Integer id;
+		
+		private String firstName;
+		
+		private String lastName;
+		
+		private String fullName;
+		
+		private List<PoliticiansRating> politiciansRating;
+
+		private Rating rating;
+		
+		private String politicianNumber;
+
+		public PoliticiansBuilder() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+
+		public PoliticiansBuilder(Integer id, String firstName, String lastName, String fullName,
+				List<PoliticiansRating> politiciansRating, Rating rating, String politicianNumber) {
+			super();
+			this.id = id;
+			this.firstName = firstName;
+			this.lastName = lastName;
+			this.fullName = fullName;
+			this.politiciansRating = politiciansRating;
+			this.rating = rating;
+			this.politicianNumber = politicianNumber;
+		}
+
+		public PoliticiansBuilder setId(Integer id) {
+			this.id = id;
+			return this;
+		}
+
+		public PoliticiansBuilder setFirstName(String firstName) {
+			this.firstName = firstName;
+			return this;
+		}
+
+		public PoliticiansBuilder setLastName(String lastName) {
+			this.lastName = lastName;
+			return this;
+		}
+
+		public PoliticiansBuilder setFullName(String fullName) {
+			this.fullName = fullName;
+			return this;
+		}
+
+		public PoliticiansBuilder setPoliticiansRating(List<PoliticiansRating> politiciansRating) {
+			this.politiciansRating = politiciansRating;
+			return this;
+		}
+
+		public PoliticiansBuilder setRating(Rating rating) {
+			this.rating = rating;
+			return this;
+		}
+
+		public PoliticiansBuilder setPoliticianNumber(String politicianNumber) {
+			this.politicianNumber = politicianNumber;
+			return this;
+		}
+		
+		public PoliticiansBuilder setRatingRepository(RatingRepository ratingRepo) {
+			this.ratingRepo = ratingRepo;
+			return this;
+		}
+		
+		public Politicians build() {
+			return new Politicians(ratingRepo, id, firstName, lastName, fullName, politiciansRating, rating, politicianNumber);
+		}
+		
 	}
 	
 }
