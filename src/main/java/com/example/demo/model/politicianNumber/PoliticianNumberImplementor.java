@@ -6,7 +6,7 @@ import io.jsonwebtoken.lang.Assert;
 
 public class PoliticianNumberImplementor extends AbstractPoliticianNumber{
 
-	private final String pattern = "PN00-PK00-0000";
+	private final String pattern = "FL00-LF00-0000";
 	private final String polNumber;
 	
 	public String getPattern() {
@@ -19,6 +19,10 @@ public class PoliticianNumberImplementor extends AbstractPoliticianNumber{
 
 	public PoliticianNumberImplementor(String firstName, String lastName, String polNumber) {
 		super(firstName, lastName);
+		if (polNumber.length() > 8) {
+			this.polNumber = polNumber;
+			return;
+		}
 		
 		Assert.state(polNumber.matches("\\d+"), 
 				"Number should be a valid digit");
@@ -26,16 +30,24 @@ public class PoliticianNumberImplementor extends AbstractPoliticianNumber{
 	}
 
 	@Override
-	public PoliticianNumberImplementor calculatePoliticianNumber(int sequenceNumbers) {
-		String politicianNumber = pattern.substring(0, lastString(pattern));
+	public PoliticianNumberImplementor calculatePoliticianNumber() {
+		String trimmedPattern = convertFAndLOfPatternToNameInitials()
+				.substring(0, pattern.length() - polNumber.length());
+		String finalPoliticianNumber = trimmedPattern.concat(polNumber);
 		
-		return new PoliticianNumberImplementor(getFirstName(), getLastName(), politicianNumber);
+		return new PoliticianNumberImplementor(getFirstName(), getLastName(), finalPoliticianNumber);
 	}
 	
-	private int lastString(String string) { 
-		return string.length() - 1;
+	private String convertFAndLOfPatternToNameInitials() {
+		String initialPattern = pattern.replace('F', firstName.charAt(0));
+		String finalPattern = initialPattern.replace('L', lastName.charAt(0));
+		
+		return finalPattern;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "PoliticianNumberImplementor [pattern=" + pattern + ", polNumber=" + polNumber + "]";
+	}
 
 }

@@ -14,6 +14,7 @@ import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.Rating;
+import com.example.demo.model.politicianNumber.PoliticianNumberImplementor;
 import com.example.demo.repository.PoliticiansRepository;
 
 @EnableTransactionManagement
@@ -21,6 +22,8 @@ import com.example.demo.repository.PoliticiansRepository;
 public class PoliticiansService {
 
 	private final PoliticiansRepository politiciansRepo;
+	
+	private static Integer polNumber = 1;
 
 	@Autowired
 	public PoliticiansService(PoliticiansRepository politiciansRepo) {
@@ -53,6 +56,10 @@ public class PoliticiansService {
 	@Transactional
 	public Politicians savePolitician(AddPoliticianDTORequest dto) {
 		try {
+			var politicianNumImplementor = new PoliticianNumberImplementor
+					(dto.getFirstName(), 
+					dto.getLastName(), 
+					String.valueOf(polNumber));
 			var politicianToBeSaved = new Politicians.PoliticiansBuilder()
 					.setFirstName(dto.getFirstName())
 					.setLastName(dto.getLastName())
@@ -60,10 +67,13 @@ public class PoliticiansService {
 					.setRating(new Rating(dto.getRating().doubleValue(), 
 					0.01D, 
 					new LowSatisfactionAverageCalculator(dto.getRating().doubleValue(), 0D)))
+					.setPoliticianNumber(politicianNumImplementor.calculatePoliticianNumber().getPolNumber())
 					.build();
 			
 			Politicians politician = politiciansRepo.save(politicianToBeSaved);
 			
+			//increment the number used for politician numbers 
+			polNumber++;
 			return politician;
 			
 		} catch (DataIntegrityViolationException e) {

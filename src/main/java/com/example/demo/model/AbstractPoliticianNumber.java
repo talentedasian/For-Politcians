@@ -2,7 +2,7 @@ package com.example.demo.model;
 
 public abstract class AbstractPoliticianNumber implements PoliticianNumberInterface{
 
-	private final String firstName, lastName;
+	protected final String firstName, lastName;
 
 	public String getFirstName() {
 		return firstName;

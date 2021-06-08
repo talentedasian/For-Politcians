@@ -16,7 +16,6 @@ import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.averageCalculator.DecentSatisfactionAverageCalculator;
 import com.example.demo.model.averageCalculator.HighSatisfactionAverageCalculator;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
-import com.example.demo.model.entities.Politicians.PoliticiansBuilder;
 import com.example.demo.repository.RatingRepository;
 
 @Entity

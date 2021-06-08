@@ -42,7 +42,8 @@ public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
 				"Mirriam", 
 				"Defensor", 
 				listOfPoliticiansRating,
-				new Rating(0.01D, 0.01D, calculator));
+				new Rating(0.01D, 0.01D, calculator),
+				"1");
 		
 		rating = new PoliticiansRating
 				(1, 8.023D, 

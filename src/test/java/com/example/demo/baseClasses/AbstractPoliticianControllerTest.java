@@ -57,7 +57,7 @@ public class AbstractPoliticianControllerTest {
 	
 	public static Politicians withRepoAndId(RatingRepository repo, Integer id, 
 			String firstName, String lastName,
-			List<PoliticiansRating> politiciansRating, Rating rating) {
+			List<PoliticiansRating> politiciansRating, Rating rating, String polNumber) {
 		var politician = new Politicians();
 		politician.setRepo(repo);
 		politician.setId(id);
@@ -65,6 +65,7 @@ public class AbstractPoliticianControllerTest {
 		politician.setLastName(lastName);
 		politician.setPoliticiansRating(politiciansRating);
 		politician.setRating(rating);
+		politician.setPoliticianNumber(polNumber);
 		
 		return politician;
 	}

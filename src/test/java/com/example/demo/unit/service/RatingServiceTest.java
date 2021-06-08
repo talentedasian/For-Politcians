@@ -61,7 +61,8 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 				"Mirriam",
 				"Defensor",
 				listOfPoliticiansRating,
-				new Rating(0.01D, 0.01D, calculator));
+				new Rating(0.01D, 0.01D, calculator),
+				"1");
 		
 		rating = new PoliticiansRating();
 		rating.setId(1);
