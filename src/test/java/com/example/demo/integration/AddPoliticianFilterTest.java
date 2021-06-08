@@ -1,5 +1,6 @@
 package com.example.demo.integration;
 
+import static com.example.demo.baseClasses.AbstractPoliticianControllerTest.withoutRepo;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,7 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.example.demo.controller.PoliticianController;
 import com.example.demo.filter.AddPoliticianFilter;
-import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
+import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
@@ -34,11 +36,13 @@ public class AddPoliticianFilterTest {
 
 	public MockMvc mvc;
 	
-	@MockBean
-	public PoliticiansService service;
-	
 	@Autowired
 	public WebApplicationContext wac;
+	
+	@MockBean
+	public PoliticiansService service;
+	@Mock
+	public AverageCalculator calculator;
 	
 	private final String content = """
 			{
@@ -47,12 +51,16 @@ public class AddPoliticianFilterTest {
 			    "rating": 0.01
 			}
 			""";
+	
 	private Politicians politician; 
 	
 	@BeforeEach
 	public void setup() {
-		var calculator = new LowSatisfactionAverageCalculator(0.01D, 0D);
-		politician = new Politicians(1, "test", "name", List.of(new PoliticiansRating()), new Rating(0.01D, 0.01D, calculator));
+		politician = withoutRepo
+				("test", 
+				"name", 
+				List.of(new PoliticiansRating()), 
+				new Rating(0.01D, 0.01D, calculator));
 		
 		mvc = MockMvcBuilders.webAppContextSetup(wac)
 				.addFilter(new AddPoliticianFilter(), "/api/politicians/add-politician")

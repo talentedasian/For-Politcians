@@ -106,7 +106,7 @@ public class Rating {
 	public double calculateTotalAmountOfRating(Double ratingToAdd, Double countOfRatings) {
 		if (totalRating == null) {
 			double rating = BigDecimal.valueOf(ratingToAdd)
-			.setScale(2, RoundingMode.HALF_DOWN).doubleValue();
+			.setScale(2, RoundingMode.CEILING).doubleValue();
 			this.totalRating = rating;
 			calculator = returnAverageCalculator(countOfRatings);
 			calculator.setTotalRating(rating);
