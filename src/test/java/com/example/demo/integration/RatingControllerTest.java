@@ -26,6 +26,7 @@ import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
+import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
 import com.example.demo.exceptions.RatingsNotFoundException;
@@ -43,6 +44,8 @@ public class RatingControllerTest {
 
 	@MockBean
 	public RatingService service;
+	@MockBean
+	public RatingDtoMapper mapper;
 	
 	public Politicians politician;
 	public PoliticiansRating politiciansRating;
