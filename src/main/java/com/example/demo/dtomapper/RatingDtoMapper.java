@@ -1,5 +1,8 @@
 package com.example.demo.dtomapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtomapper.interfaces.RatingDTOMapper;
@@ -12,15 +15,7 @@ public class RatingDtoMapper implements RatingDTOMapper{
 	@Override
 	public RatingDTO mapToDTO(PoliticiansRating entity) {
 		Politicians politician = entity.getPolitician();
-		Rating satisfactionRate = null;
-		var rating = politician.getRating().getAverageRating();
-		if (rating < 5D) {
-			satisfactionRate = Rating.LOW;
-		} else if (rating < 8.89D) {
-			satisfactionRate = Rating.DECENT;
-		} else if (rating >= 8.89D) {
-			satisfactionRate = Rating.HIGH;
-		}
+		Rating satisfactionRate = Rating.mapToSatisfactionRate(politician.getRating().getAverageRating());
 		
 		var politicianDTO = new PoliticianDTO
 				(politician.getFirstName() + "\s" + politician.getLastName(), 
@@ -34,6 +29,30 @@ public class RatingDtoMapper implements RatingDTOMapper{
 				politicianDTO);
 		
 		return ratingDTO;
+	}
+
+	@Override
+	public List<RatingDTO> mapToDTO(List<PoliticiansRating> entity) {
+		List<RatingDTO> ratingDTOList = new ArrayList<>();
+		for (PoliticiansRating politiciansRatings : entity) {
+			Politicians politician = politiciansRatings.getPolitician();
+			Rating satisfactionRate = Rating.mapToSatisfactionRate(politician.getRating().getAverageRating());
+			
+			var politicianDTO = new PoliticianDTO
+					(politician.getFullName(), 
+					String.valueOf(politician.getId()), 
+					politician.getRating().getAverageRating(), 
+					satisfactionRate);
+			
+			var ratingDTO = new RatingDTO
+					(politician.getRating().getAverageRating(), 
+					politiciansRatings.getRater(), 
+					politicianDTO);
+			
+			ratingDTOList.add(ratingDTO);
+		}
+		
+		return ratingDTOList;
 	}
 
 }

@@ -137,7 +137,7 @@ public class PoliticiansRating {
 		politician.calculateFullName();
 		politician.calculateTotalAmountOfRating(getRating());
 		politician.calculateAverageRating();
-		setPolitician(politician);
+		this.politician = politician;
 		
 		return politician;
 	}

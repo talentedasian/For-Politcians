@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.example.demo.controller.PoliticianController;
+import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.filter.AddPoliticianFilter;
 import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.entities.Politicians;
@@ -41,6 +42,8 @@ public class AddPoliticianFilterTest {
 	
 	@MockBean
 	public PoliticiansService service;
+	@MockBean
+	public PoliticiansDtoMapper mapper;
 	@Mock
 	public AverageCalculator calculator;
 	

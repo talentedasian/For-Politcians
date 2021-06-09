@@ -21,6 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.demo.controller.PoliticianController;
 import com.example.demo.controller.RatingsController;
+import com.example.demo.dtomapper.PoliticiansDtoMapper;
+import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.service.PoliticiansService;
 import com.example.demo.service.RatingService;
 
@@ -33,6 +35,10 @@ public class BadRequestTest {
 
 	@MockBean
 	public RatingService service;
+	@MockBean
+	public PoliticiansDtoMapper polMapper;
+	@MockBean
+	public RatingDtoMapper ratingMapper;
 	@MockBean
 	public PoliticiansService politicianService;
 

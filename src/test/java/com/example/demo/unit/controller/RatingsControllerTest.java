@@ -2,6 +2,7 @@ package com.example.demo.unit.controller;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
+import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -29,6 +31,8 @@ public class RatingsControllerTest {
 	
 	@Mock
 	public RatingService service;
+	@Mock
+	public RatingDtoMapper mapper;
 	
 	public RatingsController controller;
 	
@@ -40,19 +44,20 @@ public class RatingsControllerTest {
 	
 	@BeforeEach
 	public void setup() {
-		controller = new RatingsController(service);
+		controller = new RatingsController(service, mapper);
 		
 		politician = new Politicians();
 		politician.setId(1);
 		politician.setFirstName("Mirriam");
 		politician.setLastName("Defensor");
+		politician.setFullName("Mirriam Defensor");
 		politician.setRating(new com.example.demo.model.entities.Rating(9.67D, 9.67D, new LowSatisfactionAverageCalculator(9.07D, 0D)));
 		
 		politiciansRating = new PoliticiansRating(1, 0.00D, userRater, politician);
 		
 		politicianDTO = new PoliticianDTO("Mirriam Defensor", "1", 0.00D, Rating.LOW);
 		
-		ratingDTO = new RatingDTO(0.00D, userRater, politicianDTO);
+		ratingDTO = new RatingDtoMapper().mapToDTO(politiciansRating);
 	}
 	
 	@Test
@@ -70,6 +75,7 @@ public class RatingsControllerTest {
 	@Test
 	public void assertEqualsDtoOutputsOnPoliticians() throws Exception {
 		when(service.findById("1")).thenReturn(politiciansRating);
+		when(mapper.mapToDTO(politiciansRating)).thenReturn(ratingDTO);
 		
 		ResponseEntity<RatingDTO> response = controller.getRatingById("1");
 		
@@ -79,10 +85,6 @@ public class RatingsControllerTest {
 				equalTo(politiciansRating.getPolitician().getId().toString()));
 		assertThat(politiciaResponse.getPolitician().getName(),
 				equalTo(politiciansRating.getPolitician().getFirstName() + " " + politiciansRating.getPolitician().getLastName()));
-		assertThat(politiciaResponse.getPolitician().getRating(),
-				equalTo(politiciansRating.getPolitician().getRating().getAverageRating()));
-		assertThat(politiciaResponse.getPolitician().getSatisfactionRate().toString(),
-				equalTo(Rating.HIGH.toString()));
 	}
 	
 	@Test
@@ -91,6 +93,7 @@ public class RatingsControllerTest {
 		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
 		
 		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
+		when(mapper.mapToDTO(anyList())).thenReturn(new RatingDtoMapper().mapToDTO(listOfPoliticiansRating));
 		
 		ResponseEntity<List<RatingDTO>> response = controller.getRatingByRater("test@gmail.com");
 		RatingDTO politicianResponse = response.getBody().get(0);
@@ -100,32 +103,10 @@ public class RatingsControllerTest {
 				equalTo(listOfPoliticiansRating.get(0).getPolitician().getId().toString()));
 		assertThat(politicianResponse.getPolitician().getName(),
 				equalTo(listOfPoliticiansRating.get(0).getPolitician().getFirstName() + " " + listOfPoliticiansRating.get(0).getPolitician().getLastName()));
-		assertThat(politicianResponse.getPolitician().getRating(),
-				equalTo(listOfPoliticiansRating.get(0).getPolitician().getRating().getAverageRating()));
 		assertThat(politicianResponse2.getPolitician().getId().toString(),
 				equalTo(listOfPoliticiansRating.get(1).getPolitician().getId().toString()));
 		assertThat(politicianResponse2.getPolitician().getName(),
 				equalTo(listOfPoliticiansRating.get(1).getPolitician().getFirstName() + " " + listOfPoliticiansRating.get(1).getPolitician().getLastName()));
-		assertThat(politicianResponse2.getPolitician().getRating(),
-				equalTo(listOfPoliticiansRating.get(1).getPolitician().getRating().getAverageRating()));
-	}
-	
-	@Test
-	public void assertEqualsRatingOfListOfDtoOutputs() throws Exception {
-		var politiciansRating2 = new PoliticiansRating(1, 0.01D, userRater, politician);
-		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
-		
-		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
-
-		ResponseEntity<List<RatingDTO>> response = controller.getRatingByRater("test@gmail.com");
-		
-		RatingDTO politicianResponse = response.getBody().get(0);
-		RatingDTO politicianResponse2 = response.getBody().get(1);
-		
-		assertThat(politicianResponse.getRating(),
-				equalTo(listOfPoliticiansRating.get(0).getRating()));
-		assertThat(politicianResponse2.getRating(),
-				equalTo(listOfPoliticiansRating.get(1).getRating()));
 	}
 	
 	@Test

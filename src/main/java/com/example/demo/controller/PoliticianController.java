@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
-import com.example.demo.dtomapper.interfaces.DTOMapper;
+import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.service.PoliticiansService;
 
@@ -27,10 +26,12 @@ import com.example.demo.service.PoliticiansService;
 public class PoliticianController {
 	
 	private final PoliticiansService politiciansService;
+	private PoliticianDTOMapper mapper;
 	
-	@Autowired
-	public PoliticianController(PoliticiansService politiciansService) {
+	@Autowired(required = false)
+	public PoliticianController(PoliticiansService politiciansService, PoliticianDTOMapper mapper) {
 		this.politiciansService = politiciansService;
+		this.mapper = mapper;
 	}
 
 	@PostMapping("add-politician")
@@ -38,7 +39,7 @@ public class PoliticianController {
 			@RequestHeader(name = "Politician-Access") String politicianHeader) {
 		var politicianSaved = politiciansService.savePolitician(request);
 		
-		DTOMapper<PoliticianDTO, Politicians> mapper = new PoliticiansDtoMapper();
+		mapper = new PoliticiansDtoMapper();
 		
 		PoliticianDTO politician = mapper.mapToDTO(politicianSaved);
 		
@@ -49,7 +50,7 @@ public class PoliticianController {
 	public ResponseEntity<PoliticianDTO> politicianByName(String lastName, String firstName) {
 		var politicianByName = politiciansService.findPoliticianByName(lastName, firstName);
 		
-		DTOMapper<PoliticianDTO, Politicians> mapper = new PoliticiansDtoMapper();
+		mapper = new PoliticiansDtoMapper();
 		
 		PoliticianDTO politician = mapper.mapToDTO(politicianByName);
 		
@@ -59,12 +60,9 @@ public class PoliticianController {
 	@GetMapping("/all")
 	public ResponseEntity<List<PoliticianDTO>> allPoliticians() {
 		List<Politicians> allPoliticians = politiciansService.allPoliticians();
-		List<PoliticianDTO> politician = new ArrayList<>();
 		
-		DTOMapper<PoliticianDTO, Politicians> mapper = new PoliticiansDtoMapper();
-		for (Politicians politicians : allPoliticians) {
-			politician.add(mapper.mapToDTO(politicians));
-		}
+		mapper = new PoliticiansDtoMapper();
+		List<PoliticianDTO> politician = mapper.mapToDTO(allPoliticians);
 		
 		return new ResponseEntity<List<PoliticianDTO>>(politician, HttpStatus.OK);
 	}

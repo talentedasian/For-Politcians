@@ -1,11 +1,11 @@
 package com.example.demo.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.dtomapper.RatingDtoMapper;
-import com.example.demo.dtomapper.interfaces.DTOMapper;
+import com.example.demo.dtomapper.interfaces.RatingDTOMapper;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.service.RatingService;
 
@@ -30,9 +30,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public class RatingsController {
 	
 	private final RatingService ratingService;
+	private RatingDTOMapper mapper;
 	
-	public RatingsController(RatingService ratingService) {
+	@Autowired(required = false)
+	public RatingsController(RatingService ratingService, RatingDTOMapper mapper) {
 		this.ratingService = ratingService;
+		this.mapper = mapper;
 	}
 
 	@Operation(security = { @SecurityRequirement(name = "add-rating") })
@@ -40,7 +43,7 @@ public class RatingsController {
 	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request, HttpServletRequest req) {
 		PoliticiansRating politicianRatingSaved = ratingService.saveRatings(request, req);
 		
-		DTOMapper<RatingDTO, PoliticiansRating> mapper = new RatingDtoMapper();
+		mapper = new RatingDtoMapper();
 		
 		RatingDTO politicianRating = mapper.mapToDTO(politicianRatingSaved);
 		
@@ -51,7 +54,7 @@ public class RatingsController {
 	public ResponseEntity<RatingDTO> getRatingById(@RequestParam String id) {
 		PoliticiansRating politicianRatingQueried = ratingService.findById(id);
 		
-		DTOMapper<RatingDTO, PoliticiansRating> mapper = new RatingDtoMapper();
+		mapper = new RatingDtoMapper();
 		
 		RatingDTO politicianRating = mapper.mapToDTO(politicianRatingQueried);
 		
@@ -61,13 +64,10 @@ public class RatingsController {
 	@GetMapping("/ratingByRater")
 	public ResponseEntity<List<RatingDTO>> getRatingByRater(@RequestParam String email) {
 		List<PoliticiansRating> politicianRatingQueried = ratingService.findRatingsByFacebookEmail(email);
-		List<RatingDTO> politicianRating = new ArrayList<>();
 		
-		DTOMapper<RatingDTO, PoliticiansRating> mapper = new RatingDtoMapper();
+		mapper = new RatingDtoMapper();
+		List<RatingDTO> politicianRating = mapper.mapToDTO(politicianRatingQueried);
 		
-		for (PoliticiansRating politiciansRatings : politicianRatingQueried) {
-			politicianRating.add(mapper.mapToDTO(politiciansRatings));
-		}
 		
 		return new ResponseEntity<List<RatingDTO>>(politicianRating, HttpStatus.OK);
 	}

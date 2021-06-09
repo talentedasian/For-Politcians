@@ -31,4 +31,19 @@ public enum Rating {
 		this.satisfaction = satisfaction;
 	}
 	
+	public static Rating mapToSatisfactionRate(Double rating) {
+		if (rating < 5D) {
+			Rating satisfaction = Rating.LOW;
+			return satisfaction;
+		} else if (rating < 8.89D) {
+			Rating satisfaction = Rating.DECENT;
+			return satisfaction;
+		} else if (rating >= 8.89D) {
+			Rating satisfaction = Rating.HIGH;
+			return satisfaction;
+		}
+		
+		return null;
+	}
+	
 }

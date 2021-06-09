@@ -72,7 +72,7 @@ public class PoliticiansService {
 			
 			Politicians politician = politiciansRepo.save(politicianToBeSaved);
 			
-			//increment the number used for politician numbers 
+			//increment the politician number used for politician number patterns
 			polNumber++;
 			return politician;
 			

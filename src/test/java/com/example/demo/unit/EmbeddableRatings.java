@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
+import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.repository.RatingRepository;
@@ -20,6 +20,11 @@ import com.example.demo.repository.RatingRepository;
 @ExtendWith(MockitoExtension.class)
 public class EmbeddableRatings {
 
+	@Mock
+	public RatingRepository repo;
+	@Mock
+	public AverageCalculator calculator; 
+	
 	public Politicians politician;
 	
 	@BeforeEach
@@ -30,21 +35,20 @@ public class EmbeddableRatings {
 		politician.setFirstName("Mirriam");
 		politician.setLastName("Defensor");
 		politician.setPoliticiansRating(new ArrayList<>());
-		politician.setRating(new Rating(0.012D,
+		politician.setRating(new Rating
+				(0.012D,
 				2.022D, 
-				new LowSatisfactionAverageCalculator(0.012D, repo.countByPolitician_Id(1))));
+				calculator));
 	}
-	
-	@Mock
-	public RatingRepository repo;
 	
 	@Test
 	public void testLogicOfAverage() {
 		when(repo.countByPolitician_Id(1)).thenReturn(0L);
-
-		politician.calculateTotalAmountOfRating(9.8722D);
+		
+		politician.calculateTotalAmountOfRating(9.8822D);
+		
 		assertThat(politician.getRating().calculateAverage(), 
-				equalTo(9.89D));
+				equalTo(9.9D));
 	}
 	
 	@Test

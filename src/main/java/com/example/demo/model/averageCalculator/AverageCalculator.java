@@ -2,23 +2,15 @@ package com.example.demo.model.averageCalculator;
 
 public abstract class AverageCalculator {
 	
-	private double totalRating;
-	private double count;
+	private final double totalRating;
+	private final double count;
 
 	public double getTotalRating() {
 		return totalRating;
 	}
 
-	public void setTotalRating(double totalRating) {
-		this.totalRating = totalRating;
-	}
-
 	public double getCount() {
 		return count;
-	}
-
-	public void setCount(double count) {
-		this.count = count;
 	}
 
 	public AverageCalculator(double totalRating, double count) {
