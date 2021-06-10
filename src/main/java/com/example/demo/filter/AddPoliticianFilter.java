@@ -17,7 +17,7 @@ import com.example.demo.apiExceptions.ExceptionModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Profile("localDevelopment")
+@Profile({ "localDevelopment,test" })
 public class AddPoliticianFilter implements Filter{
 	
 	private String password = "password";
