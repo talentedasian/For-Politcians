@@ -33,8 +33,8 @@ public class PoliticianControllerTest extends AbstractPoliticianControllerTest {
 		
 		assertThat(politician.getRating().getAverageRating(),
 				equalTo(politicianResponse.getBody().getRating()));
-		assertThat(politician.getId(),
-				nullValue());
+		assertThat(politicianResponse.getBody().getId(),
+				equalTo("null"));
 	}		
 	
 	@Test
