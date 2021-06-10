@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,9 +15,11 @@ public interface PoliticiansRepository extends JpaRepository<Politicians, Intege
 	
 	Optional<Politicians> findByLastName(String lastName);
 	
-	Optional<Politicians> findByLastNameAndFirstName(String lastName, String firstName);
+	List<Politicians> findByLastNameAndFirstName(String lastName, String firstName);
 	
 	Optional<Politicians> findByFullName(String name);
+	
+	Optional<Politicians> findByPoliticianNumber(String polNumber);
 	
 	long countByLastName(String lastName);
 

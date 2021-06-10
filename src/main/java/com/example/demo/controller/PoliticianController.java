@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -38,7 +39,7 @@ public class PoliticianController {
 	@PostMapping("add-politician")
 	public ResponseEntity<PoliticianDTO> savePolitician(@Valid @RequestBody AddPoliticianDTORequest request,
 			@RequestHeader(name = "Politician-Access") String politicianHeader) {
-		var politicianSaved = politiciansService.savePolitician(request);
+		Politicians politicianSaved = politiciansService.savePolitician(request);
 		
 		mapper = new PoliticiansDtoMapper();
 		
@@ -48,15 +49,27 @@ public class PoliticianController {
 	}
 	
 	@GetMapping("/politicianByName")
-	public ResponseEntity<PoliticianDTO> politicianByName(String lastName, String firstName) {
-		var politicianByName = politiciansService.findPoliticianByName(lastName, firstName);
+	public ResponseEntity<List<PoliticianDTO>> politicianByName(String lastName, String firstName) {
+		List<Politicians> politicianByName = politiciansService.findPoliticianByName(lastName, firstName);
 		
 		mapper = new PoliticiansDtoMapper();
 		
-		PoliticianDTO politician = mapper.mapToDTO(politicianByName);
+		List<PoliticianDTO> politician = mapper.mapToDTO(politicianByName);
+		
+		return new ResponseEntity<List<PoliticianDTO>>(politician, HttpStatus.OK);
+	}
+	
+	@GetMapping("/politicianById/{id}")
+	public ResponseEntity<PoliticianDTO> politicianById(@PathVariable String id) {
+		Politicians politicianQueried = politiciansService.findPoliticianByNumber(id);
+		
+		mapper = new PoliticiansDtoMapper();
+		
+		PoliticianDTO politician = mapper.mapToDTO(politicianQueried);
 		
 		return new ResponseEntity<PoliticianDTO>(politician, HttpStatus.OK);
 	}
+	
 	
 	@GetMapping("/all")
 	public ResponseEntity<List<PoliticianDTO>> allPoliticians() {

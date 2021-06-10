@@ -13,17 +13,10 @@ public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 	@Override
 	public PoliticianDTO mapToDTO(Politicians entity) {
 		Double rating = entity.getRating().getAverageRating();
-		Rating satisfactionRate = null;
-		if (rating < 5D) {
-			satisfactionRate = Rating.LOW;
-		} else if (rating < 8.89D) {
-			satisfactionRate = Rating.DECENT;
-		} else if (rating >= 8.89D) {
-			satisfactionRate = Rating.HIGH;
-		}
+		Rating satisfactionRate = Rating.mapToSatisfactionRate(rating);
 		var politicianDTO =  new PoliticianDTO(
 				entity.getFirstName() + " " + entity.getLastName(), 
-				String.valueOf(entity.getId()), 
+				entity.getPoliticianNumber(), 
 				entity.getRating().getAverageRating(),
 				satisfactionRate);
 		
