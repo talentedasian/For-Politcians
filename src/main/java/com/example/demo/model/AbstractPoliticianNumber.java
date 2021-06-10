@@ -1,6 +1,6 @@
 package com.example.demo.model;
 
-public abstract class AbstractPoliticianNumber implements PoliticianNumberInterface{
+public abstract class AbstractPoliticianNumber implements PoliticianNumberInterface {
 
 	protected final String firstName, lastName;
 

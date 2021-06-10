@@ -1,6 +1,6 @@
 package com.example.demo.model;
 
-public interface PoliticianNumberInterface {
+public interface PoliticianNumberInterface extends NumberInterface{
 
 	PoliticianNumberInterface calculatePoliticianNumber();
 }
