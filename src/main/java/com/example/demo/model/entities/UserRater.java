@@ -16,6 +16,17 @@ public class UserRater {
 	
 	private String email;
 	
+	@JsonProperty("id")
+	private String userAccountNumber;
+	
+	public String getUserAccountNumber() {
+		return userAccountNumber;
+	}
+
+	public void setUserAccountNumber(String userAccountNumber) {
+		this.userAccountNumber = userAccountNumber;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -40,11 +51,12 @@ public class UserRater {
 		this.politicalParties = politicalParties;
 	}
 
-	public UserRater(String facebookName, PoliticalParty politicalParties, String email) {
+	public UserRater(String facebookName, PoliticalParty politicalParties, String email, String accNumber) {
 		super();
 		this.facebookName = facebookName;
 		this.politicalParties = politicalParties;
 		this.email = email;
+		this.userAccountNumber = accNumber;
 	}
 
 	public UserRater() {
@@ -54,8 +66,8 @@ public class UserRater {
 
 	@Override
 	public String toString() {
-		return "{facebookName=" + facebookName + ", politicalParties=" + politicalParties + ", email=" + email
-				+ "}";
+		return "UserRater [facebookName=" + facebookName + ", politicalParties=" + politicalParties + ", email=" + email
+				+ ", userAccountNumber=" + userAccountNumber + "]";
 	}
 
 	@Override
@@ -65,6 +77,7 @@ public class UserRater {
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((facebookName == null) ? 0 : facebookName.hashCode());
 		result = prime * result + ((politicalParties == null) ? 0 : politicalParties.hashCode());
+		result = prime * result + ((userAccountNumber == null) ? 0 : userAccountNumber.hashCode());
 		return result;
 	}
 
@@ -88,6 +101,11 @@ public class UserRater {
 		} else if (!facebookName.equals(other.facebookName))
 			return false;
 		if (politicalParties != other.politicalParties)
+			return false;
+		if (userAccountNumber == null) {
+			if (other.userAccountNumber != null)
+				return false;
+		} else if (!userAccountNumber.equals(other.userAccountNumber))
 			return false;
 		return true;
 	}
