@@ -36,7 +36,7 @@ import com.example.demo.service.RatingService;
 
 @ExtendWith(SpringExtension.class)
 public class RatingServiceTest extends AbstractEntitiesServiceTest{
-
+	
 	@Mock
 	public RatingRepository ratingRepo;
 	@Mock
@@ -49,6 +49,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	public RatingService service;
 	public PoliticiansRating rating;
 	public Politicians politician;
+	public AddRatingDTORequest dtoRequest;
 	
 	@BeforeEach
 	public void setup() {
@@ -69,14 +70,21 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 		rating.setPolitician(politician);
 		rating.calculateRater("test@gmail", "test", "DDS");
 		rating.setRating(0.01D);
+		
+		dtoRequest = new AddRatingDTORequest
+		(BigDecimal.valueOf(0.00D),
+		polNumber,
+		 PoliticalParty.DDS.toString());
 	}
 	
 	@Test
 	public void verifyRatingRepoCalledSaved() {
 		stubSaveRepo();
 		
-		service.saveRatings(new AddRatingDTORequest(BigDecimal.valueOf(0.00D), 
-				"Mirriam", "Defensor", PoliticalParty.DDS.toString()),
+		service.saveRatings(new AddRatingDTORequest
+				(BigDecimal.valueOf(0.00D),
+				polNumber,
+				 PoliticalParty.DDS.toString()),
 				req);
 		
 		verify(ratingRepo, times(1)).save(any());
@@ -86,9 +94,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	public void assertSavedRepo() {
 		stubSaveRepo(); 
 		
-		PoliticiansRating rating = service.saveRatings(new AddRatingDTORequest(BigDecimal.valueOf(0.01D), 
-				"Mirriam", "Defensor", PoliticalParty.DDS.toString()),
-				req);
+		PoliticiansRating rating = service.saveRatings(dtoRequest,req);
 		
 		assertThat(rating.getRating(),
 				equalTo(rating.getRating()));
@@ -98,9 +104,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	public void assertSavedRepoUserRater() {
 		stubSaveRepo();
 		
-		PoliticiansRating rating = service.saveRatings(new AddRatingDTORequest(BigDecimal.valueOf(0.01D), 
-				"Mirriam", "Defensor", PoliticalParty.DDS.toString()),
-				req);
+		PoliticiansRating rating = service.saveRatings(dtoRequest,req);
 		
 		assertThat(rating.getRater().getEmail(),
 				equalTo(rating.getRater().getEmail()));
@@ -168,7 +172,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	
 	
 	private void stubSaveRepo() {
-		when(politicianRepo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politician));
+		when(politicianRepo.findByPoliticianNumber(polNumber)).thenReturn(Optional.of(politician));
 		when(ratingRepo.save(any())).thenReturn(rating);
 		
 		String jsonWebToken = JwtProvider.createJwtWithFixedExpirationDate("test@gmail.com", "test", "000");

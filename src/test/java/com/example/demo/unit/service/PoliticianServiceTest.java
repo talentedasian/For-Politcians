@@ -66,9 +66,9 @@ public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
 		when(calculator.calculateAverage()).thenReturn(0.01D);
 		politician.calculateAverageRating();
 		
-		when(politicianRepo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politician));
+		when(politicianRepo.findByPoliticianNumber(polNumber)).thenReturn(Optional.of(politician));
 		
-		Politicians politicianQueried = politicianService.findPoliticianByName("Mirriam", "Defensor");
+		Politicians politicianQueried = politicianService.findPoliticianByNumber(polNumber);
 		
 		assertThat(0.01D,
 				equalTo(politicianQueried.getRating().getAverageRating()));
@@ -76,9 +76,9 @@ public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
 	
 	@Test
 	public void shouldEqualDTOOutputs() {
-		when(politicianRepo.findByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(Optional.of(politician));
+		when(politicianRepo.findByPoliticianNumber(polNumber)).thenReturn(Optional.of(politician));
 		
-		Politicians politicianQueried = politicianService.findPoliticianByName("Mirriam", "Defensor");
+		Politicians politicianQueried = politicianService.findPoliticianByNumber(polNumber);
 		
 		assertDtoOutputsUtil(politician, politicianQueried);
 	}

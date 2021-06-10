@@ -1,5 +1,6 @@
 package com.example.demo.unit.controller;
 
+import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.times;
@@ -14,7 +15,6 @@ import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 
 public class PoliticianControllerTest extends AbstractPoliticianControllerTest {
-
 	
 	@Test
 	public void shouldCallSaveFromServiceWhenSaved() {
@@ -33,14 +33,14 @@ public class PoliticianControllerTest extends AbstractPoliticianControllerTest {
 		assertThat(politician.getRating().getAverageRating(),
 				equalTo(politicianResponse.getBody().getRating()));
 		assertThat(politicianResponse.getBody().getId(),
-				equalTo("null"));
+				containsStringIgnoringCase("polnumber"));
 	}		
 	
 	@Test
 	public void shouldEqualDTOOutputs() {
-		when(service.findPoliticianByName("Mirriam", "Defensor")).thenReturn(politician);
+		when(service.findPoliticianByNumber("1")).thenReturn(politician);
 		
-		ResponseEntity<PoliticianDTO> politicianResponse = controller.politicianByName("Mirriam", "Defensor");
+		ResponseEntity<PoliticianDTO> politicianResponse = controller.politicianById("1");
 		PoliticianDTO politicianDTO = new PoliticiansDtoMapper().mapToDTO(politician);
 		
 		assertThat(politicianDTO,

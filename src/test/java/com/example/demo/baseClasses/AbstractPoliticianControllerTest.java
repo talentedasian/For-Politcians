@@ -41,6 +41,7 @@ public class AbstractPoliticianControllerTest {
 		politician.setRating(new Rating(9.67D, 9.67D, calculator));
 		politician.setFirstName("Mirriam");
 		politician.setLastName("Defensor");
+		politician.setPoliticianNumber("123PolNumber");
 		
 		politicianDTORequest = new AddPoliticianDTORequest
 				("Mirriam", 

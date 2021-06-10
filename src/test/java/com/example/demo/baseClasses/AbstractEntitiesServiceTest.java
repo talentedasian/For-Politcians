@@ -28,6 +28,7 @@ public class AbstractEntitiesServiceTest {
 	public RatingService ratingService;
 	public PoliticiansRating rating;
 	public Politicians politician;
+	public final String polNumber = "FL00-LF00-0000";
 	
 	
 }
