@@ -55,10 +55,9 @@ public class RatingControllerTest {
 	
 	private final String content = """
 			{
-				"politicianLastName": "name",
-				"politicianFirstName": "test",
+				"id": "123polNumber",
 				"rating": 1.00,
-				"politicalParty": "dds"
+				"political_party": "dds"
 			}
 			""";
 	

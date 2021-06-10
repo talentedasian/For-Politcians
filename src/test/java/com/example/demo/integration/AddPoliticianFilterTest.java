@@ -49,8 +49,8 @@ public class AddPoliticianFilterTest {
 	
 	private final String content = """
 			{
-			    "firstName": "test",
-			    "lastName": "name",
+			    "first_name": "test",
+			    "last_name": "name",
 			    "rating": 0.01
 			}
 			""";
