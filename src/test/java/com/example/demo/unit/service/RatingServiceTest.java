@@ -1,6 +1,5 @@
 package com.example.demo.unit.service;
 
-import static com.example.demo.baseClasses.AbstractPoliticianControllerTest.withRepoAndId;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -8,84 +7,27 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.baseClasses.AbstractEntitiesServiceTest;
-import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.jwt.JwtProvider;
-import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
-import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.UserRater;
-import com.example.demo.model.enums.PoliticalParty;
-import com.example.demo.repository.PoliticiansRepository;
-import com.example.demo.repository.RatingRepository;
-import com.example.demo.service.RatingService;
 
 @ExtendWith(SpringExtension.class)
 public class RatingServiceTest extends AbstractEntitiesServiceTest{
-	
-	@Mock
-	public RatingRepository ratingRepo;
-	@Mock
-	public PoliticiansRepository politicianRepo;
-	@Mock
-	public HttpServletRequest req;
-	@Mock
-	public AverageCalculator calculator;
-	
-	public RatingService service;
-	public PoliticiansRating rating;
-	public Politicians politician;
-	public AddRatingDTORequest dtoRequest;
-	
-	@BeforeEach
-	public void setup() {
-		service = new RatingService(ratingRepo, politicianRepo);
-		
-		List<PoliticiansRating> listOfPoliticiansRating = new ArrayList<>();
-		politician = withRepoAndId
-				(ratingRepo, 
-				1,
-				"Mirriam",
-				"Defensor",
-				listOfPoliticiansRating,
-				new Rating(0.01D, 0.01D, calculator),
-				"1");
-		
-		rating = new PoliticiansRating();
-		rating.setId(1);
-		rating.setPolitician(politician);
-		rating.calculateRater("test@gmail", "test", "DDS");
-		rating.setRating(0.01D);
-		
-		dtoRequest = new AddRatingDTORequest
-		(BigDecimal.valueOf(0.00D),
-		polNumber,
-		 PoliticalParty.DDS.toString());
-	}
-	
+
 	@Test
 	public void verifyRatingRepoCalledSaved() {
 		stubSaveRepo();
 		
-		service.saveRatings(new AddRatingDTORequest
-				(BigDecimal.valueOf(0.00D),
-				polNumber,
-				 PoliticalParty.DDS.toString()),
-				req);
+		ratingService.saveRatings(ratingDtoRequest,req);
 		
 		verify(ratingRepo, times(1)).save(any());
 	}
@@ -94,7 +36,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	public void assertSavedRepo() {
 		stubSaveRepo(); 
 		
-		PoliticiansRating rating = service.saveRatings(dtoRequest,req);
+		PoliticiansRating rating = ratingService.saveRatings(ratingDtoRequest,req);
 		
 		assertThat(rating.getRating(),
 				equalTo(rating.getRating()));
@@ -104,7 +46,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	public void assertSavedRepoUserRater() {
 		stubSaveRepo();
 		
-		PoliticiansRating rating = service.saveRatings(dtoRequest,req);
+		PoliticiansRating rating = ratingService.saveRatings(ratingDtoRequest,req);
 		
 		assertThat(rating.getRater().getEmail(),
 				equalTo(rating.getRater().getEmail()));
@@ -118,7 +60,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	public void assertEqualsQueriedRepo() {
 		when(ratingRepo.findById(1)).thenReturn(Optional.of(rating));
 		
-		PoliticiansRating ratings = service.findById("1");
+		PoliticiansRating ratings = ratingService.findById("1");
 		
 		assertThat(ratings.getRating(), 
 				equalTo(rating.getRating()));
@@ -128,7 +70,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	public void assertEqualsQueriedRepoUserRater() {
 		when(ratingRepo.findById(1)).thenReturn(Optional.of(rating));
 		
-		PoliticiansRating ratings = service.findById("1");
+		PoliticiansRating ratings = ratingService.findById("1");
 		UserRater rater = ratings.getRater();
 		
 		assertThat(rater.getEmail(), 
@@ -143,7 +85,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	public void assertEqualsQueriedRepoPolitician() {
 		when(ratingRepo.findById(1)).thenReturn(Optional.of(rating));
 		
-		PoliticiansRating ratings = service.findById("1");
+		PoliticiansRating ratings = ratingService.findById("1");
 		Politicians pol = ratings.getPolitician();
 		String polFullName = pol.calculateFullName();
 		
@@ -164,7 +106,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 		List<PoliticiansRating> listOfPoliticiansRating = List.of(rating);
 		when(ratingRepo.findByRater_Email("test@gmail.com")).thenReturn(listOfPoliticiansRating);
 		
-		List<PoliticiansRating> politicianRatingQueried = service.findRatingsByFacebookEmail("test@gmail.com");
+		List<PoliticiansRating> politicianRatingQueried = ratingService.findRatingsByFacebookEmail("test@gmail.com");
 		
 		assertThat(listOfPoliticiansRating,
 				equalTo(politicianRatingQueried));
