@@ -39,8 +39,7 @@ public class RatingService {
 	
 	@Transactional
 	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) {
-		Politicians politician = politicianRepo.findByLastNameAndFirstName(dto.getPoliticianLastName(), dto.getPoliticianFirstName())
-				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by " + dto.getPoliticianFirstName() + "\s" + dto.getPoliticianLastName()));
+		List<Politicians> politician = politicianRepo.findby
 		politician.setRepo(ratingRepo);
 		
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();

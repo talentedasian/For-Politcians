@@ -6,12 +6,16 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class AddPoliticianDTORequest {
 
 	@NotNull
+	@JsonProperty(value = "first_name")
 	private String firstName;
 	
 	@NotNull
+	@JsonProperty(value = "last_name")
 	private String lastName;
 	
 	@NotNull
