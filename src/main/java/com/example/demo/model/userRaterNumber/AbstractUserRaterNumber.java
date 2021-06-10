@@ -11,7 +11,6 @@ public abstract class AbstractUserRaterNumber implements UserRaterNumberInterfac
 		return name;
 	}
 
-
 	public LoginMechanism getLoginMechanism() {
 		return loginMechanism;
 	}
