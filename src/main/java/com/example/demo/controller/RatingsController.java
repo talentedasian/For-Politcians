@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -33,9 +34,9 @@ public class RatingsController {
 	private RatingDTOMapper mapper;
 	
 	@Autowired(required = false)
-	public RatingsController(RatingService ratingService, RatingDTOMapper mapper) {
+	public RatingsController(RatingService ratingService, Optional<RatingDTOMapper> mapper) {
 		this.ratingService = ratingService;
-		this.mapper = mapper;
+		mapper.ifPresent(dtoMapper -> {this.mapper = dtoMapper;});
 	}
 
 	@Operation(security = { @SecurityRequirement(name = "add-rating") })

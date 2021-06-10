@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -28,10 +29,10 @@ public class PoliticianController {
 	private final PoliticiansService politiciansService;
 	private PoliticianDTOMapper mapper;
 	
-	@Autowired(required = false)
-	public PoliticianController(PoliticiansService politiciansService, PoliticianDTOMapper mapper) {
+	@Autowired
+	public PoliticianController(PoliticiansService politiciansService, Optional<PoliticianDTOMapper> mapper) {
 		this.politiciansService = politiciansService;
-		this.mapper = mapper;
+		mapper.ifPresent(dtoMapper -> {this.mapper = dtoMapper;});
 	}
 
 	@PostMapping("add-politician")

@@ -11,22 +11,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 
 import com.example.demo.apiExceptions.ExceptionModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Profile("localDevelopment")
-public class AddPoliticianFilter implements Filter{
-	
-	private String password = "password";
+@Profile("production")
+public class AddPoliticianFilterProduction implements Filter{
+
+	@Value("${politician.access.password}")
+	private String password;
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
+		System.out.println(password);
 		
 		if (req.getRequestURI().equalsIgnoreCase("/api/politicians/add-politician")) {
 			if (req.getHeader("Politician-Access") != null) {
@@ -58,5 +61,6 @@ public class AddPoliticianFilter implements Filter{
 		res.setContentType("application/json");
 		res.getWriter().write(new ObjectMapper().writeValueAsString(exceptionModel));
 	}
+
 
 }

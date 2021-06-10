@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ public class RatingsControllerTest {
 	
 	@BeforeEach
 	public void setup() {
-		controller = new RatingsController(service, mapper);
+		controller = new RatingsController(service, Optional.of(mapper));
 		
 		politician = new Politicians();
 		politician.setId(1);

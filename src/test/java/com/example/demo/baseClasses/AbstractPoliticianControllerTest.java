@@ -2,6 +2,7 @@ package com.example.demo.baseClasses;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +35,7 @@ public class AbstractPoliticianControllerTest {
 	
 	@BeforeEach
 	public void setUp() {
-		controller = new PoliticianController(service, mapper);
+		controller = new PoliticianController(service, Optional.of(mapper));
 		
 		politician =  new Politicians();
 		politician.setRating(new Rating(9.67D, 9.67D, calculator));
