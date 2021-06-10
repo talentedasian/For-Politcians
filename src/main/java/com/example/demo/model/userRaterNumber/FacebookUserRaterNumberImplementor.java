@@ -1,7 +1,5 @@
 package com.example.demo.model.userRaterNumber;
 
-import com.example.demo.model.UserRaterNumberInterface;
-
 public class FacebookUserRaterNumberImplementor extends AbstractUserRaterNumber{
 	
 	/*OP stands for the Oauth2 Provider that is used for logging into the application. 
@@ -69,6 +67,11 @@ public class FacebookUserRaterNumberImplementor extends AbstractUserRaterNumber{
 	
 	private String combineFirstSectionOfPattern(String nameSection, String oauth2ProviderSection) {
 		return nameSection.concat(oauth2ProviderSection);
+	}
+
+	@Override
+	public String returnAccountNumber() {
+		return this.accountNumber;
 	}
 	
 	

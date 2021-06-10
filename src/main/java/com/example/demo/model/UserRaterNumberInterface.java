@@ -4,4 +4,6 @@ public interface UserRaterNumberInterface extends NumberInterface {
 
 	UserRaterNumberInterface calculateUserRaterAccountNumber();
 	
+	String returnAccountNumber();
+	
 }

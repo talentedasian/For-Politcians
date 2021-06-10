@@ -142,9 +142,9 @@ public class PoliticiansRating {
 		return politician;
 	}
 
-	public UserRater calculateRater(String subject, String id, String politicalParty) {
+	public UserRater calculateRater(String subject, String id, String politicalParty, String accountNumber) {
 		PoliticalParty party = PoliticalParty.mapToPoliticalParty(politicalParty);
-		var userRater = new UserRater(id, party, subject);
+		var userRater = new UserRater(id, party, subject, accountNumber);
 		setRater(userRater);
 		
 		return userRater;

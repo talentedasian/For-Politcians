@@ -41,7 +41,7 @@ public class RatingsControllerTest {
 	public PoliticiansRating politiciansRating;
 	public RatingDTO ratingDTO;
 	public PoliticianDTO politicianDTO;	
-	public final UserRater userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com");
+	public final UserRater userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accountNumber");
 	
 	@BeforeEach
 	public void setup() {

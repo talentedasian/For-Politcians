@@ -62,7 +62,7 @@ public class AbstractEntitiesServiceTest {
 		rating = new PoliticiansRating();
 		rating.setId(1);
 		rating.setPolitician(politician);
-		rating.calculateRater("test@gmail", "test", "DDS");
+		rating.calculateRater("test@gmail", "test", "DDS", "123accountNumber");
 		rating.setRating(0.01D);
 		
 		ratingDtoRequest = new AddRatingDTORequest

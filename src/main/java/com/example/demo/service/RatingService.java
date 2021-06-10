@@ -13,6 +13,8 @@ import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
+import com.example.demo.model.userRaterNumber.AbstractUserRaterNumber;
+import com.example.demo.model.userRaterNumber.FacebookUserRaterNumberImplementor;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;
 
@@ -44,10 +46,13 @@ public class RatingService {
 		politician.setRepo(ratingRepo);
 		
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
+		
+		AbstractUserRaterNumber accountNumberImplementor = new FacebookUserRaterNumberImplementor(jwt.get("name", String.class), jwt.getId());
+		
 		var rating = new PoliticiansRating();
 		rating.calculateRating(dto.getRating().doubleValue());
 		rating.calculatePolitician(politician);
-		rating.calculateRater(jwt.getSubject(), jwt.getId(), dto.getPoliticalParty());
+		rating.calculateRater(jwt.getSubject(), jwt.getId(), dto.getPoliticalParty(), accountNumberImplementor.returnAccountNumber());
 		
 		politician.calculateListOfRaters(rating);
 		
