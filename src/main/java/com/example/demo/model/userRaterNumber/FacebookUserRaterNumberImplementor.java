@@ -43,6 +43,7 @@ public class FacebookUserRaterNumberImplementor extends AbstractUserRaterNumber{
 		String finalFirstSectionOfPattern = combineFirstSectionOfPattern(firstSectionOfPatternWithName, firstSectionOfPatternWithLoginMechanism);
 		
 		String secondSectionOfPattern = pattern.split("-")[1];
+		
 		String trimmedPattern = secondSectionOfPattern.substring(0, secondSectionOfPattern.length() - accountNumber.length());
 		
 		String finalSecondSectionOfPattern = trimmedPattern.concat(accountNumber);

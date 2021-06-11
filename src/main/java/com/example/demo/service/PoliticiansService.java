@@ -58,10 +58,11 @@ public class PoliticiansService {
 	@Transactional
 	public Politicians savePolitician(AddPoliticianDTORequest dto) {
 		try {
-			var politicianNumImplementor = new PoliticianNumberImplementor
+			var politicianNumImplementor = PoliticianNumberImplementor.with
 					(dto.getFirstName(), 
 					dto.getLastName(), 
 					String.valueOf(polNumber));
+			
 			var politicianToBeSaved = new Politicians.PoliticiansBuilder()
 					.setFirstName(dto.getFirstName())
 					.setLastName(dto.getLastName())

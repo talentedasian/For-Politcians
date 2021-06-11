@@ -14,12 +14,12 @@ public class PoliticianNumberImplementorTest {
 	@Test
 	public void shouldThrowIllegalStateException() {
 		assertThrows(IllegalStateException.class, 
-				() -> new PoliticianNumberImplementor("firstName", "lastName", "not num"));
+				() -> PoliticianNumberImplementor.with("firstName", "lastName", "not number test"));
 	}
 	
 	@Test
 	public void shouldCreatePoliticianNumberObject() {
-		PoliticianNumberImplementor polNumberObject = new PoliticianNumberImplementor
+		PoliticianNumberImplementor polNumberObject = PoliticianNumberImplementor.with
 				("firstName", 
 				"lastName", 
 				"99");
@@ -29,7 +29,7 @@ public class PoliticianNumberImplementorTest {
 	
 	@Test
 	public void assertBehaviourOfPoliticianNumberPatternCreatorMethod() {
-		PoliticianNumberImplementor polNumberObject = new PoliticianNumberImplementor
+		PoliticianNumberImplementor polNumberObject = PoliticianNumberImplementor.with
 				("Test", 
 				"Politician", 
 				"99");
