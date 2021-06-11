@@ -37,7 +37,7 @@ public class FacebookUserRaterNumberImplementor extends AbstractUserRaterNumber{
 	}
 
 	@Override
-	protected AbstractUserRaterNumber calculateUserAccountNumber() {
+	public FacebookUserRaterNumberImplementor calculateUserAccountNumber() {
 		String firstSectionOfPatternWithName = convertFAndLOfPatternToNameInitials();
 		String firstSectionOfPatternWithLoginMechanism = convertOAndPOfPatternToLoginMechanisms();
 		String finalFirstSectionOfPattern = combineFirstSectionOfPattern(firstSectionOfPatternWithName, firstSectionOfPatternWithLoginMechanism);
