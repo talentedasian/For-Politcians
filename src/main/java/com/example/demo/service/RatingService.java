@@ -47,12 +47,12 @@ public class RatingService {
 		
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
 		
-		AbstractUserRaterNumber accountNumberImplementor = new FacebookUserRaterNumberImplementor(jwt.get("name", String.class), jwt.getId());
+		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
 		
 		var rating = new PoliticiansRating();
 		rating.calculateRating(dto.getRating().doubleValue());
 		rating.calculatePolitician(politician);
-		rating.calculateRater(jwt.getSubject(), jwt.getId(), dto.getPoliticalParty(), accountNumberImplementor.returnAccountNumber());
+		rating.calculateRater(jwt.getSubject(), jwt.getId(), dto.getPoliticalParty(), accountNumberImplementor.calculateEntityNumber().getAccountNumber());
 		
 		politician.calculateListOfRaters(rating);
 		

@@ -1,6 +1,8 @@
-package com.example.demo.model.entityNumber;
+package com.example.demo.model.politicianNumber;
 
-public abstract class AbstractPoliticianNumber implements NumberInterface {
+import com.example.demo.model.entityNumber.EntityNumberInterface;
+
+public abstract class AbstractPoliticianNumber implements EntityNumberInterface {
 
 	protected final String firstName, lastName, politicianNumber;
 

@@ -1,58 +1,48 @@
 package com.example.demo.model.userRaterNumber;
 
-import com.example.demo.model.UserRaterNumberInterface;
+import com.example.demo.model.entityNumber.EntityNumberInterface;
 
-public abstract class AbstractUserRaterNumber implements UserRaterNumberInterface{
+public abstract class AbstractUserRaterNumber implements EntityNumberInterface{
 	
-	protected final String name;
+	protected final String firstName, lastName, accountNumber;
+	
 	protected final LoginMechanism loginMechanism;
 	
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
-
+	
+	public String getLastName() {
+		return lastName;
+	}
+	
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+	
 	public LoginMechanism getLoginMechanism() {
 		return loginMechanism;
 	}
 
-	public AbstractUserRaterNumber(String name, LoginMechanism loginMechanism) {
-		super();
-		this.name = name;
+	public AbstractUserRaterNumber(String firstName, String lastName, String accountNumber,
+			LoginMechanism loginMechanism) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.accountNumber = accountNumber;
 		this.loginMechanism = loginMechanism;
 	}
 
 	@Override
 	public String toString() {
-		return "AbstractUserRaterNumber [name=" + name + ", loginMechanism=" + loginMechanism + "]";
-	}
-
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((loginMechanism == null) ? 0 : loginMechanism.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+		return "AbstractUserRaterNumber [firstName=" + firstName + ", lastName=" + lastName + ", accountNumber="
+				+ accountNumber + ", loginMechanism=" + loginMechanism + "]";
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AbstractUserRaterNumber other = (AbstractUserRaterNumber) obj;
-		if (loginMechanism != other.loginMechanism)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+	public AbstractUserRaterNumber calculateEntityNumber() {
+		return calculateUserAccountNumber();
 	}
+
+	protected abstract AbstractUserRaterNumber calculateUserAccountNumber();
 
 }

@@ -24,7 +24,7 @@ public class PoliticianNumberImplementorTest {
 				"lastName", 
 				"99");
 		
-		assertEquals(polNumberObject.getPolNumber(), "99");
+		assertEquals(polNumberObject.getPoliticianNumber(), "99");
 	}
 	
 	@Test
@@ -34,11 +34,11 @@ public class PoliticianNumberImplementorTest {
 				"Politician", 
 				"99");
 		
-		assertThat(polNumberObject.calculatePoliticianNumber().getPolNumber(), 
+		assertThat(polNumberObject.calculatePoliticianNumber().getPoliticianNumber(), 
 				containsString("T"));
-		assertThat(polNumberObject.calculatePoliticianNumber().getPolNumber(), 
+		assertThat(polNumberObject.calculatePoliticianNumber().getPoliticianNumber(), 
 				containsString("P"));
-		assertThat(polNumberObject.calculatePoliticianNumber().getPolNumber(), 
+		assertThat(polNumberObject.calculatePoliticianNumber().getPoliticianNumber(), 
 				containsString("99"));
 	}
 	

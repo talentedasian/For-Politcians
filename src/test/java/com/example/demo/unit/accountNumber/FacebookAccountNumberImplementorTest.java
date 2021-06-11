@@ -14,9 +14,22 @@ public class FacebookAccountNumberImplementorTest {
 	public void assertBehaviourOfFacebookAccountNumberPatternCreatorMethod() {
 		final String number = "39812732123";
 		
-		AbstractUserRaterNumber accountNumberImplementor = new FacebookUserRaterNumberImplementor("Test Name Anything", number);
+		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor
+				.with("Test Name Anything", number);
 		
-		assertThat(accountNumberImplementor.calculateUserRaterAccountNumber().returnAccountNumber(), 
+		assertThat(accountNumberImplementor.calculateEntityNumber().getAccountNumber(), 
 				equalTo("TNFLM-00039812732123"));
-	}	
+	}
+	
+	@Test
+	public void assertBehaviourOfFacebookAccountNumberPatternCreatorMethodWithOneWordName() {
+		final String number = "39812732123";
+		
+		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor
+				.with("Test", number);
+		
+		assertThat(accountNumberImplementor.calculateEntityNumber().getAccountNumber(), 
+				equalTo("TGFLM-00039812732123"));
+	}
+	
 }

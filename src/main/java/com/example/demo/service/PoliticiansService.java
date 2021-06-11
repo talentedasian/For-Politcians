@@ -69,7 +69,7 @@ public class PoliticiansService {
 					.setRating(new Rating(dto.getRating().doubleValue(), 
 					0.01D, 
 					new LowSatisfactionAverageCalculator(dto.getRating().doubleValue(), 0D)))
-					.setPoliticianNumber(politicianNumImplementor.calculatePoliticianNumber().getPolNumber())
+					.setPoliticianNumber(politicianNumImplementor.calculatePoliticianNumber().getPoliticianNumber())
 					.build();
 			
 			Politicians politician = politiciansRepo.save(politicianToBeSaved);

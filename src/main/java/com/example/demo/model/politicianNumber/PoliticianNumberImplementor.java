@@ -1,10 +1,5 @@
 package com.example.demo.model.politicianNumber;
 
-import com.example.demo.model.entityNumber.AbstractPoliticianNumber;
-import com.example.demo.model.entityNumber.NumberInterface;
-
-import io.jsonwebtoken.lang.Assert;
-
 public class PoliticianNumberImplementor extends AbstractPoliticianNumber{
 
 	private final String pattern = "FL00-LF00-0000";
