@@ -1,39 +1,23 @@
 package com.example.demo.model.politicianNumber;
 
-import com.example.demo.model.AbstractPoliticianNumber;
+import com.example.demo.model.entityNumber.AbstractPoliticianNumber;
+import com.example.demo.model.entityNumber.NumberInterface;
 
 import io.jsonwebtoken.lang.Assert;
 
 public class PoliticianNumberImplementor extends AbstractPoliticianNumber{
 
 	private final String pattern = "FL00-LF00-0000";
-	private final String polNumber;
-	
-	public String getPattern() {
-		return pattern;
-	}
-
-	public String getPolNumber() {
-		return polNumber;
-	}
 
 	public PoliticianNumberImplementor(String firstName, String lastName, String polNumber) {
-		super(firstName, lastName);
-		if (polNumber.length() > 8) {
-			this.polNumber = polNumber;
-			return;
-		}
-		
-		Assert.state(polNumber.matches("\\d+"), 
-				"Number should be a valid digit");
-		this.polNumber = polNumber;
+		super(firstName, lastName, polNumber);
 	}
 
 	@Override
 	public PoliticianNumberImplementor calculatePoliticianNumber() {
 		String trimmedPattern = convertFAndLOfPatternToNameInitials()
-				.substring(0, pattern.length() - polNumber.length());
-		String finalPoliticianNumber = trimmedPattern.concat(polNumber);
+				.substring(0, pattern.length() - politicianNumber.length());
+		String finalPoliticianNumber = trimmedPattern.concat(politicianNumber);
 		
 		return new PoliticianNumberImplementor(getFirstName(), getLastName(), finalPoliticianNumber);
 	}
@@ -45,9 +29,7 @@ public class PoliticianNumberImplementor extends AbstractPoliticianNumber{
 		return finalPattern;
 	}
 	
-	@Override
-	public String toString() {
-		return "PoliticianNumberImplementor [pattern=" + pattern + ", polNumber=" + polNumber + "]";
-	}
+	
+	
 
 }
