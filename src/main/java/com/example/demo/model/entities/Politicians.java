@@ -7,7 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,6 +21,7 @@ import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator
 import com.example.demo.repository.RatingRepository;
 
 @Entity
+@Table(indexes = @Index(columnList = "politicianNumber") )
 public class Politicians implements PoliticianMethods{
 
 	@Autowired private transient RatingRepository repo;
