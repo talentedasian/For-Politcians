@@ -8,13 +8,17 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.annotation.Commit;
 
+import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.Rating;
 import com.example.demo.repository.PoliticiansRepository;
 
 @DataJpaTest
@@ -25,12 +29,19 @@ public class PoliticianRepoTest {
 	@Autowired
 	private PoliticiansRepository repo;
 	
+	@Mock
+	public AverageCalculator calculator;
+	
 	@Test
 	@Order(1)
+	@Commit
 	public void shouldBeEqualOnSavedEntity() {
 		var politicianToBeSaved = new Politicians();
 		politicianToBeSaved.setFirstName("Rodrigo");
 		politicianToBeSaved.setLastName("Duterte");
+		politicianToBeSaved.calculateFullName();
+		politicianToBeSaved.setRating(new Rating(0.01D, 0.01D, calculator));
+		politicianToBeSaved.setPoliticianNumber("1111");
 		
 		Politicians politician = repo.save(politicianToBeSaved);
 		
@@ -40,6 +51,8 @@ public class PoliticianRepoTest {
 				equalTo(politician.getLastName()));
 		assertThat(politicianToBeSaved.getRating(), 
 				equalTo(politician.getRating()));
+		assertThat(politicianToBeSaved.getPoliticianNumber(), 
+				equalTo(politician.getPoliticianNumber()));
 	}
 	
 	@Test
@@ -48,6 +61,9 @@ public class PoliticianRepoTest {
 		var politicianToBeSaved = new Politicians();
 		politicianToBeSaved.setFirstName("Rodrigo");
 		politicianToBeSaved.setLastName("Duterte");
+		politicianToBeSaved.calculateFullName();
+		politicianToBeSaved.setRating(new Rating(0.01D, 0.01D, calculator));
+		politicianToBeSaved.setPoliticianNumber("1111");
 		
 		assertThrows(DataIntegrityViolationException.class,
 				() -> repo.saveAndFlush(politicianToBeSaved));

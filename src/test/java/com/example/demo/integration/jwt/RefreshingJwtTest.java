@@ -44,14 +44,16 @@ public class RefreshingJwtTest {
 		String jwt = JwtProvider.createJwtWithDynamicExpirationDate("nanay@gmail.com", "nanay", date);
 		
 		when(req.getHeader("Authorization")).thenReturn("Bearer " + jwt);
+		
 		RefreshJwtFilter filter = new RefreshJwtFilter();
 		FilterChain filterChain = Mockito.mock(FilterChain.class);
+		
 		doThrow(new NestedServletException("nice",
 				new RefreshTokenException(JwtProviderHttpServletRequest.decodeJwt(req).getBody()))).when(filterChain).doFilter(req, res);
 		
 		filter.doFilter(req, res, filterChain);
-		verify(res, times(1)).addCookie(any(Cookie.class));
 		
+		verify(res, times(1)).addCookie(any(Cookie.class));
 	}
 	
 }
