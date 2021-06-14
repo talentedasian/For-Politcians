@@ -9,10 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.PoliticianNotFoundException;
+import com.example.demo.exceptions.RateLimitedException;
 import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
+import com.example.demo.model.redis.RateLimiter;
 import com.example.demo.model.userRaterNumber.AbstractUserRaterNumber;
 import com.example.demo.model.userRaterNumber.FacebookUserRaterNumberImplementor;
 import com.example.demo.repository.PoliticiansRepository;
@@ -51,9 +53,12 @@ public class RatingService {
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
 		
 		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
-		
-		if (isUserRatedLimited(accountNumberImplementor.calculateUserAccountNumber().getAccountNumber())) {
-			throw new Rate
+		String accountNumber = accountNumberImplementor.calculateUserAccountNumber().getAccountNumber();
+		if (isUserRatedLimited(accountNumber)) {
+			RateLimiter rateLimit = rateLimiterService.findRateLimitByUserAccountNumber(accountNumber).get();
+			Long rateLimitTimeout = rateLimiterService.getExpirationTimeOfKey(rateLimit.getId());
+			throw new RateLimitedException(rateLimitTimeout, 
+					"User has " + rateLimitTimeout + " seconds left before consuming the current endpoint");
 		}
 		
 		
