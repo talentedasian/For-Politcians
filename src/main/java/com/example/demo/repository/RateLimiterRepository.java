@@ -8,5 +8,5 @@ import com.example.demo.model.redis.RateLimiter;
 
 public interface RateLimiterRepository extends CrudRepository<RateLimiter, String>{
 
-	Optional<RateLimiter> findByAccountNumber();
+	Optional<RateLimiter> findByAccountNumber(String accountNumber);
 }

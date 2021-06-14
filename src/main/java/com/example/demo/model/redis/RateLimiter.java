@@ -2,6 +2,7 @@ package com.example.demo.model.redis;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 @RedisHash(timeToLive = 604800l)
 public class RateLimiter {
@@ -9,6 +10,7 @@ public class RateLimiter {
 	@Id
 	private	String id;
 	private String politicianNumber;
+	@Indexed
 	private String accountNumber;
 	
 	public String getId() {
