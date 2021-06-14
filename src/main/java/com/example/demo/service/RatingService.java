@@ -25,10 +25,13 @@ public class RatingService {
 
 	private final RatingRepository ratingRepo;
 	private final PoliticiansRepository politicianRepo;
+	private final RateLimiterService rateLimiterService;
 
-	public RatingService(RatingRepository ratingRepo, PoliticiansRepository politicianRepo) {
+	public RatingService(RatingRepository ratingRepo, PoliticiansRepository politicianRepo, 
+			RateLimiterService rateLimiterService) {
 		this.ratingRepo = ratingRepo;
 		this.politicianRepo = politicianRepo;
+		this.rateLimiterService = rateLimiterService;
 	}
 	
 	@Transactional(readOnly = true)
@@ -48,6 +51,11 @@ public class RatingService {
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
 		
 		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
+		
+		if (isUserRatedLimited(accountNumberImplementor.calculateUserAccountNumber().getAccountNumber())) {
+			throw new Rate
+		}
+		
 		
 		var rating = new PoliticiansRating();
 		rating.calculateRating(dto.getRating().doubleValue());
@@ -72,4 +80,8 @@ public class RatingService {
 		return ratingsByRater;
 	}
 
+	private boolean isUserRatedLimited(String accountNumber) {
+		return rateLimiterService.findRateLimitByUserAccountNumber(accountNumber).isPresent();
+	}
+	
 }
