@@ -17,6 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.baseClasses.AbstractEntitiesServiceTest;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
+import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.model.entities.Politicians;
 
 @ExtendWith(SpringExtension.class)
@@ -32,7 +33,7 @@ public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
 	}
 	
 	@Test
-	public void shouldAddTotalRatingAndCorrectAverageRating() {
+	public void shouldAddTotalRatingAndCorrectAverageRating() throws PoliticianNotFoundException {
 		when(calculator.calculateAverage()).thenReturn(0.01D);
 		politician.calculateAverageRating();
 		
@@ -45,7 +46,7 @@ public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
 	}
 	
 	@Test
-	public void shouldEqualDTOOutputs() {
+	public void shouldEqualDTOOutputs() throws PoliticianNotFoundException {
 		when(politicianRepo.findByPoliticianNumber(polNumber)).thenReturn(Optional.of(politician));
 		
 		Politicians politicianQueried = politicianService.findPoliticianByNumber(polNumber);

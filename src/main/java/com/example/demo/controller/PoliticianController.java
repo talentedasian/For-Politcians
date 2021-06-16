@@ -20,6 +20,7 @@ import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
+import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.service.PoliticiansService;
 
@@ -49,7 +50,7 @@ public class PoliticianController {
 	}
 	
 	@GetMapping("/politicianByName")
-	public ResponseEntity<List<PoliticianDTO>> politicianByName(String lastName, String firstName) {
+	public ResponseEntity<List<PoliticianDTO>> politicianByName(String lastName, String firstName) throws PoliticianNotFoundException {
 		List<Politicians> politicianByName = politiciansService.findPoliticianByName(lastName, firstName);
 		
 		mapper = new PoliticiansDtoMapper();
@@ -60,7 +61,7 @@ public class PoliticianController {
 	}
 	
 	@GetMapping("/politicianById/{id}")
-	public ResponseEntity<PoliticianDTO> politicianById(@PathVariable String id) {
+	public ResponseEntity<PoliticianDTO> politicianById(@PathVariable String id) throws PoliticianNotFoundException {
 		Politicians politicianQueried = politiciansService.findPoliticianByNumber(id);
 		
 		mapper = new PoliticiansDtoMapper();

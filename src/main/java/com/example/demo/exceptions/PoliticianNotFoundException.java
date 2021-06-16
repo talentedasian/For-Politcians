@@ -1,6 +1,6 @@
 package com.example.demo.exceptions;
 
-public class PoliticianNotFoundException extends RuntimeException{
+public class PoliticianNotFoundException extends Exception{
 
 	/**
 	 * 

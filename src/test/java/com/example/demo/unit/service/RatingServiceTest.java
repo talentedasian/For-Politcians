@@ -15,6 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.baseClasses.AbstractEntitiesServiceTest;
+import com.example.demo.exceptions.PoliticianNotFoundException;
+import com.example.demo.exceptions.RateLimitedException;
+import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.jwt.JwtProvider;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -24,7 +27,7 @@ import com.example.demo.model.entities.UserRater;
 public class RatingServiceTest extends AbstractEntitiesServiceTest{
 
 	@Test
-	public void verifyRatingRepoCalledSaved() {
+	public void verifyRatingRepoCalledSaved() throws RateLimitedException, PoliticianNotFoundException {
 		stubSaveRepo();
 		
 		ratingService.saveRatings(ratingDtoRequest,req);
@@ -33,7 +36,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	}
 	
 	@Test
-	public void assertSavedRepo() {
+	public void assertSavedRepo() throws RateLimitedException, PoliticianNotFoundException {
 		stubSaveRepo(); 
 		
 		PoliticiansRating rating = ratingService.saveRatings(ratingDtoRequest,req);
@@ -43,7 +46,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	}
 	
 	@Test
-	public void assertSavedRepoUserRater() {
+	public void assertSavedRepoUserRater() throws RateLimitedException, PoliticianNotFoundException {
 		stubSaveRepo();
 		
 		PoliticiansRating rating = ratingService.saveRatings(ratingDtoRequest,req);
@@ -57,7 +60,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	}
 	
 	@Test
-	public void assertEqualsQueriedRepo() {
+	public void assertEqualsQueriedRepo() throws RatingsNotFoundException {
 		when(ratingRepo.findById(1)).thenReturn(Optional.of(rating));
 		
 		PoliticiansRating ratings = ratingService.findById("1");
@@ -67,7 +70,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	}
 	
 	@Test
-	public void assertEqualsQueriedRepoUserRater() {
+	public void assertEqualsQueriedRepoUserRater() throws RatingsNotFoundException {
 		when(ratingRepo.findById(1)).thenReturn(Optional.of(rating));
 		
 		PoliticiansRating ratings = ratingService.findById("1");
@@ -82,7 +85,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	}
 	
 	@Test
-	public void assertEqualsQueriedRepoPolitician() {
+	public void assertEqualsQueriedRepoPolitician() throws RatingsNotFoundException {
 		when(ratingRepo.findById(1)).thenReturn(Optional.of(rating));
 		
 		PoliticiansRating ratings = ratingService.findById("1");
@@ -102,7 +105,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	}
 	
 	@Test
-	public void assertEqualsDtoOutputs() {
+	public void assertEqualsDtoOutputs() throws RatingsNotFoundException {
 		List<PoliticiansRating> listOfPoliticiansRating = List.of(rating);
 		when(ratingRepo.findByRater_Email("test@gmail.com")).thenReturn(listOfPoliticiansRating);
 		

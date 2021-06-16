@@ -37,7 +37,7 @@ public class RatingService {
 	}
 	
 	@Transactional(readOnly = true)
-	public PoliticiansRating findById(String id) {
+	public PoliticiansRating findById(String id) throws RatingsNotFoundException {
 		PoliticiansRating rating = ratingRepo.findById(Integer.valueOf(id))
 				.orElseThrow(() -> new RatingsNotFoundException("No rating found by Id"));
 		
@@ -45,7 +45,7 @@ public class RatingService {
 	}
 	
 	@Transactional
-	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) {
+	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) throws RateLimitedException, PoliticianNotFoundException {
 		Politicians politician = politicianRepo.findByPoliticianNumber(dto.getId())
 				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by id"));
 		politician.setRepo(ratingRepo);
@@ -76,7 +76,7 @@ public class RatingService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<PoliticiansRating> findRatingsByFacebookEmail(String email) {
+	public List<PoliticiansRating> findRatingsByFacebookEmail(String email) throws RatingsNotFoundException {
 		List<PoliticiansRating> ratingsByRater = ratingRepo.findByRater_Email(email);
 		if (ratingsByRater.isEmpty()) {
 			throw new RatingsNotFoundException("No rating found by Rater"); 

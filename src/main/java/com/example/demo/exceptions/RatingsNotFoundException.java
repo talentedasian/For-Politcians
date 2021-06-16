@@ -1,6 +1,6 @@
 package com.example.demo.exceptions;
 
-public class RatingsNotFoundException extends RuntimeException{
+public class RatingsNotFoundException extends Exception{
 
 	/**
 	 * 

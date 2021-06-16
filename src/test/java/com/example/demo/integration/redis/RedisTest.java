@@ -33,7 +33,7 @@ public class RedisTest {
 		
 		assertThat(repo.findByAccountNumber("8000").get().getAccountNumber(), 
 				equalTo(savedRateLimiter.getAccountNumber()));
-	}
+	}	
 	
 	@Test
 	public void testExpirationTimeOfRedisKey() throws InterruptedException {

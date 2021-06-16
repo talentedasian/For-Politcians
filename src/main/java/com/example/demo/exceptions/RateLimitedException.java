@@ -1,6 +1,6 @@
 package com.example.demo.exceptions;
 
-public class RateLimitedException extends RuntimeException{
+public class RateLimitedException extends Exception{
 
 	/**
 	 * 

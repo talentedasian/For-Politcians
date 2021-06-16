@@ -31,7 +31,7 @@ public class PoliticiansService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Politicians findPoliticianByNumber(String polNumber) {
+	public Politicians findPoliticianByNumber(String polNumber) throws PoliticianNotFoundException {
 		Politicians politician = politiciansRepo.findByPoliticianNumber(polNumber)
 				.orElseThrow(() -> new PoliticianNotFoundException("No politician found using the given number"));
 		
@@ -39,7 +39,7 @@ public class PoliticiansService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Politicians> findPoliticianByName(String lastName, String firstName) {
+	public List<Politicians> findPoliticianByName(String lastName, String firstName) throws PoliticianNotFoundException {
 		List<Politicians> politician = politiciansRepo.findByLastNameAndFirstName(lastName, firstName);
 		if (politician.isEmpty()) {
 			throw new PoliticianNotFoundException("No politician found by given full name");
