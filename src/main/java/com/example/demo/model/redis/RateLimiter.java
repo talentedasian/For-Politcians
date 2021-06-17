@@ -14,7 +14,7 @@ public class RateLimiter {
 	@Indexed
 	private String accountNumber;
 	@TimeToLive
-	private Long expiration;
+	Long expiration;
 	
 	public Long getExpiration() {
 		return expiration;
