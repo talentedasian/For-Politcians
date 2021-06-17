@@ -65,7 +65,7 @@ public class RatingService {
 		var rating = new PoliticiansRating();
 		rating.calculateRating(dto.getRating().doubleValue());
 		rating.calculatePolitician(politician);
-		rating.calculateRater(jwt.getSubject(), jwt.getId(), dto.getPoliticalParty(), accountNumberImplementor.calculateEntityNumber().getAccountNumber());
+		rating.calculateRater(jwt.getSubject(), jwt.getId(), dto.getPoliticalParty(), accountNumber);
 		
 		politician.calculateListOfRaters(rating);
 		

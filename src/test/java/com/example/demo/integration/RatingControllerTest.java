@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,6 +30,7 @@ import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
+import com.example.demo.exceptions.RateLimitedException;
 import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -124,6 +126,23 @@ public class RatingControllerTest {
 					containsStringIgnoringCase("404")))
 			.andExpect(jsonPath("err",
 				containsStringIgnoringCase("no rating found")));
+	}
+	
+	@Test
+	public void shouldReturn409WithDetailedExplanations() throws Exception { 
+		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(new RateLimitedException("User has been rate limited for 172800 seconds", 172800L));
+		
+		mvc.perform(post(create("/api/ratings/add-rating"))
+				.content(content)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().is4xxClientError())
+			.andExpect(jsonPath("err", 
+					containsStringIgnoringCase("rate limited for 172800 seconds")))
+			.andExpect(jsonPath("code", 
+				containsStringIgnoringCase("429")))
+			.andExpect(jsonPath("optional", 
+				containsStringIgnoringCase("one request per week")))
+			.andExpect(header().string("Retry-After","172800"));
 	}
 	
 }

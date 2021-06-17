@@ -26,7 +26,7 @@ public class RedisTest {
 	@Test
 	@Commit
 	public void shouldEqualAccountNumberStoredInRedis() {
-		RateLimiter rateLimiter = new RateLimiter();
+		RateLimiter rateLimiter = new RateLimiter(); 
 		rateLimiter.setPoliticianNumber("0000");
 		rateLimiter.setAccountNumber("1111");
 		rateLimiter.setExpiration(604800L);

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 
-import com.example.demo.apiExceptions.ExceptionModel;
+import com.example.demo.exceptionHandling.ExceptionModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

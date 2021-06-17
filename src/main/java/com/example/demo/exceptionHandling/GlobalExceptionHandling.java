@@ -1,4 +1,4 @@
-package com.example.demo.apiExceptions;
+package com.example.demo.exceptionHandling;
 
 import java.util.ArrayList;
 import java.util.List;
