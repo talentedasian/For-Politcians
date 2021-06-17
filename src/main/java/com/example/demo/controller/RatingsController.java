@@ -20,9 +20,6 @@ import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.dtomapper.interfaces.RatingDTOMapper;
-import com.example.demo.exceptions.PoliticianNotFoundException;
-import com.example.demo.exceptions.RateLimitedException;
-import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.service.RatingService;
 
@@ -44,7 +41,7 @@ public class RatingsController {
 
 	@Operation(security = { @SecurityRequirement(name = "add-rating") })
 	@PostMapping("/add-rating")
-	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request, HttpServletRequest req) throws RateLimitedException, PoliticianNotFoundException {
+	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request, HttpServletRequest req) {
 		PoliticiansRating politicianRatingSaved = ratingService.saveRatings(request, req);
 		
 		mapper = new RatingDtoMapper();
@@ -55,7 +52,7 @@ public class RatingsController {
 	}
 	
 	@GetMapping("/ratingById")
-	public ResponseEntity<RatingDTO> getRatingById(@RequestParam String id) throws RatingsNotFoundException {
+	public ResponseEntity<RatingDTO> getRatingById(@RequestParam String id) {
 		PoliticiansRating politicianRatingQueried = ratingService.findById(id);
 		
 		mapper = new RatingDtoMapper();
@@ -66,7 +63,7 @@ public class RatingsController {
 	}
 	
 	@GetMapping("/ratingByRater")
-	public ResponseEntity<List<RatingDTO>> getRatingByRater(@RequestParam String email) throws RatingsNotFoundException {
+	public ResponseEntity<List<RatingDTO>> getRatingByRater(@RequestParam String email) {
 		List<PoliticiansRating> politicianRatingQueried = ratingService.findRatingsByFacebookEmail(email);
 		
 		mapper = new RatingDtoMapper();

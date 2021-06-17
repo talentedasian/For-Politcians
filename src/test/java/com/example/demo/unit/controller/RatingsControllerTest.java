@@ -19,7 +19,6 @@ import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtomapper.RatingDtoMapper;
-import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -63,7 +62,7 @@ public class RatingsControllerTest {
 	}
 	
 	@Test
-	public void assertEqualsDtoOutputs() throws RatingsNotFoundException {
+	public void assertEqualsDtoOutputs() throws Exception {
 		when(service.findById("1")).thenReturn(politiciansRating);
 		
 		ResponseEntity<RatingDTO> response = controller.getRatingById("1");
@@ -75,7 +74,7 @@ public class RatingsControllerTest {
 	}
 	
 	@Test
-	public void assertEqualsDtoOutputsOnPoliticians() throws RatingsNotFoundException {
+	public void assertEqualsDtoOutputsOnPoliticians() throws Exception {
 		when(service.findById("1")).thenReturn(politiciansRating);
 		when(mapper.mapToDTO(politiciansRating)).thenReturn(ratingDTO);
 		

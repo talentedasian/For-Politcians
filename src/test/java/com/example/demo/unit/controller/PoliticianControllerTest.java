@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import com.example.demo.baseClasses.AbstractPoliticianControllerTest;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
-import com.example.demo.exceptions.PoliticianNotFoundException;
 
 public class PoliticianControllerTest extends AbstractPoliticianControllerTest {
 	
@@ -38,7 +37,7 @@ public class PoliticianControllerTest extends AbstractPoliticianControllerTest {
 	}		
 	
 	@Test
-	public void shouldEqualDTOOutputs() throws PoliticianNotFoundException {
+	public void shouldEqualDTOOutputs() {
 		when(service.findPoliticianByNumber("1")).thenReturn(politician);
 		
 		ResponseEntity<PoliticianDTO> politicianResponse = controller.politicianById("1");

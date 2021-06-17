@@ -1,14 +1,10 @@
 package com.example.demo.integration.redis;
 
-import static org.hamcrest.CoreMatchers.both;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.lessThan;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
@@ -38,7 +34,7 @@ public class RedisTest {
 		RateLimiter savedRateLimiter = repo.save(rateLimiter);
 		
 		assertThat(repo.findByAccountNumber("1111").get().getAccountNumber(), 
-				equalTo(savedRateLimiter.getAccountNumber()));		
+				equalTo(savedRateLimiter.getAccountNumber()));
 	}
 	
 	@Test

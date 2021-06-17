@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.PoliticianNotFoundException;
+import com.example.demo.exceptions.RateLimitedException;
 import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.model.entities.Politicians;
@@ -35,7 +36,7 @@ public class RatingService {
 	}
 	
 	@Transactional(readOnly = true)
-	public PoliticiansRating findById(String id) throws RatingsNotFoundException {
+	public PoliticiansRating findById(String id) {
 		PoliticiansRating rating = ratingRepo.findById(Integer.valueOf(id))
 				.orElseThrow(() -> new RatingsNotFoundException("No rating found by Id"));
 		
@@ -43,7 +44,7 @@ public class RatingService {
 	}
 	
 	@Transactional
-	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) throws RateLimitedException, PoliticianNotFoundException {
+	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) {
 		Politicians politician = politicianRepo.findByPoliticianNumber(dto.getId())
 				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by id"));
 		politician.setRepo(ratingRepo);
@@ -51,9 +52,13 @@ public class RatingService {
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
 		
 		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
+		String accountNumber = accountNumberImplementor.calculateUserAccountNumber().getAccountNumber();
 		
-		if (isUserRatedLimited(accountNumberImplementor.calculateUserAccountNumber().getAccountNumber())) {
-			throw new Rate
+		if (isUserRatedLimited(accountNumber)) {
+			Long rateLimitTimeout = rateLimiterService.findExpirationOfRateLimit(accountNumber);
+			
+			throw new RateLimitedException("User has been rate limited for " + rateLimitTimeout + " seconds" ,
+					rateLimitTimeout );
 		}
 		
 		
@@ -71,7 +76,7 @@ public class RatingService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<PoliticiansRating> findRatingsByFacebookEmail(String email) throws RatingsNotFoundException {
+	public List<PoliticiansRating> findRatingsByFacebookEmail(String email) {
 		List<PoliticiansRating> ratingsByRater = ratingRepo.findByRater_Email(email);
 		if (ratingsByRater.isEmpty()) {
 			throw new RatingsNotFoundException("No rating found by Rater"); 
