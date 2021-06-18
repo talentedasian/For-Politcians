@@ -52,8 +52,8 @@ public class RatingsController {
 		return new ResponseEntity<RatingDTO>(politicianRating, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/rating")
-	public ResponseEntity<RatingDTO> getRatingById(@PathVariable Integer id) {
+	@GetMapping("/rating/{id}")
+	public ResponseEntity<RatingDTO> getRatingById(@PathVariable String id) {
 		PoliticiansRating politicianRatingQueried = ratingService.findById(String.valueOf(id));
 		
 		mapper = new RatingDtoMapper();
