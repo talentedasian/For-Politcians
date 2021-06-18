@@ -35,6 +35,8 @@ public class RedisTest {
 		
 		assertThat(repo.findByAccountNumber("1111").get().getAccountNumber(), 
 				equalTo(savedRateLimiter.getAccountNumber()));
+		
+		repo.delete(savedRateLimiter);
 	}
 	
 	@Test
@@ -43,7 +45,7 @@ public class RedisTest {
 		
 		assertThat((Long)ops.execute((RedisConnection connection) -> connection.execute("TTL", 
 				("rate_limit:" + queriedRateLimiter.getId()).getBytes())), 
-				is(greaterThan(604000L)));
+				is(greaterThan(60000L)));
 	}
 
 }

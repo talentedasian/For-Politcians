@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,7 @@ public class RatingsController {
 	}
 
 	@Operation(security = { @SecurityRequirement(name = "add-rating") })
-	@PostMapping("/add-rating")
+	@PostMapping("/rating")
 	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request, HttpServletRequest req) {
 		PoliticiansRating politicianRatingSaved = ratingService.saveRatings(request, req);
 		
@@ -51,9 +52,9 @@ public class RatingsController {
 		return new ResponseEntity<RatingDTO>(politicianRating, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/ratingById")
-	public ResponseEntity<RatingDTO> getRatingById(@RequestParam String id) {
-		PoliticiansRating politicianRatingQueried = ratingService.findById(id);
+	@GetMapping("/rating")
+	public ResponseEntity<RatingDTO> getRatingById(@PathVariable Integer id) {
+		PoliticiansRating politicianRatingQueried = ratingService.findById(String.valueOf(id));
 		
 		mapper = new RatingDtoMapper();
 		
@@ -62,7 +63,7 @@ public class RatingsController {
 		return new ResponseEntity<RatingDTO>(politicianRating, HttpStatus.OK);
 	}
 	
-	@GetMapping("/ratingByRater")
+	@GetMapping("/rating")
 	public ResponseEntity<List<RatingDTO>> getRatingByRater(@RequestParam String email) {
 		List<PoliticiansRating> politicianRatingQueried = ratingService.findRatingsByFacebookEmail(email);
 		

@@ -79,7 +79,7 @@ public class RatingService {
 	public List<PoliticiansRating> findRatingsByFacebookEmail(String email) {
 		List<PoliticiansRating> ratingsByRater = ratingRepo.findByRater_Email(email);
 		if (ratingsByRater.isEmpty()) {
-			throw new RatingsNotFoundException("No rating found by Rater"); 
+			throw new RatingsNotFoundException("No rating found by Rater " + email); 
 		}
 		
 		return ratingsByRater;

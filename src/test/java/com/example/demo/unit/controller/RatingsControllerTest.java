@@ -65,7 +65,7 @@ public class RatingsControllerTest {
 	public void assertEqualsDtoOutputs() throws Exception {
 		when(service.findById("1")).thenReturn(politiciansRating);
 		
-		ResponseEntity<RatingDTO> response = controller.getRatingById("1");
+		ResponseEntity<RatingDTO> response = controller.getRatingById(1);
 		
 		RatingDTO politicianResponse = response.getBody();
 		
@@ -78,7 +78,7 @@ public class RatingsControllerTest {
 		when(service.findById("1")).thenReturn(politiciansRating);
 		when(mapper.mapToDTO(politiciansRating)).thenReturn(ratingDTO);
 		
-		ResponseEntity<RatingDTO> response = controller.getRatingById("1");
+		ResponseEntity<RatingDTO> response = controller.getRatingById(1);
 		
 		RatingDTO politiciaResponse = response.getBody();
 		
@@ -114,7 +114,7 @@ public class RatingsControllerTest {
 	public void assertEqualsUserRaterDtoOutputs() throws Exception {
 		when(service.findById("1")).thenReturn(politiciansRating);
 		
-		ResponseEntity<RatingDTO> response = controller.getRatingById("1");
+		ResponseEntity<RatingDTO> response = controller.getRatingById(1);
 		
 		assertThat(response.getBody().getRater().getFacebookName(),
 				equalTo(politiciansRating.getRater().getFacebookName()));

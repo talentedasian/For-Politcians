@@ -13,7 +13,7 @@ import com.example.demo.exceptions.RateLimitedException;
 import com.example.demo.exceptions.RatingsNotFoundException;
 
 @RestControllerAdvice(assignableTypes = { RatingsController.class })
-public class RatingServiceApiExceptionHandling {
+public class RatingApiExceptionHandling {
 
 	@ExceptionHandler(RatingsNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
@@ -21,6 +21,7 @@ public class RatingServiceApiExceptionHandling {
 		ExceptionModel exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("404");
 		exceptionModel.setErr(ex.getMessage());
+		System.out.println(exceptionModel.getErr() + " tanginamo");
 		
 		return exceptionModel;
 	}

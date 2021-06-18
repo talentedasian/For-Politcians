@@ -79,7 +79,7 @@ public class RatingControllerTest {
 		String message = "No jwt found on authorization header";
 		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(new JwtNotFoundException(message));
 		
-		mvc.perform(post(create("/api/ratings/add-rating"))
+		mvc.perform(post(create("/api/ratings/rating"))
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnauthorized())
@@ -94,7 +94,7 @@ public class RatingControllerTest {
 		String message = "Authorization Header must start with Bearer";
 		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(new JwtMalformedFormatException(message));
 		
-		mvc.perform(post(create("/api/ratings/add-rating"))
+		mvc.perform(post(create("/api/ratings/rating"))
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnauthorized())
@@ -108,7 +108,7 @@ public class RatingControllerTest {
 	public void shouldReturn404NotFoundbyId() throws Exception {
 		when(service.findById("1")).thenThrow(new RatingsNotFoundException("No rating found by Id"));
 		
-		mvc.perform(get(create("/api/ratings/ratingById?id=1")))
+		mvc.perform(get(create("/api/ratings/rating/1")))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("code",
 					containsStringIgnoringCase("404")))
@@ -120,7 +120,7 @@ public class RatingControllerTest {
 	public void shouldReturn404NotFoundByRater() throws Exception {
 		when(service.findRatingsByFacebookEmail("dasdsa@gmail.com")).thenThrow(new RatingsNotFoundException("No rating found by Rater"));
 		
-		mvc.perform(get(create("/api/ratings/ratingByRater?email=dasdsa@gmail.com")))
+		mvc.perform(get(create("/api/ratings/rating?email=dasdsa@gmail.com")))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("code",
 					containsStringIgnoringCase("404")))
@@ -132,7 +132,7 @@ public class RatingControllerTest {
 	public void shouldReturn409WithDetailedExplanations() throws Exception { 
 		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(new RateLimitedException("User has been rate limited for 172800 seconds", 172800L));
 		
-		mvc.perform(post(create("/api/ratings/add-rating"))
+		mvc.perform(post(create("/api/ratings/rating"))
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().is4xxClientError())
