@@ -36,7 +36,7 @@ public class PoliticianController {
 		mapper.ifPresent(dtoMapper -> {this.mapper = dtoMapper;});
 	}
 
-	@PostMapping("add-politician")
+	@PostMapping("/politician")
 	public ResponseEntity<PoliticianDTO> savePolitician(@Valid @RequestBody AddPoliticianDTORequest request,
 			@RequestHeader(name = "Politician-Access") String politicianHeader) {
 		Politicians politicianSaved = politiciansService.savePolitician(request);
@@ -48,7 +48,7 @@ public class PoliticianController {
 		return new ResponseEntity<PoliticianDTO>(politician, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/politicianByName")
+	@GetMapping("/politician")
 	public ResponseEntity<List<PoliticianDTO>> politicianByName(String lastName, String firstName) {
 		List<Politicians> politicianByName = politiciansService.findPoliticianByName(lastName, firstName);
 		
@@ -59,7 +59,7 @@ public class PoliticianController {
 		return new ResponseEntity<List<PoliticianDTO>>(politician, HttpStatus.OK);
 	}
 	
-	@GetMapping("/politicianById/{id}")
+	@GetMapping("/politician/{id}")
 	public ResponseEntity<PoliticianDTO> politicianById(@PathVariable String id) {
 		Politicians politicianQueried = politiciansService.findPoliticianByNumber(id);
 		
@@ -71,7 +71,7 @@ public class PoliticianController {
 	}
 	
 	
-	@GetMapping("/all")
+	@GetMapping("/politicians")
 	public ResponseEntity<List<PoliticianDTO>> allPoliticians() {
 		List<Politicians> allPoliticians = politiciansService.allPoliticians();
 		

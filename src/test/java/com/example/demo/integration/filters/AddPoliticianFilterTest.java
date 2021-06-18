@@ -1,4 +1,4 @@
-package com.example.demo.integration;
+package com.example.demo.integration.filters;
 
 import static com.example.demo.baseClasses.AbstractPoliticianControllerTest.withoutRepo;
 import static org.hamcrest.CoreMatchers.equalTo;

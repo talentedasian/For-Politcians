@@ -1,4 +1,4 @@
-package com.example.demo.integration;
+package com.example.demo.integration.controllers;
 
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
