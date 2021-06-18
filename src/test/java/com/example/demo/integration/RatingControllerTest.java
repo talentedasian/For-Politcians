@@ -142,7 +142,7 @@ public class RatingControllerTest {
 				containsStringIgnoringCase("429")))
 			.andExpect(jsonPath("optional", 
 				containsStringIgnoringCase("one request per week")))
-			.andExpect(header().string("Retry-After","172800"));
+				.andExpect(header().string("Retry-After","172800"));
 	}
 	
 }
