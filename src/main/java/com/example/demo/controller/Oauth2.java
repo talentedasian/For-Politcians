@@ -48,6 +48,7 @@ public class Oauth2 {
 		
 		EntityModel<JwtClaims> entityModel = EntityModel.of(jwtResponse);
 		
+		
 		return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
 	}
 	
