@@ -95,6 +95,12 @@
 	    	<groupId>org.springframework.hateoas</groupId>
 	    	<artifactId>spring-hateoas</artifactId>
 		</dependency>
+		<dependency>
+		    <groupId>de.ingogriebsch.hateoas</groupId>
+		    <artifactId>spring-hateoas-siren</artifactId>
+		    <version>{see project page for current version}</version>
+		    <scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

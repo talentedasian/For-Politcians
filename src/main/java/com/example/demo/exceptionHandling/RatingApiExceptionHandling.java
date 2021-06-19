@@ -21,7 +21,6 @@ public class RatingApiExceptionHandling {
 		ExceptionModel exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("404");
 		exceptionModel.setErr(ex.getMessage());
-		System.out.println(exceptionModel.getErr() + " tanginamo");
 		
 		return exceptionModel;
 	}
