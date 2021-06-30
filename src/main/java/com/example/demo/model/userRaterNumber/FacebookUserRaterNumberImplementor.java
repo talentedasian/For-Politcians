@@ -50,11 +50,11 @@ public class FacebookUserRaterNumberImplementor extends AbstractUserRaterNumber{
 		
 		String finalAccountNumber = finalFirstSectionOfPattern.concat("-" + finalSecondSectionOfPattern);
 		
-		return new FacebookUserRaterNumberImplementor(firstName + " " + lastName, finalAccountNumber);
+		return new FacebookUserRaterNumberImplementor(firstName() + " " + lastName(), finalAccountNumber);
 	}
 	
 	private String convertFAndLOfPatternToNameInitials() {
-		String[] nameArray = (firstName + " " + lastName).split(" ");
+		String[] nameArray = (firstName() + " " + lastName()).split(" ");
 		if (nameArray.length < 2) {
 			String initialPattern = pattern.replace("F", nameArray[0].toUpperCase());
 			String finalPattern = initialPattern.replace("G", "G");
@@ -70,7 +70,7 @@ public class FacebookUserRaterNumberImplementor extends AbstractUserRaterNumber{
 	private String convertOAndPOfPatternToLoginMechanisms() {
 		String[] firstSectionOfPattern = pattern.split("-");
 		String patternWithoutFAndL = firstSectionOfPattern[0].substring(2);
-		String initialPattern = patternWithoutFAndL.replace("O", String.valueOf(loginMechanism.toString().charAt(0)));
+		String initialPattern = patternWithoutFAndL.replace("O", String.valueOf(getLoginMechanism().toString().charAt(0)));
 		String finalPattern = initialPattern.replace("P", "L").concat("M");
 		
 		return finalPattern;

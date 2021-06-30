@@ -30,11 +30,12 @@ import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
-import com.example.demo.exceptions.RateLimitedException;
 import com.example.demo.exceptions.RatingsNotFoundException;
+import com.example.demo.exceptions.UserRateLimitedOnPolitician;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.UserRater;
+import com.example.demo.service.RateLimitingService;
 import com.example.demo.service.RatingService;
 
 @WebMvcTest(RatingsController.class)
@@ -48,6 +49,8 @@ public class RatingControllerTest {
 	public RatingService service;
 	@MockBean
 	public RatingDtoMapper mapper;
+	@MockBean
+	public RateLimitingService rateLimitService;
 	
 	public Politicians politician;
 	public PoliticiansRating politiciansRating;
@@ -129,20 +132,21 @@ public class RatingControllerTest {
 	}
 	
 	@Test
-	public void shouldReturn409WithDetailedExplanations() throws Exception { 
-		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(new RateLimitedException("User has been rate limited for 172800 seconds", 172800L));
+	public void shouldReturn429WithDetailedExplanations() throws Exception { 
+		when(service.saveRatings(any(AddRatingDTORequest.class), any()))
+		.thenThrow(new UserRateLimitedOnPolitician("User is rate limited on politician with 2 days left", 2L));
 		
 		mvc.perform(post(create("/api/ratings/rating"))
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().is4xxClientError())
 			.andExpect(jsonPath("err", 
-					containsStringIgnoringCase("rate limited for 172800 seconds")))
+					containsStringIgnoringCase("rate limited on politician ")))
 			.andExpect(jsonPath("code", 
 				containsStringIgnoringCase("429")))
 			.andExpect(jsonPath("optional", 
 				containsStringIgnoringCase("one request per week")))
-				.andExpect(header().string("Retry-After","172800"));
+				.andExpect(header().string("Retry-After","2 days"));
 	}
 	
 }

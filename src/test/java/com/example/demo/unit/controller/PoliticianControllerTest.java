@@ -19,7 +19,7 @@ public class PoliticianControllerTest extends AbstractPoliticianControllerTest {
 	@Test
 	public void shouldCallSaveFromServiceWhenSaved() {
 		when(service.savePolitician(politicianDTORequest)).thenReturn(politician);
-		controller.savePolitician(politicianDTORequest, "password");
+		controller.savePolitician(politicianDTORequest);
 		
 		verify(service, times(1)).savePolitician(politicianDTORequest);
 	}
@@ -28,7 +28,7 @@ public class PoliticianControllerTest extends AbstractPoliticianControllerTest {
 	public void shouldEqualDTOOutputsWhenSaved() {
 		when(service.savePolitician(politicianDTORequest)).thenReturn(politician);
 		
-		ResponseEntity<PoliticianDTO> politicianResponse = controller.savePolitician(politicianDTORequest, "password");
+		ResponseEntity<PoliticianDTO> politicianResponse = controller.savePolitician(politicianDTORequest);
 		
 		assertThat(politician.getRating().getAverageRating(),
 				equalTo(politicianResponse.getBody().getRating()));

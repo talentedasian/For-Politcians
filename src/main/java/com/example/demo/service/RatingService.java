@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.PoliticianNotFoundException;
-import com.example.demo.exceptions.RateLimitedException;
 import com.example.demo.exceptions.RatingsNotFoundException;
+import com.example.demo.exceptions.UserRateLimitedOnPolitician;
 import com.example.demo.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -26,13 +26,14 @@ public class RatingService {
 
 	private final RatingRepository ratingRepo;
 	private final PoliticiansRepository politicianRepo;
-	private final RateLimiterService rateLimiterService;
+	private final RateLimitingService rateLimitService;
+
 
 	public RatingService(RatingRepository ratingRepo, PoliticiansRepository politicianRepo, 
-			RateLimiterService rateLimiterService) {
+			RateLimitingService rateLimitService) {
 		this.ratingRepo = ratingRepo;
 		this.politicianRepo = politicianRepo;
-		this.rateLimiterService = rateLimiterService;
+		this.rateLimitService = rateLimitService;
 	}
 	
 	@Transactional(readOnly = true)
@@ -44,7 +45,7 @@ public class RatingService {
 	}
 	
 	@Transactional
-	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) {
+	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) throws UserRateLimitedOnPolitician {
 		Politicians politician = politicianRepo.findByPoliticianNumber(dto.getId())
 				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by id"));
 		politician.setRepo(ratingRepo);
@@ -53,14 +54,14 @@ public class RatingService {
 		
 		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
 		String accountNumber = accountNumberImplementor.calculateUserAccountNumber().getAccountNumber();
+		String polNumber = politician.getPoliticianNumber();
 		
-		if (isUserRatedLimited(accountNumber)) {
-			Long rateLimitTimeout = rateLimiterService.findExpirationOfRateLimit(accountNumber);
+		if (!rateLimitService.isNotRateLimited(accountNumber, polNumber)) {
+			Long daysLeft = rateLimitService.daysLeftOfBeingRateLimited(accountNumber, polNumber).longValue();
 			
-			throw new RateLimitedException("User has been rate limited for " + rateLimitTimeout + " seconds" ,
-					rateLimitTimeout );
+			throw new UserRateLimitedOnPolitician("User is rate limited on politician with " + daysLeft + " days left", 
+					daysLeft);
 		}
-		
 		
 		var rating = new PoliticiansRating();
 		rating.calculateRating(dto.getRating().doubleValue());
@@ -83,10 +84,6 @@ public class RatingService {
 		}
 		
 		return ratingsByRater;
-	}
-
-	private boolean isUserRatedLimited(String accountNumber) {
-		return rateLimiterService.findRateLimitByUserAccountNumber(accountNumber).isPresent();
 	}
 	
 }

@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,6 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.example.demo.controller.PoliticianController;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
+import com.example.demo.exceptionHandling.GlobalExceptionHandling;
 import com.example.demo.filter.AddPoliticianFilter;
 import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.entities.Politicians;
@@ -32,7 +34,7 @@ import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.service.PoliticiansService;
 
-@WebMvcTest(PoliticianController.class)
+@WebMvcTest(controllers = { PoliticianController.class,GlobalExceptionHandling.class })
 public class AddPoliticianFilterTest {
 
 	public MockMvc mvc;
@@ -49,8 +51,8 @@ public class AddPoliticianFilterTest {
 	
 	private final String content = """
 			{
-			    "first_name": "test",
-			    "last_name": "name",
+			    "firstName": "test",
+			    "lastName": "name",
 			    "rating": 0.01
 			}
 			""";
@@ -66,7 +68,8 @@ public class AddPoliticianFilterTest {
 				new Rating(0.01D, 0.01D, calculator));
 		
 		mvc = MockMvcBuilders.webAppContextSetup(wac)
-				.addFilter(new AddPoliticianFilter(), "/api/politicians/add-politician")
+				.addFilter(new AddPoliticianFilter(), "/api/politicians/politician")
+				.alwaysDo(print())
 				.build();
 	}
 	
@@ -74,8 +77,7 @@ public class AddPoliticianFilterTest {
 	public void shouldReturn401AuthorizationRequiredMessageIfAuthorizationIsIncorrect() throws URISyntaxException, Exception {
 		when(service.savePolitician(any())).thenReturn(politician);
 		
-		mvc.perform(post(URI.create("/api/politicians/add-politician"))
-				.header("Politician-Access", "oo")
+		mvc.perform(post(URI.create("/api/politicians/politician"))
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnauthorized())
@@ -89,7 +91,7 @@ public class AddPoliticianFilterTest {
 	public void shouldReturn401AuthorizationRequiredMessageIfHeaderRequiredIsNull() throws URISyntaxException, Exception {
 		when(service.savePolitician(any())).thenReturn(politician);
 		
-		mvc.perform(post(URI.create("/api/politicians/add-politician"))
+		mvc.perform(post(URI.create("/api/politicians/politician"))
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnauthorized())
@@ -103,7 +105,7 @@ public class AddPoliticianFilterTest {
 	public void shouldReturn201CreatedIfAuthorizationIsCorrect() throws URISyntaxException, Exception {
 		when(service.savePolitician(any())).thenReturn(politician);
 		
-		mvc.perform(post(URI.create("/api/politicians/add-politician"))
+		mvc.perform(post(URI.create("/api/politicians/politician"))
 				.header("Politician-Access", "password")
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))

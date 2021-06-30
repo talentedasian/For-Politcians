@@ -4,16 +4,18 @@ import com.example.demo.model.entityNumber.EntityNumberInterface;
 
 public abstract class AbstractUserRaterNumber implements EntityNumberInterface{
 	
-	protected final String firstName, lastName, accountNumber;
+	private final String firstName, lastName;
 	
-	protected final LoginMechanism loginMechanism;
+	protected final String accountNumber;
 	
-	public String getFirstName() {
-		return firstName;
+	private final LoginMechanism loginMechanism;
+	
+	protected String firstName() {
+		return this.firstName;
 	}
 	
-	public String getLastName() {
-		return lastName;
+	protected String lastName() {
+		return this.lastName;
 	}
 	
 	public String getAccountNumber() {

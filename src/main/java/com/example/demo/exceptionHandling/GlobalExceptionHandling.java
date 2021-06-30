@@ -20,6 +20,7 @@ public class GlobalExceptionHandling extends ResponseEntityExceptionHandler{
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		System.out.println("tanginamo");
 		List<String> messages = new ArrayList<>();
 		for (FieldError errors : ex.getFieldErrors()) {
 			messages.add("Error on " + errors.getField() + ". " + errors.getDefaultMessage());

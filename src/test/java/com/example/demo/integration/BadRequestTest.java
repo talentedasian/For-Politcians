@@ -63,7 +63,7 @@ public class BadRequestTest {
 	
 	@Test
 	public void shouldReturn400BadRequestOnRatingEndpoint() throws Exception {
-		mvc.perform(post(create("/api/ratings/add-rating"))
+		mvc.perform(post(create("/api/ratings/rating"))
 				.content(ratingContent)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
@@ -77,7 +77,7 @@ public class BadRequestTest {
 	
 	@Test
 	public void shouldReturn400BadRequestOnPoliticianEndpoint() throws Exception {
-		mvc.perform(post(create("/api/politicians/add-politician"))
+		mvc.perform(post(create("/api/politicians/politician"))
 				.header("Politician-Access", "password")
 				.content(politicianContent)
 				.contentType(MediaType.APPLICATION_JSON))

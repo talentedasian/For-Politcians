@@ -21,7 +21,7 @@ import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;
 import com.example.demo.service.PoliticiansService;
-import com.example.demo.service.RateLimiterService;
+import com.example.demo.service.RateLimitingService;
 import com.example.demo.service.RatingService;
 
 public class AbstractEntitiesServiceTest {
@@ -31,11 +31,11 @@ public class AbstractEntitiesServiceTest {
 	@Mock
 	public PoliticiansRepository politicianRepo;
 	@Mock
-	public RateLimiterService rateLimiterService;
-	@Mock
 	public HttpServletRequest req;
 	@Mock
 	public AverageCalculator calculator;
+	@Mock
+	public RateLimitingService rateLimitService;
 	
 	public PoliticiansService politicianService;
 	public RatingService ratingService;
@@ -50,7 +50,7 @@ public class AbstractEntitiesServiceTest {
 	public void setup() {
 		politicianService = new PoliticiansService(politicianRepo);
 		
-		ratingService = new RatingService(ratingRepo, politicianRepo, rateLimiterService);
+		ratingService = new RatingService(ratingRepo, politicianRepo, rateLimitService);
 		
 		List<PoliticiansRating> listOfPoliticiansRating = new ArrayList<>();
 		politician = withRepoAndId

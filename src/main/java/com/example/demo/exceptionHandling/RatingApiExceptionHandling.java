@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.demo.controller.RatingsController;
 import com.example.demo.exceptions.PoliticianNotFoundException;
-import com.example.demo.exceptions.RateLimitedException;
 import com.example.demo.exceptions.RatingsNotFoundException;
+import com.example.demo.exceptions.UserRateLimitedOnPolitician;
 
 @RestControllerAdvice(assignableTypes = { RatingsController.class })
 public class RatingApiExceptionHandling {
@@ -35,17 +35,16 @@ public class RatingApiExceptionHandling {
 		return new ResponseEntity<ExceptionModel>(exceptionModel, HttpStatus.NOT_FOUND);
 	}
 	
-	@ExceptionHandler(RateLimitedException.class)
+	@ExceptionHandler(UserRateLimitedOnPolitician.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ResponseEntity<ExceptionModel> handleRateLimitedException(RateLimitedException e) {
+	public ResponseEntity<ExceptionModel> handleRateLimitedException(UserRateLimitedOnPolitician e) {
 		var exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("429");
 		exceptionModel.setErr(e.getMessage());
 		exceptionModel.setOptional("This endpoint only allows one request per week");
 		
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Retry-After", e.getSecondsOfTimeout().toString());
-		
+		headers.add("Retry-After", e.getDaysLeft().toString() + " days");
 		return new ResponseEntity<ExceptionModel>(exceptionModel, headers, HttpStatus.NOT_FOUND);
 	}
 	

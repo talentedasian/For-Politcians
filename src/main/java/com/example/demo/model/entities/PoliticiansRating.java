@@ -2,6 +2,7 @@ package com.example.demo.model.entities;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,6 +31,8 @@ public class PoliticiansRating {
 	@JoinColumn(nullable = false, name = "politician_id")
 	private Politicians politician;
 	
+	@Column(nullable = false, name = "date_created", updatable = false)
+	private LocalDate dateCreated;
 	
 	public Integer getId() {
 		return id;
@@ -79,51 +82,8 @@ public class PoliticiansRating {
 
 	@Override
 	public String toString() {
-		return "PoliticiansRating [id=" + id + ", rating=" + rating + ", rater=" + rater + ", politician=" + politician
-				+ "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((politician == null) ? 0 : politician.hashCode());
-		result = prime * result + ((rater == null) ? 0 : rater.hashCode());
-		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PoliticiansRating other = (PoliticiansRating) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (politician == null) {
-			if (other.politician != null)
-				return false;
-		} else if (!politician.equals(other.politician))
-			return false;
-		if (rater == null) {
-			if (other.rater != null)
-				return false;
-		} else if (!rater.equals(other.rater))
-			return false;
-		if (rating == null) {
-			if (other.rating != null)
-				return false;
-		} else if (!rating.equals(other.rating))
-			return false;
-		return true;
+		return "PoliticiansRating [id=" + id + ", rating=" + rating + ", rater=" + rater +
+				", politician=" + politician + "]";
 	}
 
 	public double calculateRating(double rating) {
@@ -132,7 +92,7 @@ public class PoliticiansRating {
 		
 		return rate;
 	}
-
+	
 	public Politicians calculatePolitician(Politicians politician) {
 		politician.calculateFullName();
 		politician.calculateTotalAmountOfRating(getRating());

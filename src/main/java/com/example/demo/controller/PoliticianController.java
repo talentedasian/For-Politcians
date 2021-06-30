@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +21,8 @@ import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.service.PoliticiansService;
+
+import io.swagger.v3.oas.annotations.Hidden;
 
 @RestController
 @RequestMapping("/api/politicians")
@@ -37,8 +38,8 @@ public class PoliticianController {
 	}
 
 	@PostMapping("/politician")
-	public ResponseEntity<PoliticianDTO> savePolitician(@Valid @RequestBody AddPoliticianDTORequest request,
-			@RequestHeader(name = "Politician-Access") String politicianHeader) {
+	@Hidden
+	public ResponseEntity<PoliticianDTO> savePolitician(@Valid @RequestBody AddPoliticianDTORequest request) {
 		Politicians politicianSaved = politiciansService.savePolitician(request);
 		
 		mapper = new PoliticiansDtoMapper();
