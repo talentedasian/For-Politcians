@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,16 +24,44 @@ public class RateLimitingService {
 	}
 	
 	@Transactional(readOnly = true)
-	public RateLimit findRateLimitInPolitician(String accountNumber, String politicianNumber) {
-		return repo.findByIdAndPoliticianNumber(accountNumber, politicianNumber).orElse(null);
+	public Optional<RateLimit> findRateLimitInPolitician(String accountNumber, String politicianNumber) {
+		return repo.findByIdAndPoliticianNumber(accountNumber, politicianNumber);
+	}
+	
+	//rate limit a user in a particular politician
+	@Transactional
+	public RateLimit rateLimitUser(String accountNumber, String politicianNumber) {
+		var rateLimitToBeSaved = new RateLimit(accountNumber, politicianNumber);
+		
+		deleteRateLimit(accountNumber, politicianNumber);
+		RateLimit rateLimit = repo.save(rateLimitToBeSaved);
+		return rateLimit;
+	}
+	
+	private void deleteRateLimit(String id, String politicianNumber) {
+		repo.deleteByIdAndPoliticianNumber(id, politicianNumber);
 	}
 	
 	public boolean isNotRateLimited(String accNumber, String polNumber) {
-		 return this.findRateLimitInPolitician(accNumber, polNumber).isNotRateLimited();
+		Optional<RateLimit> rateLimit = this.findRateLimitInPolitician(accNumber, polNumber);
+		if (rateLimit.isEmpty()) {
+			return true;
+		}
+		
+		return rateLimit.get().isNotRateLimited();
 	}
 	
 	public Integer daysLeftOfBeingRateLimited(String accNumber, String polNumber) {
-		 return this.findRateLimitInPolitician(accNumber, polNumber).daysLeftOfBeingRateLimited();
+		Optional<RateLimit> rateLimit = this.findRateLimitInPolitician(accNumber, polNumber);
+		 if (rateLimit.isPresent()) {
+			 Integer daysLeft = rateLimit.get().daysLeftOfBeingRateLimited();
+			 if (rateLimit.get().daysLeftOfBeingRateLimited() == null) {
+				 return 0;
+			 }
+			 return daysLeft; 
+		 } 
+		 
+		 return 0;
 	}
 
 }

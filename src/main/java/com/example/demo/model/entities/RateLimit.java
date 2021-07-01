@@ -44,11 +44,11 @@ public class RateLimit {
 		this.dateCreated = dateCreated;
 	}
 
-	public RateLimit(String id, String politicianNumber, LocalDate created) {
+	public RateLimit(String id, String politicianNumber) {
 		super();
 		this.id = id;
 		this.politicianNumber = politicianNumber;
-		dateCreated = created;
+		dateCreated = LocalDate.now();
 	}
 
 	public RateLimit() {

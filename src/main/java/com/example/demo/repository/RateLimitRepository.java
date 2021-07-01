@@ -9,4 +9,6 @@ import com.example.demo.model.entities.RateLimit;
 public interface RateLimitRepository extends JpaRepository<RateLimit, String>{
 
 	Optional<RateLimit> findByIdAndPoliticianNumber(String id, String politicianNumber);
+	
+	void deleteByIdAndPoliticianNumber(String id, String politicianNumber);
 }

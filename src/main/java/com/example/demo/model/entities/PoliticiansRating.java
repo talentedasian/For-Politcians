@@ -2,7 +2,6 @@ package com.example.demo.model.entities;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,9 +29,6 @@ public class PoliticiansRating {
 	@ManyToOne
 	@JoinColumn(nullable = false, name = "politician_id")
 	private Politicians politician;
-	
-	@Column(nullable = false, name = "date_created", updatable = false)
-	private LocalDate dateCreated;
 	
 	public Integer getId() {
 		return id;

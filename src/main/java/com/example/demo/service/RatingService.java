@@ -28,7 +28,6 @@ public class RatingService {
 	private final PoliticiansRepository politicianRepo;
 	private final RateLimitingService rateLimitService;
 
-
 	public RatingService(RatingRepository ratingRepo, PoliticiansRepository politicianRepo, 
 			RateLimitingService rateLimitService) {
 		this.ratingRepo = ratingRepo;
@@ -53,15 +52,26 @@ public class RatingService {
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
 		
 		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
-		String accountNumber = accountNumberImplementor.calculateUserAccountNumber().getAccountNumber();
+		String accountNumber = accountNumberImplementor.calculateEntityNumber().getAccountNumber();
 		String polNumber = politician.getPoliticianNumber();
 		
+		/*
+		 * check whether the user is currently not allowed to rate
+		 * a politician. The timeout/rate limit is within a week.
+		 */
 		if (!rateLimitService.isNotRateLimited(accountNumber, polNumber)) {
+			System.out.println("tanginamo");
 			Long daysLeft = rateLimitService.daysLeftOfBeingRateLimited(accountNumber, polNumber).longValue();
 			
 			throw new UserRateLimitedOnPolitician("User is rate limited on politician with " + daysLeft + " days left", 
 					daysLeft);
 		}
+		/*
+		 * save the rate limit in the database to be fetched whenever a user
+		 * wants to rate a politician(see if statement above). this method already 
+		 * deletes the existing rate limit for the user.
+		 */
+		rateLimitService.rateLimitUser(accountNumber, polNumber);
 		
 		var rating = new PoliticiansRating();
 		rating.calculateRating(dto.getRating().doubleValue());

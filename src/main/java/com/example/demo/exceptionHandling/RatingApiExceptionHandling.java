@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.demo.controller.RatingsController;
 import com.example.demo.exceptions.PoliticianNotFoundException;
+import com.example.demo.exceptions.RateLimitNotFoundException;
 import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.exceptions.UserRateLimitedOnPolitician;
 
@@ -46,6 +47,16 @@ public class RatingApiExceptionHandling {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Retry-After", e.getDaysLeft().toString() + " days");
 		return new ResponseEntity<ExceptionModel>(exceptionModel, headers, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(RateLimitNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ResponseEntity<ExceptionModel> handleRateLimitNotFoundException(RateLimitNotFoundException e) {
+		var exceptionModel = new ExceptionModel();
+		exceptionModel.setCode("404");
+		exceptionModel.setErr(e.getMessage());
+		
+		return new ResponseEntity<ExceptionModel>(exceptionModel, HttpStatus.NOT_FOUND);
 	}
 	
 }
