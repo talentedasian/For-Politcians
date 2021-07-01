@@ -19,8 +19,8 @@ public class RateLimitingService {
 	}
 	
 	@Transactional(readOnly = true)
-	public RateLimit findById(String id) {
-		return repo.findById(id).orElse(null);
+	public Optional<RateLimit> findById(String id) {
+		return repo.findById(id);
 	}
 	
 	@Transactional(readOnly = true)

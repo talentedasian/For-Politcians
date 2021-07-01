@@ -25,7 +25,6 @@ import com.example.demo.model.entities.Rating;
 import com.example.demo.model.userRaterNumber.FacebookUserRaterNumberImplementor;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RateLimitRepository;
-import com.example.demo.service.RateLimitingService;
 import com.example.demo.service.RatingService;
 
 @SpringBootTest
@@ -55,7 +54,19 @@ public class RateLimitIntegrationTest {
 	}
 	
 	@Test
-	public void assertLogicOfRateLimit() throws UserRateLimitedOnPolitician {
+	public void assertLogicOfRateLimitSupposedToThrow() throws UserRateLimitedOnPolitician {
+		rateLimitRepo.save(rateLimitToBeSaved);
+		
+		var requestContent = new AddRatingDTORequest(valueOf(1L), "1number", "dds");
+		HttpServletRequest req = mock(HttpServletRequest.class);
+		when(req.getHeader("Authorization")).thenReturn("Bearer " + createJwtWithFixedExpirationDate("test@gmail.com", "1", "test name"));
+		
+		assertThrows(UserRateLimitedOnPolitician.class, 
+				() -> ratingService.saveRatings(requestContent, req));
+	}
+	
+	@Test
+	public void assertLogicOfRateLimitShouldSuccessful() {
 		rateLimitRepo.save(rateLimitToBeSaved);
 		
 		var requestContent = new AddRatingDTORequest(valueOf(1L), "1number", "dds");

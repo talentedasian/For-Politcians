@@ -15,6 +15,7 @@
 	<description>Project for the people</description>
 	<properties>
 		<java.version>15</java.version>
+		<app.profiles>production,localDevelopment</app.profiles>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -94,7 +95,64 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+                    <profiles>${app.profiles}</profiles>
+                </configuration>
+                <executions>
+	                <execution>
+	                    <goals>
+	                        <goal>repackage</goal>
+	                    </goals>
+	                    <configuration>
+	                    	<outputDirectory>/</outputDirectory>
+	                    </configuration>
+                	</execution>
+                	<execution>
+                		<id>pre-integration-test</id>
+	                    <goals>
+	                        <goal>start</goal>
+	                    </goals>
+	                    <configuration>
+	                    	<fork>false</fork>
+	                    </configuration>
+                	</execution>
+                	<execution>
+                		<id>post-integration-test</id>
+	                    <goals>
+	                        <goal>stop</goal>
+	                    </goals>
+	                    <configuration>
+	                    	<fork>false</fork>
+	                    </configuration>
+                	</execution>
+               	</executions>
 			</plugin>
+			<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-failsafe-plugin</artifactId>
+	            <configuration>
+		          <includes>
+		            <include>%regex[.*Test.*]</include>
+		            <include>PoliticsApplicationTest</include>
+		          </includes>
+		        </configuration>
+		            <executions>
+			        	<execution>
+				            <goals>
+				              <goal>integration-test</goal>
+				            </goals>
+			          	</execution>
+			          	<execution>
+			          	<id>verify</id>
+				            <goals>
+				              <goal>verify</goal>
+				            </goals>
+				            <configuration>
+								<failIfNoTests>true</failIfNoTests>				            
+				            </configuration>
+			          	</execution>
+	       			 </executions>
+	        </plugin>
 		</plugins>
 	</build>
 
