@@ -104,7 +104,7 @@
 	                        <goal>repackage</goal>
 	                    </goals>
 	                    <configuration>
-	                    	<outputDirectory>/</outputDirectory>
+	                    	<outputDirectory>/jar</outputDirectory>
 	                    </configuration>
                 	</execution>
                 	<execution>
@@ -133,11 +133,12 @@
 	            <configuration>
 		          <includes>
 		            <include>%regex[.*Test.*]</include>
-		            <include>PoliticsApplicationTest</include>
+		            <disableXmlReport>true</disableXmlReport>
 		          </includes>
 		        </configuration>
 		            <executions>
 			        	<execution>
+				        	<id>integratio-test</id>
 				            <goals>
 				              <goal>integration-test</goal>
 				            </goals>

@@ -9,11 +9,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.example.demo.PoliticsApplicationTests;
+import com.example.demo.PoliticsApplicationTest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.dtomapper.RatingDtoMapper;
 
-public class SpringDocAbstractTest extends PoliticsApplicationTests {
+public class SpringDocAbstractTest extends PoliticsApplicationTest {
 	
 	@MockBean
 	public PoliticiansDtoMapper polMapper;
