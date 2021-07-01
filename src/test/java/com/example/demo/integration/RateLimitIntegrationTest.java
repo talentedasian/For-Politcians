@@ -32,7 +32,6 @@ import com.example.demo.service.RatingService;
 public class RateLimitIntegrationTest {
 	
 	@Autowired public RestTemplate template;
-	@Autowired public RateLimitingService rateLimitService;
 	@Autowired public RateLimitRepository rateLimitRepo;
 	@Autowired public RatingService ratingService;
 	@Autowired public PoliticiansRepository polRepo;

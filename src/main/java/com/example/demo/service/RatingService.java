@@ -60,7 +60,6 @@ public class RatingService {
 		 * a politician. The timeout/rate limit is within a week.
 		 */
 		if (!rateLimitService.isNotRateLimited(accountNumber, polNumber)) {
-			System.out.println("tanginamo");
 			Long daysLeft = rateLimitService.daysLeftOfBeingRateLimited(accountNumber, polNumber).longValue();
 			
 			throw new UserRateLimitedOnPolitician("User is rate limited on politician with " + daysLeft + " days left", 
