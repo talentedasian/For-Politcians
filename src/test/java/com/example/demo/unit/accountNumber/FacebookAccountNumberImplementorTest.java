@@ -6,7 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.jupiter.api.Test;
 
 import com.example.demo.model.userRaterNumber.AbstractUserRaterNumber;
-import com.example.demo.model.userRaterNumber.FacebookUserRaterNumberImplementor;
+import com.example.demo.model.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
 
 public class FacebookAccountNumberImplementorTest {
 

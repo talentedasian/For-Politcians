@@ -1,6 +1,9 @@
-package com.example.demo.model.userRaterNumber;
+package com.example.demo.model.userRaterNumber.facebook;
 
-public class FacebookUserRaterNumberImplementor extends AbstractUserRaterNumber{
+import com.example.demo.model.userRaterNumber.AbstractUserRaterNumber;
+import com.example.demo.model.userRaterNumber.LoginMechanism;
+
+public final class FacebookUserRaterNumberImplementor extends AbstractUserRaterNumber{
 	
 	/*OP stands for the Oauth2 Provider that is used for logging into the application. 
 	 * If facebook is used as the login mechanism or OP, OP will be replaced to FLM which 
@@ -37,23 +40,36 @@ public class FacebookUserRaterNumberImplementor extends AbstractUserRaterNumber{
 	}
 
 	@Override
-	FacebookUserRaterNumberImplementor calculateUserAccountNumber() {
-		String firstSectionOfPatternWithName = convertFAndLOfPatternToNameInitials();
-		String firstSectionOfPatternWithLoginMechanism = convertOAndPOfPatternToLoginMechanisms();
-		String finalFirstSectionOfPattern = combineFirstSectionOfPattern(firstSectionOfPatternWithName, firstSectionOfPatternWithLoginMechanism);
+	protected FacebookUserRaterNumberImplementor calculateUserAccountNumber() {
+		String finalFirstSectionOfPattern = calculateFirstSectionOfPattern();
 		
-		String secondSectionOfPattern = pattern.split("-")[1];
+		String finalSecondSectionOfPattern = calculateSecondSectionOfPattern();
 		
-		String trimmedPattern = secondSectionOfPattern.substring(0, secondSectionOfPattern.length() - accountNumber.length());
-		
-		String finalSecondSectionOfPattern = trimmedPattern.concat(accountNumber);
-		
-		String finalAccountNumber = finalFirstSectionOfPattern.concat("-" + finalSecondSectionOfPattern);
+		String finalAccountNumber = combineSectionsOfPattern(finalFirstSectionOfPattern, "-" + finalSecondSectionOfPattern);
 		
 		return new FacebookUserRaterNumberImplementor(firstName() + " " + lastName(), finalAccountNumber);
 	}
 	
-	private String convertFAndLOfPatternToNameInitials() {
+	String calculateFirstSectionOfPattern() {
+		String firstSectionOfPatternWithName = convertFAndLOfPatternToNameInitials();
+		String firstSectionOfPatternWithLoginMechanism = convertOAndPOfPatternToLoginMechanisms();
+		
+		String finalFirstSectionOfPattern = combineSectionsOfPattern(firstSectionOfPatternWithName, firstSectionOfPatternWithLoginMechanism);
+		
+		return finalFirstSectionOfPattern.toUpperCase();
+	}
+	
+	String calculateSecondSectionOfPattern() {
+		String secondSectionOfPattern = splitPatternIntoSections(pattern)[1];
+		
+		String trimmedPattern = secondSectionOfPattern.substring(0, secondSectionOfPattern.length() - accountNumber.length());
+		
+		String finalSecondSectionOfPattern = combineSectionsOfPattern(trimmedPattern, accountNumber);
+		
+		return finalSecondSectionOfPattern.toUpperCase();
+	}
+	
+	String convertFAndLOfPatternToNameInitials() {
 		String[] nameArray = (firstName() + " " + lastName()).split(" ");
 		if (nameArray.length < 2) {
 			String initialPattern = pattern.replace("F", nameArray[0].toUpperCase());
@@ -64,11 +80,11 @@ public class FacebookUserRaterNumberImplementor extends AbstractUserRaterNumber{
 		String initialPattern = pattern.replace("F", String.valueOf(nameArray[0].charAt(0)));
 		String finalPattern = initialPattern.replace("L", String.valueOf(nameArray[1].charAt(0)));
 		
-		return finalPattern.split("-")[0].substring(0,2);
+		return splitPatternIntoSections(finalPattern)[0].substring(0,2).toUpperCase();
 	}
 	
-	private String convertOAndPOfPatternToLoginMechanisms() {
-		String[] firstSectionOfPattern = pattern.split("-");
+	String convertOAndPOfPatternToLoginMechanisms() {
+		String[] firstSectionOfPattern = splitPatternIntoSections(pattern);
 		String patternWithoutFAndL = firstSectionOfPattern[0].substring(2);
 		String initialPattern = patternWithoutFAndL.replace("O", String.valueOf(getLoginMechanism().toString().charAt(0)));
 		String finalPattern = initialPattern.replace("P", "L").concat("M");
@@ -76,8 +92,12 @@ public class FacebookUserRaterNumberImplementor extends AbstractUserRaterNumber{
 		return finalPattern;
 	}
 	
-	private String combineFirstSectionOfPattern(String nameSection, String oauth2ProviderSection) {
-		return nameSection.concat(oauth2ProviderSection);
+	private String[] splitPatternIntoSections(String section) {
+		return section.split("-");
+	}
+	
+	private String combineSectionsOfPattern(String first, String Second) {
+		return first.concat(Second);
 	}
 	
 }

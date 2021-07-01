@@ -14,7 +14,7 @@ import com.example.demo.exceptions.RateLimitNotFoundException;
 import com.example.demo.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.model.entities.RateLimit;
 import com.example.demo.model.userRaterNumber.AbstractUserRaterNumber;
-import com.example.demo.model.userRaterNumber.FacebookUserRaterNumberImplementor;
+import com.example.demo.model.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
 import com.example.demo.service.RateLimitingService;
 
 import io.jsonwebtoken.Claims;

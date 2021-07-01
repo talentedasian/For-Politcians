@@ -22,7 +22,7 @@ import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.RateLimit;
 import com.example.demo.model.entities.Rating;
-import com.example.demo.model.userRaterNumber.FacebookUserRaterNumberImplementor;
+import com.example.demo.model.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RateLimitRepository;
 import com.example.demo.service.RatingService;

@@ -45,6 +45,6 @@ public abstract class AbstractUserRaterNumber implements EntityNumberInterface{
 		return calculateUserAccountNumber();
 	}
 
-	abstract AbstractUserRaterNumber calculateUserAccountNumber();
+	protected abstract AbstractUserRaterNumber calculateUserAccountNumber();
 
 }

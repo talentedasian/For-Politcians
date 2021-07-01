@@ -15,7 +15,7 @@ import com.example.demo.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.userRaterNumber.AbstractUserRaterNumber;
-import com.example.demo.model.userRaterNumber.FacebookUserRaterNumberImplementor;
+import com.example.demo.model.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;
 
