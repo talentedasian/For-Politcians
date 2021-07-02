@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.PoliticianDTO;
@@ -50,7 +51,8 @@ public class PoliticianController {
 	}
 	
 	@GetMapping("/politician")
-	public ResponseEntity<List<PoliticianDTO>> politicianByName(String lastName, String firstName) {
+	public ResponseEntity<List<PoliticianDTO>> politicianByName(@RequestParam String lastName,
+			@RequestParam String firstName) {
 		List<Politicians> politicianByName = politiciansService.findPoliticianByName(lastName, firstName);
 		
 		mapper = new PoliticiansDtoMapper();

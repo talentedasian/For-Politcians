@@ -1,4 +1,4 @@
-package com.example.demo.filter;
+package com.example.demo.annotationDiscoverer;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

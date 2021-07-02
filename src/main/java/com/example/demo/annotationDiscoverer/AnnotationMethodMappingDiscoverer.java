@@ -1,19 +1,11 @@
-package com.example.demo.filter;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+package com.example.demo.annotationDiscoverer;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import com.example.demo.controller.PoliticianController;
-import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 
 /*
  * Discoverer for annotations present in methods
@@ -28,19 +20,21 @@ public class AnnotationMethodMappingDiscoverer{
 		return annotationName;
 	}
 	
-	public AnnotationMethodMappingDiscoverer(MethodWrapper method, String annotationName) {
+	public AnnotationMethodMappingDiscoverer(MethodWrapper method, String annotationValueName) {
 		super();
 		Assert.notNull(method, "method should not be null");
-		Assert.notNull(annotationName, "annotationName should not be null");
+		Assert.notNull(annotationValueName, "annotationName should not be null");
 		
 		this.method = method;
-		this.annotationName = annotationName;
+		this.annotationName = annotationValueName;
 		this.mergedAnnotations = MergedAnnotations.from(this.method.getAnnotations());
 	}
 
 	/*
 	 * Get the value of an annotation that is present on a method using a 
-	 * method wrapper class.
+	 * method wrapper class. If the value is a string array and has unwanted 
+	 * characters, use the StringArrayAnnotationMethodMappingDiscoverer class 
+	 * instead and pass your own regex to extract out the unwanted characters. 
 	 */
 	public <T extends Annotation, Z> Optional<Z> getAnnotationValueOnMethod(Class<T> annotationClassType, 
 			Class<Z> annotationValueType) {
@@ -50,7 +44,6 @@ public class AnnotationMethodMappingDiscoverer{
 		}
 		
 		return Optional.empty();
-		
 	}
 
 }
