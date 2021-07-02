@@ -4,11 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.annotationDiscoverer.AnnotationMethodMappingDiscoverer;
 import com.example.demo.annotationDiscoverer.MethodWrapper;
-import com.example.demo.controller.PoliticianController;
 import com.example.demo.service.PoliticiansService;
 
 public class AnnotationMethodMappingDiscovererTest {

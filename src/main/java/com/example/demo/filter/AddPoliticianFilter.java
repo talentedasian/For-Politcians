@@ -1,7 +1,7 @@
 package com.example.demo.filter;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -15,7 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.demo.annotationDiscoverer.MethodWrapper;
+import com.example.demo.annotationDiscoverer.StringArrayAnnotationMethodMappingDiscoverer;
 import com.example.demo.controller.PoliticianController;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.exceptionHandling.ExceptionModel;
@@ -26,22 +29,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AddPoliticianFilter implements Filter{
 	
 	private String password = "password";
+	private static final String REMOVE_SPECIAL_CHAR = "[\\[\\]]";
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-		
-		Method method = null;
-		try {
-			method = PoliticianController.class.getMethod("savePolitician", AddPoliticianDTORequest.class);
-		} catch (NoSuchMethodException | SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(MergedAnnotation.from(method.getAnnotation(PostMapping.class)).getStringArray("value").toString() + " tanginaka");
-		if (req.getRequestURI().equalsIgnoreCase(MergedAnnotation.from(method.getAnnotation(PostMapping.class)).getStringArray("value").toString())) {
+
+		if (isRequestShouldBeHandled(req)) {
 			if (req.getHeader("Politician-Access") != null) {
 				if (req.getHeader("Politician-Access").equalsIgnoreCase(password)) {
 					//essentially do nothing
@@ -72,6 +68,24 @@ public class AddPoliticianFilter implements Filter{
 		res.getWriter().write(new ObjectMapper().writeValueAsString(exceptionModel));
 	}
 	
+	private boolean isRequestShouldBeHandled(HttpServletRequest req) {
+		return getRequestUriToMatch().equals(req.getRequestURI());
+	}
 	
+	private String getRequestUriToMatch() {
+		var method = new MethodWrapper("savePolitician", PoliticianController.class, AddPoliticianDTORequest.class); 
+		var discoverer = new StringArrayAnnotationMethodMappingDiscoverer(method, "value");
+		
+		String httpEndpoint = discoverer.getAnnotationValue(PostMapping.class, REMOVE_SPECIAL_CHAR);
+		System.out.println(httpEndpoint + "pota bat ganto");
+		/*
+		 * Implement a class for extracting annotation values from the future.
+		 */
+		String[] apiEndpointArray = MergedAnnotation.from(method.getMethod().get().getDeclaringClass().getAnnotation(RequestMapping.class)).getStringArray("value");
+		String apiEndpoint = Arrays.deepToString(apiEndpointArray).replaceAll("[\\[\\]]", "");
+		System.out.println(apiEndpoint.concat(httpEndpoint) + " potangina");
+		
+		return apiEndpoint.concat(httpEndpoint);
+	}
 
 }

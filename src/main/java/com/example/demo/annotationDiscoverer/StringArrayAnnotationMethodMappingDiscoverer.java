@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public final class StringArrayAnnotationMethodMappingDiscoverer extends AnnotationMethodMappingDiscoverer{
 
-	public StringArrayAnnotationMethodMappingDiscoverer(MethodWrapper method, String annotationName) {
-		super(method, annotationName);
+	public StringArrayAnnotationMethodMappingDiscoverer(MethodWrapper method, String annotationValueName) {
+		super(method, annotationValueName);
 	}
 
 	/*
