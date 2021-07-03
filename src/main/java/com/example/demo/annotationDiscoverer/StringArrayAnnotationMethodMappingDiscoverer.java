@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Optional;
 
-public final class StringArrayAnnotationMethodMappingDiscoverer extends AnnotationMethodMappingDiscoverer{
+public class StringArrayAnnotationMethodMappingDiscoverer extends AnnotationMethodMappingDiscoverer{
 
 	public StringArrayAnnotationMethodMappingDiscoverer(MethodWrapper method, String annotationValueName) {
 		super(method, annotationValueName);
@@ -19,6 +19,17 @@ public final class StringArrayAnnotationMethodMappingDiscoverer extends Annotati
 	 */
 	public <T extends Annotation> String getAnnotationValue(Class<T> annotationClassType, String regex) {
 		Optional<String[]> annotationValue = super.getAnnotationValueOnMethod(annotationClassType, String[].class); 
+		
+		if (annotationValue.isEmpty()) {
+			return "";
+		}
+		
+		return Arrays.deepToString(annotationValue.get()).replaceAll(regex, "");
+	}
+	
+	public <T extends Annotation> String getAnnotationValueOnClass(Class<T> annotationClassType, String regex,
+			String annotationValueName) {
+		Optional<String[]> annotationValue = super.getAnnotationValueOnClass(annotationClassType, String[].class, annotationValueName); 
 		
 		if (annotationValue.isEmpty()) {
 			return "";

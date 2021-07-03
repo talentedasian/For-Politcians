@@ -29,12 +29,12 @@ public final class MethodWrapper {
 		return methodParameters;
 	}
 
-	public MethodWrapper(String methodName, Class<?> classType, @Nullable Class<?>... methodParameters) {
+	public MethodWrapper(String methodName, Class<?> clasz, @Nullable Class<?>... methodParameters) {
 		super();
 		Assert.notNull(methodName, "methodName cannot be null");
-		Assert.notNull(classType, "classType cannot be null");
+		Assert.notNull(clasz, "class cannot be null");
 		this.methodName = methodName;
-		this.classType = classType;
+		this.classType = clasz;
 		this.methodParameters = methodParameters;
 	}
 
@@ -58,5 +58,8 @@ public final class MethodWrapper {
 		return method.get().getDeclaredAnnotations();
 	}
 	
+	public Annotation[] getDeclaredClassAnnotations() {
+		return classType.getAnnotations();
+	}
+	
 }
-

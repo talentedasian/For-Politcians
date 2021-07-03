@@ -15,6 +15,7 @@ public class AnnotationMethodMappingDiscoverer{
 	private final MethodWrapper method;
 	private final String annotationName;
 	private final MergedAnnotations mergedAnnotations;
+	private final MergedAnnotations classMergedAnnotations;
 
 	public String getAnnotationName() {
 		return annotationName;
@@ -28,6 +29,7 @@ public class AnnotationMethodMappingDiscoverer{
 		this.method = method;
 		this.annotationName = annotationValueName;
 		this.mergedAnnotations = MergedAnnotations.from(this.method.getAnnotations());
+		this.classMergedAnnotations = MergedAnnotations.from(this.method.getDeclaredClassAnnotations());
 	}
 
 	/*
@@ -45,5 +47,18 @@ public class AnnotationMethodMappingDiscoverer{
 		
 		return Optional.empty();
 	}
+	
+	/*
+	 * 
+	 */
+	public <T extends Annotation, Z> Optional<Z> getAnnotationValueOnClass(Class<T> annotationInClassType, 
+			Class<Z> annotationInClassValueType, String annotationValueName) {
+		MergedAnnotation<T> annotation = classMergedAnnotations.get(annotationInClassType);
+		if (annotation.isDirectlyPresent()) {
+			return Optional.of(annotation.getValue(annotationValueName, annotationInClassValueType).get());
+		}
+		
+		return Optional.empty();
+	} 
 
 }
