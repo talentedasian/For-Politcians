@@ -1,7 +1,6 @@
 package com.example.demo.filter;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -13,12 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.annotation.MergedAnnotation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpMethod;
 
+import com.example.demo.annotationDiscoverer.ControllerPathValueFactory;
 import com.example.demo.annotationDiscoverer.MethodWrapper;
-import com.example.demo.annotationDiscoverer.StringArrayAnnotationMethodMappingDiscoverer;
+import com.example.demo.annotationDiscoverer.RequestMappingAnnotationDiscoverer;
 import com.example.demo.controller.PoliticianController;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.exceptionHandling.ExceptionModel;
@@ -29,7 +27,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AddPoliticianFilter implements Filter{
 	
 	private String password = "password";
-	private static final String REMOVE_SPECIAL_CHAR = "[\\[\\]]";
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -74,18 +71,10 @@ public class AddPoliticianFilter implements Filter{
 	
 	private String getRequestUriToMatch() {
 		var method = new MethodWrapper("savePolitician", PoliticianController.class, AddPoliticianDTORequest.class); 
-		var discoverer = new StringArrayAnnotationMethodMappingDiscoverer(method, "value");
+		var discoverer = new RequestMappingAnnotationDiscoverer(method, "value");
+		var endpointBuilder = new ControllerPathValueFactory(discoverer);
 		
-		String httpEndpoint = discoverer.getAnnotationValue(PostMapping.class, REMOVE_SPECIAL_CHAR);
-		System.out.println(httpEndpoint + "pota bat ganto");
-		/*
-		 * Implement a class for extracting annotation values from the future.
-		 */
-		String[] apiEndpointArray = MergedAnnotation.from(method.getMethod().get().getDeclaringClass().getAnnotation(RequestMapping.class)).getStringArray("value");
-		String apiEndpoint = Arrays.deepToString(apiEndpointArray).replaceAll("[\\[\\]]", "");
-		System.out.println(apiEndpoint.concat(httpEndpoint) + " potangina");
-		
-		return apiEndpoint.concat(httpEndpoint);
+		return endpointBuilder.formUriEndpoint(HttpMethod.POST);
 	}
 
 }
