@@ -1,9 +1,15 @@
 package com.example.demo.mockMvcUtils;
 
+import static java.net.URI.create;
+
+import java.net.URI;
 import java.util.Map;
 
+import org.mockito.Mockito;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpRequest;
 import org.springframework.lang.Nullable;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
 import com.example.demo.annotationDiscoverer.MethodWrapper;
@@ -45,6 +51,8 @@ public class MockMvcPathUtils {
 		case DELETE -> {uri = baseUri.concat(discoverer.getAnnotationDeleteMappingPathValue());}
 		default -> throw new IllegalArgumentException("Unexpected value: " + httpMethod);
 		}
+		
+		UriComponentsBuilder.fromUri(create(uri)).queryparam
 		
 		return uri;
 	}
