@@ -2,9 +2,9 @@
 ----
 $ curl 'http://localhost:8080/api/ratings/rating' -i -X POST \
     -H 'Content-Type: application/json' \
-    -H 'Authorization: Not Bearer eyJsb2dpbl9tZWNoYW5pc20iOiJmYWNlYm9vayIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsIm5hbWUiOiJ0ZXN0IiwianRpIjoiMSIsImV4cCI6MTYyNTQ2Mzg2MH0.YPihX3HGAfJNa_Rzwv0MB2Qo7xL704shMRmJI3VLP-c1avdY5mOqnMD3yK7w2HvFe3UTwunmqkpGEjsz3m__j1bJ5nPqQhndcyofk1tfZ5rBFZPDXt-lyogop9H57Vs3MxCCeKOOGR-aQJIbXqFuFGD_hoCSUNvaRwRnNoQ_iK_-CFGl-XxJngUw2GWuGyiKtXUMdy5qrqcrxHU9yLIV8Wmp7lxvYxb1fUEECiHLzZaRr0jTLELBvazbf7x08n7xADJnqL8Anp1M2FICP8GJIC5YNIyy7gV0Li3vWG833d5KcE4t6ft8XvuOfDDy9KE527Q_A3NnfXM1jxEXX3BVsQ' \
+    -H 'Authorization: Not Bearer eyJsb2dpbl9tZWNoYW5pc20iOiJmYWNlYm9vayIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsIm5hbWUiOiJ0ZXN0IiwianRpIjoiMSIsImV4cCI6MTYyNTQ2ODgxN30.BJty_SYMStGACM0EZAQWof7mDRdsVP1-WQ4I9pFdg-hENJs4WoPgMeCIvhr_7fluLkxR2hF4omnVJROYlUqCACJXVDvvvNFZs_ilVGWDbNTuhrSYESfvnbWXOqxtSO-3FHEf8oH2qOk0XIXa1upIw2y4IF68LXhSg7C3ivhyUUnq557u0IaXzMYbL1QyuY9ExNchqHVMdqcJkkpYSkjvyPLUCkn2QrJQGtB8SMtXllmB0-L-7ebvrwHfLJgojTG1VZuukwa8oxUsjgcD-wl7jHLg2slsaReGkRMp-jX7CFYAFr8vqLYN23S83bn6x9yVjDwNkRmXlcD_FQKdNZs8dg' \
     -d '{
-	"id": "123polNumber",
+	"id": "123",
 	"rating": 1.00,
 	"political_party": "dds"
 }

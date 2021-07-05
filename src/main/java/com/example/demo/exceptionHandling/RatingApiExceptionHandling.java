@@ -37,7 +37,7 @@ public class RatingApiExceptionHandling {
 	}
 	
 	@ExceptionHandler(UserRateLimitedOnPoliticianException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
 	public ResponseEntity<ExceptionModel> handleRateLimitedException(UserRateLimitedOnPoliticianException e) {
 		var exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("429");
@@ -46,7 +46,7 @@ public class RatingApiExceptionHandling {
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Retry-After", e.getDaysLeft().toString() + " days");
-		return new ResponseEntity<ExceptionModel>(exceptionModel, headers, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<ExceptionModel>(exceptionModel, headers, HttpStatus.TOO_MANY_REQUESTS);
 	}
 	
 	@ExceptionHandler(RateLimitNotFoundException.class)

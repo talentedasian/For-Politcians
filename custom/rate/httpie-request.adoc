@@ -1,7 +1,7 @@
 [source,bash]
 ----
 $ echo '{
-	"id": "123polNumber",
+	"id": "123",
 	"rating": 1.00,
 	"political_party": "dds"
 }

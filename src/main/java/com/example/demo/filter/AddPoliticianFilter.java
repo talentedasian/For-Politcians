@@ -12,11 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import com.example.demo.annotationDiscoverer.MethodWrapper;
-import com.example.demo.annotationDiscoverer.RequestMappingAnnotationDiscoverer;
 import com.example.demo.controller.PoliticianController;
-import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.exceptionHandling.ExceptionModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -68,16 +66,15 @@ public class AddPoliticianFilter implements Filter{
 	}
 	
 	private String getRequestUriToMatch() {
+		System.out.println(formUriEndpoint() + " potangina");
 		return formUriEndpoint();
 	}
 
 	private String formUriEndpoint() {
-		var method = new MethodWrapper("savePolitician", PoliticianController.class, AddPoliticianDTORequest.class);
-		var endpointBuilder = new RequestMappingAnnotationDiscoverer(method, "value");
-		
-		return endpointBuilder.getAnnotationRequestMappingPathValueOnClass().concat(endpointBuilder.getAnnotationGetMappingPathValue());
+		return MvcUriComponentsBuilder.fromController(PoliticianController.class).path("/politician")
+				.build()
+				.getPath()
+				.toString();
 	}
 	
-	
-
 }

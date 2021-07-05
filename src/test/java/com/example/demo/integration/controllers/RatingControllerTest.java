@@ -1,15 +1,12 @@
 package com.example.demo.integration.controllers;
 
 import static com.example.demo.jwt.JwtProvider.createJwtWithFixedExpirationDate;
-import static com.example.demo.mockMvcUtils.MockMvcPathUtils.createPath;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -19,10 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -69,20 +62,15 @@ public class RatingControllerTest {
 	@MockBean RatingDtoMapper mapper;
 	@MockBean RateLimitingService rateLimitService;
 	
-	Map<String, Object> uriVars = new HashMap<>();
-	
 	Politicians politician;
 	PoliticiansRating politiciansRating;
 	RatingDTO ratingDTO;
 	PoliticianDTO politicianDTO;
 	UserRater userRater;
 	
-	Class<?>[] postClasses = { AddRatingDTORequest.class, HttpServletRequest.class };
-	Class<RatingsController> ratingClass= RatingsController.class;
-	
 	final String content = """
 			{
-				"id": "123polNumber",
+				"id": "123",
 				"rating": 1.00,
 				"political_party": "dds"
 			}
@@ -98,7 +86,7 @@ public class RatingControllerTest {
 				.build();
 		
 		politician = new Politicians();
-		politician.setId(1);
+		politician.setId(123);
 		politician.setFirstName("Mirriam");
 		politician.setLastName("Defensor");
 		politician.setRating(new Rating(1D, 1D, mock(LowSatisfactionAverageCalculator.class)));
@@ -106,8 +94,6 @@ public class RatingControllerTest {
 		userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accNumber");
 		
 		politiciansRating = new PoliticiansRating(1, 1D, userRater, politician);
-		
-		uriVars.put("id", 1);
 	}
 	
 	@Test
@@ -122,8 +108,7 @@ public class RatingControllerTest {
 			.andExpect(jsonPath("err", 
 					containsStringIgnoringCase("no jwt found on authorization header")))
 			.andExpect(jsonPath("code", 
-					containsStringIgnoringCase("401")))
-			.andDo(document("rate-no-jwt"));
+					containsStringIgnoringCase("401")));
 	}
 	
 	@Test
@@ -147,8 +132,7 @@ public class RatingControllerTest {
 	public void shouldReturn201IsCreated() throws Exception {
 		when(service.saveRatings(any(AddRatingDTORequest.class), any(HttpServletRequest.class))).thenReturn(politiciansRating);
 		
-		
-		mvc.perform(post(createPath("saveRating", ratingClass, POST, null, postClasses))
+		mvc.perform(post(create("/api/ratings/rating"))
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
@@ -159,14 +143,23 @@ public class RatingControllerTest {
 			.andExpect(jsonPath("rater.facebook_name", 
 					equalTo(userRater.getFacebookName())))
 			.andExpect(jsonPath("rater.political_party", 
-					equalTo(userRater.getPoliticalParties().toString())));
+					equalTo(userRater.getPoliticalParties().toString())))
+			.andExpect(jsonPath("rater.id", 
+					equalTo(userRater.getUserAccountNumber())))
+			.andExpect(jsonPath("politician.name", 
+					equalTo(politician.getFullName())))
+			.andExpect(jsonPath("politician.rating", 
+					equalTo(politician.getRating().getAverageRating())))
+			.andExpect(jsonPath("politician.satisfaction_rate", 
+					equalTo(com.example.demo.model.enums.Rating.mapToSatisfactionRate(politician.getRating().getAverageRating()).toString())))
+			.andDo(document("rate"));
 	}
 	
 	@Test
 	public void shouldReturn404NotFoundbyId() throws Exception {
 		when(service.findById("1")).thenThrow(new RatingsNotFoundException("No rating found by Id"));
 		
-		mvc.perform(get(createPath("getRatingById", ratingClass, GET, uriVars, String.class)))
+		mvc.perform(get(create("/api/ratings/rating/1")))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("code",
 					containsStringIgnoringCase("404")))
@@ -177,8 +170,8 @@ public class RatingControllerTest {
 	@Test
 	public void shouldReturn404NotFoundByRater() throws Exception {
 		when(service.findRatingsByFacebookEmail("dasdsa@gmail.com")).thenThrow(new RatingsNotFoundException("No rating found by Rater"));
-		System.out.println(createPath("getRatingByRater", ratingClass, GET, null, String.class).concat("?email=dasdsa@gmail.com") + " tite");
-		mvc.perform(get(URI.create(createPath("getRatingByRater", ratingClass, GET, null, String.class).concat("?email=dasdsa@gmail.com"))))
+		
+		mvc.perform(get(create("/api/ratings/rating?email=dasdsa@gmail.com")))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("code",
 					containsStringIgnoringCase("404")))
@@ -191,18 +184,17 @@ public class RatingControllerTest {
 		when(service.saveRatings(any(AddRatingDTORequest.class), any(HttpServletRequest.class)))
 		.thenThrow(new UserRateLimitedOnPoliticianException("User is rate limited on politician with 2 days left", 2L));
 		
-		mvc.perform(post(URI.create(createPath("saveRating", ratingClass, POST, null, AddRatingDTORequest.class, HttpServletRequest.class)))
+		mvc.perform(post(create("/api/ratings/rating"))
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().is4xxClientError())
+			.andExpect(status().isTooManyRequests())
 			.andExpect(jsonPath("err", 
 					containsStringIgnoringCase("rate limited on politician ")))
 			.andExpect(jsonPath("code", 
 				containsStringIgnoringCase("429")))
 			.andExpect(jsonPath("optional", 
 				containsStringIgnoringCase("one request per week")))
-			.andExpect(header().string("Retry-After","2 days"))
-			.andDo(document("rate-limited"));
+			.andExpect(header().string("Retry-After","2 days"));
 	}
 	
 }

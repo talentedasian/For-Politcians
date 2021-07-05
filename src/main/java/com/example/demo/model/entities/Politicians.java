@@ -89,7 +89,7 @@ public class Politicians implements PoliticianMethods{
 	}
 
 	public String getFullName() {
-		return fullName;
+		return firstName + " " + lastName;
 	}
 
 	public void setFullName(String fullName) {

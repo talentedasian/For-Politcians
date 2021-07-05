@@ -1,0 +1,4 @@
+[source,bash]
+----
+$ curl 'http://localhost:8080/api/ratings/rating?email=dasdsa@gmail.com' -i -X GET
+----

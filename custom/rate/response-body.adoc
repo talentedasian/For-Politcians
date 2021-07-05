@@ -1,4 +1,4 @@
 [source,options="nowrap"]
 ----
-{"err":"Accessing protected resource. No jwt found on authorization Header","code":"401"}
+{"rating":1.0,"rater":{"email":"test@gmail.com","facebook_name":"test","political_party":"DDS","id":"123accNumber"},"politician":{"name":"Mirriam Defensor","id":null,"rating":1.0,"satisfaction_rate":"LOW"}}
 ----

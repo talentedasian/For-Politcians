@@ -3,7 +3,7 @@
 $ curl 'http://localhost:8080/api/ratings/rating' -i -X POST \
     -H 'Content-Type: application/json' \
     -d '{
-	"id": "123polNumber",
+	"id": "123",
 	"rating": 1.00,
 	"political_party": "dds"
 }
