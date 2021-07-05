@@ -21,7 +21,7 @@ import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.dtomapper.interfaces.RatingDTOMapper;
-import com.example.demo.exceptions.UserRateLimitedOnPolitician;
+import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.service.RatingService;
 
@@ -43,7 +43,7 @@ public class RatingsController {
 
 	@Operation(security = { @SecurityRequirement(name = "add-rating") })
 	@PostMapping("/rating")
-	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request, HttpServletRequest req) throws UserRateLimitedOnPolitician {
+	public ResponseEntity<RatingDTO> saveRating(@Valid @RequestBody AddRatingDTORequest request, HttpServletRequest req) throws UserRateLimitedOnPoliticianException {
 		PoliticiansRating politicianRatingSaved = ratingService.saveRatings(request, req);
 		
 		mapper = new RatingDtoMapper();

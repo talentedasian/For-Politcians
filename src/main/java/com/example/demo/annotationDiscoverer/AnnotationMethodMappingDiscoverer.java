@@ -1,7 +1,7 @@
 package com.example.demo.annotationDiscoverer;
 
 import java.lang.annotation.Annotation;
-import java.util.Optional;
+import java.lang.reflect.Parameter;
 
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
@@ -21,6 +21,18 @@ public class AnnotationMethodMappingDiscoverer{
 		return annotationName;
 	}
 	
+	MethodWrapper getMethod() {
+		return method;
+	}
+
+	MergedAnnotations getMergedAnnotations() {
+		return mergedAnnotations;
+	}
+
+	MergedAnnotations getClassMergedAnnotations() {
+		return classMergedAnnotations;
+	}
+
 	public AnnotationMethodMappingDiscoverer(MethodWrapper method, String annotationValueName) {
 		super();
 		Assert.notNull(method, "method should not be null");
@@ -38,27 +50,36 @@ public class AnnotationMethodMappingDiscoverer{
 	 * characters, use the StringArrayAnnotationMethodMappingDiscoverer class 
 	 * instead and pass your own regex to extract out the unwanted characters. 
 	 */
-	public <T extends Annotation, Z> Optional<Z> getAnnotationValueOnMethod(Class<T> annotationClassType, 
+	public <T extends Annotation, Z> Z getAnnotationValueOnMethod(Class<T> annotationClassType, 
 			Class<Z> annotationValueType) {
 		MergedAnnotation<T> annotation = mergedAnnotations.get(annotationClassType);
 		if (annotation.isDirectlyPresent()) {
-			return Optional.of(annotation.getValue(annotationName, annotationValueType).get());
+			return annotation.getValue(annotationName, annotationValueType).get();
 		}
 		
-		return Optional.empty();
+		return null;
 	}
 	
 	/*
 	 * 
 	 */
-	public <T extends Annotation, Z> Optional<Z> getAnnotationValueOnClass(Class<T> annotationInClassType, 
+	public <T extends Annotation, Z> Z getAnnotationValueOnClass(Class<T> annotationInClassType, 
 			Class<Z> annotationInClassValueType, String annotationValueName) {
 		MergedAnnotation<T> annotation = classMergedAnnotations.get(annotationInClassType);
 		if (annotation.isDirectlyPresent()) {
-			return Optional.of(annotation.getValue(annotationValueName, annotationInClassValueType).get());
+			return annotation.getValue(annotationValueName, annotationInClassValueType).get();
 		}
 		
-		return Optional.empty();
+		return null;
 	} 
+	
+	public Parameter[] getMethodParameters() {
+		Parameter[] params = this.method.getParameters();
+		if (params.length == 0) {
+			return null;
+		}
+		
+		return params;
+	}
 
 }

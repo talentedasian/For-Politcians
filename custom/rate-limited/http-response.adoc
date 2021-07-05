@@ -1,0 +1,9 @@
+[source,http,options="nowrap"]
+----
+HTTP/1.1 404 Not Found
+Retry-After: 2 days
+Content-Type: application/json
+Content-Length: 208
+
+{"err":"User is rate limited on politician with 2 days left","code":"429","optional":"This endpoint only allows one request per week","additional_information":"This endpoint only allows one request per week"}
+----

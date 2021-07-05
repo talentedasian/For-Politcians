@@ -12,9 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpMethod;
 
-import com.example.demo.annotationDiscoverer.ControllerPathValueFactory;
 import com.example.demo.annotationDiscoverer.MethodWrapper;
 import com.example.demo.annotationDiscoverer.RequestMappingAnnotationDiscoverer;
 import com.example.demo.controller.PoliticianController;
@@ -70,11 +68,16 @@ public class AddPoliticianFilter implements Filter{
 	}
 	
 	private String getRequestUriToMatch() {
-		var method = new MethodWrapper("savePolitician", PoliticianController.class, AddPoliticianDTORequest.class); 
-		var discoverer = new RequestMappingAnnotationDiscoverer(method, "value");
-		var endpointBuilder = new ControllerPathValueFactory(discoverer);
-		
-		return endpointBuilder.formUriEndpoint(HttpMethod.POST);
+		return formUriEndpoint();
 	}
+
+	private String formUriEndpoint() {
+		var method = new MethodWrapper("savePolitician", PoliticianController.class, AddPoliticianDTORequest.class);
+		var endpointBuilder = new RequestMappingAnnotationDiscoverer(method, "value");
+		
+		return endpointBuilder.getAnnotationRequestMappingPathValueOnClass().concat(endpointBuilder.getAnnotationGetMappingPathValue());
+	}
+	
+	
 
 }

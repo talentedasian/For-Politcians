@@ -1,0 +1,15 @@
+[source,http,options="nowrap"]
+----
+POST /api/ratings/rating HTTP/1.1
+Content-Type: application/json
+Authorization: Not Bearer eyJsb2dpbl9tZWNoYW5pc20iOiJmYWNlYm9vayIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsIm5hbWUiOiJ0ZXN0IiwianRpIjoiMSIsImV4cCI6MTYyNTQ2Mzg2MH0.YPihX3HGAfJNa_Rzwv0MB2Qo7xL704shMRmJI3VLP-c1avdY5mOqnMD3yK7w2HvFe3UTwunmqkpGEjsz3m__j1bJ5nPqQhndcyofk1tfZ5rBFZPDXt-lyogop9H57Vs3MxCCeKOOGR-aQJIbXqFuFGD_hoCSUNvaRwRnNoQ_iK_-CFGl-XxJngUw2GWuGyiKtXUMdy5qrqcrxHU9yLIV8Wmp7lxvYxb1fUEECiHLzZaRr0jTLELBvazbf7x08n7xADJnqL8Anp1M2FICP8GJIC5YNIyy7gV0Li3vWG833d5KcE4t6ft8XvuOfDDy9KE527Q_A3NnfXM1jxEXX3BVsQ
+Content-Length: 70
+Host: localhost:8080
+
+{
+	"id": "123polNumber",
+	"rating": 1.00,
+	"political_party": "dds"
+}
+
+----

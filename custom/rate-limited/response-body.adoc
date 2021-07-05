@@ -1,0 +1,4 @@
+[source,options="nowrap"]
+----
+{"err":"User is rate limited on politician with 2 days left","code":"429","optional":"This endpoint only allows one request per week","additional_information":"This endpoint only allows one request per week"}
+----

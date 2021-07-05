@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.RatingsNotFoundException;
-import com.example.demo.exceptions.UserRateLimitedOnPolitician;
+import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -44,7 +44,7 @@ public class RatingService {
 	}
 	
 	@Transactional
-	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) throws UserRateLimitedOnPolitician {
+	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) throws UserRateLimitedOnPoliticianException {
 		Politicians politician = politicianRepo.findByPoliticianNumber(dto.getId())
 				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by id"));
 		politician.setRepo(ratingRepo);
@@ -62,7 +62,7 @@ public class RatingService {
 		if (!rateLimitService.isNotRateLimited(accountNumber, polNumber)) {
 			Long daysLeft = rateLimitService.daysLeftOfBeingRateLimited(accountNumber, polNumber).longValue();
 			
-			throw new UserRateLimitedOnPolitician("User is rate limited on politician with " + daysLeft + " days left", 
+			throw new UserRateLimitedOnPoliticianException("User is rate limited on politician with " + daysLeft + " days left", 
 					daysLeft);
 		}
 		/*

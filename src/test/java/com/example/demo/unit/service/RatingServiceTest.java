@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.baseClasses.AbstractEntitiesServiceTest;
-import com.example.demo.exceptions.UserRateLimitedOnPolitician;
+import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.jwt.JwtProvider;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -25,7 +25,7 @@ import com.example.demo.model.entities.UserRater;
 public class RatingServiceTest extends AbstractEntitiesServiceTest{
 
 	@Test
-	public void verifyRatingRepoCalledSaved() throws UserRateLimitedOnPolitician {
+	public void verifyRatingRepoCalledSaved() throws UserRateLimitedOnPoliticianException {
 		stubSaveRepo();
 		when(rateLimitService.isNotRateLimited(any(), any())).thenReturn(true);
 		ratingService.saveRatings(ratingDtoRequest,req);
@@ -34,7 +34,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	}
 	
 	@Test
-	public void assertSavedRepo() throws UserRateLimitedOnPolitician {
+	public void assertSavedRepo() throws UserRateLimitedOnPoliticianException {
 		stubSaveRepo(); 
 		when(rateLimitService.isNotRateLimited(any(), any())).thenReturn(true);
 		PoliticiansRating rating = ratingService.saveRatings(ratingDtoRequest,req);
@@ -44,7 +44,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	}
 	
 	@Test
-	public void assertSavedRepoUserRater() throws UserRateLimitedOnPolitician {
+	public void assertSavedRepoUserRater() throws UserRateLimitedOnPoliticianException {
 		stubSaveRepo();
 		when(rateLimitService.isNotRateLimited(any(), any())).thenReturn(true);
 		PoliticiansRating rating = ratingService.saveRatings(ratingDtoRequest,req);

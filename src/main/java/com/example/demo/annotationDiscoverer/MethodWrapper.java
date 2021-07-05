@@ -2,6 +2,7 @@ package com.example.demo.annotationDiscoverer;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.Optional;
 
 import org.springframework.lang.Nullable;
@@ -38,7 +39,7 @@ public final class MethodWrapper {
 		this.methodParameters = methodParameters;
 	}
 
-	public Optional<Method> getMethod() {
+	private Optional<Method> getMethod() {
 		try {
 			return Optional.of(classType.getDeclaredMethod(methodName, methodParameters));
 		} catch (NoSuchMethodException | SecurityException e) {
@@ -60,6 +61,34 @@ public final class MethodWrapper {
 	
 	public Annotation[] getDeclaredClassAnnotations() {
 		return classType.getAnnotations();
+	}
+	
+	public Annotation[] getParameterAnnotations() {
+		Optional<Method> method = getMethod();
+		
+		Annotation[] annotations = new Annotation[10];
+		if (method.isEmpty()) {
+			return annotations;
+		}
+		
+		int i = 0;
+		for (Parameter param : method.get().getParameters()) {
+			for (Annotation annotation : param.getDeclaredAnnotations()) {
+				annotations[i++] = annotation;
+			}
+		}
+		
+		return annotations;
+	}
+	
+	public Parameter[] getParameters() {
+		Optional<Method> method = getMethod();
+		
+		if (method.isEmpty()) {
+			return new Parameter[0];
+		}
+		
+		return method.get().getParameters();
 	}
 	
 }

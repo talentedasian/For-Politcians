@@ -1,0 +1,9 @@
+[source,options="nowrap"]
+----
+{
+	"id": "123polNumber",
+	"rating": 1.00,
+	"political_party": "dds"
+}
+
+----

@@ -1,0 +1,4 @@
+[source,options="nowrap"]
+----
+{"err":"Authorization Header must start with Bearer","code":"401"}
+----

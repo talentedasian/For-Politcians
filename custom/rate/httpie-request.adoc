@@ -1,0 +1,10 @@
+[source,bash]
+----
+$ echo '{
+	"id": "123polNumber",
+	"rating": 1.00,
+	"political_party": "dds"
+}
+' | http POST 'http://localhost:8080/api/ratings/rating' \
+    'Content-Type:application/json'
+----

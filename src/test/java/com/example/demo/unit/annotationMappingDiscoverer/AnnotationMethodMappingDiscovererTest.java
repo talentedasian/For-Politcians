@@ -17,7 +17,7 @@ public class AnnotationMethodMappingDiscovererTest {
 		var discoverer = new AnnotationMethodMappingDiscoverer(method, "readOnly");
 		
 		assertEquals(true, 
-				discoverer.getAnnotationValueOnMethod(Transactional.class, Boolean.class).get());
+				discoverer.getAnnotationValueOnMethod(Transactional.class, Boolean.class));
 	}
 
 }

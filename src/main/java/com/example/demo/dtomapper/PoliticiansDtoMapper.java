@@ -12,33 +12,28 @@ public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 
 	@Override
 	public PoliticianDTO mapToDTO(Politicians entity) {
-		Double rating = entity.getRating().getAverageRating();
-		Rating satisfactionRate = Rating.mapToSatisfactionRate(rating);
-		var politicianDTO =  new PoliticianDTO(
-				entity.getFirstName() + " " + entity.getLastName(), 
-				entity.getPoliticianNumber(), 
-				entity.getRating().getAverageRating(),
-				satisfactionRate);
-		
-		return politicianDTO;
+		return mapToPoliticianDTO(entity);
 	}
 	
 	@Override
 	public List<PoliticianDTO> mapToDTO(List<Politicians> entity) {
 		List<PoliticianDTO> politicianDTOList = new ArrayList<>();
-		for (Politicians politicians : entity) {
-			Double rating = politicians.getRating().getAverageRating();			
-			Rating satisfactionRate = Rating.mapToSatisfactionRate(rating);
-			var politicianDTO =  new PoliticianDTO(
-					politicians.getFirstName() + " " + politicians.getLastName(), 
-					String.valueOf(politicians.getId()), 
-					politicians.getRating().getAverageRating(),
-					satisfactionRate);
-			
-			politicianDTOList.add(politicianDTO);
-		}
+		entity.stream().forEach(politicians -> {
+			politicianDTOList.add(mapToPoliticianDTO(politicians));
+		});
 		
 		return politicianDTOList;
+	}
+	
+	private PoliticianDTO mapToPoliticianDTO(Politicians entity) {
+		Double rating = entity.getRating().getAverageRating();
+		Rating satisfactionRate = Rating.mapToSatisfactionRate(rating);
+		
+		return new PoliticianDTO(
+				entity.getFirstName() + " " + entity.getLastName(), 
+				entity.getPoliticianNumber(), 
+				rating,
+				satisfactionRate);
 	}
 
 }

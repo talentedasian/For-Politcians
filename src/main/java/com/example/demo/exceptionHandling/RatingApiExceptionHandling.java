@@ -11,7 +11,7 @@ import com.example.demo.controller.RatingsController;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.RateLimitNotFoundException;
 import com.example.demo.exceptions.RatingsNotFoundException;
-import com.example.demo.exceptions.UserRateLimitedOnPolitician;
+import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 
 @RestControllerAdvice(assignableTypes = { RatingsController.class })
 public class RatingApiExceptionHandling {
@@ -36,9 +36,9 @@ public class RatingApiExceptionHandling {
 		return new ResponseEntity<ExceptionModel>(exceptionModel, HttpStatus.NOT_FOUND);
 	}
 	
-	@ExceptionHandler(UserRateLimitedOnPolitician.class)
+	@ExceptionHandler(UserRateLimitedOnPoliticianException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ResponseEntity<ExceptionModel> handleRateLimitedException(UserRateLimitedOnPolitician e) {
+	public ResponseEntity<ExceptionModel> handleRateLimitedException(UserRateLimitedOnPoliticianException e) {
 		var exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("429");
 		exceptionModel.setErr(e.getMessage());

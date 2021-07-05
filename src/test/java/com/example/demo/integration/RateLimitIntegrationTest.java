@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.dtoRequest.AddRatingDTORequest;
-import com.example.demo.exceptions.UserRateLimitedOnPolitician;
+import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.RateLimit;
@@ -54,14 +54,14 @@ public class RateLimitIntegrationTest {
 	}
 	
 	@Test
-	public void assertLogicOfRateLimitSupposedToThrow() throws UserRateLimitedOnPolitician {
+	public void assertLogicOfRateLimitSupposedToThrow() throws UserRateLimitedOnPoliticianException {
 		rateLimitRepo.save(rateLimitToBeSaved);
 		
 		var requestContent = new AddRatingDTORequest(valueOf(1L), "1number", "dds");
 		HttpServletRequest req = mock(HttpServletRequest.class);
 		when(req.getHeader("Authorization")).thenReturn("Bearer " + createJwtWithFixedExpirationDate("test@gmail.com", "1", "test name"));
 		
-		assertThrows(UserRateLimitedOnPolitician.class, 
+		assertThrows(UserRateLimitedOnPoliticianException.class, 
 				() -> ratingService.saveRatings(requestContent, req));
 	}
 	
@@ -73,7 +73,7 @@ public class RateLimitIntegrationTest {
 		HttpServletRequest req = mock(HttpServletRequest.class);
 		when(req.getHeader("Authorization")).thenReturn("Bearer " + createJwtWithFixedExpirationDate("test@gmail.com", "1", "test name"));
 		
-		assertThrows(UserRateLimitedOnPolitician.class, 
+		assertThrows(UserRateLimitedOnPoliticianException.class, 
 				() -> ratingService.saveRatings(requestContent, req));
 	}
 
