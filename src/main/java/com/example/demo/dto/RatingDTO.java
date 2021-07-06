@@ -1,8 +1,10 @@
 package com.example.demo.dto;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.example.demo.model.entities.UserRater;
 
-public class RatingDTO {
+public class RatingDTO extends RepresentationModel<RatingDTO>{
 
 	private Double rating;
 	

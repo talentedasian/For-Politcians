@@ -1,4 +1,0 @@
-[source,options="nowrap"]
-----
-{"err":"No rating found by Id","code":"404"}
-----

@@ -23,6 +23,7 @@ import com.example.demo.controller.PoliticianController;
 import com.example.demo.controller.RatingsController;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.dtomapper.RatingDtoMapper;
+import com.example.demo.hateoas.RatingAssembler;
 import com.example.demo.service.PoliticiansService;
 import com.example.demo.service.RatingService;
 
@@ -41,6 +42,8 @@ public class BadRequestTest {
 	public RatingDtoMapper ratingMapper;
 	@MockBean
 	public PoliticiansService politicianService;
+	@MockBean
+	public RatingAssembler assembler;
 
 
 
@@ -91,4 +94,5 @@ public class BadRequestTest {
 			.andExpect(jsonPath("message", 
 					hasItem(startsWithIgnoringCase("error on firstName"))));
 	}
+	
 }

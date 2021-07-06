@@ -37,8 +37,8 @@ public class RatingService {
 	
 	@Transactional(readOnly = true)
 	public PoliticiansRating findById(String id) {
-		PoliticiansRating rating = ratingRepo.findById(Integer.valueOf(id))
-				.orElseThrow(() -> new RatingsNotFoundException("No rating found by Id"));
+		PoliticiansRating rating = ratingRepo.findByRater_UserAccountNumber(id)
+				.orElseThrow(() -> new RatingsNotFoundException("No rating found by " + id));
 		
 		return rating;
 	}

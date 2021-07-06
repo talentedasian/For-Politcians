@@ -2,16 +2,15 @@ package com.example.demo.unit.controller;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -19,6 +18,7 @@ import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtomapper.RatingDtoMapper;
+import com.example.demo.hateoas.RatingAssembler;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -30,25 +30,24 @@ import com.example.demo.service.RatingService;
 @ExtendWith(SpringExtension.class)
 public class RatingsControllerTest {
 	
-	@Mock
-	public RatingService service;
-	@Mock
-	public RatingDtoMapper mapper;
+	@Mock RatingService service;
 	
-	public RatingsController controller;
+	@Mock RatingAssembler assembler;
 	
-	public Politicians politician;
-	public PoliticiansRating politiciansRating;
-	public RatingDTO ratingDTO;
-	public PoliticianDTO politicianDTO;	
-	public final UserRater userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accountNumber");
+	RatingsController controller;
+	
+	Politicians politician;
+	PoliticiansRating politiciansRating;
+	RatingDTO ratingDTO;
+	PoliticianDTO politicianDTO;	
+	final UserRater userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accountNumber");
 	
 	@BeforeEach
 	public void setup() {
-		controller = new RatingsController(service, Optional.of(mapper));
+		controller = new RatingsController(service, assembler);
 		
 		politician = new Politicians();
-		politician.setId(1);
+		politician.setPoliticianNumber("123polNumber");
 		politician.setFirstName("Mirriam");
 		politician.setLastName("Defensor");
 		politician.setFullName("Mirriam Defensor");
@@ -64,10 +63,11 @@ public class RatingsControllerTest {
 	@Test
 	public void assertEqualsDtoOutputs() throws Exception {
 		when(service.findById("1")).thenReturn(politiciansRating);
+		when(assembler.toModel(ratingDTO)).thenReturn(EntityModel.of(ratingDTO));
 		
-		ResponseEntity<RatingDTO> response = controller.getRatingById("1");
+		ResponseEntity<EntityModel<RatingDTO>> response = controller.getRatingById("1");
 		
-		RatingDTO politicianResponse = response.getBody();
+		RatingDTO politicianResponse = response.getBody().getContent();
 		
 		assertThat(politicianResponse.getRating(),
 				equalTo(politiciansRating.getRating()));
@@ -76,14 +76,14 @@ public class RatingsControllerTest {
 	@Test
 	public void assertEqualsDtoOutputsOnPoliticians() throws Exception {
 		when(service.findById("1")).thenReturn(politiciansRating);
-		when(mapper.mapToDTO(politiciansRating)).thenReturn(ratingDTO);
+		when(assembler.toModel(ratingDTO)).thenReturn(EntityModel.of(ratingDTO));
 		
-		ResponseEntity<RatingDTO> response = controller.getRatingById("1");
+		ResponseEntity<EntityModel<RatingDTO>> response = controller.getRatingById("1");
 		
-		RatingDTO politiciaResponse = response.getBody();
+		RatingDTO politiciaResponse = response.getBody().getContent();
 		
 		assertThat(politiciaResponse.getPolitician().getId().toString(),
-				equalTo(politiciansRating.getPolitician().getId().toString()));
+				equalTo(politiciansRating.getPolitician().getPoliticianNumber()));
 		assertThat(politiciaResponse.getPolitician().getName(),
 				equalTo(politiciansRating.getPolitician().getFirstName() + " " + politiciansRating.getPolitician().getLastName()));
 	}
@@ -94,18 +94,17 @@ public class RatingsControllerTest {
 		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
 		
 		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
-		when(mapper.mapToDTO(anyList())).thenReturn(new RatingDtoMapper().mapToDTO(listOfPoliticiansRating));
 		
 		ResponseEntity<List<RatingDTO>> response = controller.getRatingByRater("test@gmail.com");
 		RatingDTO politicianResponse = response.getBody().get(0);
 		RatingDTO politicianResponse2 = response.getBody().get(1);
 		
 		assertThat(politicianResponse.getPolitician().getId().toString(),
-				equalTo(listOfPoliticiansRating.get(0).getPolitician().getId().toString()));
+				equalTo(listOfPoliticiansRating.get(0).getPolitician().getPoliticianNumber()));
 		assertThat(politicianResponse.getPolitician().getName(),
 				equalTo(listOfPoliticiansRating.get(0).getPolitician().getFirstName() + " " + listOfPoliticiansRating.get(0).getPolitician().getLastName()));
 		assertThat(politicianResponse2.getPolitician().getId().toString(),
-				equalTo(listOfPoliticiansRating.get(1).getPolitician().getId().toString()));
+				equalTo(listOfPoliticiansRating.get(1).getPolitician().getPoliticianNumber()));
 		assertThat(politicianResponse2.getPolitician().getName(),
 				equalTo(listOfPoliticiansRating.get(1).getPolitician().getFirstName() + " " + listOfPoliticiansRating.get(1).getPolitician().getLastName()));
 	}
@@ -113,14 +112,15 @@ public class RatingsControllerTest {
 	@Test
 	public void assertEqualsUserRaterDtoOutputs() throws Exception {
 		when(service.findById("1")).thenReturn(politiciansRating);
+		when(assembler.toModel(ratingDTO)).thenReturn(EntityModel.of(ratingDTO));
 		
-		ResponseEntity<RatingDTO> response = controller.getRatingById("1");
+		EntityModel<RatingDTO> response = controller.getRatingById("1").getBody();
 		
-		assertThat(response.getBody().getRater().getFacebookName(),
+		assertThat(response.getContent().getRater().getFacebookName(),
 				equalTo(politiciansRating.getRater().getFacebookName()));
-		assertThat(response.getBody().getRater().getPoliticalParties().toString(),
+		assertThat(response.getContent().getRater().getPoliticalParties().toString(),
 				equalTo(politiciansRating.getRater().getPoliticalParties().toString()));
-		assertThat(response.getBody().getRater().getEmail(),
+		assertThat(response.getContent().getRater().getEmail(),
 				equalTo(politiciansRating.getRater().getEmail()));
 	}
 	

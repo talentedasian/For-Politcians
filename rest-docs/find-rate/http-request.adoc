@@ -1,0 +1,7 @@
+[source,http,options="nowrap"]
+----
+GET /api/ratings/rating/123accNumber HTTP/1.1
+Accept: application/prs.hal-forms+json
+Host: localhost:8080
+
+----

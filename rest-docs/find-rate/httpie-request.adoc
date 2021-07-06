@@ -1,0 +1,5 @@
+[source,bash]
+----
+$ http GET 'http://localhost:8080/api/ratings/rating/123accNumber' \
+    'Accept:application/prs.hal-forms+json'
+----

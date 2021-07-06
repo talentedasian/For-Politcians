@@ -1,0 +1,14 @@
+= Documentation
+:toc: left
+:homepage: gg
+
+== Rating a politician
+
+
+include::/home/almir/backend projects/politics/custom/rate/http-request.adoc[]
+
+=== Tanginamo 
+ulol gago
+
+== Rating a rater
+

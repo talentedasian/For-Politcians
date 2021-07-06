@@ -7,8 +7,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -21,13 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -40,6 +35,7 @@ import com.example.demo.exceptions.JwtMalformedFormatException;
 import com.example.demo.exceptions.JwtNotFoundException;
 import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
+import com.example.demo.hateoas.RatingAssembler;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -52,15 +48,14 @@ import com.example.demo.service.RatingService;
 
 @WebMvcTest(RatingsController.class)
 public class RatingControllerTest {
-	
-	@RegisterExtension final RestDocumentationExtension restDocumentation = new RestDocumentationExtension ("custom");
-	
+
 	MockMvc mvc;
 
 	@MockBean RatingService service;
 	@MockBean PoliticiansService polService;
 	@MockBean RatingDtoMapper mapper;
 	@MockBean RateLimitingService rateLimitService;
+	@MockBean RatingAssembler assembler;;
 	
 	Politicians politician;
 	PoliticiansRating politiciansRating;
@@ -79,9 +74,8 @@ public class RatingControllerTest {
 	@Mock HttpServletRequest req;
 	
 	@BeforeEach
-	public void setup(WebApplicationContext wac, RestDocumentationContextProvider provider) {
+	public void setup(WebApplicationContext wac) {
 		this.mvc = webAppContextSetup(wac)
-				.apply(documentationConfiguration(provider))
 				.alwaysDo(print())
 				.build();
 		
@@ -124,14 +118,14 @@ public class RatingControllerTest {
 			.andExpect(jsonPath("err", 
 					containsStringIgnoringCase("must start with bearer")))
 			.andExpect(jsonPath("code", 
-				containsStringIgnoringCase("401")))
-			.andDo(document("rate-start-bearer-jwt"));
+				containsStringIgnoringCase("401")));
 	}
 	
 	@Test
 	public void shouldReturn201IsCreated() throws Exception {
 		when(service.saveRatings(any(AddRatingDTORequest.class), any(HttpServletRequest.class))).thenReturn(politiciansRating);
 		
+		when(assembler.toModel(any())).thenCallRealMethod();
 		mvc.perform(post(create("/api/ratings/rating"))
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
@@ -140,7 +134,7 @@ public class RatingControllerTest {
 					equalTo(1.0D)))
 			.andExpect(jsonPath("rater.email", 
 					equalTo(userRater.getEmail())))
-			.andExpect(jsonPath("rater.facebook_name", 
+			.andExpect(jsonPath("rater.name", 
 					equalTo(userRater.getFacebookName())))
 			.andExpect(jsonPath("rater.political_party", 
 					equalTo(userRater.getPoliticalParties().toString())))
@@ -151,8 +145,7 @@ public class RatingControllerTest {
 			.andExpect(jsonPath("politician.rating", 
 					equalTo(politician.getRating().getAverageRating())))
 			.andExpect(jsonPath("politician.satisfaction_rate", 
-					equalTo(com.example.demo.model.enums.Rating.mapToSatisfactionRate(politician.getRating().getAverageRating()).toString())))
-			.andDo(document("rate"));
+					equalTo(com.example.demo.model.enums.Rating.mapToSatisfactionRate(politician.getRating().getAverageRating()).toString())));
 	}
 	
 	@Test

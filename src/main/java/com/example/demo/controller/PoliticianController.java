@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -30,20 +29,17 @@ import io.swagger.v3.oas.annotations.Hidden;
 public class PoliticianController {
 	
 	private final PoliticiansService politiciansService;
-	private PoliticianDTOMapper mapper;
+	private PoliticianDTOMapper mapper = new PoliticiansDtoMapper();
 	
 	@Autowired
-	public PoliticianController(PoliticiansService politiciansService, Optional<PoliticianDTOMapper> mapper) {
+	public PoliticianController(PoliticiansService politiciansService) {
 		this.politiciansService = politiciansService;
-		mapper.ifPresent(dtoMapper -> {this.mapper = dtoMapper;});
 	}
 
 	@PostMapping("/politician")
 	@Hidden
 	public ResponseEntity<PoliticianDTO> savePolitician(@Valid @RequestBody AddPoliticianDTORequest request) {
 		Politicians politicianSaved = politiciansService.savePolitician(request);
-		
-		mapper = new PoliticiansDtoMapper();
 		
 		PoliticianDTO politician = mapper.mapToDTO(politicianSaved);
 		
@@ -55,8 +51,6 @@ public class PoliticianController {
 			@RequestParam String firstName) {
 		List<Politicians> politicianByName = politiciansService.findPoliticianByName(lastName, firstName);
 		
-		mapper = new PoliticiansDtoMapper();
-		
 		List<PoliticianDTO> politician = mapper.mapToDTO(politicianByName);
 		
 		return new ResponseEntity<List<PoliticianDTO>>(politician, HttpStatus.OK);
@@ -65,8 +59,6 @@ public class PoliticianController {
 	@GetMapping("/politician/{id}")
 	public ResponseEntity<PoliticianDTO> politicianById(@PathVariable String id) {
 		Politicians politicianQueried = politiciansService.findPoliticianByNumber(id);
-		
-		mapper = new PoliticiansDtoMapper();
 		
 		PoliticianDTO politician = mapper.mapToDTO(politicianQueried);
 		
@@ -78,7 +70,6 @@ public class PoliticianController {
 	public ResponseEntity<List<PoliticianDTO>> allPoliticians() {
 		List<Politicians> allPoliticians = politiciansService.allPoliticians();
 		
-		mapper = new PoliticiansDtoMapper();
 		List<PoliticianDTO> politician = mapper.mapToDTO(allPoliticians);
 		
 		return new ResponseEntity<List<PoliticianDTO>>(politician, HttpStatus.OK);

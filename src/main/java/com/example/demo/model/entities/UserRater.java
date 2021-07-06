@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Embeddable
 public class UserRater {
 
-	@JsonProperty("facebook_name")
+	@JsonProperty("name")
 	private String facebookName;
 	
 	@JsonProperty("political_party")

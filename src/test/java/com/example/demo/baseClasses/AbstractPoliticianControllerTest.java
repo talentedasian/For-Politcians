@@ -2,7 +2,6 @@ package com.example.demo.baseClasses;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +10,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.controller.PoliticianController;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
-import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
 import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -26,8 +24,6 @@ public class AbstractPoliticianControllerTest {
 	public PoliticiansService service;
 	@Mock
 	public AverageCalculator calculator;
-	@Mock
-	public PoliticianDTOMapper mapper;
 	
 	public PoliticianController controller;
 	public Politicians politician;
@@ -35,7 +31,7 @@ public class AbstractPoliticianControllerTest {
 	
 	@BeforeEach
 	public void setUp() {
-		controller = new PoliticianController(service, Optional.of(mapper));
+		controller = new PoliticianController(service);
 		
 		politician =  new Politicians();
 		politician.setRating(new Rating(9.67D, 9.67D, calculator));

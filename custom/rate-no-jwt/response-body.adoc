@@ -1,4 +1,0 @@
-[source,options="nowrap"]
-----
-{"err":"Accessing protected resource. No jwt found on authorization Header","code":"401"}
-----
