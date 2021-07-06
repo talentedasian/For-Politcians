@@ -3,7 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-rest-docs/
+/rest-docs/
 
 ### STS ###
 .apt_generated
@@ -32,7 +32,6 @@ build/
 
 ### VS Code ###
 .vscode/
-src/main/java/com/example/demo/ApplicationListener.java
 mvnw
 mvnw.cmd
 .mvn/
