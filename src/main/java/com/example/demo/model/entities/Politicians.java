@@ -134,6 +134,67 @@ public class Politicians implements PoliticianMethods{
 		return "Politicians [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", fullName="
 				+ fullName +  ", rating=" + rating + "]";
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((politicianNumber == null) ? 0 : politicianNumber.hashCode());
+		result = prime * result + ((politiciansRating == null) ? 0 : politiciansRating.hashCode());
+		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Politicians other = (Politicians) obj;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (fullName == null) {
+			if (other.fullName != null)
+				return false;
+		} else if (!fullName.equals(other.fullName))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (politicianNumber == null) {
+			if (other.politicianNumber != null)
+				return false;
+		} else if (!politicianNumber.equals(other.politicianNumber))
+			return false;
+		if (politiciansRating == null) {
+			if (other.politiciansRating != null)
+				return false;
+		} else if (!politiciansRating.equals(other.politiciansRating))
+			return false;
+		if (rating == null) {
+			if (other.rating != null)
+				return false;
+		} else if (!rating.equals(other.rating))
+			return false;
+		return true;
+	}
 
 	@Override
 	public double calculateAverageRating() {
