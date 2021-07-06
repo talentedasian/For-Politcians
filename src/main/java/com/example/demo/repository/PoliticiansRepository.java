@@ -11,13 +11,13 @@ import com.example.demo.model.entities.Politicians;
 @Repository
 public interface PoliticiansRepository extends JpaRepository<Politicians, Integer>{
 
-	Optional<Politicians> findByFirstName(String firstName);
+	List<Politicians> findByFirstName(String firstName);
 	
-	Optional<Politicians> findByLastName(String lastName);
+	List<Politicians> findByLastName(String lastName);
 	
 	List<Politicians> findByLastNameAndFirstName(String lastName, String firstName);
 	
-	Optional<Politicians> findByFullName(String name);
+	List<Politicians> findByFullName(String name);
 	
 	Optional<Politicians> findByPoliticianNumber(String polNumber);
 	

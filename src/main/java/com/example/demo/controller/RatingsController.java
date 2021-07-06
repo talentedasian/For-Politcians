@@ -67,8 +67,17 @@ public class RatingsController {
 	}
 	
 	@GetMapping("/rating")
-	public ResponseEntity<List<RatingDTO>> getRatingByRater(@RequestParam String email) {
+	public ResponseEntity<List<RatingDTO>> getRatingByRaterEmail(@RequestParam String email) {
 		List<PoliticiansRating> politicianRatingQueried = ratingService.findRatingsByFacebookEmail(email);
+		
+		List<RatingDTO> politicianRating = mapper.mapToDTO(politicianRatingQueried);
+		
+		return new ResponseEntity<List<RatingDTO>>(politicianRating, HttpStatus.OK);
+	}
+	
+	@GetMapping("/rating")
+	public ResponseEntity<List<RatingDTO>> getRatingByRaterAccountNumber(@RequestParam String accNumber) {
+		List<PoliticiansRating> politicianRatingQueried = ratingService.findRatingsByAccountNumber(accNumber);
 		
 		List<RatingDTO> politicianRating = mapper.mapToDTO(politicianRatingQueried);
 		

@@ -37,7 +37,7 @@ public class RatingService {
 	
 	@Transactional(readOnly = true)
 	public PoliticiansRating findById(String id) {
-		PoliticiansRating rating = ratingRepo.findByRater_UserAccountNumber(id)
+		PoliticiansRating rating = ratingRepo.findById(Integer.valueOf(id))
 				.orElseThrow(() -> new RatingsNotFoundException("No rating found by " + id));
 		
 		return rating;
@@ -90,6 +90,16 @@ public class RatingService {
 		List<PoliticiansRating> ratingsByRater = ratingRepo.findByRater_Email(email);
 		if (ratingsByRater.isEmpty()) {
 			throw new RatingsNotFoundException("No rating found by Rater " + email); 
+		}
+		
+		return ratingsByRater;
+	}
+	
+	@Transactional(readOnly = true)
+	public List<PoliticiansRating> findRatingsByAccountNumber(String accNumber) {
+		List<PoliticiansRating> ratingsByRater = ratingRepo.findByRater_UserAccountNumber(accNumber);
+		if (ratingsByRater.isEmpty()) {
+			throw new RatingsNotFoundException("No rating found by " + accNumber); 
 		}
 		
 		return ratingsByRater;

@@ -95,7 +95,7 @@ public class RatingsControllerTest {
 		
 		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
 		
-		ResponseEntity<List<RatingDTO>> response = controller.getRatingByRater("test@gmail.com");
+		ResponseEntity<List<RatingDTO>> response = controller.getRatingByRaterEmail("test@gmail.com");
 		RatingDTO politicianResponse = response.getBody().get(0);
 		RatingDTO politicianResponse2 = response.getBody().get(1);
 		
@@ -131,7 +131,7 @@ public class RatingsControllerTest {
 		
 		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
 
-		ResponseEntity<List<RatingDTO>> response = controller.getRatingByRater("test@gmail.com");
+		ResponseEntity<List<RatingDTO>> response = controller.getRatingByRaterEmail("test@gmail.com");
 		
 		RatingDTO politicianResponse = response.getBody().get(0);
 		RatingDTO politicianResponse2 = response.getBody().get(1);

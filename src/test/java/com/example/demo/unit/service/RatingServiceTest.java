@@ -59,9 +59,9 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	
 	@Test
 	public void assertEqualsQueriedRepo() {
-		when(ratingRepo.findByRater_UserAccountNumber("1")).thenReturn(Optional.of(rating));
+		when(ratingRepo.findByRater_UserAccountNumber("1")).thenReturn(List.of(rating));
 		
-		PoliticiansRating ratings = ratingService.findById("1");
+		PoliticiansRating ratings = ratingService.findRatingsByAccountNumber("1").get(0);
 		
 		assertThat(ratings.getRating(), 
 				equalTo(rating.getRating()));
@@ -69,9 +69,9 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	
 	@Test
 	public void assertEqualsQueriedRepoUserRater() {
-		when(ratingRepo.findByRater_UserAccountNumber("1")).thenReturn(Optional.of(rating));
+		when(ratingRepo.findByRater_UserAccountNumber("1")).thenReturn(List.of(rating));
 		
-		PoliticiansRating ratings = ratingService.findById("1");
+		PoliticiansRating ratings = ratingService.findRatingsByAccountNumber("1").get(0);
 		UserRater rater = ratings.getRater();
 		
 		assertThat(rater.getEmail(), 
@@ -84,9 +84,9 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	
 	@Test
 	public void assertEqualsQueriedRepoPolitician() {
-		when(ratingRepo.findByRater_UserAccountNumber("1")).thenReturn(Optional.of(rating));
+		when(ratingRepo.findByRater_UserAccountNumber("1")).thenReturn(List.of(rating));
 		
-		PoliticiansRating ratings = ratingService.findById("1");
+		PoliticiansRating ratings = ratingService.findRatingsByAccountNumber("1").get(0);
 		Politicians pol = ratings.getPolitician();
 		String polFullName = pol.calculateFullName();
 		

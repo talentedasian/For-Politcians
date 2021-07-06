@@ -1,7 +1,6 @@
 package com.example.demo.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,6 +12,6 @@ public interface RatingRepository extends JpaRepository<PoliticiansRating, Integ
 
 	long countByPolitician_Id(Integer id);
 	
-	Optional<PoliticiansRating> findByRater_UserAccountNumber(String accountNumber);
+	List<PoliticiansRating> findByRater_UserAccountNumber(String accountNumber);
 
 }

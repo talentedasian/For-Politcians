@@ -42,7 +42,8 @@ public class RatingDtoMapper implements RatingDTOMapper{
 		return new RatingDTO
 				(entity.getRating(),
 				entity.getRater(), 
-				politicianDTO);
+				politicianDTO,
+				String.valueOf(entity.getId()));
 	}
 
 }

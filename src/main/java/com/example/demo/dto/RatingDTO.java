@@ -6,57 +6,48 @@ import com.example.demo.model.entities.UserRater;
 
 public class RatingDTO extends RepresentationModel<RatingDTO>{
 
-	private Double rating;
+	private final Double rating;
 	
-	private UserRater rater;
+	private final UserRater rater;
 	
-	private PoliticianDTO politician;
+	private final PoliticianDTO politician;
+	
+	private final String id;
 
 	public Double getRating() {
 		return rating;
-	}
-
-	public void setRating(Double rating) {
-		this.rating = rating;
 	}
 
 	public UserRater getRater() {
 		return rater;
 	}
 
-	public void setRater(UserRater rater) {
-		this.rater = rater;
-	}
-
 	public PoliticianDTO getPolitician() {
 		return politician;
 	}
 
-	public void setPolitician(PoliticianDTO politician) {
-		this.politician = politician;
+	public String getId() {
+		return id;
 	}
 
-	public RatingDTO() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public RatingDTO(Double rating, UserRater rater, PoliticianDTO politician) {
+	public RatingDTO(Double rating, UserRater rater, PoliticianDTO politician, String id) {
 		super();
 		this.rating = rating;
 		this.rater = rater;
 		this.politician = politician;
+		this.id = id;
 	}
 
 	@Override
 	public String toString() {
-		return "RatingDTO [rating=" + rating + ", rater=" + rater + ", politician=" + politician + "]";
+		return "RatingDTO [rating=" + rating + ", rater=" + rater + ", politician=" + politician + ", id=" + id + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result = super.hashCode();
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((politician == null) ? 0 : politician.hashCode());
 		result = prime * result + ((rater == null) ? 0 : rater.hashCode());
 		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
@@ -67,11 +58,16 @@ public class RatingDTO extends RepresentationModel<RatingDTO>{
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		RatingDTO other = (RatingDTO) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
 		if (politician == null) {
 			if (other.politician != null)
 				return false;
