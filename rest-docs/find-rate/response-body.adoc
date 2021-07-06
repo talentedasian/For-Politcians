@@ -1,4 +1,0 @@
-[source,options="nowrap"]
-----
-{"rating":1.0,"rater":{"email":"test@gmail.com","name":"test","political_party":"DDS","id":"123accNumber"},"politician":{"name":"test politician","id":"123polNumber","rating":1.0,"satisfaction_rate":"LOW"},"_links":{"rating":[{"href":"http://localhost:8080/api/ratings/rating/123accNumber"},{"href":"http://localhost:8080/api/ratings/rating/123accNumber"}]},"_templates":{"default":{"method":"post","properties":[{"name":"id","required":true,"type":"text"},{"name":"politicalParty","required":true,"type":"text"},{"name":"rating","required":true,"type":"number"}],"target":"http://localhost:8080/api/ratings/rating"}}}
-----

@@ -1,7 +1,0 @@
-|===
-|Relation|Description
-
-|`+rating+`
-|Link to rating a politician
-
-|===

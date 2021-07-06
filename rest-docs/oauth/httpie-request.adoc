@@ -1,6 +1,0 @@
-[source,bash]
-----
-$ http GET 'http://localhost:8080/login/oauth2/code/facebook' \
-    'Accept:application/prs.hal-forms+json' \
-    'Cookie:accessJwt=eyJsb2dpbl9tZWNoYW5pc20iOiJmYWNlYm9vayIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJ0ZXN0IHN1YiIsIm5hbWUiOiJ0ZXN0IG5hbWUiLCJqdGkiOiIxMTExIiwiZXhwIjoxNjI1NTY4ODE0fQ.pkhzdKduXhjw_vDKZUxPxCSvgaQbe_STMmdfow4NFEbt7d3QzsjYDHEjqaMpb263awqGnK7H4u_lYHnAbleDfDxnf6z44ED7PFvvEOxNOVHekFanQbKAFSLfe5s0a8CvUioNmMixjQmjbAtop6Y_QqtDpzQTYov5eDJW8acDdQ96exMy6cy7t-ZruxxxtjpUlXoUX8dRQg8jDtmweht-JROZplvSQn_fPohsttUyrAcFB1SeJvcgQZeBJ2teax6PGZmW47pmjsNPxZ3_OnI8EPY9vzhyHYavQKgWmHwN1rbfDI8Iot-B0-mo1StPmwnRHWMzUL6_Eg7rnksmOpt_yw'
-----
