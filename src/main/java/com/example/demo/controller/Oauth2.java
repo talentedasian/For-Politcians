@@ -9,7 +9,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.Affordances;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -33,8 +33,9 @@ import io.swagger.v3.oas.annotations.Hidden;
 @RequestMapping("/login/oauth2/code/facebook")
 public class Oauth2 {
 
+	@SuppressWarnings("deprecation")
 	@GetMapping
-	public ResponseEntity<EntityModel<JwtClaims>> returnCredentials(HttpServletRequest req) throws UserRateLimitedOnPoliticianException  {
+	public ResponseEntity<RepresentationModel<JwtClaims>> returnCredentials(HttpServletRequest req) throws UserRateLimitedOnPoliticianException  {
 		Map<String, String> cookieMap = new HashMap<>();
 		
 		Arrays.stream(req.getCookies())
@@ -60,11 +61,10 @@ public class Oauth2 {
 				.build()
 				.toLink();
 		
-		EntityModel<JwtClaims> sirenModel = EntityModel.of(jwtResponse);
-		sirenModel.add(affordance);
-		sirenModel.add(linkTo(methodOn(Oauth2.class).returnCredentials(null)).withRel("jwt"));
+		jwtResponse.add(affordance);
+		jwtResponse.add(linkTo(methodOn(Oauth2.class).returnCredentials(null)).withRel("jwt"));
 		
-		return new ResponseEntity<EntityModel<JwtClaims>>(sirenModel, HttpStatus.OK);
+		return new ResponseEntity<RepresentationModel<JwtClaims>>(jwtResponse, HttpStatus.OK);
 	}
 	
 }

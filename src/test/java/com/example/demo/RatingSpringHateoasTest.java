@@ -43,7 +43,8 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 		this.mvc.perform(get(create("/api/ratings/rating/123accNumber")))
 			.andExpect(status().isOk())
 			.andDo(document("find-rate", links(halLinks(),
-					linkWithRel("rating").description("Link to rating a politician"))));
+					linkWithRel("politician").description("Link to rating a politician"),
+					linkWithRel("self").description("Link to a rating"))));
 	}
 	
 }

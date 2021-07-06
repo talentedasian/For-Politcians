@@ -18,7 +18,7 @@ public class RatingAssembler implements SimpleRepresentationModelAssembler<Ratin
 	public void addLinks(EntityModel<RatingDTO> resource) {
 		resource.add(linkTo(methodOn(RatingsController.class)
 				.getRatingById(resource.getContent().getRater().getUserAccountNumber()))
-			.withRel("rating"));				
+			.withRel("self"));				
 	}
 
 	@Override

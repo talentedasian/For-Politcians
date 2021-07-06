@@ -19,8 +19,8 @@ import org.springframework.hateoas.MediaTypes;
 
 import com.example.demo.BaseSpringHateoasTest;
 import com.example.demo.jwt.JwtProvider;
-public class Oauth2ControllerTest extends BaseSpringHateoasTest{
-	
+
+public class Oauth2ControllerTest extends BaseSpringHateoasTest{	
 	
 	@Test
 	public void shouldReturnHalForms() throws Exception {
@@ -37,8 +37,7 @@ public class Oauth2ControllerTest extends BaseSpringHateoasTest{
 					equalTo(jwt)))
 			.andDo(document("oauth", links(halLinks(),
 					linkWithRel("politicians").description("Retrieve all politician"),
-					linkWithRel("jwt").description("Jwt status and description")
-					)));
+					linkWithRel("jwt").description("Jwt status and description"))));
 	}
 	
 }
