@@ -23,6 +23,7 @@ import com.example.demo.controller.PoliticianController;
 import com.example.demo.controller.RatingsController;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.dtomapper.RatingDtoMapper;
+import com.example.demo.hateoas.PoliticianAssembler;
 import com.example.demo.hateoas.RatingAssembler;
 import com.example.demo.service.PoliticiansService;
 import com.example.demo.service.RatingService;
@@ -44,6 +45,8 @@ public class BadRequestTest {
 	public PoliticiansService politicianService;
 	@MockBean
 	public RatingAssembler assembler;
+	@MockBean
+	public PoliticianAssembler polAssembler;
 
 
 

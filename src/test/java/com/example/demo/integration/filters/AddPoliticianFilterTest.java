@@ -1,6 +1,7 @@
 package com.example.demo.integration.filters;
 
 import static com.example.demo.baseClasses.AbstractPoliticianControllerTest.withoutRepo;
+import static com.example.demo.model.enums.Rating.LOW;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -19,15 +20,18 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.example.demo.controller.PoliticianController;
+import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.exceptionHandling.GlobalExceptionHandling;
 import com.example.demo.filter.AddPoliticianFilter;
+import com.example.demo.hateoas.PoliticianAssembler;
 import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -39,15 +43,15 @@ public class AddPoliticianFilterTest {
 
 	public MockMvc mvc;
 	
-	@Autowired
-	public WebApplicationContext wac;
+	@Autowired public WebApplicationContext wac;
 	
-	@MockBean
-	public PoliticiansService service;
-	@MockBean
-	public PoliticiansDtoMapper mapper;
-	@Mock
-	public AverageCalculator calculator;
+	@MockBean public PoliticiansService service;
+	
+	@MockBean public PoliticiansDtoMapper mapper;
+	
+	@MockBean public PoliticianAssembler assembler;
+	
+	@Mock public AverageCalculator calculator;
 	
 	private final String content = """
 			{
@@ -103,7 +107,10 @@ public class AddPoliticianFilterTest {
 	
 	@Test 
 	public void shouldReturn201CreatedIfAuthorizationIsCorrect() throws URISyntaxException, Exception {
+		var polDTO = new PoliticianDTO("test name", "123polNumber", 0.01D, LOW);
+		
 		when(service.savePolitician(any())).thenReturn(politician);
+		when(assembler.toModel(any(PoliticianDTO.class))).thenReturn(EntityModel.of(polDTO));
 		
 		mvc.perform(post(URI.create("/api/politicians/politician"))
 				.header("Politician-Access", "password")

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PoliticianDTO {
 
-	private String name, id;
+	private final String name, id;
 	
 	private final Double rating;
 	
@@ -15,25 +15,13 @@ public class PoliticianDTO {
 	public Rating getSatisfactionRate() {
 		return satisfactionRate;
 	}
-
-	public void setSatisfactionRate(Rating satisfactionRate) {
-		this.satisfactionRate = satisfactionRate;
-	}
-
+	
 	public String getName() {
 		return name;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	public String getId() {
 		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
 	}
 	
 	public Double getRating() {

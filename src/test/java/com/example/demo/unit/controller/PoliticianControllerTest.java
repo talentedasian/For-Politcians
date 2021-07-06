@@ -8,7 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
+import org.springframework.hateoas.EntityModel;
 
 import com.example.demo.baseClasses.AbstractPoliticianControllerTest;
 import com.example.demo.dto.PoliticianDTO;
@@ -26,25 +26,31 @@ public class PoliticianControllerTest extends AbstractPoliticianControllerTest {
 	
 	@Test
 	public void shouldEqualDTOOutputsWhenSaved() {
-		when(service.savePolitician(politicianDTORequest)).thenReturn(politician);
+		PoliticianDTO polDTO = new PoliticiansDtoMapper().mapToDTO(politician);
 		
-		ResponseEntity<PoliticianDTO> politicianResponse = controller.savePolitician(politicianDTORequest);
+		when(service.savePolitician(politicianDTORequest)).thenReturn(politician);
+		when(assembler.toModel(polDTO)).thenReturn(EntityModel.of(polDTO));
+		
+		PoliticianDTO politicianResponse = controller.savePolitician(politicianDTORequest).getBody().getContent();
 		
 		assertThat(politician.getRating().getAverageRating(),
-				equalTo(politicianResponse.getBody().getRating()));
-		assertThat(politicianResponse.getBody().getId(),
+				equalTo(politicianResponse.getRating()));
+		assertThat(politicianResponse.getId(),
 				containsStringIgnoringCase("polnumber"));
 	}		
 	
 	@Test
 	public void shouldEqualDTOOutputs() {
-		when(service.findPoliticianByNumber("1")).thenReturn(politician);
+		PoliticianDTO polDTO = new PoliticiansDtoMapper().mapToDTO(politician);
 		
-		ResponseEntity<PoliticianDTO> politicianResponse = controller.politicianById("1");
+		when(service.findPoliticianByNumber("1")).thenReturn(politician);
+		when(assembler.toModel(polDTO)).thenReturn(EntityModel.of(polDTO));
+		
+		PoliticianDTO politicianResponse = controller.politicianById("1").getBody().getContent();
 		PoliticianDTO politicianDTO = new PoliticiansDtoMapper().mapToDTO(politician);
 		
 		assertThat(politicianDTO,
-				equalTo(politicianResponse.getBody()));
+				equalTo(politicianResponse));
 	}			
 	
 }

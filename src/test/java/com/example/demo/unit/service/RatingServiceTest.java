@@ -59,7 +59,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	
 	@Test
 	public void assertEqualsQueriedRepo() {
-		when(ratingRepo.findById(1)).thenReturn(Optional.of(rating));
+		when(ratingRepo.findByRater_UserAccountNumber("1")).thenReturn(Optional.of(rating));
 		
 		PoliticiansRating ratings = ratingService.findById("1");
 		
@@ -69,7 +69,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	
 	@Test
 	public void assertEqualsQueriedRepoUserRater() {
-		when(ratingRepo.findById(1)).thenReturn(Optional.of(rating));
+		when(ratingRepo.findByRater_UserAccountNumber("1")).thenReturn(Optional.of(rating));
 		
 		PoliticiansRating ratings = ratingService.findById("1");
 		UserRater rater = ratings.getRater();
@@ -84,7 +84,7 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	
 	@Test
 	public void assertEqualsQueriedRepoPolitician() {
-		when(ratingRepo.findById(1)).thenReturn(Optional.of(rating));
+		when(ratingRepo.findByRater_UserAccountNumber("1")).thenReturn(Optional.of(rating));
 		
 		PoliticiansRating ratings = ratingService.findById("1");
 		Politicians pol = ratings.getPolitician();

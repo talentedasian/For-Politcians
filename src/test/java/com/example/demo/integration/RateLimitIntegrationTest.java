@@ -63,7 +63,7 @@ public class RateLimitIntegrationTest {
 		
 		assertThrows(UserRateLimitedOnPoliticianException.class, 
 				() -> ratingService.saveRatings(requestContent, req));
-	}
+	}	
 	
 	@Test
 	public void assertLogicOfRateLimitShouldSuccessful() {

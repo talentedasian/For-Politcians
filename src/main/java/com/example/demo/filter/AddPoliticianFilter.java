@@ -66,7 +66,6 @@ public class AddPoliticianFilter implements Filter{
 	}
 	
 	private String getRequestUriToMatch() {
-		System.out.println(formUriEndpoint() + " potangina");
 		return formUriEndpoint();
 	}
 

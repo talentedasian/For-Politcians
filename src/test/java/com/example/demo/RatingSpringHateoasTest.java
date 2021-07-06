@@ -31,7 +31,6 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 				.setFirstName("test")
 				.setLastName("politician")
 				.setFullName()
-				
 				.setPoliticianNumber("123polNumber")
 				.setRating(new Rating(1.00D, 1.00D, new LowSatisfactionAverageCalculator(1.00D, 1D)))
 				.build();
