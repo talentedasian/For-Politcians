@@ -1,7 +1,5 @@
 package com.example.demo.unit.controller;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -26,7 +24,6 @@ import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.model.enums.Rating;
-import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.service.RatingService;
 
 @ExtendWith(SpringExtension.class)

@@ -3,6 +3,7 @@ package com.example.demo.unit.controller;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -33,14 +34,11 @@ public class PoliticianControllerTest extends AbstractPoliticianControllerTest {
 		
 		PoliticianDTO politicianResponse = controller.savePolitician(politicianDTORequest).getBody().getContent();
 		
-		assertThat(politician.getRating().getAverageRating(),
-				equalTo(politicianResponse.getRating()));
-		assertThat(politicianResponse.getId(),
-				containsStringIgnoringCase("polnumber"));
+		assertEquals(polDTO, politicianResponse);
 	}		
 	
 	@Test
-	public void shouldEqualDTOOutputs() {
+	public void shouldEqualDTOOutputsByPoliticianNumber() {
 		PoliticianDTO polDTO = new PoliticiansDtoMapper().mapToDTO(politician);
 		
 		when(service.findPoliticianByNumber("1")).thenReturn(politician);
@@ -49,8 +47,7 @@ public class PoliticianControllerTest extends AbstractPoliticianControllerTest {
 		PoliticianDTO politicianResponse = controller.politicianById("1").getBody().getContent();
 		PoliticianDTO politicianDTO = new PoliticiansDtoMapper().mapToDTO(politician);
 		
-		assertThat(politicianDTO,
-				equalTo(politicianResponse));
+		assertEquals(politicianDTO, politicianResponse);
 	}			
 	
 }
