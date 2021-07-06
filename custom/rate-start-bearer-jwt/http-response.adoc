@@ -1,8 +1,0 @@
-[source,http,options="nowrap"]
-----
-HTTP/1.1 401 Unauthorized
-Content-Type: application/json
-Content-Length: 66
-
-{"err":"Authorization Header must start with Bearer","code":"401"}
-----

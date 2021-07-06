@@ -1,8 +1,0 @@
-[source,http,options="nowrap"]
-----
-HTTP/1.1 201 Created
-Content-Type: application/hal+json
-Content-Length: 197
-
-{"rating":1.0,"rater":{"email":"test@gmail.com","name":"test","political_party":"DDS","id":"123accNumber"},"politician":{"name":"Mirriam Defensor","id":null,"rating":1.0,"satisfaction_rate":"LOW"}}
-----

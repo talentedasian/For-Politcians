@@ -1,9 +1,0 @@
-[source,options="nowrap"]
-----
-{
-	"id": "123",
-	"rating": 1.00,
-	"political_party": "dds"
-}
-
-----
