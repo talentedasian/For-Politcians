@@ -2,35 +2,25 @@ package com.example.demo.integration.controllers;
 
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.springframework.hateoas.MediaTypes.HAL_FORMS_JSON;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.halLinks;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import javax.servlet.http.Cookie;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.hateoas.MediaTypes;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-import com.example.demo.controller.Oauth2;
+import com.example.demo.BaseSpringHateoasTest;
 import com.example.demo.jwt.JwtProvider;
-
-@WebMvcTest({Oauth2.class})
-public class Oauth2ControllerTest {
-
-	public MockMvc mvc;
+public class Oauth2ControllerTest extends BaseSpringHateoasTest{
 	
-	@BeforeEach
-	public void setup(WebApplicationContext wac) {
-		mvc = MockMvcBuilders.webAppContextSetup(wac)
-				.alwaysDo(MockMvcResultHandlers.print())
-				.build();
-	}
 	
 	@Test
 	public void shouldReturnHalForms() throws Exception {
@@ -41,9 +31,14 @@ public class Oauth2ControllerTest {
 		mvc.perform(get(create("/login/oauth2/code/facebook"))
 				.accept(MediaTypes.HAL_FORMS_JSON)
 				.cookie(cookies))
+			.andExpect(content().contentType(HAL_FORMS_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("jwt",
-					equalTo(jwt)));
+					equalTo(jwt)))
+			.andDo(document("oauth", links(halLinks(),
+					linkWithRel("politicians").description("Retrieve all politician"),
+					linkWithRel("jwt").description("Jwt status and description")
+					)));
 	}
 	
 }

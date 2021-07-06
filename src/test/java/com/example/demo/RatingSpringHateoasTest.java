@@ -4,11 +4,12 @@ import static java.net.URI.create;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.halLinks;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
-import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.MediaTypes;
 
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
@@ -25,7 +26,7 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 	@Autowired RatingRepository ratingRepo;
 	
 	@Test
-	public void testHalFormsSaveRating() {
+	public void testHalFormsSaveRating() throws Exception {
 		var rater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accNumber");
 		var politician = new Politicians.PoliticiansBuilder()
 				.setFirstName("test")
@@ -39,12 +40,9 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 		repo.save(politician);
 		ratingRepo.save(new PoliticiansRating(1, 1.00D, rater, politician));
 		
-		webTestClient.get()
-			.uri(create("http://localhost:8080/api/ratings/rating/123accNumber"))
-			.accept(MediaTypes.HAL_FORMS_JSON)
-			.exchange()
-			.expectStatus().isOk().expectBody()
-			.consumeWith(document("find-rate", links(halLinks(),
+		this.mvc.perform(get(create("/api/ratings/rating/123accNumber")))
+			.andExpect(status().isOk())
+			.andDo(document("find-rate", links(halLinks(),
 					linkWithRel("rating").description("Link to rating a politician"))));
 	}
 	

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
+import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.jwt.JwtClaims;
 import com.example.demo.jwt.JwtProvider;
 
@@ -33,7 +34,7 @@ import io.swagger.v3.oas.annotations.Hidden;
 public class Oauth2 {
 
 	@GetMapping
-	public ResponseEntity<EntityModel<JwtClaims>> returnCredentials(HttpServletRequest req)  {
+	public ResponseEntity<EntityModel<JwtClaims>> returnCredentials(HttpServletRequest req) throws UserRateLimitedOnPoliticianException  {
 		Map<String, String> cookieMap = new HashMap<>();
 		
 		Arrays.stream(req.getCookies())
@@ -55,11 +56,13 @@ public class Oauth2 {
 				.withInput(AddRatingDTORequest.class)
 				.withName("rate-politician")
 				.withName("rate-politician")
+				.withTarget(linkTo(methodOn(RatingsController.class).saveRating(null, null)).withRel("rate"))
 				.build()
 				.toLink();
 		
-		EntityModel<JwtClaims> sirenModel = EntityModel.of(jwtResponse).add(affordance);
-				
+		EntityModel<JwtClaims> sirenModel = EntityModel.of(jwtResponse);
+		sirenModel.add(affordance);
+		sirenModel.add(linkTo(methodOn(Oauth2.class).returnCredentials(null)).withRel("jwt"));
 		
 		return new ResponseEntity<EntityModel<JwtClaims>>(sirenModel, HttpStatus.OK);
 	}

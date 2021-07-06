@@ -2,7 +2,9 @@ package com.example.demo.jwt;
 
 import java.util.Date;
 
-public class JwtClaims {
+import org.springframework.hateoas.RepresentationModel;
+
+public class JwtClaims extends RepresentationModel<JwtClaims>{
 	
 	private String jwt;
 

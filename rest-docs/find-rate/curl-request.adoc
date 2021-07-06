@@ -1,5 +1,4 @@
 [source,bash]
 ----
-$ curl 'http://localhost:8080/api/ratings/rating/123accNumber' -i -X GET \
-    -H 'Accept: application/prs.hal-forms+json'
+$ curl 'http://localhost:8080/api/ratings/rating/123accNumber' -i -X GET
 ----

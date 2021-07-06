@@ -1,0 +1,10 @@
+|===
+|Relation|Description
+
+|`+politicians+`
+|Retrieve all politician
+
+|`+jwt+`
+|Jwt status and description
+
+|===
