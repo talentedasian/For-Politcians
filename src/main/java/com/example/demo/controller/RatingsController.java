@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,22 +67,26 @@ public class RatingsController {
 		return new ResponseEntity<EntityModel<RatingDTO>>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/rating")
-	public ResponseEntity<List<RatingDTO>> getRatingByRaterEmail(@RequestParam String email) {
+	@GetMapping("/ratings")
+	public ResponseEntity<CollectionModel<EntityModel<RatingDTO>>> getRatingByRaterEmail(@RequestParam String email) {
 		List<PoliticiansRating> politicianRatingQueried = ratingService.findRatingsByFacebookEmail(email);
 		
 		List<RatingDTO> politicianRating = mapper.mapToDTO(politicianRatingQueried);
 		
-		return new ResponseEntity<List<RatingDTO>>(politicianRating, HttpStatus.OK);
+		CollectionModel<EntityModel<RatingDTO>> response = assembler.toCollectionModel(politicianRating);
+		
+		return new ResponseEntity<CollectionModel<EntityModel<RatingDTO>>>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/rating")
-	public ResponseEntity<List<RatingDTO>> getRatingByRaterAccountNumber(@RequestParam String accNumber) {
+	@GetMapping("/ratings/{accNumber}")
+	public ResponseEntity<CollectionModel<EntityModel<RatingDTO>>> getRatingByRaterAccountNumber(@PathVariable String accNumber) {
 		List<PoliticiansRating> politicianRatingQueried = ratingService.findRatingsByAccountNumber(accNumber);
 		
 		List<RatingDTO> politicianRating = mapper.mapToDTO(politicianRatingQueried);
 		
-		return new ResponseEntity<List<RatingDTO>>(politicianRating, HttpStatus.OK);
+		CollectionModel<EntityModel<RatingDTO>> response = assembler.toCollectionModel(politicianRating);
+		
+		return new ResponseEntity<CollectionModel<EntityModel<RatingDTO>>>(response, HttpStatus.OK);
 	}
 
 }

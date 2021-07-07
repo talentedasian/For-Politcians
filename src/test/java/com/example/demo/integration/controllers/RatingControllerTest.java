@@ -126,6 +126,7 @@ public class RatingControllerTest {
 		when(service.saveRatings(any(AddRatingDTORequest.class), any(HttpServletRequest.class))).thenReturn(politiciansRating);
 		
 		when(assembler.toModel(any())).thenCallRealMethod();
+		
 		mvc.perform(post(create("/api/ratings/rating"))
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
@@ -164,7 +165,7 @@ public class RatingControllerTest {
 	public void shouldReturn404NotFoundByRater() throws Exception {
 		when(service.findRatingsByFacebookEmail("dasdsa@gmail.com")).thenThrow(new RatingsNotFoundException("No rating found by Rater"));
 		
-		mvc.perform(get(create("/api/ratings/rating?email=dasdsa@gmail.com")))
+		mvc.perform(get(create("/api/ratings/ratings?email=dasdsa@gmail.com")))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("code",
 					containsStringIgnoringCase("404")))

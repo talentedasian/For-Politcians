@@ -1,14 +1,19 @@
 package com.example.demo.unit.controller;
 
+import static org.hamcrest.CoreMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -17,6 +22,7 @@ import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtomapper.RatingDtoMapper;
+import com.example.demo.hateoas.PoliticianAssembler;
 import com.example.demo.hateoas.RatingAssembler;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
@@ -66,39 +72,38 @@ public class RatingsControllerTest {
 		
 		ResponseEntity<EntityModel<RatingDTO>> response = controller.getRatingById("1");
 		
-		RatingDTO politicianResponse = response.getBody().getContent();
+		RatingDTO expected = response.getBody().getContent();
 		
-		assertEquals(politicianResponse, ratingDTO);
+		assertEquals(expected, ratingDTO);
 	}
 	
 	@Test
 	public void assertEqualsPoliticiansListOfDtoOutputsByEmail() throws Exception {
 		var politiciansRating2 = new PoliticiansRating(1, 0.01D, userRater, politician);
 		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
+		CollectionModel<EntityModel<RatingDTO>> expected = new RatingAssembler().toCollectionModel(new RatingDtoMapper().mapToDTO(listOfPoliticiansRating));
 		
 		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
+		when(assembler.toCollectionModel(any())).thenReturn(expected);
 		
-		ResponseEntity<List<RatingDTO>> response = controller.getRatingByRaterEmail("test@gmail.com");
-		RatingDTO politicianResponse = response.getBody().get(0);
-		RatingDTO politicianResponse2 = response.getBody().get(1);
+		CollectionModel<EntityModel<RatingDTO>> response = controller.getRatingByRaterEmail("test@gmail.com").getBody();
 		
-		assertEquals(politicianResponse, ratingDTO);
-		assertEquals(politicianResponse2, new RatingDtoMapper().mapToDTO(listOfPoliticiansRating.get(1)));
+		
+		assertEquals(expected, response);
 	}
 	
 	@Test
 	public void assertEqualsPoliticiansListOfDtoOutputsByAccNumber() throws Exception {
 		var politiciansRating2 = new PoliticiansRating(1, 0.01D, userRater, politician);
 		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
-		
+		CollectionModel<EntityModel<RatingDTO>> expected = new RatingAssembler().toCollectionModel(new RatingDtoMapper().mapToDTO(listOfPoliticiansRating));
+				
 		when(service.findRatingsByAccountNumber("123accNumber")).thenReturn(listOfPoliticiansRating);
+		when(assembler.toCollectionModel(any())).thenReturn(expected);
 		
-		ResponseEntity<List<RatingDTO>> response = controller.getRatingByRaterAccountNumber("123accNumber");
-		RatingDTO politicianResponse = response.getBody().get(0);
-		RatingDTO politicianResponse2 = response.getBody().get(1);
+		CollectionModel<EntityModel<RatingDTO>> response = controller.getRatingByRaterAccountNumber("123accNumber").getBody();
 		
-		assertEquals(politicianResponse, ratingDTO);
-		assertEquals(politicianResponse2, new RatingDtoMapper().mapToDTO(listOfPoliticiansRating.get(1)));
+		assertEquals(expected, response);
 	}
 	
 }

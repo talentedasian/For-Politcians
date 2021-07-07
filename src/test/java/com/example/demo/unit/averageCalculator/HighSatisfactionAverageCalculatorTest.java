@@ -1,7 +1,6 @@
 package com.example.demo.unit.averageCalculator;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,8 +11,7 @@ public class HighSatisfactionAverageCalculatorTest extends AbstractAverageCalcul
 	@Test
 	public void testLogicOfCalculator() {
 		calculator = new HighSatisfactionAverageCalculator(2.279D, 0D);
-		assertThat(calculator.calculateAverage(),
-				equalTo(2.27D));
+		assertEquals(calculator.calculateAverage(), 2.27D);
 	}
 	
 }

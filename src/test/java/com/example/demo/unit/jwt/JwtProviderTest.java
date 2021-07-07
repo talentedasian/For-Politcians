@@ -1,7 +1,6 @@
 package com.example.demo.unit.jwt;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Date;
 
@@ -30,8 +29,7 @@ public class JwtProviderTest {
 		
 		String jwts =JwtProvider.createJwtWithDynamicExpirationDate("test@gmail.com", "test", dateNow);
 		
-		assertThat(actualJwts, 
-				equalTo(jwts));
+		assertEquals(actualJwts, jwts);
 	}
 	
 	@Test
@@ -43,13 +41,9 @@ public class JwtProviderTest {
 		
 		Claims actualJwts = decodedJwts.getBody();
 		
-		assertThat("test@gmail.com", 
-				equalTo(actualJwts.getSubject()));
-		assertThat("test", 
-				equalTo(actualJwts.getId()));
-		assertThat(dateNow.toString(), 
-				equalTo(actualJwts.getExpiration().toString()));
-		assertThat(true, 
-				equalTo(actualJwts.getExpiration().before(dateNow)));
+		assertEquals("test@gmail.com", actualJwts.getSubject());
+		assertEquals("test", actualJwts.getId());
+		assertEquals(dateNow.toString(), actualJwts.getExpiration().toString());
+		assertEquals(true, actualJwts.getExpiration().before(dateNow));
 	}
 }

@@ -1,7 +1,6 @@
 package com.example.demo.unit.accountNumber;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
@@ -17,8 +16,7 @@ public class FacebookAccountNumberImplementorTest {
 		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor
 				.with("Test Name Anything", number);
 		
-		assertThat(accountNumberImplementor.calculateEntityNumber().getAccountNumber(), 
-				equalTo("TNFLM-00039812732123"));
+		assertEquals(accountNumberImplementor.calculateEntityNumber().getAccountNumber(), "TNFLM-00039812732123");
 	}
 	
 	@Test
@@ -28,8 +26,7 @@ public class FacebookAccountNumberImplementorTest {
 		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor
 				.with("Test", number);
 		
-		assertThat(accountNumberImplementor.calculateEntityNumber().getAccountNumber(), 
-				equalTo("TGFLM-00039812732123"));
+		assertEquals(accountNumberImplementor.calculateEntityNumber().getAccountNumber(), "TGFLM-00039812732123");
 	}
 	
 }

@@ -40,7 +40,7 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 		repo.save(politician);
 		ratingRepo.save(new PoliticiansRating(1, 1.00D, rater, politician));
 		
-		this.mvc.perform(get(create("/api/ratings/rating/123accNumber")))
+		this.mvc.perform(get(create("/api/ratings/ratings/123accNumber")))
 			.andExpect(status().isOk())
 			.andDo(document("find-rate", links(halLinks(),
 					linkWithRel("politician").description("Link to rating a politician"),
