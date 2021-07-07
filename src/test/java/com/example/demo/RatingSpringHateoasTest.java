@@ -28,21 +28,23 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 	@Autowired RatingRepository ratingRepo;
 	@Autowired RateLimitingService limitingService;
 	
+	UserRater rater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accNumber", limitingService);
+	Politicians politician = new Politicians.PoliticiansBuilder()
+			.setFirstName("test")
+			.setLastName("politician")
+			.setFullName()
+			.setPoliticianNumber("123polNumber")
+			.setRating(new Rating(1.00D, 1.00D, new LowSatisfactionAverageCalculator(1.00D, 1D)))
+			.build();
+	private PoliticiansRating politiciansRating = new PoliticiansRating(1, 1.00D, rater, politician);
+	
 	@Transactional
 	@Test
 	public void testHalFormsSaveRating() throws Exception {
-		var rater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accNumber", limitingService);
-		var politician = new Politicians.PoliticiansBuilder()
-				.setFirstName("test")
-				.setLastName("politician")
-				.setFullName()
-				.setPoliticianNumber("123polNumber")
-				.setRating(new Rating(1.00D, 1.00D, new LowSatisfactionAverageCalculator(1.00D, 1D)))
-				.build();
 				
 		
 		repo.save(politician);
-		ratingRepo.save(new PoliticiansRating(1, 1.00D, rater, politician));
+		ratingRepo.save(politiciansRating);
 		
 		this.mvc.perform(get(create("/api/ratings/ratings/123accNumber")))
 			.andExpect(status().isOk())
@@ -54,7 +56,7 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 		 * before the test finishes. 
 		 */
 		repo.delete(politician);
-		ratingRepo.deleteById(1);
+		ratingRepo.delete(politiciansRating);
 	}
 	
 }
