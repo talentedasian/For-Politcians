@@ -27,9 +27,9 @@ public class JwtProviderTest {
 				.setHeaderParam("login_mechanism", "facebook")
 				.compact();
 		
-		String jwts =JwtProvider.createJwtWithDynamicExpirationDate("test@gmail.com", "test", dateNow);
+		String expected =JwtProvider.createJwtWithDynamicExpirationDate("test@gmail.com", "test", dateNow);
 		
-		assertEquals(actualJwts, jwts);
+		assertEquals(expected, actualJwts);
 	}
 	
 	@Test
@@ -46,4 +46,5 @@ public class JwtProviderTest {
 		assertEquals(dateNow.toString(), actualJwts.getExpiration().toString());
 		assertEquals(true, actualJwts.getExpiration().before(dateNow));
 	}
+	
 }
