@@ -1,12 +1,24 @@
 package com.example.demo.model.entities;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
+import com.example.demo.jwt.JwtProvider;
 import com.example.demo.model.enums.PoliticalParty;
+import com.example.demo.service.RateLimitingService;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.jsonwebtoken.JwtException;
 
 @Embeddable
 public class UserRater {
+
+	@Transient
+	private transient RateLimitingService limitingService;
+	
+	public void setLimitingService(RateLimitingService limitingService) {
+		this.limitingService = limitingService;
+	}
 
 	@JsonProperty("name")
 	private String facebookName;
@@ -51,16 +63,18 @@ public class UserRater {
 		this.politicalParties = politicalParties;
 	}
 
-	public UserRater(String facebookName, PoliticalParty politicalParties, String email, String accNumber) {
+	public UserRater(String facebookName, PoliticalParty politicalParties, String email, 
+			String accNumber, RateLimitingService limitingService) {
 		super();
 		this.facebookName = facebookName;
 		this.politicalParties = politicalParties;
 		this.email = email;
 		this.userAccountNumber = accNumber;
+		this.limitingService = limitingService;
 	}
 
 	public UserRater() {
-		super();
+		this.limitingService = null;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -108,6 +122,38 @@ public class UserRater {
 		} else if (!userAccountNumber.equals(other.userAccountNumber))
 			return false;
 		return true;
+	}
+	
+	public boolean canRate(String jwt, String polNumber) {
+		if (jwt == null | jwt.isBlank() | jwt.isEmpty()) {
+			return false;
+		}
+		
+		if (!isJwtValid(jwt)) {
+			return false;
+		} else {
+			if (isRateLimited(polNumber)) {
+				return false;
+			}			
+		}
+		return true;
+	}
+	
+	private boolean isJwtValid(String jwt) {
+		try {
+			JwtProvider.decodeJwt(jwt);
+			return true;
+		} catch (JwtException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	private boolean isRateLimited(String politicianNumber) {
+		if (limitingService.isNotRateLimited(userAccountNumber, politicianNumber)) {
+			System.out.println(limitingService.isNotRateLimited(userAccountNumber, politicianNumber) + " tanga ka gago");
+		}
+		return !limitingService.isNotRateLimited(userAccountNumber, politicianNumber);
 	}
 	
 }

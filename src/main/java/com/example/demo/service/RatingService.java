@@ -14,6 +14,7 @@ import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
+import com.example.demo.model.entities.UserRater;
 import com.example.demo.model.userRaterNumber.AbstractUserRaterNumber;
 import com.example.demo.model.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
 import com.example.demo.repository.PoliticiansRepository;
@@ -50,21 +51,28 @@ public class RatingService {
 		politician.setRepo(ratingRepo);
 		
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
+		String stringJwt = JwtProviderHttpServletRequest.extractJwtFromReq(req);
 		
 		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
 		String accountNumber = accountNumberImplementor.calculateEntityNumber().getAccountNumber();
 		String polNumber = politician.getPoliticianNumber();
 		
+		var rating = new PoliticiansRating();
+		rating.calculateRating(dto.getRating().doubleValue());
+		rating.calculatePolitician(politician);
+		rating.calculateRater(jwt.getSubject(), jwt.getId(), dto.getPoliticalParty(), accountNumber, rateLimitService);
+		
 		/*
 		 * check whether the user is currently not allowed to rate
 		 * a politician. The timeout/rate limit is within a week.
 		 */
-		if (!rateLimitService.isNotRateLimited(accountNumber, polNumber)) {
+		if (!canRate(rating.getRater(), stringJwt, polNumber)) {
 			Long daysLeft = rateLimitService.daysLeftOfBeingRateLimited(accountNumber, polNumber).longValue();
 			
 			throw new UserRateLimitedOnPoliticianException("User is rate limited on politician with " + daysLeft + " days left", 
 					daysLeft);
 		}
+		
 		/*
 		 * save the rate limit in the database to be fetched whenever a user
 		 * wants to rate a politician(see if statement above). this method already 
@@ -72,10 +80,6 @@ public class RatingService {
 		 */
 		rateLimitService.rateLimitUser(accountNumber, polNumber);
 		
-		var rating = new PoliticiansRating();
-		rating.calculateRating(dto.getRating().doubleValue());
-		rating.calculatePolitician(politician);
-		rating.calculateRater(jwt.getSubject(), jwt.getId(), dto.getPoliticalParty(), accountNumber);
 		
 		politician.calculateListOfRaters(rating);
 		
@@ -83,6 +87,10 @@ public class RatingService {
 		PoliticiansRating savedRating = ratingRepo.save(rating);
 		
 		return savedRating;
+	}
+	
+	private boolean canRate(UserRater rater, String jwt, String polNumber) {
+		return rater.canRate(jwt, polNumber);
 	}
 	
 	@Transactional(readOnly = true)

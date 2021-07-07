@@ -85,7 +85,7 @@ public class RatingControllerTest {
 		politician.setLastName("Defensor");
 		politician.setRating(new Rating(1D, 1D, mock(LowSatisfactionAverageCalculator.class)));
 		
-		userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accNumber");
+		userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accNumber", rateLimitService);
 		
 		politiciansRating = new PoliticiansRating(1, 1D, userRater, politician);
 	}

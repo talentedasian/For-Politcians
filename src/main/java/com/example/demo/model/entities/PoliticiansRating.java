@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.example.demo.model.enums.PoliticalParty;
+import com.example.demo.service.RateLimitingService;
 
 @Entity
 public class PoliticiansRating {
@@ -98,9 +99,10 @@ public class PoliticiansRating {
 		return politician;
 	}
 
-	public UserRater calculateRater(String subject, String id, String politicalParty, String accountNumber) {
+	public UserRater calculateRater(String subject, String id, String politicalParty,
+			String accountNumber, RateLimitingService service) {
 		PoliticalParty party = PoliticalParty.mapToPoliticalParty(politicalParty);
-		var userRater = new UserRater(id, party, subject, accountNumber);
+		var userRater = new UserRater(id, party, subject, accountNumber, service);
 		setRater(userRater);
 		
 		return userRater;

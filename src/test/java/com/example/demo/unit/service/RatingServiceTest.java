@@ -1,5 +1,6 @@
 package com.example.demo.unit.service;
 
+import static com.example.demo.jwt.JwtProvider.createJwtWithFixedExpirationDate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,7 +28,10 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	@Test
 	public void verifyRatingRepoCalledSaved() throws UserRateLimitedOnPoliticianException {
 		stubSaveRepo();
+		
 		when(rateLimitService.isNotRateLimited(any(), any())).thenReturn(true);
+		when(req.getHeader("Authorization")).thenReturn("Bearer " + createJwtWithFixedExpirationDate("test@gmail.com", "123", "test"));
+		
 		ratingService.saveRatings(ratingDtoRequest,req);
 		
 		verify(ratingRepo, times(1)).save(any());
@@ -36,7 +40,10 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	@Test
 	public void assertSavedRepo() throws UserRateLimitedOnPoliticianException {
 		stubSaveRepo(); 
+		
 		when(rateLimitService.isNotRateLimited(any(), any())).thenReturn(true);
+		when(req.getHeader("Authorization")).thenReturn("Bearer " + createJwtWithFixedExpirationDate("test@gmail.com", "123", "test"));
+		
 		PoliticiansRating rating = ratingService.saveRatings(ratingDtoRequest,req);
 		
 		assertThat(rating.getRating(),
@@ -46,7 +53,9 @@ public class RatingServiceTest extends AbstractEntitiesServiceTest{
 	@Test
 	public void assertSavedRepoUserRater() throws UserRateLimitedOnPoliticianException {
 		stubSaveRepo();
+		when(req.getHeader("Authorization")).thenReturn("Bearer " + createJwtWithFixedExpirationDate("test@gmail.com", "123", "test"));
 		when(rateLimitService.isNotRateLimited(any(), any())).thenReturn(true);
+		
 		PoliticiansRating rating = ratingService.saveRatings(ratingDtoRequest,req);
 		
 		assertThat(rating.getRater().getEmail(),

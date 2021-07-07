@@ -31,27 +31,15 @@ public class JwtProviderHttpServletRequest {
 
 	private static Jws<Claims> decodeJwtUtilMethod(HttpServletRequest req) {
 		Jws<Claims> jwts = null;
-		try {
-			Assert.state(req.getHeader("Authorization") != null, 
-					"No jwt found on authorization header");			
-		} catch (IllegalStateException e) {
-			throw new JwtNotFoundException(e.getMessage(), e);
-		} 
 		
 		try {
-			Assert.state(req.getHeader("Authorization").startsWith("Bearer "), 
-					"Authorization Header must start with Bearer");
-		} catch (IllegalStateException e) {
-			throw new JwtMalformedFormatException(e.getMessage(), e);
-		}
-		
-		try {
+			String jwtToDecode = extractJwtFromReq(req);
+			
 			jwts = Jwts.parserBuilder()
 					.setSigningKey(JwtKeys.getJwtKeyPair().getPublic())
 					.setAllowedClockSkewSeconds(60 * 3)
 					.build()
-					.parseClaimsJws(req.getHeader("Authorization").substring(7));
-			
+					.parseClaimsJws(jwtToDecode);
 		}  catch (MalformedJwtException e) {
 			throw new JwtMalformedFormatException(e.getLocalizedMessage());
 		}  catch (ExpiredJwtException e) {
@@ -71,6 +59,26 @@ public class JwtProviderHttpServletRequest {
 		LocalDateTime dateTime = LocalDateTime.now().minusHours(1L);
 		
 		return date.after(Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant()));
+	}
+	
+	public static String extractJwtFromReq(HttpServletRequest req) {
+		try {
+			Assert.state(req.getHeader("Authorization") != null, 
+					"No jwt found on authorization header");			
+		} catch (IllegalStateException e) {
+			throw new JwtNotFoundException(e.getMessage(), e);
+		}
+		
+		String jwt = req.getHeader("Authorization");
+		
+		try {
+			Assert.state(jwt.startsWith("Bearer "), 
+					"Authorization Header must start with Bearer");
+		} catch (IllegalStateException e) {
+			throw new JwtMalformedFormatException(e.getMessage(), e);
+		}
+		
+		return jwt.substring(7);
 	}
 	
 }

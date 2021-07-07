@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
@@ -19,15 +20,18 @@ import com.example.demo.model.entities.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;
+import com.example.demo.service.RateLimitingService;
 
 public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 
 	@Autowired PoliticiansRepository repo;
 	@Autowired RatingRepository ratingRepo;
+	@Autowired RateLimitingService limitingService;
 	
+	@Transactional
 	@Test
 	public void testHalFormsSaveRating() throws Exception {
-		var rater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accNumber");
+		var rater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accNumber", limitingService);
 		var politician = new Politicians.PoliticiansBuilder()
 				.setFirstName("test")
 				.setLastName("politician")
@@ -43,8 +47,14 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 		this.mvc.perform(get(create("/api/ratings/ratings/123accNumber")))
 			.andExpect(status().isOk())
 			.andDo(document("find-rate", links(halLinks(),
-					linkWithRel("politician").description("Link to rating a politician"),
 					linkWithRel("self").description("Link to a rating"))));
+		
+		/*
+		 * We are dealing with a real database here. Delete the entities
+		 * before the test finishes. 
+		 */
+		repo.delete(politician);
+		ratingRepo.deleteById(1);
 	}
 	
 }

@@ -26,14 +26,15 @@ import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.model.enums.Rating;
+import com.example.demo.service.RateLimitingService;
 import com.example.demo.service.RatingService;
 
 @ExtendWith(SpringExtension.class)
 public class RatingsControllerTest {
 	
 	@Mock RatingService service;
-	
 	@Mock RatingAssembler assembler;
+	@Mock RateLimitingService limitingService;
 	
 	RatingsController controller;
 	
@@ -41,7 +42,7 @@ public class RatingsControllerTest {
 	PoliticiansRating politiciansRating;
 	RatingDTO ratingDTO;
 	PoliticianDTO politicianDTO;	
-	final UserRater userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accountNumber");
+	final UserRater userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accountNumber", limitingService);
 	
 	@BeforeEach
 	public void setup() {

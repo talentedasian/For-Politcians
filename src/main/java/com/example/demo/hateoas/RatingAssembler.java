@@ -23,8 +23,13 @@ public class RatingAssembler implements SimpleRepresentationModelAssembler<Ratin
 
 	@Override
 	public void addLinks(CollectionModel<EntityModel<RatingDTO>> resources) {
-		// TODO Auto-generated method stub
+		RatingDTO entity = resources.getContent().stream()
+				.findAny().get()
+				.getContent();
 		
+		resources.add(linkTo(methodOn(RatingsController.class)
+				.getRatingByRaterAccountNumber(entity.getRater().getUserAccountNumber()))
+			.withRel("self"));
 	}
 
 }
