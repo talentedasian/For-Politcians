@@ -47,9 +47,8 @@ public class RatingProcessor implements RepresentationModelProcessor<EntityModel
 					.build()
 					.toLink();
 		} catch (UserRateLimitedOnPoliticianException e) {
-			// TODO Auto-generated catch block
 			LoggerFactory.getLogger(RatingProcessor.class).info("""
-					Exception not supposed to throw. Either a problem with our code our in the Spring Hateoas Framework
+					Exception not supposed to throw. Either a problem with our code or in the Spring Hateoas Framework
 					""");
 		}
 
