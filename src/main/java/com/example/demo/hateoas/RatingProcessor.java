@@ -3,6 +3,7 @@ package com.example.demo.hateoas;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.mediatype.Affordances;
@@ -47,7 +48,9 @@ public class RatingProcessor implements RepresentationModelProcessor<EntityModel
 					.toLink();
 		} catch (UserRateLimitedOnPoliticianException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggerFactory.getLogger(RatingProcessor.class).info("""
+					Exception not supposed to throw. Either a problem with our code our in the Spring Hateoas Framework
+					""");
 		}
 
 		model.add(affordance);
