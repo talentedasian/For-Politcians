@@ -10,6 +10,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -25,6 +26,7 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 	
 	@Autowired
 	private ClientRegistrationRepository clientRegistrationRepo;
+	
 	private final FacebookOauth2UserInfoUtility userInfoEndpointUtil;
 	
 	@Autowired
@@ -59,11 +61,12 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 	public void saveAuthorizedClient(OAuth2AuthorizedClient authorizedClient, Authentication principal,
 			HttpServletRequest request, HttpServletResponse response) {
 		try {
-			
 			saveAuthorizedClientsInCookie(authorizedClient, response);
 			addJwtCookie(authorizedClient, response);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			LoggerFactory.getLogger("Oauth2").info("""
+					URI exception, consider changing the URI used
+					for fetching user information on facebook.""");
 		}
 	}
 
@@ -78,14 +81,17 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 				authorizedClient.getAccessToken().getTokenValue());
 		accessTokenValueCookie.setHttpOnly(true);
 		accessTokenValueCookie.setPath("/");
+		
 		Cookie accessTokenExpiresAtCookie = new Cookie("accessTokenExpiresAt", 
 				String.valueOf(authorizedClient.getAccessToken().getExpiresAt().getEpochSecond()));
 		accessTokenExpiresAtCookie.setHttpOnly(true);
 		accessTokenExpiresAtCookie.setPath("/");
+		
 		Cookie accessTokenIssuedAtCookie = new Cookie("accessTokenIssuedAt", 
 				String.valueOf(authorizedClient.getAccessToken().getIssuedAt().getEpochSecond()));
 		accessTokenIssuedAtCookie.setHttpOnly(true);
 		accessTokenIssuedAtCookie.setPath("/");
+		
 		Cookie principalNameCookie = new Cookie("principalName",
 				authorizedClient.getPrincipalName());
 		principalNameCookie.setPath("/");
