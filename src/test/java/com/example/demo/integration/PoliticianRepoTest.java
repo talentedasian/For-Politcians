@@ -1,7 +1,6 @@
 package com.example.demo.integration;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.MethodOrderer;
@@ -45,14 +44,7 @@ public class PoliticianRepoTest {
 		
 		Politicians politician = repo.save(politicianToBeSaved);
 		
-		assertThat(politicianToBeSaved.getFirstName(), 
-				equalTo(politician.getFirstName()));
-		assertThat(politicianToBeSaved.getLastName(), 
-				equalTo(politician.getLastName()));
-		assertThat(politicianToBeSaved.getRating(), 
-				equalTo(politician.getRating()));
-		assertThat(politicianToBeSaved.getPoliticianNumber(), 
-				equalTo(politician.getPoliticianNumber()));
+		assertEquals(politicianToBeSaved, politician);
 	}
 	
 	@Test
