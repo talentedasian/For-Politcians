@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
@@ -8,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.RateLimitDto;
+import com.example.demo.dto.RateLimitDTO;
 import com.example.demo.dtomapper.RateLimitDtoMapper;
 import com.example.demo.exceptions.RateLimitNotFoundException;
 import com.example.demo.jwt.JwtProviderHttpServletRequest;
@@ -30,7 +33,7 @@ public class RateLimitController {
 	}
 
 
-	@GetMapping("/rate{politicianNumber}")
+	@GetMapping("/{politicianNumber}")
 	public ResponseEntity<?> findRateLimitOnCurrentUser(@PathVariable String politicianNumber,
 			HttpServletRequest req) {
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
@@ -41,7 +44,12 @@ public class RateLimitController {
 		RateLimit rateLimitQueried = service.findRateLimitInPolitician(accountNumber, politicianNumber)
 				.orElseThrow(() -> new RateLimitNotFoundException("User is not rate limited"));
 		
-		RateLimitDto rateLimit = new RateLimitDtoMapper().mapToDTO(rateLimitQueried);
+		RateLimitDTO rateLimit = new RateLimitDtoMapper().mapToDTO(rateLimitQueried);
+		var selfLink = linkTo(methodOn(RateLimitController.class)
+				.findRateLimitOnCurrentUser(rateLimit.getPoliticianNumber(), req))
+				.withRel("self");
+		
+		rateLimit.add(selfLink);
 		
 		return new ResponseEntity<>(rateLimit, HttpStatus.OK);
 	}

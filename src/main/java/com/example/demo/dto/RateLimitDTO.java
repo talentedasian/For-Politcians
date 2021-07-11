@@ -1,6 +1,8 @@
 package com.example.demo.dto;
 
-public class RateLimitDto {
+import org.springframework.hateoas.RepresentationModel;
+
+public class RateLimitDTO extends RepresentationModel<RateLimitDTO>{
 
 	private final String daysLeft, accountNumber, politicianNumber;
 
@@ -17,7 +19,7 @@ public class RateLimitDto {
 	}
 
 
-	public RateLimitDto(String daysLeft, String accountNumber, String politicianNumber) {
+	public RateLimitDTO(String daysLeft, String accountNumber, String politicianNumber) {
 		super();
 		this.daysLeft = daysLeft;
 		this.accountNumber = accountNumber;

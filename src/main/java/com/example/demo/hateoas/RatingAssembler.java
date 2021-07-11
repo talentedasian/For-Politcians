@@ -5,6 +5,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.SimpleRepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +18,11 @@ public class RatingAssembler implements SimpleRepresentationModelAssembler<Ratin
 	@Override
 	public void addLinks(EntityModel<RatingDTO> resource) {
 		resource.add(linkTo(methodOn(RatingsController.class)
-				.getRatingById(resource.getContent().getRater().getUserAccountNumber()))
-			.withRel("self"));				
+				.getRatingById(resource.getContent().getId()))
+			.withRel("self"));
+		
+		resource.add(Link.of("http://localhost:8080/rate-limit/{politicianNumber}")
+			.withRel("rate-limit"));
 	}
 
 	@Override

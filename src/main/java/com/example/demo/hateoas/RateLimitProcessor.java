@@ -3,67 +3,66 @@ package com.example.demo.hateoas;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import org.slf4j.LoggerFactory;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.mediatype.Affordances;
 import org.springframework.hateoas.server.RepresentationModelProcessor;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
-import com.example.demo.controller.PoliticianController;
 import com.example.demo.controller.RatingsController;
+import com.example.demo.dto.RateLimitDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.service.RateLimitingService;
 
-public class RatingProcessor implements RepresentationModelProcessor<EntityModel<RatingDTO>>{
+public class RateLimitProcessor implements RepresentationModelProcessor<RateLimitDTO>{
 
 	private final RateLimitingService rateLimitService;
 	
-	public RatingProcessor(RateLimitingService rateLimitService) {
+	public RateLimitProcessor(RateLimitingService rateLimitService) {
 		super();
 		this.rateLimitService = rateLimitService;
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	@Override
-	public EntityModel<RatingDTO> process(EntityModel<RatingDTO> model) {
-		var rating = model.getContent();
+	public RateLimitDTO process(RateLimitDTO model) {
+		Link ratingLink = linkTo(methodOn(RatingsController.class)
+				.getRatingByRaterAccountNumber(model.getAccountNumber()))
+				.withRel("rating-account-number");
 		
-		Link linkToPolitician = linkTo(methodOn(PoliticianController.class).politicianById(rating.getPolitician().getId()))
-				.withRel("politician");
-		
-		if (isRateLimited(rating)) {
-			return model.add(linkToPolitician);
+		if (isRateLimited(model)) {			
+			return model.add(ratingLink);;
 		}
-		
+			
 		Link affordance = null;
 		try {
-			affordance = Affordances.of(linkToPolitician)
-					.afford(HttpMethod.POST)
-					.withInput(AddRatingDTORequest.class)
-					.withInputMediaType(MediaType.APPLICATION_JSON)
-					.withTarget(linkTo(methodOn(RatingsController.class).saveRating(null, null)).withRel("rate"))
-					.build()
-					.toLink();
+			affordance = Affordances.of(ratingLink)
+				.afford(POST)
+				.withInput(AddRatingDTORequest.class)
+				.withInputMediaType(APPLICATION_JSON)
+				.withTarget(linkTo(methodOn(RatingsController.class).saveRating(null, null)).withRel("rate"))
+				.build()
+				.toLink();
 		} catch (UserRateLimitedOnPoliticianException e) {
 			LoggerFactory.getLogger(RatingProcessor.class).info("""
 					Exception not supposed to throw. Either a problem with our 
 					code or in the Spring Hateoas Framework
 					""", e);
 		}
-
-		model.add(affordance);
 		
-		return model;
+		return model.add(affordance);
 	}
 	
-	private boolean isRateLimited(RatingDTO entity) {
-		return !rateLimitService.isNotRateLimited(entity.getRater().getUserAccountNumber(),
-				entity.getPolitician().getId());
+	private boolean isRateLimited(RateLimitDTO entity) {
+		return !rateLimitService.isNotRateLimited(entity.getAccountNumber(),
+				entity.getPoliticianNumber());
 	}
+	
+	
 
 }
