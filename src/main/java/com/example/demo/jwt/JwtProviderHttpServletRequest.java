@@ -6,7 +6,6 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import com.example.demo.exceptions.JwtExpiredException;
@@ -22,7 +21,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 
-@Component
 public class JwtProviderHttpServletRequest {
 
 	public static Jws<Claims> decodeJwt(HttpServletRequest req) {

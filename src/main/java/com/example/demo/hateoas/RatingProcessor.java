@@ -2,7 +2,6 @@ package com.example.demo.hateoas;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-import static org.springframework.http.HttpMethod.POST;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.EntityModel;

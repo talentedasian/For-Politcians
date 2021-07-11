@@ -15,8 +15,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.example.demo.repository.PoliticiansRepository;
+import com.example.demo.repository.RatingRepository;
+import com.example.demo.service.RateLimitingService;
+
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class BaseSpringHateoasTest {
+	
+	@Autowired PoliticiansRepository repo;
+	@Autowired RatingRepository ratingRepo;
+	@Autowired RateLimitingService limitingService;
 
 	@RegisterExtension
 	final RestDocumentationExtension restDocumentation = new RestDocumentationExtension("rest-docs");

@@ -38,7 +38,7 @@ public class RateLimitingService {
 		return rateLimit;
 	}
 	
-	private void deleteRateLimit(String id, String politicianNumber) {
+	public void deleteRateLimit(String id, String politicianNumber) {
 		repo.deleteByIdAndPoliticianNumber(id, politicianNumber);
 	}
 	

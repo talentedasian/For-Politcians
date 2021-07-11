@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
@@ -18,15 +17,8 @@ import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.UserRater;
 import com.example.demo.model.enums.PoliticalParty;
-import com.example.demo.repository.PoliticiansRepository;
-import com.example.demo.repository.RatingRepository;
-import com.example.demo.service.RateLimitingService;
 
 public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
-
-	@Autowired PoliticiansRepository repo;
-	@Autowired RatingRepository ratingRepo;
-	@Autowired RateLimitingService limitingService;
 	
 	UserRater rater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accNumber", limitingService);
 	Politicians politician = new Politicians.PoliticiansBuilder()

@@ -9,12 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.mediatype.Affordances;
 import org.springframework.hateoas.server.RepresentationModelProcessor;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 
 import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.RateLimitDTO;
-import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.service.RateLimitingService;
@@ -36,7 +33,7 @@ public class RateLimitProcessor implements RepresentationModelProcessor<RateLimi
 				.withRel("rating-account-number");
 		
 		if (isRateLimited(model)) {			
-			return model.add(ratingLink);;
+			return model.add(ratingLink);
 		}
 			
 		Link affordance = null;
@@ -62,7 +59,5 @@ public class RateLimitProcessor implements RepresentationModelProcessor<RateLimi
 		return !rateLimitService.isNotRateLimited(entity.getAccountNumber(),
 				entity.getPoliticianNumber());
 	}
-	
-	
 
 }

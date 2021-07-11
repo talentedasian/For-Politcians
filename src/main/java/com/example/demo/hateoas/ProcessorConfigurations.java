@@ -12,4 +12,10 @@ public class ProcessorConfigurations {
 	public RatingProcessor ratingProcessor(RateLimitingService service) {
 		return new RatingProcessor(service);
 	}
+	
+	@Bean
+	public RateLimitProcessor rateLimitProcessor(RateLimitingService service) {
+		return new RateLimitProcessor(service);
+	}
+	
 }
