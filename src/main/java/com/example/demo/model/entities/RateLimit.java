@@ -3,13 +3,31 @@ package com.example.demo.model.entities;
 import static java.lang.Integer.valueOf;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 @Entity
 public class RateLimit {
+	
+	@Transient
+	private transient static final Map<String, RateLimit> cache = new HashMap<>();
+	
+	static {
+		/*
+		 * Commonly used for testing
+		 */
+		var rateLimit = new RateLimit();
+		rateLimit.setDateCreated(LocalDate.now().minusDays(8));
+		rateLimit.setId("TGFLM-00000000000123");
+		rateLimit.setPoliticianNumber("123polNumber");
+		
+		cache.put(rateLimit.getId(), rateLimit);
+	}
 	
 	@Id
 	private String id;
@@ -48,8 +66,19 @@ public class RateLimit {
 		super();
 		this.id = id;
 		this.politicianNumber = politicianNumber;
-		dateCreated = LocalDate.now();
+		this.dateCreated = LocalDate.now();
 	}
+	
+	public static RateLimit withNotExpiredRateLimit(String id, String politicianNumber) {
+		return cache.computeIfAbsent(id, (key) -> {
+			var rateLimit = new RateLimit();
+			rateLimit.setId(id);
+			rateLimit.setPoliticianNumber(politicianNumber);
+			rateLimit.setDateCreated(LocalDate.now().minusDays(8));
+			
+			return rateLimit;
+		});
+	};
 
 	public RateLimit() {
 		super();
@@ -99,7 +128,7 @@ public class RateLimit {
 	}
 	
 	public boolean isNotRateLimited() {
-		return this.dateCreated != null && (LocalDate.now().minusDays(7L).isAfter(dateCreated) | 
+		return this.dateCreated == null || (LocalDate.now().minusDays(7L).isAfter(dateCreated) | 
 				LocalDate.now().minusDays(7L).isEqual(dateCreated));
 	}
 	
@@ -109,7 +138,13 @@ public class RateLimit {
 			return null;
 		}
 		
-		return valueOf(this.dateCreated.getDayOfMonth() - LocalDate.now().minusDays(7L).getDayOfMonth());
+		int daysLeft = this.dateCreated.getDayOfMonth() - LocalDate.now().minusDays(7L).getDayOfMonth();
+		
+		if (Integer.signum(daysLeft) == -1) {
+			return null;
+		}
+		
+		return valueOf(daysLeft);
 	}
 
 }

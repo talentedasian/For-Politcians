@@ -8,11 +8,16 @@ public class RateLimitDtoMapper implements DTOMapper<RateLimitDTO, RateLimit>{
 
 	@Override
 	public RateLimitDTO mapToDTO(RateLimit entity) {
-		String daysLeft = entity.daysLeftOfBeingRateLimited().toString();
+		Integer daysLeft = entity.daysLeftOfBeingRateLimited();
+		String days = null;
+		
 		if (daysLeft == null) {
-			daysLeft = "0";
+			days = "0";
+		} else {
+			days = daysLeft.toString();
 		}
-		var rateLimitDTO = new RateLimitDTO(daysLeft, entity.getId(), entity.getPoliticianNumber());
+		
+		var rateLimitDTO = new RateLimitDTO(days, entity.getId(), entity.getPoliticianNumber());
 		return rateLimitDTO;
 	}
 

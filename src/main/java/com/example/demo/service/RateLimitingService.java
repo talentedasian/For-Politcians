@@ -28,7 +28,11 @@ public class RateLimitingService {
 		return repo.findByIdAndPoliticianNumber(accountNumber, politicianNumber);
 	}
 	
-	//rate limit a user in a particular politician
+	/*
+	 * Rate limit a user in a particular politician. Also delete
+	 * the first instance of the rate limit so that the most updated
+	 * rate limit is reflected and not the outdated one. 
+	 */
 	@Transactional
 	public RateLimit rateLimitUser(String accountNumber, String politicianNumber) {
 		var rateLimitToBeSaved = new RateLimit(accountNumber, politicianNumber);
@@ -38,6 +42,24 @@ public class RateLimitingService {
 		return rateLimit;
 	}
 	
+	
+	/*
+	 * Probably going to change the access modifier to avoid 
+	 * being used everywhere. This should only be used for tests.
+	 */
+	@Transactional
+	public RateLimit rateLimitUserForTests(String accNumber, String polNumber) {
+		var rateLimitToBeSaved = RateLimit.withNotExpiredRateLimit(accNumber, polNumber);
+		
+		deleteRateLimit(accNumber, polNumber);
+		RateLimit rateLimit = repo.save(rateLimitToBeSaved);
+		return rateLimit;
+	}
+	
+	/*
+	 * Probably going to change the access modifier to avoid 
+	 * being used everywhere. This should only be used for tests.
+	 */
 	public void deleteRateLimit(String id, String politicianNumber) {
 		repo.deleteByIdAndPoliticianNumber(id, politicianNumber);
 	}

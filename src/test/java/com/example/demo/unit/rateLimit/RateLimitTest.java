@@ -1,5 +1,6 @@
 package com.example.demo.unit.rateLimit;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -27,7 +28,7 @@ public class RateLimitTest {
 		rate.setPoliticianNumber("2");
 		rate.setDateCreated(LocalDate.now().minusDays(5L));
 		
-		assertTrue(!rate.isNotRateLimited());
+		assertFalse(rate.isNotRateLimited());
 	}
 	
 }

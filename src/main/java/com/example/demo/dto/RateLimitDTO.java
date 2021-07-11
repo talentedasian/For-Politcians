@@ -2,6 +2,10 @@ package com.example.demo.dto;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class RateLimitDTO extends RepresentationModel<RateLimitDTO>{
 
 	private final String daysLeft, accountNumber, politicianNumber;
