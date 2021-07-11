@@ -1,4 +1,4 @@
-package com.example.demo.integration.controllers;
+package com.example.demo;
 
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -17,7 +17,6 @@ import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.MediaTypes;
 
-import com.example.demo.BaseSpringHateoasTest;
 import com.example.demo.jwt.JwtProvider;
 
 public class Oauth2ControllerTest extends BaseSpringHateoasTest{	
