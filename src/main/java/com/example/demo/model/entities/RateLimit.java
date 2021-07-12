@@ -82,7 +82,6 @@ public class RateLimit {
 
 	public RateLimit() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
