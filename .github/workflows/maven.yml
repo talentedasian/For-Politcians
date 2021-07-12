@@ -43,4 +43,3 @@ jobs:
       - uses: actions/checkout@v2
       - name: Generate JaCoCo Badge
         uses: cicirello/jacoco-badge-generator@v2
-        with:
