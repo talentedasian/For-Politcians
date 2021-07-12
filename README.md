@@ -17,6 +17,7 @@
 -->
 
 [![Java CI with Maven](https://github.com/talentedasian/For-Politcians/actions/workflows/maven.yml/badge.svg)](https://github.com/talentedasian/For-Politcians/actions/workflows/maven.yml)
+[![Coverage](.github/badges/jacoco.svg)](https://github.com/talentedasian/For-Politicians/actions/workflows/maven.yml)
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
