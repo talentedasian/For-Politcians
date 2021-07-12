@@ -13,5 +13,9 @@ public interface RatingRepository extends JpaRepository<PoliticiansRating, Integ
 	long countByPolitician_Id(Integer id);
 	
 	List<PoliticiansRating> findByRater_UserAccountNumber(String accountNumber);
+	
+	void deleteByRater_UserAccountNumber(String accountNumber);
+	
+	boolean existsByRater_UserAccountNumber(String accountNumber);
 
 }

@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,7 +25,7 @@ import com.example.demo.repository.RatingRepository;
 @Table(indexes = @Index(columnList = "politicianNumber") )
 public class Politicians implements PoliticianMethods{
 
-	@Autowired private transient RatingRepository repo;
+	@Transient @Autowired private transient RatingRepository repo;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

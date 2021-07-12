@@ -123,4 +123,14 @@ public class RatingService {
 		return false;
 	}
 	
+	@Transactional
+	public boolean deleteByAccountNumber(String accountNumber) {
+		if (ratingRepo.existsByRater_UserAccountNumber(accountNumber)) {
+			ratingRepo.deleteByRater_UserAccountNumber(accountNumber);
+			return true;
+		}
+		
+		return false;
+	}
+	
 }
