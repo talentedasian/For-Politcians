@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +12,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +25,7 @@ import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.dtomapper.interfaces.RatingDTOMapper;
+import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.hateoas.RatingAssembler;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -87,6 +91,20 @@ public class RatingsController {
 		CollectionModel<EntityModel<RatingDTO>> response = assembler.toCollectionModel(politicianRating);
 		
 		return new ResponseEntity<CollectionModel<EntityModel<RatingDTO>>>(response, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/rating/{id}")
+	public ResponseEntity<?> deleteRating(@PathVariable Integer id) {
+		if (id == null) {
+			throw new RatingsNotFoundException("Id cannot be null");
+		}
+		
+		boolean delete = ratingService.deleteById(id);
+		if (!delete) {
+			throw new RatingsNotFoundException("Rating not found by " + id);
+		}
+		
+		return new ResponseEntity<>(NO_CONTENT);
 	}
 
 }

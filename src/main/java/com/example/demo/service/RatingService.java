@@ -113,4 +113,14 @@ public class RatingService {
 		return ratingsByRater;
 	}
 	
+	@Transactional
+	public boolean deleteById(Integer id) {
+		if (ratingRepo.existsById(id)) {
+			ratingRepo.deleteById(id);
+			return true;
+		}
+		
+		return false;
+	}
+	
 }

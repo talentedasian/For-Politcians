@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -189,6 +190,24 @@ public class RatingControllerTest {
 			.andExpect(jsonPath("optional", 
 				containsStringIgnoringCase("one request per week")))
 			.andExpect(header().string("Retry-After","2 days"));
+	}
+	
+	@Test
+	public void shouldReturn204NoContent() throws Exception {
+		when(service.deleteById(1)).thenReturn(true);
+		
+		mvc.perform(delete(create("/api/ratings/rating/1")))
+			.andExpect(status().isNoContent());
+	}
+	
+	@Test
+	public void shouldReturn404NotFoundWhenDeleting() throws Exception {
+		when(service.deleteById(1)).thenReturn(false);
+		
+		mvc.perform(delete(create("/api/ratings/rating/1")))
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("code", equalTo("404")))
+			.andExpect(jsonPath("err", equalTo("Rating not found by 1")));
 	}
 	
 }
