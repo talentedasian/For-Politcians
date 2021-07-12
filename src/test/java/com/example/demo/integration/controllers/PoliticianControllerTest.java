@@ -19,26 +19,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.MediaTypes;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.example.demo.controller.PoliticianController;
 import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
-import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.hateoas.PoliticianAssembler;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
-import com.example.demo.model.entities.UserRater;
-import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.service.PoliticiansService;
-import com.example.demo.service.RateLimitingService;
 
 @WebMvcTest(PoliticianController.class)
 public class PoliticianControllerTest {
