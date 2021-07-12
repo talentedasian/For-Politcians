@@ -36,4 +36,5 @@ jobs:
       run: mvn clean verify -Dspring.profiles.active=githubActions
     - name: Generate JaCoCo Badge
       uses: cicirello/jacoco-badge-generator@v2
-      
+      with:
+        generate-branches-badge: false
