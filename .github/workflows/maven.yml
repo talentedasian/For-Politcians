@@ -37,5 +37,5 @@ jobs:
     - name: Generate JaCoCo Badge
       uses: cicirello/jacoco-badge-generator@v2
       with:
-        generate-branches-badge: true
-        badges-directory: jacoco/badges
+        name: jacoco-report
+        path: target/site/jacoco/
