@@ -210,4 +210,22 @@ public class RatingControllerTest {
 			.andExpect(jsonPath("err", equalTo("Rating not found by 1")));
 	}
 	
+	@Test
+	public void shouldReturn204NoContentByAccNumber() throws Exception {
+		when(service.deleteByAccountNumber("123accNumber")).thenReturn(true);
+		
+		mvc.perform(delete(create("/api/ratings/ratings/123accNumber")))
+			.andExpect(status().isNoContent());
+	}
+	
+	@Test
+	public void shouldReturn404NotFoundWhenDeletingByAccNumber() throws Exception {
+		when(service.deleteByAccountNumber("123accNumber")).thenReturn(false);
+		
+		mvc.perform(delete(create("/api/ratings/ratings/123accNumber")))
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("code", equalTo("404")))
+			.andExpect(jsonPath("err", equalTo("Rating not found by 123accNumber")));
+	}
+	
 }

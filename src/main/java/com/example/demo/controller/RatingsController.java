@@ -107,4 +107,18 @@ public class RatingsController {
 		return new ResponseEntity<>(NO_CONTENT);
 	}
 
+	@DeleteMapping("/ratings/{accNumber}")
+	public ResponseEntity<?> deleteRatingByAccountNumber(@PathVariable String accNumber) {
+		if (accNumber == null) {
+			throw new RatingsNotFoundException("Account number cannot be null");
+		}
+		
+		boolean delete = ratingService.deleteByAccountNumber(accNumber);
+		if (!delete) {
+			throw new RatingsNotFoundException("Rating not found by " + accNumber);
+		}
+		
+		return new ResponseEntity<>(NO_CONTENT);
+	}
+
 }
