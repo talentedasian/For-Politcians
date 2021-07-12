@@ -181,6 +181,11 @@
 			            <goals>
 			                <goal>report</goal>
 			            </goals>
+			            <configuration>
+			            	<excludes>
+								<exclude>com/example/demo/exceptions/**</exclude>
+							</excludes>
+			            </configuration>
 			        </execution>
 			        <execution>
 			        	<id>jacoco-check</id>
@@ -191,10 +196,6 @@
 			            <configuration>
 							<rules>
 								<rule>
-									<element>PACKAGE</element>
-									<excludes>
-										<exclude>exceptions</exclude>
-									</excludes>
 									<element>BUNDLE</element>
 									<limits>
 										<limit>
