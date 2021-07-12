@@ -16,8 +16,8 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 
-[![Java CI with Maven](https://github.com/talentedasian/For-Politcians/actions/workflows/maven.yml/badge.svg)](https://github.com/talentedasian/For-Politcians/actions/workflows/maven.yml)
-[![Coverage](.github/badges/jacoco.svg)](https://github.com/talentedasian/For-Politicians/actions/workflows/maven.yml)
+[![Java CI with Maven](https://github.com/talentedasian/For-Politicians/actions/workflows/build.yml/badge.svg?branch=1.x.x.RESTFUL)](https://github.com/talentedasian/For-Politicians/actions/workflows/build.yml)
+[![codecov](https://codecov.io/gh/talentedasian/For-Politicians/branch/1.x.x.RESTFUL/graph/badge.svg?token=6VUTJC5D3G)](https://codecov.io/gh/talentedasian/For-Politicians)
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
