@@ -191,9 +191,9 @@
 			            <configuration>
 							<rules>
 								<rule>
-									<element>CLASS</element>
+									<element>PACKAGE</element>
 									<excludes>
-										<exclude>*Exception</exclude>
+										<exclude>exceptions</exclude>
 									</excludes>
 									<element>BUNDLE</element>
 									<limits>
