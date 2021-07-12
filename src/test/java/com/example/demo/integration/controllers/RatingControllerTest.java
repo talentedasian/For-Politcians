@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,12 +20,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
@@ -46,7 +47,6 @@ import com.example.demo.service.PoliticiansService;
 import com.example.demo.service.RateLimitingService;
 import com.example.demo.service.RatingService;
 
-@AutoConfigureMockMvc(print = MockMvcPrint.DEFAULT, printOnlyOnFailure = false)
 @WebMvcTest(RatingsController.class)
 public class RatingControllerTest {
 
@@ -75,7 +75,11 @@ public class RatingControllerTest {
 	@Mock HttpServletRequest req;
 	
 	@BeforeEach
-	public void setup() {
+	public void setup(WebApplicationContext wac) {
+		this.mvc = MockMvcBuilders.webAppContextSetup(wac)
+				.alwaysDo(print())
+				.build();
+		
 		politician = new Politicians();
 		politician.setId(123);
 		politician.setFirstName("Mirriam");
