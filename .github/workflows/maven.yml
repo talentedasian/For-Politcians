@@ -33,7 +33,7 @@ jobs:
       env: 
         OAUTH2_CLIENT_SECRET: ${{ secrets.OAUTH2_CLIENT_SECRET }}
     - name: Build with Maven
-      run: mvn clean verify -Dspring.profiles.active=githubActions
+      run: mvn clean package -Dspring.profiles.active=githubActions
     - name: Generate JaCoCo Badge
       uses: cicirello/jacoco-badge-generator@v2
     - name: Upload Jacoco coverage report
