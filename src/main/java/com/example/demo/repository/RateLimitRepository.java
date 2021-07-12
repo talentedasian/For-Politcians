@@ -11,4 +11,9 @@ public interface RateLimitRepository extends JpaRepository<RateLimit, String>{
 	Optional<RateLimit> findByIdAndPoliticianNumber(String id, String politicianNumber);
 	
 	void deleteByIdAndPoliticianNumber(String id, String politicianNumber);
+	
+	/*
+	 *	Used for tests only! 
+	 */
+	long countByIdAndPoliticianNumber(String id, String polNumber);	
 }
