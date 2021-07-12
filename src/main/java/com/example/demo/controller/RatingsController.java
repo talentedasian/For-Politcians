@@ -95,10 +95,6 @@ public class RatingsController {
 	
 	@DeleteMapping("/rating/{id}")
 	public ResponseEntity<?> deleteRating(@PathVariable Integer id) {
-		if (id == null) {
-			throw new RatingsNotFoundException("Id cannot be null");
-		}
-		
 		boolean delete = ratingService.deleteById(id);
 		if (!delete) {
 			throw new RatingsNotFoundException("Rating not found by " + id);
@@ -109,10 +105,6 @@ public class RatingsController {
 
 	@DeleteMapping("/ratings/{accNumber}")
 	public ResponseEntity<?> deleteRatingByAccountNumber(@PathVariable String accNumber) {
-		if (accNumber == null) {
-			throw new RatingsNotFoundException("Account number cannot be null");
-		}
-		
 		boolean delete = ratingService.deleteByAccountNumber(accNumber);
 		if (!delete) {
 			throw new RatingsNotFoundException("Rating not found by " + accNumber);
