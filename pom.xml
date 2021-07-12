@@ -180,7 +180,26 @@
 			            <phase>prepare-package</phase>
 			            <goals>
 			                <goal>report</goal>
+			                <goal>check</goal>
 			            </goals>
+			            <configuration>
+			            	<haltOnFailure>true</haltOnFailure>
+							<rules>
+								<element>BUNDLE</element>
+								<limits>
+									<limit>
+										<counter>INSTRUCTION</counter>
+								        <value>COVEREDRATIO</value>
+								        <minimum>0.50</minimum>
+									</limit>
+									<limit>
+										<counter>CLASS</counter>
+										<value>MISSEDCOUNT</value>
+										<maximumm>0</maximumm>
+									</limit>
+								</limits>
+							</rules>			            
+			            </configuration>
 			        </execution>
 			    </executions>
 			</plugin>
