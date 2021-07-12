@@ -6,7 +6,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.MediaTypes.HAL_FORMS_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -18,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -69,13 +72,38 @@ public class PoliticianControllerTest {
 	}
 	
 	@Test
-	public void shouldEqualDtoOutputs() throws Exception {
+	public void shouldEqualDtoOutputsByPoliticianNumber() throws Exception {
 		when(polService.findPoliticianByNumber("123polNumber")).thenReturn(politician);
 		when(assembler.toModel(any())).thenReturn(entityModel);
 		
 		this.mvc.perform(get(create("/api/politicians/politician/123polNumber"))
 				.accept(HAL_FORMS_JSON))
 				.andExpect(status().isOk())
+				.andExpect(content().contentType(HAL_FORMS_JSON))
+				.andExpect(jsonPath("name", equalTo(politicianDTO.getName())))
+				.andExpect(jsonPath("id", equalTo(politicianDTO.getId())))
+				.andExpect(jsonPath("rating", equalTo(1.0D)))
+				.andExpect(jsonPath("satisfaction_rate", equalTo(politicianDTO.getSatisfactionRate().toString())));
+	}
+	
+	@Test
+	public void shouldEqualDtoOutputsWhenSaved() throws Exception {
+		when(polService.savePolitician(any())).thenReturn(politician);
+		when(assembler.toModel(any())).thenReturn(entityModel);
+		
+		String content = """
+				{
+					"firstName": "Test",
+					"lastName": "Name",
+					"rating": 1.00
+				}
+				""";
+		
+		this.mvc.perform(post(create("/api/politicians/politician/"))
+				.content(content)
+				.contentType(APPLICATION_JSON)
+				.accept(HAL_FORMS_JSON))
+				.andExpect(status().isCreated())
 				.andExpect(content().contentType(HAL_FORMS_JSON))
 				.andExpect(jsonPath("name", equalTo(politicianDTO.getName())))
 				.andExpect(jsonPath("id", equalTo(politicianDTO.getId())))
