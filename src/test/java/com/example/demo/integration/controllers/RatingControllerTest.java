@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -50,7 +49,7 @@ import com.example.demo.service.RatingService;
 @WebMvcTest(RatingsController.class)
 public class RatingControllerTest {
 
-	@Autowired MockMvc mvc;
+	MockMvc mvc;
 
 	@MockBean RatingService service;
 	@MockBean PoliticiansService polService;
