@@ -22,7 +22,6 @@ public class RateLimitDTO extends RepresentationModel<RateLimitDTO>{
 		return politicianNumber;
 	}
 
-
 	public RateLimitDTO(String daysLeft, String accountNumber, String politicianNumber) {
 		super();
 		this.daysLeft = daysLeft;

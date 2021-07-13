@@ -14,7 +14,7 @@ import javax.persistence.Transient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.demo.annotations.ExcludeFromJacocoCoverage;
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.model.PoliticianMethods;
 import com.example.demo.repository.RatingRepository;
 
@@ -126,13 +126,13 @@ public class Politicians implements PoliticianMethods{
 		this.politicianNumber = politicianNumber;
 	}
 
-	@ExcludeFromJacocoCoverage
 	@Override
 	public String toString() {
 		return "Politicians [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", fullName="
 				+ fullName +  ", rating=" + rating + "]";
 	}
-	
+
+	@ExcludeFromJacocoGeneratedCoverage
 	@Override
 	public int hashCode() {
 		final int prime = 31;
