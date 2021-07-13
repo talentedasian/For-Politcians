@@ -84,6 +84,7 @@ public class RatingControllerTest {
 			.setId(123)
 			.setFirstName("Mirriam")
 			.setLastName("Defensor")
+			.setFullName()
 			.setRating(new Rating(1D, 1D, mock(LowSatisfactionAverageCalculator.class)))
 			.build();
 		
