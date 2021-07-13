@@ -18,8 +18,6 @@ import com.example.demo.annotations.ExcludeFromJacocoCoverage;
 import com.example.demo.model.PoliticianMethods;
 import com.example.demo.repository.RatingRepository;
 
-import io.jsonwebtoken.lang.Assert;
-
 @Entity
 @Table(indexes = @Index(columnList = "politicianNumber") )
 public class Politicians implements PoliticianMethods{
@@ -259,14 +257,16 @@ public class Politicians implements PoliticianMethods{
 		}
 
 		public PoliticiansBuilder setFullName() {
-			Assert.state(firstName != null && lastName != null, 
-					"First and Last name cannot be null");
+			if (firstName == null && lastName == null) {
+				throw new IllegalArgumentException("First and Last name cannot be null");
+			}
 			
 			if (lastName == null) {
 				this.fullName = firstName;
+				return this;
 			}
-			this.fullName = firstName + " " + lastName;
 			
+			this.fullName = firstName + " " + lastName;
 			return this;
 		}
 
