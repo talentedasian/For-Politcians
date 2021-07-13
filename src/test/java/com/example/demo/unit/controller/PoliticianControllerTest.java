@@ -1,6 +1,7 @@
 package com.example.demo.unit.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -27,7 +28,7 @@ public class PoliticianControllerTest extends AbstractPoliticianControllerTest {
 		PoliticianDTO polDTO = new PoliticiansDtoMapper().mapToDTO(politician);
 		
 		when(service.savePolitician(politicianDTORequest)).thenReturn(politician);
-		when(assembler.toModel(polDTO)).thenReturn(EntityModel.of(polDTO));
+		when(assembler.toModel(any())).thenReturn(EntityModel.of(polDTO));
 		
 		PoliticianDTO politicianResponse = controller.savePolitician(politicianDTORequest).getBody().getContent();
 		
@@ -39,12 +40,11 @@ public class PoliticianControllerTest extends AbstractPoliticianControllerTest {
 		PoliticianDTO polDTO = new PoliticiansDtoMapper().mapToDTO(politician);
 		
 		when(service.findPoliticianByNumber("1")).thenReturn(politician);
-		when(assembler.toModel(polDTO)).thenReturn(EntityModel.of(polDTO));
+		when(assembler.toModel(any())).thenReturn(EntityModel.of(polDTO));
 		
 		PoliticianDTO politicianResponse = controller.politicianById("1").getBody().getContent();
-		PoliticianDTO politicianDTO = new PoliticiansDtoMapper().mapToDTO(politician);
 		
-		assertEquals(politicianDTO, politicianResponse);
+		assertEquals(polDTO, politicianResponse);
 	}			
 	
 }
