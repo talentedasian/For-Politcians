@@ -88,43 +88,6 @@ public class RateLimit {
 	public String toString() {
 		return "RateLimit [id=" + id + ", politicianNumber=" + politicianNumber + ", dateCreated=" + dateCreated + "]";
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((dateCreated == null) ? 0 : dateCreated.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((politicianNumber == null) ? 0 : politicianNumber.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		RateLimit other = (RateLimit) obj;
-		if (dateCreated == null) {
-			if (other.dateCreated != null)
-				return false;
-		} else if (!dateCreated.equals(other.dateCreated))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (politicianNumber == null) {
-			if (other.politicianNumber != null)
-				return false;
-		} else if (!politicianNumber.equals(other.politicianNumber))
-			return false;
-		return true;
-	}
 	
 	public boolean isNotRateLimited() {
 		return this.dateCreated == null || (LocalDate.now().minusDays(7L).isAfter(dateCreated) | 
