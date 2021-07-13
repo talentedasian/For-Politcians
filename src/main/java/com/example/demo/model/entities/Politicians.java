@@ -109,8 +109,7 @@ public class Politicians implements PoliticianMethods{
 		this.rating = rating;
 	}
 	
-	public Politicians() {
-		super();
+	protected Politicians() {
 	}
 
 	public Politicians(RatingRepository repo, Integer id, String firstName, String lastName, String fullName,
@@ -235,9 +234,9 @@ public class Politicians implements PoliticianMethods{
 		
 		private String politicianNumber;
 
-		public PoliticiansBuilder() {
+		public PoliticiansBuilder(String politicianNumber) {
 			super();
-			// TODO Auto-generated constructor stub
+			this.politicianNumber = politicianNumber;
 		}
 
 		public PoliticiansBuilder setId(Integer id) {
@@ -270,9 +269,18 @@ public class Politicians implements PoliticianMethods{
 			return this;
 		}
 
+		/*
+		 * Politician number should not change in an object so this
+		 * method returns a new Builder with the politicianNumber
+		 */
 		public PoliticiansBuilder setPoliticianNumber(String politicianNumber) {
-			this.politicianNumber = politicianNumber;
-			return this;
+			return new PoliticiansBuilder(politicianNumber)
+					.setId(id)
+					.setFirstName(firstName)
+					.setLastName(lastName)
+					.setRating(rating)
+					.setPoliticiansRating(politiciansRating)
+					.setRatingRepository(ratingRepo);
 		}
 		
 		public PoliticiansBuilder setRatingRepository(RatingRepository ratingRepo) {

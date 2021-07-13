@@ -9,24 +9,19 @@ import com.example.demo.model.entities.Politicians;
 
 public class PoliticiansTest {
 
-	Politicians politicianWithoutPolNumber = new Politicians.PoliticiansBuilder()
-			.setFirstName("Test")
-			.setLastName("Name")
-			.build();
-	
-	Politicians politicianWithPolNumber = new Politicians.PoliticiansBuilder()
-			.setPoliticianNumber("123polNumber")
+	Politicians politician = new Politicians.PoliticiansBuilder("123polNumber")
 			.setFirstName("Test")
 			.setLastName("Name")
 			.build();
 	
 	@Test
 	public void assertCustomEqualsMethod() {
-		var pol = new Politicians();
-		pol.setPoliticianNumber("123polNumber");
+		var pol = new Politicians.PoliticiansBuilder("123polNumber").build();
 		
-		assertTrue(politicianWithPolNumber.equals(pol));
-		assertFalse(politicianWithoutPolNumber.equals(pol));
+		var polWrongNumber = new Politicians.PoliticiansBuilder("999polNumber").build();
+		
+		assertTrue(politician.equals(pol));
+		assertFalse(politician.equals(polWrongNumber));
 	}
 	
 }
