@@ -1,7 +1,7 @@
 package com.example.demo.baseClasses;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -54,7 +54,7 @@ public class AbstractEntitiesServiceTest {
 				.setId(1)
 				.setFirstName("Mirriam")
 				.setLastName("Defensor")
-				.setPoliticiansRating(List.of())
+				.setPoliticiansRating(new ArrayList<PoliticiansRating>())
 				.setRating(new Rating(0.01D, 0.01D, calculator))
 				.build();
 		

@@ -14,8 +14,11 @@ import javax.persistence.Transient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.demo.annotations.ExcludeFromJacocoCoverage;
 import com.example.demo.model.PoliticianMethods;
 import com.example.demo.repository.RatingRepository;
+
+import io.jsonwebtoken.lang.Assert;
 
 @Entity
 @Table(indexes = @Index(columnList = "politicianNumber") )
@@ -33,7 +36,7 @@ public class Politicians implements PoliticianMethods{
 	@Column(nullable = false, name = "politician_last_name")
 	private String lastName;
 	
-	@Column(nullable = false, name = "full_name")
+	@Column(nullable = false, name = "politician_full_name")
 	private String fullName;
 	
 	@OneToMany(mappedBy = "politician")
@@ -86,7 +89,7 @@ public class Politicians implements PoliticianMethods{
 	}
 
 	public String getFullName() {
-		return firstName + " " + lastName;
+		return this.fullName;
 	}
 
 	public void setFullName(String fullName) {
@@ -125,6 +128,7 @@ public class Politicians implements PoliticianMethods{
 		this.politicianNumber = politicianNumber;
 	}
 
+	@ExcludeFromJacocoCoverage
 	@Override
 	public String toString() {
 		return "Politicians [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", fullName="
@@ -255,7 +259,14 @@ public class Politicians implements PoliticianMethods{
 		}
 
 		public PoliticiansBuilder setFullName() {
+			Assert.state(firstName != null && lastName != null, 
+					"First and Last name cannot be null");
+			
+			if (lastName == null) {
+				this.fullName = firstName;
+			}
 			this.fullName = firstName + " " + lastName;
+			
 			return this;
 		}
 

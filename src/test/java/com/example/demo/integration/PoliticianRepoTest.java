@@ -31,18 +31,16 @@ public class PoliticianRepoTest {
 	@Mock
 	public AverageCalculator calculator;
 	
-	Politicians politicianToBeSaved = new Politicians.PoliticiansBuilder("1111")
-			.setFirstName("Rodrigo")
-		.setLastName("Duterte")
-		.setFullName()
-		.setRating(new Rating(0.01D, 0.01D, calculator))
-		.setPoliticianNumber("1111")
-		.build();
-	
 	@Test
 	@Order(1)
 	@Commit
 	public void shouldBeEqualOnSavedEntity() {
+		Politicians politicianToBeSaved = new Politicians.PoliticiansBuilder("1111")
+			.setFirstName("Rodrigo")
+			.setLastName("Duterte")
+			.setFullName()
+			.setRating(new Rating(0.01D, 0.01D, calculator))
+			.build();
 		
 		Politicians politician = repo.save(politicianToBeSaved);
 		
@@ -51,7 +49,14 @@ public class PoliticianRepoTest {
 	
 	@Test
 	@Order(2)
-	public void shouldThrowDataIntegrityException() {	
+	public void shouldThrowDataIntegrityException() {
+		Politicians politicianToBeSaved = new Politicians.PoliticiansBuilder("1111")
+			.setFirstName("Rodrigo")
+			.setLastName("Duterte")
+			.setFullName()
+			.setRating(new Rating(0.01D, 0.01D, calculator))
+			.build();
+		
 		assertThrows(DataIntegrityViolationException.class,
 				() -> repo.saveAndFlush(politicianToBeSaved));
 	}
