@@ -152,10 +152,21 @@ public class Politicians implements PoliticianMethods{
 
 	@Override
 	public boolean equals(Object obj) {
+		if (Politicians.class.isInstance(obj.getClass())) {
+			return false;
+		}
+		
+		if (politicianNumber == null) {
+			this.politicianNumber = "";
+		}
+		
 		Politicians other = (Politicians) obj;
 		
-		return this == obj || 
-				id == other.id;
+		if (other.politicianNumber == null) {
+			other.politicianNumber = "";
+		}
+		
+		return this == obj || politicianNumber.equals(other.politicianNumber);
 	}
 
 	@Override
@@ -209,18 +220,6 @@ public class Politicians implements PoliticianMethods{
 		this.fullName = fullName;
 		
 		return fullName;
-	}
-	
-	public AverageCalculator returnAverageCalculator(Double count) {
-		if (getRating().averageRating < 5D) {
-			return new LowSatisfactionAverageCalculator(getRating().totalRating, count);
-		} else if (getRating().averageRating < 8.89D) {
-			return new DecentSatisfactionAverageCalculator(getRating().totalRating, count);
-		} else if (getRating().averageRating >= 8.89D) {
-			return new HighSatisfactionAverageCalculator(getRating().totalRating, count);
-		}
-		
-		return new LowSatisfactionAverageCalculator(getRating().totalRating, count);
 	}
 	
 	public static class PoliticiansBuilder {
