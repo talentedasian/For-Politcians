@@ -48,12 +48,12 @@ public class RatingsControllerTest {
 	public void setup() {
 		controller = new RatingsController(service, assembler);
 		
-		politician = new Politicians();
-		politician.setPoliticianNumber("123polNumber");
-		politician.setFirstName("Mirriam");
-		politician.setLastName("Defensor");
-		politician.setFullName("Mirriam Defensor");
-		politician.setRating(new com.example.demo.model.entities.Rating(9.67D, 9.67D, new LowSatisfactionAverageCalculator(9.07D, 0D)));
+		politician = new Politicians.PoliticiansBuilder("123polNumber")
+			.setFirstName("Mirriam")
+			.setLastName("Defensor")
+			.setFullName()
+			.setRating(new com.example.demo.model.entities.Rating(9.67D, 9.67D, new LowSatisfactionAverageCalculator(9.07D, 0D)))
+			.build();
 		
 		politiciansRating = new PoliticiansRating(1, 0.00D, userRater, politician);
 		

@@ -26,13 +26,12 @@ public class RatingRepoTest {
 	@Autowired RatingRepository repo;
 	@Autowired PoliticiansRepository polRepo;
 	
-	Politicians politician = new Politicians.PoliticiansBuilder()
+	Politicians politician = new Politicians.PoliticiansBuilder("123polNumber")
 			.setRatingRepository(repo)
 			.setFirstName("Test")
 			.setLastName("Name")
 			.setFullName()
 			.setRating(new Rating(0.01D, 0.01D, mock(LowSatisfactionAverageCalculator.class)))
-			.setPoliticianNumber("123polNumber")
 			.build();
 	
 	@Test

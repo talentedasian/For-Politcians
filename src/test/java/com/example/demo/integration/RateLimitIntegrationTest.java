@@ -39,10 +39,9 @@ public class RateLimitIntegrationTest {
 	
 	@BeforeEach
 	public void setup() {
-		polRepo.save(new Politicians.PoliticiansBuilder()
+		polRepo.save(new Politicians.PoliticiansBuilder("1number")
 				.setId(1)
 				.setRating(new Rating(1D, 1D, new LowSatisfactionAverageCalculator(1D, 0D)))
-				.setPoliticianNumber("1number")
 				.setFirstName("test")
 				.setLastName("name")
 				.setFullName()

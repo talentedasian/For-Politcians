@@ -63,19 +63,20 @@ public class PoliticiansService {
 					dto.getLastName(), 
 					String.valueOf(polNumber));
 			
-			var politicianToBeSaved = new Politicians.PoliticiansBuilder()
+			var politicianToBeSaved = new Politicians.PoliticiansBuilder(politicianNumImplementor.calculateEntityNumber().getPoliticianNumber())
 					.setFirstName(dto.getFirstName())
 					.setLastName(dto.getLastName())
 					.setFullName()
 					.setRating(new Rating(dto.getRating().doubleValue(), 
 					0.01D, 
 					new LowSatisfactionAverageCalculator(dto.getRating().doubleValue(), 0D)))
-					.setPoliticianNumber(politicianNumImplementor.calculatePoliticianNumber().getPoliticianNumber())
 					.build();
 			
 			Politicians politician = politiciansRepo.save(politicianToBeSaved);
 			
-			//increment the politician number used for politician number patterns
+			/*
+			 * Increment the id for now but change it to a UUID later on for scalibility.
+			 */
 			polNumber++;
 			return politician;
 			

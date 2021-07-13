@@ -26,11 +26,10 @@ import com.example.demo.model.enums.PoliticalParty;
 public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 	
 	UserRater rater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accNumber", limitingService);
-	Politicians politician = new Politicians.PoliticiansBuilder()
+	Politicians politician = new Politicians.PoliticiansBuilder("123polNumber")
 			.setFirstName("test")
 			.setLastName("politician")
 			.setFullName()
-			.setPoliticianNumber("123polNumber")
 			.setRating(new Rating(1.00D, 1.00D, new LowSatisfactionAverageCalculator(1.00D, 1D)))
 			.build();
 	PoliticiansRating politiciansRating = new PoliticiansRating(1, 1.00D, rater, politician);

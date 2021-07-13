@@ -1,6 +1,5 @@
 package com.example.demo.integration.filters;
 
-import static com.example.demo.baseClasses.AbstractPoliticianControllerTest.withoutRepo;
 import static com.example.demo.model.enums.Rating.LOW;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
@@ -65,12 +64,14 @@ public class AddPoliticianFilterTest {
 	
 	@BeforeEach
 	public void setup() {
-		politician = withoutRepo
-				("test", 
-				"name", 
-				List.of(new PoliticiansRating()), 
-				new Rating(0.01D, 0.01D, calculator));
-		
+		politician = new Politicians.PoliticiansBuilder("123polNumber")
+				.setFirstName("Test")
+				.setLastName("Name")
+				.setFullName()
+				.setRating(new Rating(0.01D, 0.01D, calculator))
+				.setPoliticiansRating(List.of(new PoliticiansRating()))
+				.build();
+				
 		mvc = MockMvcBuilders.webAppContextSetup(wac)
 				.addFilter(new AddPoliticianFilter(), "/api/politicians/politician")
 				.alwaysDo(print())

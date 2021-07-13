@@ -52,12 +52,14 @@ public class PoliticianControllerTest {
 				.alwaysDo(print())
 				.build();
 		
-		politician = new Politicians();
-		politician.setId(123);
-		politician.setFirstName("Mirriam");
-		politician.setLastName("Defensor");
-		politician.setPoliticianNumber("123polNumber");
-		politician.setRating(new Rating(1D, 1D, mock(LowSatisfactionAverageCalculator.class)));
+		politician = new Politicians.PoliticiansBuilder("123polNumber")
+			.setId(123)
+			.setFirstName("Mirriam")
+			.setLastName("Defensor")
+			.setPoliticianNumber("123polNumber")
+			.setRating(new Rating(1D, 1D, mock(LowSatisfactionAverageCalculator.class)))
+			.build();
+			
 		
 		politicianDTO = new PoliticiansDtoMapper().mapToDTO(politician);
 		

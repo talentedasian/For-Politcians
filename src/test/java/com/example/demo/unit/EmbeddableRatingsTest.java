@@ -29,16 +29,17 @@ public class EmbeddableRatingsTest {
 	
 	@BeforeEach
 	public void setup() {
-		politician = new Politicians();
-		politician.setRepo(repo);
-		politician.setId(1);
-		politician.setFirstName("Mirriam");
-		politician.setLastName("Defensor");
-		politician.setPoliticiansRating(new ArrayList<>());
-		politician.setRating(new Rating
+		politician = new Politicians.PoliticiansBuilder("123polNumber")
+			.setRatingRepository(repo)
+			.setId(1)
+			.setFirstName("Mirriam")
+			.setLastName("Defensor")
+			.setPoliticiansRating(new ArrayList<>())
+			.setRating(new Rating
 				(0.012D,
 				2.022D, 
-				calculator));
+				calculator))
+			.build();
 	}
 	
 	@Test

@@ -1,9 +1,6 @@
 package com.example.demo.baseClasses;
 
-import static com.example.demo.baseClasses.AbstractPoliticianControllerTest.withRepoAndId;
-
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,15 +49,14 @@ public class AbstractEntitiesServiceTest {
 		
 		ratingService = new RatingService(ratingRepo, politicianRepo, rateLimitService);
 		
-		List<PoliticiansRating> listOfPoliticiansRating = new ArrayList<>();
-		politician = withRepoAndId
-				(ratingRepo, 
-				1,
-				"Mirriam",
-				"Defensor",
-				listOfPoliticiansRating,
-				new Rating(0.01D, 0.01D, calculator),
-				"1");
+		politician = new Politicians.PoliticiansBuilder("123polNumber")
+				.setRatingRepository(ratingRepo)
+				.setId(1)
+				.setFirstName("Mirriam")
+				.setLastName("Defensor")
+				.setPoliticiansRating(List.of())
+				.setRating(new Rating(0.01D, 0.01D, calculator))
+				.build();
 		
 		rating = new PoliticiansRating();
 		rating.setId(1);

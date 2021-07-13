@@ -80,11 +80,12 @@ public class RatingControllerTest {
 				.alwaysDo(print())
 				.build();
 		
-		politician = new Politicians();
-		politician.setId(123);
-		politician.setFirstName("Mirriam");
-		politician.setLastName("Defensor");
-		politician.setRating(new Rating(1D, 1D, mock(LowSatisfactionAverageCalculator.class)));
+		politician = new Politicians.PoliticiansBuilder("123polNumber")
+			.setId(123)
+			.setFirstName("Mirriam")
+			.setLastName("Defensor")
+			.setRating(new Rating(1D, 1D, mock(LowSatisfactionAverageCalculator.class)))
+			.build();
 		
 		userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accNumber", rateLimitService);
 		
