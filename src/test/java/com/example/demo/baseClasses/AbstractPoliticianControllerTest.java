@@ -33,7 +33,7 @@ public class AbstractPoliticianControllerTest {
 	public void setUp() {
 		controller = new PoliticianController(service, assembler);
 		
-		politician =  new Politicians.PoliticiansBuilder("123polNumber")
+		politician =  new Politicians.PoliticiansBuilder("123polNumber") 
 			.setRating(new Rating(9.67D, 9.67D, calculator))
 			.setFirstName("Mirriam")
 			.setLastName("Defensor")
