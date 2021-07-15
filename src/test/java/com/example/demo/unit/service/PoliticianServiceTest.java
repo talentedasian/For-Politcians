@@ -2,6 +2,7 @@ package com.example.demo.unit.service;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -53,7 +54,12 @@ public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
 		assertDtoOutputsUtil(politician, politicianQueried);
 	}
 	
-	
+	@Test
+	public void shouldReturnTrueWhenDeletedByPoliticianNumber() {
+		when(politicianRepo.existsByPoliticianNumber(polNumber)).thenReturn(true);
+		
+		assertTrue(politicianService.deletePolitician(polNumber));
+	}
 	
 	@Test
 	public void shouldEqualDTOOutputsWhenSaved() {

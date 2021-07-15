@@ -1,7 +1,9 @@
 package com.example.demo.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -61,4 +63,35 @@ public class PoliticianRepoTest {
 				() -> repo.saveAndFlush(politicianToBeSaved));
 	}
 	
+	@Test
+	public void assertExistsByPoliticianNumberQuery() {
+		Politicians politicianToBeSaved = new Politicians.PoliticiansBuilder("3333")
+				.setFirstName("Rodrigo")
+				.setLastName("Duterte")
+				.setFullName()
+				.setRating(new Rating(0.01D, 0.01D, calculator))
+				.build();
+		
+		repo.save(politicianToBeSaved);
+		
+		assertTrue(repo.existsByPoliticianNumber(politicianToBeSaved.getPoliticianNumber()));
+	}
+	
+	@Test
+	public void assertDeleteByPoliticianNumberQuery() {
+		Politicians politicianToBeSaved = new Politicians.PoliticiansBuilder("4444")
+				.setFirstName("Rodrigo")
+				.setLastName("Duterte")
+				.setFullName()
+				.setRating(new Rating(0.01D, 0.01D, calculator))
+				.build();
+		
+		repo.save(politicianToBeSaved);
+		
+		String id = politicianToBeSaved.getPoliticianNumber();
+		
+		assertTrue(repo.existsByPoliticianNumber(id));
+		repo.deleteByPoliticianNumber(id);
+		assertFalse(repo.existsByPoliticianNumber(id));
+	}
 }

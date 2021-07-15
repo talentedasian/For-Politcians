@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+ package com.example.demo.controller;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
+import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.hateoas.PoliticianAssembler;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.service.PoliticiansService;
@@ -86,6 +88,15 @@ public class PoliticianController {
 		CollectionModel<EntityModel<PoliticianDTO>> response = assembler.toCollectionModel(politician);
 		
 		return new ResponseEntity<CollectionModel<EntityModel<PoliticianDTO>>>(response, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/politician/{polNumber}")
+	public ResponseEntity<?> deletePolitician(@PathVariable String polNumber) {
+		if (!politiciansService.deletePolitician(polNumber)) {
+			throw new PoliticianNotFoundException("Politician not found by " + polNumber);
+		}
+		
+		return ResponseEntity.noContent().build();
 	}
 
 }

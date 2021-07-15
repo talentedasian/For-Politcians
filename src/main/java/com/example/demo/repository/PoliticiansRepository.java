@@ -25,4 +25,8 @@ public interface PoliticiansRepository extends JpaRepository<Politicians, Intege
 
 	long countByLastNameAndFirstName(String lastName, String firstName);
 	
+	boolean existsByPoliticianNumber(String polNumber);
+	
+	void deleteByPoliticianNumber(String polNumber);
+	
 }

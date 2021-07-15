@@ -85,4 +85,14 @@ public class PoliticiansService {
 		}
 	}
 	
+	@Transactional
+	public boolean deletePolitician(String polNumber) {
+		if (politiciansRepo.existsByPoliticianNumber(polNumber)) {
+			politiciansRepo.deleteByPoliticianNumber(polNumber);
+			return true;
+		}
+		
+		return false;
+	}
+	
 }

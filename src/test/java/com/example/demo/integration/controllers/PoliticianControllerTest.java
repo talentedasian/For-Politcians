@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.MediaTypes.HAL_FORMS_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -104,6 +105,22 @@ public class PoliticianControllerTest {
 				.andExpect(jsonPath("id", equalTo(politicianDTO.getId())))
 				.andExpect(jsonPath("rating", equalTo(1.0D)))
 				.andExpect(jsonPath("satisfaction_rate", equalTo(politicianDTO.getSatisfactionRate().toString())));
+	}
+	
+	@Test
+	public void shouldExpectPoliticianNotFoundWhenDeleting() throws Exception {
+		when(polService.deletePolitician("123polNumber")).thenReturn(false);
+		
+		this.mvc.perform(delete(create("/api/politicians/politician/123polNumber")))
+			.andExpect(status().isNotFound());
+	}
+	
+	@Test
+	public void shouldExpectPoliticianNoContentWhenDeleting() throws Exception {
+		when(polService.deletePolitician("123polNumber")).thenReturn(true);
+		
+		this.mvc.perform(delete(create("/api/politicians/politician/123polNumber")))
+			.andExpect(status().isNoContent());
 	}
 	
 }
