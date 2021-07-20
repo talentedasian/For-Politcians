@@ -36,7 +36,8 @@ mvnw
 mvnw.cmd
 .mvn/
 *.log
-src/main/java/com/example/demo/testConfigurations/SecurityConfig.java
+src/main/java/com/example/demo/config/SecurityTestConfig.java
+src/main/java/com/example/demo/config/SecurityConfig.java
 src/main/resources/application-test.properties
 src/main/resources/application-production.properties
 facebook/
