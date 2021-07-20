@@ -39,4 +39,3 @@ mvnw.cmd
 src/main/java/com/example/demo/config/SecurityTestConfig.java
 src/main/java/com/example/demo/config/SecurityConfig.java
 src/main/resources/application-test.properties
-facebook/
