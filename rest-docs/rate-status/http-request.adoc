@@ -1,0 +1,8 @@
+[source,http,options="nowrap"]
+----
+GET /rate-limit/123polNumber HTTP/1.1
+Authorization: Bearer eyJsb2dpbl9tZWNoYW5pc20iOiJmYWNlYm9vayIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJ0ZXN0QGdtYWlsY29tIiwibmFtZSI6InRlc3QiLCJqdGkiOiIxMjMiLCJleHAiOjE2MjY5Mzk2MjV9.s3XtaL4kBR4vlJgzz4ozu-SRUpAGePhmevS28tgLOmnGyrYY0p5KGZGHjh37uEhwh2IcFC0a0zSr5EAxG_4RrMLOubb9VbcnTfOS3C2RweFJ-pYoGq9mZyRDjc98LIdCEYRAdnZ3tWcl9euCl_Hnp7fyu51617DXPvEg1QIkdV_O9zSO3P73ms2-9mWHG5sYwTz2eP1HHL7lp1rlLpEza6YbSaXS4rBD1ugSNN0pRsfF682nOSlTflx1gc-iqp7CjV-KxAbw7AvEiz7Nz5YXOAsBqtFmPUnQcSdX6uongNtLYwXGX1D_Jfx56fWZuTb7PfKS7lqYqlV5Gi9h9hzSjg
+Accept: application/prs.hal-forms+json
+Host: localhost:8080
+
+----

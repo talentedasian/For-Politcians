@@ -1,0 +1,6 @@
+[source,bash]
+----
+$ curl 'http://localhost:8080/login/oauth2/code/facebook' -i -X GET \
+    -H 'Accept: application/prs.hal-forms+json' \
+    --cookie 'accessJwt=eyJsb2dpbl9tZWNoYW5pc20iOiJmYWNlYm9vayIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJ0ZXN0IHN1YiIsIm5hbWUiOiJ0ZXN0IG5hbWUiLCJqdGkiOiIxMTExIiwiZXhwIjoxNjI2OTM5NjM3fQ.sntteyWNz_arlkvF6j9i1sc3po9uym4tNtvHN2cc_jvYPyiwg3hYeY7Ng8KC2xxZsUvbvQurgyrCmfo7eNtnOYcqUDvYvg7_4BXRcV56a-NyfvsKiGFDpzZ9JZXhIsdX1l2ZpQNvEzllm6I_hiXKppmV-LNEl2llRKrfG_jNP_gMqjim2mGxFOceDn8ap0I4ElusCyxQXQFpMiefL5BdnC0JSrkGRfEOu8VpoIkwPYfspn8qKqnkR9777pJitEQ81UNAiUrZl7426wbWzwqAL4Yyd4bk-ubVy3oH7Lf_pQWs_QJipb126fTOvqpBrpRh18eTMZu9ing0pUDTKoz34Q'
+----

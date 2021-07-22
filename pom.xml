@@ -162,6 +162,9 @@
 		                <goals>
 		                    <goal>repackage</goal>
 		                </goals>
+		                <configuration>
+		                	<outputDirectory>jars/</outputDirectory>
+		                </configuration>
 		            </execution>
 	       		</executions>
 			</plugin>

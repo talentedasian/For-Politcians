@@ -1,0 +1,10 @@
+|===
+|Relation|Description
+
+|`+self+`
+|Rate limit status of user
+
+|`+rating-account-number+`
+|All ratings by user's account number
+
+|===

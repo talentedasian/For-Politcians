@@ -1,0 +1,8 @@
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/prs.hal-forms+json
+Content-Length: 558
+
+{"days_left":"0","account_number":"TGFLM-00000000000123","politician_number":"123polNumber","_links":{"self":{"href":"http://localhost:8080/rate-limit/123polNumber"},"rating-account-number":{"href":"http://localhost:8080/api/ratings/ratings/TGFLM-00000000000123"}},"_templates":{"default":{"method":"post","contentType":"application/json","properties":[{"name":"id","required":true,"type":"text"},{"name":"politicalParty","required":true,"type":"text"},{"name":"rating","required":true,"type":"number"}],"target":"http://localhost:8080/api/ratings/rating"}}}
+----

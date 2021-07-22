@@ -1,14 +1,53 @@
 = Documentation
 :toc: left
-:homepage: gg
+:toclevels: 4 
 
-== Rating a politician
+== Backend API
+
+The API of this backend is RESTful, which means it uses `HATEOAS` to determine 
+business logic and also uses `JWT` as its stateless authorization mechanism.
+ For example, the https://politicians-fear.herokuapp.com[login endpoint,role=green,window=_blank] response shows us two `_links` response which leads us to other endpoints
+in the server. The `_template` response is specific to the **MediaType** being used
+which is `hal+forms` and I suggest you to read their official documentation on that.
+
+== Adding a Politician
+ 
+Currently only authorized persons who have access to the password that is generated
+can add politicians. You can however request to add a politician by raising an issue
+in this https://github.com/talentedasian/For-Politicians/issues[link,role=green,window=_blank] with the subject line `Add a politician`. 
 
 
-include::/home/almir/backend projects/politics/custom/rate/http-request.adoc[]
+== Rating a Politician
 
-=== Tanginamo 
-ulol gago
+There are two requirements in rating a politician:
 
-== Rating a rater
+[disc]
+- Have a JWT token that is sent in an Authorization Header with a prefix of `Bearer`
+- Is not currently rate limited with the politician that you want to rate.
 
+=== Properties Required for Rating Politicians
+
+We recommend to dynamically let the user populate the fields and not construct fields 
+manually as to avoid breaking your applications in case of API updates/changes.
+
+
+==== Using HATEOAS To Avoid Broken Applications
+
+[IMPORTANT]
+====
+.READ THE DOCUMENTATION!!
+READ THE HAL+FORMS AND HAL MEDIATYPE DOCUMENTATION BEFORE USING THIS API.
+====
+
+.Recommended steps in defining fields for users to populate
+. The fields are found in the `_templates.properties` response. Do an if statement
+using the required attribute in the `properties` response and put any design attribute 
+that a user would easily notice whether the field is required or not.
+. Do not construct your own field/json. Instead, Take the fields in the `_templates`
+response so API changes don't break your application.
+. Again, do not construct your own field/json payload to send. Use the `name` fields
+in the `_templates` response as it is also the name that the backend expects you to send.
+. Don't manually construct the URL to send the payload to. The URL to be used is
+in the `target` response.
+
+include::../../../rest-docs/oauth/response.adoc[]
