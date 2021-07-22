@@ -29,7 +29,6 @@ public class AddPoliticianFilterProduction implements Filter{
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-		System.out.println(password);
 		
 		if (req.getRequestURI().equalsIgnoreCase("/api/politicians/add-politician")) {
 			if (req.getHeader("Politician-Access") != null) {
