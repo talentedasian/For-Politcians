@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RateLimit.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">politics</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.model.entities</a> &gt; <span class="el_source">RateLimit.java</span></div><h1>RateLimit.java</h1><pre class="source lang-java linenums">package com.example.demo.model.entities;
+
+import static java.lang.Integer.valueOf;
+
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+@Entity
+public class RateLimit {
+	
+	@Transient
+<span class="fc" id="L18">	private transient static final Map&lt;String, RateLimit&gt; cache = new HashMap&lt;&gt;();</span>
+	
+	static {
+		/*
+		 * Commonly used for testing
+		 */
+<span class="fc" id="L24">		var rateLimit = new RateLimit();</span>
+<span class="fc" id="L25">		rateLimit.setDateCreated(LocalDate.now().minusDays(8));</span>
+<span class="fc" id="L26">		rateLimit.setId(&quot;TGFLM-00000000000123&quot;);</span>
+<span class="fc" id="L27">		rateLimit.setPoliticianNumber(&quot;123polNumber&quot;);</span>
+		
+<span class="fc" id="L29">		cache.put(rateLimit.getId(), rateLimit);</span>
+<span class="fc" id="L30">	}</span>
+	
+	@Id
+	private String id;
+	
+	@Column(nullable = false, name = &quot;politician_number&quot;)
+	private String politicianNumber;
+	
+	@Column(nullable = true, name = &quot;date_created&quot;)
+	private LocalDate dateCreated;
+
+	public String getId() {
+<span class="fc" id="L42">		return id;</span>
+	}
+
+	public void setId(String id) {
+<span class="fc" id="L46">		this.id = id;</span>
+<span class="fc" id="L47">	}</span>
+
+	public String getPoliticianNumber() {
+<span class="fc" id="L50">		return politicianNumber;</span>
+	}
+
+	public void setPoliticianNumber(String politicianNumber) {
+<span class="fc" id="L54">		this.politicianNumber = politicianNumber;</span>
+<span class="fc" id="L55">	}</span>
+
+	public LocalDate getDateCreated() {
+<span class="fc" id="L58">		return dateCreated;</span>
+	}
+
+	public void setDateCreated(LocalDate dateCreated) {
+<span class="fc" id="L62">		this.dateCreated = dateCreated;</span>
+<span class="fc" id="L63">	}</span>
+
+	public RateLimit(String id, String politicianNumber) {
+<span class="fc" id="L66">		super();</span>
+<span class="fc" id="L67">		this.id = id;</span>
+<span class="fc" id="L68">		this.politicianNumber = politicianNumber;</span>
+<span class="fc" id="L69">		this.dateCreated = LocalDate.now();</span>
+<span class="fc" id="L70">	}</span>
+	
+	public static RateLimit withNotExpiredRateLimit(String id, String politicianNumber) {
+<span class="fc" id="L73">		return cache.computeIfAbsent(id, (key) -&gt; {</span>
+<span class="nc" id="L74">			var rateLimit = new RateLimit();</span>
+<span class="nc" id="L75">			rateLimit.setId(id);</span>
+<span class="nc" id="L76">			rateLimit.setPoliticianNumber(politicianNumber);</span>
+<span class="nc" id="L77">			rateLimit.setDateCreated(LocalDate.now().minusDays(8));</span>
+			
+<span class="nc" id="L79">			return rateLimit;</span>
+		});
+	};
+
+	public RateLimit() {
+<span class="fc" id="L84">		super();</span>
+<span class="fc" id="L85">	}</span>
+
+	@Override
+	public String toString() {
+<span class="nc" id="L89">		return &quot;RateLimit [id=&quot; + id + &quot;, politicianNumber=&quot; + politicianNumber + &quot;, dateCreated=&quot; + dateCreated + &quot;]&quot;;</span>
+	}
+	
+	public boolean isNotRateLimited() {
+<span class="fc bfc" id="L93" title="All 2 branches covered.">		return this.dateCreated == null || (LocalDate.now().minusDays(7L).isAfter(dateCreated) | </span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">				LocalDate.now().minusDays(7L).isEqual(dateCreated));</span>
+	}
+	
+	// return null if user is not rate limited
+	public Integer daysLeftOfBeingRateLimited() {
+<span class="fc bfc" id="L99" title="All 2 branches covered.">		if (isNotRateLimited()) {</span>
+<span class="fc" id="L100">			return null;</span>
+		}
+		
+<span class="fc" id="L103">		int daysLeft = this.dateCreated.getDayOfMonth() - LocalDate.now().minusDays(7L).getDayOfMonth();</span>
+		
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">		if (Integer.signum(daysLeft) == -1) {</span>
+<span class="nc" id="L106">			return null;</span>
+		}
+		
+<span class="fc" id="L109">		return valueOf(daysLeft);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

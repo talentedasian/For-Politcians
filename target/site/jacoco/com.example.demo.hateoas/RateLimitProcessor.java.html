@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RateLimitProcessor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">politics</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.hateoas</a> &gt; <span class="el_source">RateLimitProcessor.java</span></div><h1>RateLimitProcessor.java</h1><pre class="source lang-java linenums">package com.example.demo.hateoas;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
+import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.mediatype.Affordances;
+import org.springframework.hateoas.server.RepresentationModelProcessor;
+
+import com.example.demo.controller.RatingsController;
+import com.example.demo.dto.RateLimitDTO;
+import com.example.demo.dtoRequest.AddRatingDTORequest;
+import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
+import com.example.demo.service.RateLimitingService;
+
+public class RateLimitProcessor implements RepresentationModelProcessor&lt;RateLimitDTO&gt;{
+
+	private final RateLimitingService rateLimitService;
+	
+	public RateLimitProcessor(RateLimitingService rateLimitService) {
+<span class="fc" id="L24">		super();</span>
+<span class="fc" id="L25">		this.rateLimitService = rateLimitService;</span>
+<span class="fc" id="L26">	}</span>
+	
+	@SuppressWarnings(&quot;deprecation&quot;)
+	@Override
+	public RateLimitDTO process(RateLimitDTO model) {
+<span class="fc" id="L31">		Link ratingLink = linkTo(methodOn(RatingsController.class)</span>
+<span class="fc" id="L32">				.getRatingByRaterAccountNumber(model.getAccountNumber()))</span>
+<span class="fc" id="L33">				.withRel(&quot;rating-account-number&quot;);</span>
+		
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">		if (isRateLimited(model)) {			</span>
+<span class="nc" id="L36">			return model.add(ratingLink);</span>
+		}
+			
+<span class="fc" id="L39">		Link affordance = null;</span>
+		try {
+<span class="fc" id="L41">			affordance = Affordances.of(ratingLink)</span>
+<span class="fc" id="L42">				.afford(POST)</span>
+<span class="fc" id="L43">				.withInput(AddRatingDTORequest.class)</span>
+<span class="fc" id="L44">				.withInputMediaType(APPLICATION_JSON)</span>
+<span class="fc" id="L45">				.withTarget(linkTo(methodOn(RatingsController.class).saveRating(null, null)).withRel(&quot;rate&quot;))</span>
+<span class="fc" id="L46">				.build()</span>
+<span class="fc" id="L47">				.toLink();</span>
+<span class="nc" id="L48">		} catch (UserRateLimitedOnPoliticianException e) {</span>
+<span class="nc" id="L49">			LoggerFactory.getLogger(RatingProcessor.class).info(&quot;&quot;&quot;</span>
+					Exception not supposed to throw. Either a problem with our 
+					code or in the Spring Hateoas Framework
+					&quot;&quot;&quot;, e);
+<span class="fc" id="L53">		}</span>
+		
+<span class="fc" id="L55">		return model.add(affordance);</span>
+	}
+	
+	private boolean isRateLimited(RateLimitDTO entity) {
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">		return !rateLimitService.isNotRateLimited(entity.getAccountNumber(),</span>
+<span class="fc" id="L60">				entity.getPoliticianNumber());</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

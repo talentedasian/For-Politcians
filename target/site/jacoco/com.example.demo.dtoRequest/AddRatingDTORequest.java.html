@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AddRatingDTORequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">politics</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.dtoRequest</a> &gt; <span class="el_source">AddRatingDTORequest.java</span></div><h1>AddRatingDTORequest.java</h1><pre class="source lang-java linenums">package com.example.demo.dtoRequest;
+
+import java.math.BigDecimal;
+
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class AddRatingDTORequest {
+
+	@NotNull
+	@DecimalMin(&quot;0.01&quot;)
+	@DecimalMax(&quot;10.00&quot;)
+	private BigDecimal rating;
+	
+	@NotNull
+	private String id;
+
+	@NotNull
+	@JsonProperty(value = &quot;political_party&quot;)
+	private String politicalParty;
+
+	public BigDecimal getRating() {
+<span class="fc" id="L26">		return rating;</span>
+	}
+
+	public void setRating(BigDecimal rating) {
+<span class="fc" id="L30">		this.rating = rating;</span>
+<span class="fc" id="L31">	}</span>
+
+	public String getId() {
+<span class="fc" id="L34">		return id;</span>
+	}
+
+	public void setId(String id) {
+<span class="fc" id="L38">		this.id = id;</span>
+<span class="fc" id="L39">	}</span>
+
+	public String getPoliticalParty() {
+<span class="fc" id="L42">		return politicalParty;</span>
+	}
+
+	public void setPoliticalParty(String politicalParty) {
+<span class="fc" id="L46">		this.politicalParty = politicalParty;</span>
+<span class="fc" id="L47">	}</span>
+
+	public AddRatingDTORequest(@NotNull @DecimalMin(&quot;0.01&quot;) @DecimalMax(&quot;10.00&quot;) BigDecimal rating, @NotNull String id,
+			@NotNull String politicalParty) {
+<span class="fc" id="L51">		super();</span>
+<span class="fc" id="L52">		this.rating = rating;</span>
+<span class="fc" id="L53">		this.id = id;</span>
+<span class="fc" id="L54">		this.politicalParty = politicalParty;</span>
+<span class="fc" id="L55">	}</span>
+
+	public AddRatingDTORequest() {
+<span class="fc" id="L58">		super();</span>
+		// TODO Auto-generated constructor stub
+<span class="fc" id="L60">	}</span>
+
+	@Override
+	public String toString() {
+<span class="nc" id="L64">		return &quot;AddRatingDTORequest [rating=&quot; + rating + &quot;, id=&quot; + id + &quot;, politicalParty=&quot; + politicalParty + &quot;]&quot;;</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L69">		final int prime = 31;</span>
+<span class="nc" id="L70">		int result = 1;</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">		result = prime * result + ((id == null) ? 0 : id.hashCode());</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">		result = prime * result + ((politicalParty == null) ? 0 : politicalParty.hashCode());</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">		result = prime * result + ((rating == null) ? 0 : rating.hashCode());</span>
+<span class="nc" id="L74">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L79" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L80">			return true;</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L82">			return false;</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L84">			return false;</span>
+<span class="nc" id="L85">		AddRatingDTORequest other = (AddRatingDTORequest) obj;</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">		if (id == null) {</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">			if (other.id != null)</span>
+<span class="nc" id="L88">				return false;</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">		} else if (!id.equals(other.id))</span>
+<span class="nc" id="L90">			return false;</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">		if (politicalParty == null) {</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">			if (other.politicalParty != null)</span>
+<span class="nc" id="L93">				return false;</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">		} else if (!politicalParty.equals(other.politicalParty))</span>
+<span class="nc" id="L95">			return false;</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">		if (rating == null) {</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">			if (other.rating != null)</span>
+<span class="nc" id="L98">				return false;</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">		} else if (!rating.equals(other.rating))</span>
+<span class="nc" id="L100">			return false;</span>
+<span class="nc" id="L101">		return true;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

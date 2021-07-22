@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Oauth2.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">politics</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.controller</a> &gt; <span class="el_source">Oauth2.java</span></div><h1>Oauth2.java</h1><pre class="source lang-java linenums">package com.example.demo.controller;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.mediatype.Affordances;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.dto.RatingDTO;
+import com.example.demo.dtoRequest.AddRatingDTORequest;
+import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
+import com.example.demo.jwt.JwtClaims;
+import com.example.demo.jwt.JwtProvider;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.swagger.v3.oas.annotations.Hidden;
+
+@Hidden
+@RestController
+@RequestMapping(&quot;/login/oauth2/code/facebook&quot;)
+<span class="fc" id="L34">public class Oauth2 {</span>
+
+	@SuppressWarnings(&quot;deprecation&quot;)
+	@GetMapping
+	public ResponseEntity&lt;RepresentationModel&lt;JwtClaims&gt;&gt; returnCredentials(HttpServletRequest req) throws UserRateLimitedOnPoliticianException  {
+<span class="fc" id="L39">		Map&lt;String, String&gt; cookieMap = new HashMap&lt;&gt;();</span>
+		
+<span class="fc" id="L41">		Arrays.stream(req.getCookies())</span>
+<span class="fc" id="L42">			.filter(cookie -&gt; cookie.getName().equalsIgnoreCase(&quot;accessJwt&quot;))</span>
+<span class="fc" id="L43">			.forEach(jwtCookie -&gt; cookieMap.put(&quot;jwt&quot;, jwtCookie.getValue()));</span>
+		
+<span class="fc" id="L45">		Jws&lt;Claims&gt; jwt = JwtProvider.decodeJwt(cookieMap.get(&quot;jwt&quot;));</span>
+<span class="fc" id="L46">		JwtClaims jwtResponse = new JwtClaims();</span>
+<span class="fc" id="L47">		jwtResponse.setJwt(cookieMap.get(&quot;jwt&quot;));</span>
+<span class="fc" id="L48">		jwtResponse.setExpiration(jwt.getBody().getExpiration());</span>
+<span class="fc" id="L49">		jwtResponse.setId(jwt.getBody().getId());</span>
+<span class="fc" id="L50">		jwtResponse.setSubject(jwt.getBody().getSubject());</span>
+<span class="fc" id="L51">		jwtResponse.setName(jwt.getBody().get(&quot;name&quot;, String.class));</span>
+		
+<span class="fc" id="L53">		var affordance = Affordances.of(linkTo(methodOn(PoliticianController.class).allPoliticians())</span>
+<span class="fc" id="L54">				.withRel(&quot;politicians&quot;))</span>
+<span class="fc" id="L55">				.afford(HttpMethod.POST)</span>
+<span class="fc" id="L56">				.withOutput(RatingDTO.class)</span>
+<span class="fc" id="L57">				.withInput(AddRatingDTORequest.class)</span>
+<span class="fc" id="L58">				.withName(&quot;rate-politician&quot;)</span>
+<span class="fc" id="L59">				.withName(&quot;rate-politician&quot;)</span>
+<span class="fc" id="L60">				.withTarget(linkTo(methodOn(RatingsController.class).saveRating(null, null)).withRel(&quot;rate&quot;))</span>
+<span class="fc" id="L61">				.build()</span>
+<span class="fc" id="L62">				.toLink();</span>
+		
+<span class="fc" id="L64">		jwtResponse.add(affordance);</span>
+<span class="fc" id="L65">		jwtResponse.add(linkTo(methodOn(Oauth2.class).returnCredentials(null)).withRel(&quot;jwt&quot;));</span>
+		
+<span class="fc" id="L67">		return new ResponseEntity&lt;RepresentationModel&lt;JwtClaims&gt;&gt;(jwtResponse, HttpStatus.OK);</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

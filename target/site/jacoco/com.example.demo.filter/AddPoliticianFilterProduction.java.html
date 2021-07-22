@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AddPoliticianFilterProduction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">politics</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.filter</a> &gt; <span class="el_source">AddPoliticianFilterProduction.java</span></div><h1>AddPoliticianFilterProduction.java</h1><pre class="source lang-java linenums">package com.example.demo.filter;
+
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+
+import com.example.demo.exceptionHandling.ExceptionModel;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Profile(&quot;production&quot;)
+<span class="nc" id="L22">public class AddPoliticianFilterProduction implements Filter{</span>
+
+	@Value(&quot;${politician.access.password}&quot;)
+	private String password;
+
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+<span class="nc" id="L30">		HttpServletRequest req = (HttpServletRequest) request;</span>
+<span class="nc" id="L31">		HttpServletResponse res = (HttpServletResponse) response;</span>
+		
+<span class="nc bnc" id="L33" title="All 2 branches missed.">		if (req.getRequestURI().equalsIgnoreCase(&quot;/api/politicians/add-politician&quot;)) {</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">			if (req.getHeader(&quot;Politician-Access&quot;) != null) {</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">				if (req.getHeader(&quot;Politician-Access&quot;).equalsIgnoreCase(password)) {</span>
+					//essentially do nothing
+				} else {
+<span class="nc" id="L38">					handleAddPoliticianAccessDenied(req, res);</span>
+<span class="nc" id="L39">					return;					</span>
+				}
+				
+			} else {
+<span class="nc" id="L43">				handleAddPoliticianAccessDenied(req, res);</span>
+<span class="nc" id="L44">				return;</span>
+			}
+		}
+		
+<span class="nc" id="L48">		chain.doFilter(req, res);</span>
+<span class="nc" id="L49">	}</span>
+
+	private void handleAddPoliticianAccessDenied(HttpServletRequest req, HttpServletResponse res) throws JsonProcessingException, IOException {
+<span class="nc" id="L52">		LoggerFactory.getLogger(&quot;Add Politician Filter&quot;)</span>
+<span class="nc" id="L53">			.info(&quot;IP Address &quot;  + req.getRemoteAddr() + &quot; accessed a protected resource with wrong credentials&quot;);</span>
+		
+<span class="nc" id="L55">		ExceptionModel exceptionModel = new ExceptionModel();</span>
+<span class="nc" id="L56">		exceptionModel.setCode(&quot;401&quot;);</span>
+<span class="nc" id="L57">		exceptionModel.setErr(&quot;Authorization Required&quot;);</span>
+		
+<span class="nc" id="L59">		res.setStatus(401);</span>
+<span class="nc" id="L60">		res.setContentType(&quot;application/json&quot;);</span>
+<span class="nc" id="L61">		res.getWriter().write(new ObjectMapper().writeValueAsString(exceptionModel));</span>
+<span class="nc" id="L62">	}</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

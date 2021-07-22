@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RatingJwtExceptionHandling.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">politics</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.exceptionHandling</a> &gt; <span class="el_source">RatingJwtExceptionHandling.java</span></div><h1>RatingJwtExceptionHandling.java</h1><pre class="source lang-java linenums">package com.example.demo.exceptionHandling;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.example.demo.controller.RatingsController;
+import com.example.demo.exceptions.JwtMalformedFormatException;
+import com.example.demo.exceptions.JwtNotFoundException;
+import com.example.demo.exceptions.JwtNotFromServerException;
+
+import io.jsonwebtoken.ExpiredJwtException;
+
+@RestControllerAdvice(assignableTypes = { RatingsController.class })
+<span class="fc" id="L17">public class RatingJwtExceptionHandling extends ResponseEntityExceptionHandler{</span>
+
+	@ExceptionHandler(JwtNotFoundException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public ExceptionModel handleJwtNotFoundException(JwtNotFoundException e) {
+<span class="nc" id="L22">		var exceptionModel = new ExceptionModel();</span>
+<span class="nc" id="L23">		exceptionModel.setCode(&quot;401&quot;);</span>
+<span class="nc" id="L24">		exceptionModel.setErr(e.getMessage());</span>
+		
+<span class="nc" id="L26">		return exceptionModel;</span>
+	}
+	
+	@ExceptionHandler(JwtMalformedFormatException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public ExceptionModel handleJwtMalformedException(JwtMalformedFormatException e) {
+<span class="fc" id="L32">		var exceptionModel = new ExceptionModel();</span>
+<span class="fc" id="L33">		exceptionModel.setCode(&quot;401&quot;);</span>
+<span class="fc" id="L34">		exceptionModel.setErr(e.getMessage());</span>
+		
+<span class="fc" id="L36">		return exceptionModel;</span>
+	}
+	
+	@ExceptionHandler(ExpiredJwtException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public ExceptionModel handleJwtMalformedException(ExpiredJwtException e) {
+<span class="nc" id="L42">		var exceptionModel = new ExceptionModel();</span>
+<span class="nc" id="L43">		exceptionModel.setCode(&quot;401&quot;);</span>
+<span class="nc" id="L44">		exceptionModel.setErr(e.getMessage());</span>
+		
+<span class="nc" id="L46">		return exceptionModel;</span>
+	}
+	
+	@ExceptionHandler(JwtNotFromServerException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public ExceptionModel handleJwtMalformedException(JwtNotFromServerException e) {
+<span class="nc" id="L52">		var exceptionModel = new ExceptionModel();</span>
+<span class="nc" id="L53">		exceptionModel.setCode(&quot;401&quot;);</span>
+<span class="nc" id="L54">		exceptionModel.setErr(e.getMessage());</span>
+		
+<span class="nc" id="L56">		return exceptionModel;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

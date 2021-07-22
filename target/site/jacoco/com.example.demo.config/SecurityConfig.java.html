@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">politics</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.config</a> &gt; <span class="el_source">SecurityConfig.java</span></div><h1>SecurityConfig.java</h1><pre class="source lang-java linenums">package com.example.demo.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+
+import com.example.demo.filter.AddPoliticianFilterProduction;
+import com.example.demo.filter.RefreshJwtFilter;
+import com.example.demo.oauth2.CustomOauth2AuthorizationRequestsRepository;
+import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
+import com.example.demo.oauth2.FacebookOauth2UserInfoUtility;
+
+@EnableWebSecurity
+@Profile(&quot;production&quot;)
+<span class="nc" id="L27">public class SecurityConfig extends WebSecurityConfigurerAdapter{</span>
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+<span class="nc" id="L31">		http</span>
+<span class="nc" id="L32">			.sessionManagement()</span>
+<span class="nc" id="L33">				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)</span>
+<span class="nc" id="L34">				.sessionFixation()</span>
+<span class="nc" id="L35">					.none()</span>
+<span class="nc" id="L36">			.and()</span>
+<span class="nc" id="L37">			.requestCache()</span>
+<span class="nc" id="L38">				.requestCache(this.statelessRequestCache())</span>
+<span class="nc" id="L39">			.and()</span>
+<span class="nc" id="L40">			.csrf()</span>
+<span class="nc" id="L41">				.disable()</span>
+<span class="nc" id="L42">			.httpBasic()</span>
+<span class="nc" id="L43">				.disable()</span>
+<span class="nc" id="L44">			.oauth2Client()</span>
+<span class="nc" id="L45">				.authorizationCodeGrant()</span>
+<span class="nc" id="L46">				.authorizationRequestRepository(this.authorizationRequestsRepo())</span>
+<span class="nc" id="L47">				.and()</span>
+<span class="nc" id="L48">				.authorizedClientRepository(this.authorizedClientRepo())</span>
+<span class="nc" id="L49">			.and()</span>
+<span class="nc" id="L50">				.addFilterBefore(new AddPoliticianFilterProduction(), UsernamePasswordAuthenticationFilter.class)</span>
+<span class="nc" id="L51">				.addFilterBefore(new RefreshJwtFilter(), UsernamePasswordAuthenticationFilter.class);</span>
+				
+<span class="nc" id="L53">	}</span>
+	
+	@Bean
+	public ClientRegistrationRepository registration() {
+<span class="nc" id="L57">		return new InMemoryClientRegistrationRepository(this.facebookClientRegistration());</span>
+	}
+		
+	public OAuth2AuthorizedClientRepository authorizedClientRepo() {
+<span class="nc" id="L61">		return new CustomOauth2AuthorizedClientsRepository(this.facebookUserInfoEndpointUtility());</span>
+	}
+	
+	public FacebookOauth2UserInfoUtility facebookUserInfoEndpointUtility() {
+<span class="nc" id="L65">		return new FacebookOauth2UserInfoUtility();</span>
+	} 
+	
+	@Bean
+	public AuthorizationRequestRepository&lt;OAuth2AuthorizationRequest&gt; authorizationRequestsRepo() {
+<span class="nc" id="L70">		return new CustomOauth2AuthorizationRequestsRepository();</span>
+	}
+	
+	@Bean
+	public ClientRegistration facebookClientRegistration() {
+<span class="nc" id="L75">        return ClientRegistration.withRegistrationId(&quot;facebook&quot;)</span>
+<span class="nc" id="L76">            .clientId(&quot;761966061136844&quot;)</span>
+<span class="nc" id="L77">            .clientSecret(&quot;bc9fb319c8102071263231f658d5692b&quot;)</span>
+<span class="nc" id="L78">            .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)</span>
+<span class="nc" id="L79">            .redirectUri(&quot;{baseUrl}/login/oauth2/code/facebook&quot;)</span>
+<span class="nc" id="L80">            .authorizationUri(&quot;https://www.facebook.com/dialog/oauth&quot;)</span>
+<span class="nc" id="L81">            .tokenUri(&quot;https://graph.facebook.com/v10.0/oauth/access_token&quot;)</span>
+<span class="nc" id="L82">            .userInfoUri(&quot;https://graph.facebook.com/me&quot;)</span>
+<span class="nc" id="L83">            .userNameAttributeName(&quot;id,email&quot;)</span>
+<span class="nc" id="L84">            .clientName(&quot;Facebook&quot;)</span>
+<span class="nc" id="L85">            .build();</span>
+	    }
+	
+	private HttpSessionRequestCache statelessRequestCache() {
+<span class="nc" id="L89">		HttpSessionRequestCache cache = new HttpSessionRequestCache();</span>
+<span class="nc" id="L90">		cache.setCreateSessionAllowed(false);</span>
+<span class="nc" id="L91">		return cache;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
