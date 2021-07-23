@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import com.example.demo.controller.PoliticianController;
 import com.example.demo.exceptionHandling.ExceptionModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +32,7 @@ public class AddPoliticianFilterProduction implements Filter{
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		
-		if (req.getRequestURI().equalsIgnoreCase("/api/politicians/add-politician")) {
+		if (isRequestShouldBeHandled(req)) {
 			if (req.getHeader("Politician-Access") != null) {
 				if (req.getHeader("Politician-Access").equalsIgnoreCase(password)) {
 					//essentially do nothing
@@ -61,5 +63,19 @@ public class AddPoliticianFilterProduction implements Filter{
 		res.getWriter().write(new ObjectMapper().writeValueAsString(exceptionModel));
 	}
 
+	private boolean isRequestShouldBeHandled(HttpServletRequest req) {
+		return getRequestUriToMatch().equals(req.getRequestURI());
+	}
+	
+	private String getRequestUriToMatch() {
+		return formUriEndpoint();
+	}
+
+	private String formUriEndpoint() {
+		return MvcUriComponentsBuilder.fromController(PoliticianController.class).path("/politician")
+				.build()
+				.getPath()
+				.toString();
+	}
 
 }
