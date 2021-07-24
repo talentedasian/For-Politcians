@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Commit;
 
+import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.Rating;
@@ -25,7 +26,7 @@ import com.example.demo.repository.PoliticiansRepository;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PoliticianRepoTest {
+public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 
 	@Autowired
 	private PoliticiansRepository repo;

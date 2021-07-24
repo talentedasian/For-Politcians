@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.model.entities.RateLimit;
 import com.example.demo.repository.RateLimitRepository;
 import com.example.demo.service.RateLimitingService;
@@ -17,7 +18,7 @@ import com.example.demo.service.RateLimitingService;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @EnableAutoConfiguration
-public class RateLimitServiceTest {
+public class RateLimitServiceTest extends BaseClassTestsThatUsesDatabase {
 
 	RateLimitingService service;
 	@Autowired RateLimitRepository repo;

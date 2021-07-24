@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
@@ -28,7 +29,7 @@ import com.example.demo.repository.RateLimitRepository;
 import com.example.demo.service.RatingService;
 
 @SpringBootTest
-public class RateLimitIntegrationTest {
+public class RateLimitIntegrationTest extends BaseClassTestsThatUsesDatabase {
 	
 	@Autowired public RestTemplate template;
 	@Autowired public RateLimitRepository rateLimitRepo;

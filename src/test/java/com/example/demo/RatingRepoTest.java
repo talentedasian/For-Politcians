@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -21,7 +22,7 @@ import com.example.demo.service.RateLimitingService;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-public class RatingRepoTest {
+public class RatingRepoTest extends BaseClassTestsThatUsesDatabase {
 	
 	@Autowired RatingRepository repo;
 	@Autowired PoliticiansRepository polRepo;

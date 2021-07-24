@@ -178,7 +178,7 @@ Or do it programatically:
 ## Roadmap
 * Add Identifiers for Politicians e.g. Presidential Politician/Senatorial Politician 
 X Add Rate Limiting functionality for adding ratings to politicians so users can't abuse their favorite or most hated politician.
-* Use Test Containers instead of manually adding a postgresql service on github actions.
+X Use Test Containers instead of manually adding a postgresql service on github actions.
 X Add Account Numbers for raters
 * Add documentation
 

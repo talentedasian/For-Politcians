@@ -12,16 +12,6 @@ jobs:
   test-code:
 
     runs-on: ubuntu-latest
-    
-    services:
-        postgres_db:
-          image: postgres
-          env:
-            POSTGRES_USER: politics
-            POSTGRES_PASSWORD: politics
-            POSTGRES_DB: politics
-          ports:
-           - 5432:5432
 
     steps:
     - uses: actions/checkout@v2
