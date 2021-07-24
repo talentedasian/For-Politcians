@@ -10,6 +10,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jboss.logging.MDC;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
@@ -51,8 +52,7 @@ public class AddPoliticianFilterProduction implements Filter{
 	}
 
 	private void handleAddPoliticianAccessDenied(HttpServletRequest req, HttpServletResponse res) throws JsonProcessingException, IOException {
-		LoggerFactory.getLogger("PoliticianAccess")
-			.info("IP Address "  + req.getRemoteAddr() + " accessed a protected resource with wrong credentials");
+		logAccessDenied(req);
 		
 		ExceptionModel exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("401");
@@ -61,6 +61,15 @@ public class AddPoliticianFilterProduction implements Filter{
 		res.setStatus(401);
 		res.setContentType("application/json");
 		res.getWriter().write(new ObjectMapper().writeValueAsString(exceptionModel));
+	}
+	
+	private void logAccessDenied(HttpServletRequest req) {
+		MDC.put("credentials", req.getHeader("Politician-Access"));
+		
+		LoggerFactory.getLogger("PoliticianAccess")
+		.info("IP Address "  + req.getRemoteAddr() + " accessed a protected resource with wrong credentials");
+		
+		MDC.clear();
 	}
 
 	private boolean isRequestShouldBeHandled(HttpServletRequest req) {
