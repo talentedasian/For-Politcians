@@ -78,7 +78,7 @@ This section should list any major frameworks that you built your project using.
 
 <!-- GETTING STARTED -->
 ## Getting Started
-1. This project uses jdk 15 and maven as the build tool.
+1. This project uses jdk 16 and maven as the build tool.
 2. Install a database of your choice(mine is postgresql).
 3. Populate the spring datasource properties.
     ```java
@@ -107,13 +107,80 @@ Or do it programatically:
             .build();
 	    }
   ```
+6. Add a Security Configuration Class
+  ```java
+  @Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http
+			.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.sessionFixation()
+					.none()
+			.and()
+			.requestCache()
+				.requestCache(this.statelessRequestCache())
+			.and()
+			.csrf()
+				.disable()
+			.httpBasic()
+				.disable()
+			.oauth2Client()
+				.authorizationCodeGrant()
+				.authorizationRequestRepository(this.authorizationRequestsRepo())
+				.and()
+				.authorizedClientRepository(this.authorizedClientRepo())
+			.and()
+				.addFilterBefore(new AddPoliticianFilter(), UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(new RefreshJwtFilter(), UsernamePasswordAuthenticationFilter.class);
+				
+	}
+		
+	public OAuth2AuthorizedClientRepository authorizedClientRepo() {
+		return new CustomOauth2AuthorizedClientsRepository(this.facebookUserInfoEndpointUtility());
+	}
+	
+	@Bean
+	public ClientRegistrationRepository registration() {
+		return new InMemoryClientRegistrationRepository(this.facebookClientRegistration());
+	}
+	
+	public FacebookOauth2UserInfoUtility facebookUserInfoEndpointUtility() {
+		return new FacebookOauth2UserInfoUtility();
+	} 
+	
+	@Bean
+	public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestsRepo() {
+		return new CustomOauth2AuthorizationRequestsRepository();
+	}
+	
+	public ClientRegistration facebookClientRegistration() {
+        return ClientRegistration.withRegistrationId("facebook")
+            .clientId(client_id)
+            .clientSecret(client_secret)
+            .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+            .redirectUri("{baseUrl}/login/oauth2/code/facebook")
+            .authorizationUri("https://www.facebook.com/dialog/oauth")
+            .tokenUri("https://graph.facebook.com/v10.0/oauth/access_token")
+            .userInfoUri("https://graph.facebook.com/me")
+            .userNameAttributeName("id,email")
+            .clientName("Facebook")
+            .build();
+	    }
+	
+	private HttpSessionRequestCache statelessRequestCache() {
+		HttpSessionRequestCache cache = new HttpSessionRequestCache();
+		cache.setCreateSessionAllowed(false);
+		return cache;
+	}
+  ```
 
 <!-- ROADMAP -->
 ## Roadmap
 * Add Identifiers for Politicians e.g. Presidential Politician/Senatorial Politician 
-* Add Rate Limiting functionality for adding ratings to politicians so users can't abuse their favorite or most hated politician.
+X Add Rate Limiting functionality for adding ratings to politicians so users can't abuse their favorite or most hated politician.
 * Use Test Containers instead of manually adding a postgresql service on github actions.
-* Add Account Numbers for raters
+X Add Account Numbers for raters
+* Add documentation
 
 
 
