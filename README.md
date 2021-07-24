@@ -41,7 +41,6 @@
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
 
@@ -193,6 +192,7 @@ X Add Account Numbers for raters
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+6. Append `testcontainers.reuse.enabled=true` to your testcontainer properties which is usually located in `/home/$USER/.testcontainers.properties`
 
 
 <!-- CONTACT -->
