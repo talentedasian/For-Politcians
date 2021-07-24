@@ -51,7 +51,7 @@ public class AddPoliticianFilterProduction implements Filter{
 	}
 
 	private void handleAddPoliticianAccessDenied(HttpServletRequest req, HttpServletResponse res) throws JsonProcessingException, IOException {
-		LoggerFactory.getLogger("Add Politician Filter")
+		LoggerFactory.getLogger("PoliticianAccess")
 			.info("IP Address "  + req.getRemoteAddr() + " accessed a protected resource with wrong credentials");
 		
 		ExceptionModel exceptionModel = new ExceptionModel();

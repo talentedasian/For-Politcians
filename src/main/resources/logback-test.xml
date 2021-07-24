@@ -11,10 +11,21 @@
             <pattern>%date{ISO8601, GMT+8}   |  [%thread]  %-10level  |  %logger{36} |  %20X{fullname} %msg %X{polNumber}%n</pattern>
         </encoder>
     </appender>
-     
+    <appender name="SAVEPOLITICIAN" class="ch.qos.logback.core.FileAppender">
+    	<file>logs/failed-politician.log</file>
+    	<append>true</append>
+        <encoder>
+            <pattern>%date{ISO8601, GMT+8}   |   %msg "%X{credentials}" %n</pattern>
+        </encoder>
+    </appender>
+    
     <logger name="com.example.demo.logger.PoliticiansLogger" additivity="false" level="INFO">
     	<appender-ref ref="POLITICIAN" />
-    </logger> 
+    </logger>
+    <logger name="PoliticianAccess" additivity="false" level="INFO">
+   		<appender-ref ref="SAVEPOLITICIAN" />
+   	</logger>   
+    
     <root level="info">
         <appender-ref ref="CONSOLE" />
     </root>
