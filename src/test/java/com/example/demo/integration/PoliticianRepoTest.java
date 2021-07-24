@@ -35,11 +35,6 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	@Mock
 	public AverageCalculator calculator;
 	
-	@BeforeEach
-	public void setup() {
-		container.start();
-	}
-	
 	@Test
 	@Order(1)
 	@Commit

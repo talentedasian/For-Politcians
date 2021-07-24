@@ -37,7 +37,6 @@ public class RateLimitIntegrationTest extends BaseClassTestsThatUsesDatabase {
 	@Autowired public PoliticiansRepository polRepo;
 	RateLimit rateLimitToBeSaved = new RateLimit();
 	
-	
 	@BeforeEach
 	public void setup() {
 		polRepo.save(new Politicians.PoliticiansBuilder("1number")
