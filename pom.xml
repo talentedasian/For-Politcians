@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.talentedasian</groupId>
 	<artifactId>politics</artifactId>
-	<version>1.1.0</version>
+	<version>1.2.0</version>
 	<name>politics</name>
 	<description>Project for the people</description>
 	<properties>
@@ -89,10 +89,6 @@
 		    <artifactId>junit-jupiter-params</artifactId>
 		    <scope>test</scope>
 		</dependency>
-	 	<dependency>
-		    <groupId>org.springframework.hateoas</groupId>
-		    <artifactId>spring-hateoas</artifactId>
-		</dependency>
 		<dependency> 
 			<groupId>org.springframework.restdocs</groupId>
 			<artifactId>spring-restdocs-mockmvc</artifactId>
@@ -110,7 +106,22 @@
 		    <version>1.15.3</version>
 		    <scope>test</scope>
 		</dependency>
+		<dependency>
+		    <groupId>org.springframework.hateoas</groupId>
+		    <artifactId>spring-hateoas</artifactId>
+		</dependency>
 	</dependencies>
+	
+	<repositories>
+		<repository>
+		    <id>spring-snapshot</id>
+		    <name>Spring Snapshot Repository</name>
+		    <url>https://repo.spring.io/snapshot</url>
+		    <snapshots>
+		        <enabled>true</enabled>
+		    </snapshots>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
@@ -227,5 +238,15 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+			    <groupId>org.springframework.hateoas</groupId>
+			    <artifactId>spring-hateoas</artifactId>
+			    <version>1.4.0-SNAPSHOT</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 </project>

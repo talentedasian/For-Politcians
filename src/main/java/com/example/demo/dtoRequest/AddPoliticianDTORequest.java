@@ -6,6 +6,8 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
+
 public class AddPoliticianDTORequest {
 
 	@NotNull
@@ -56,47 +58,11 @@ public class AddPoliticianDTORequest {
 		this.rating = rating;
 	}
 
+	@ExcludeFromJacocoGeneratedCoverage
 	@Override
 	public String toString() {
 		return "AddPoliticianDTORequest [firstName=" + firstName + ", lastName=" + lastName + ", rating=" + rating
 				+ "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AddPoliticianDTORequest other = (AddPoliticianDTORequest) obj;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (rating == null) {
-			if (other.rating != null)
-				return false;
-		} else if (!rating.equals(other.rating))
-			return false;
-		return true;
 	}
 
 }

@@ -6,6 +6,7 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AddRatingDTORequest {
@@ -59,11 +60,10 @@ public class AddRatingDTORequest {
 		// TODO Auto-generated constructor stub
 	}
 
+	@ExcludeFromJacocoGeneratedCoverage
 	@Override
 	public String toString() {
 		return "AddRatingDTORequest [rating=" + rating + ", id=" + id + ", politicalParty=" + politicalParty + "]";
 	}
-
-		
 	
 }
