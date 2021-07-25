@@ -1,6 +1,0 @@
-[source,bash]
-----
-$ curl 'http://localhost:8080/rate-limit/123polNumber' -i -X GET \
-    -H 'Authorization: Bearer eyJsb2dpbl9tZWNoYW5pc20iOiJmYWNlYm9vayIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJ0ZXN0QGdtYWlsY29tIiwibmFtZSI6InRlc3QiLCJqdGkiOiIxMjMiLCJleHAiOjE2MjcyMDY5MzJ9.AePQ0nb4oQ4RDMbzjF6cd8wxPLrmkl4Rmee1m3UiHf-jLCPAQ5_z4LhAbO1spVgJE84yFl9rCXtYqBLBOL0nXvZH2ZZK0vAVomFBYm5fMNSwr02a6-ZS9kvOd7RaUjRrzINPyeIPKgpTCARm78t5w8pBdR2bfhwjMZkzuV13W-kpT9Q-SWWpN3IA01F92A4j8-rkhhaeQyrayXYfcpOPxj8rIkD-4xEWXoDEoZwuSYndkVMF4_O2TqPzZu1-fZqEtR6ctYpL1RXdZKGqnjqQRivEVuTggKWYU5yTqOiDQKRCapoaoSp1XxzgsmvPYciRhofsn-m7ZTx3MkYj3LCOJQ' \
-    -H 'Accept: application/prs.hal-forms+json'
-----
