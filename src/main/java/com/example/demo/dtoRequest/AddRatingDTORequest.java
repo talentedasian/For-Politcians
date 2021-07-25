@@ -6,6 +6,7 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AddRatingDTORequest {
@@ -59,46 +60,10 @@ public class AddRatingDTORequest {
 		// TODO Auto-generated constructor stub
 	}
 
+	@ExcludeFromJacocoGeneratedCoverage
 	@Override
 	public String toString() {
 		return "AddRatingDTORequest [rating=" + rating + ", id=" + id + ", politicalParty=" + politicalParty + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((politicalParty == null) ? 0 : politicalParty.hashCode());
-		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AddRatingDTORequest other = (AddRatingDTORequest) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (politicalParty == null) {
-			if (other.politicalParty != null)
-				return false;
-		} else if (!politicalParty.equals(other.politicalParty))
-			return false;
-		if (rating == null) {
-			if (other.rating != null)
-				return false;
-		} else if (!rating.equals(other.rating))
-			return false;
-		return true;
 	}
 	
 }
