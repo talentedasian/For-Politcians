@@ -6,6 +6,10 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
+/*
+ * Classes that use an underlying database such as 
+ * {@DataJpaTest} and {@SpringBootTest} must extend this class.
+ */
 @Testcontainers
 public class BaseClassTestsThatUsesDatabase {
 
