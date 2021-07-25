@@ -20,7 +20,7 @@ public class FacebookAccountNumberImplementorTest {
 	}
 	
 	@Test
-	public void assertBehaviourOfFacebookAccountNumberPatternCreatorMethodWithOneWordName() {
+	public void assertBehaviourOfFacebookAccountNumberPatternCreatorMethodWithSingleWordName() {
 		final String number = "39812732123";
 		
 		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor
