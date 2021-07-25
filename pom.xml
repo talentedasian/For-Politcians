@@ -111,17 +111,6 @@
 		    <scope>test</scope>
 		</dependency>
 	</dependencies>
-	
-	<repositories>
-		<repository>
-		    <id>spring-snapshot</id>
-		    <name>Spring Snapshot Repository</name>
-		    <url>https://repo.spring.io/snapshot</url>
-		    <snapshots>
-		        <enabled>true</enabled>
-		    </snapshots>
-		</repository>
-	</repositories>
 
 	<build>
 		<plugins>
@@ -238,15 +227,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-			    <groupId>org.springframework.hateoas</groupId>
-			    <artifactId>spring-hateoas</artifactId>
-			    <version>1.4.0-SNAPSHOT</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
 </project>
