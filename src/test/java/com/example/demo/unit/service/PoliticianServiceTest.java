@@ -2,6 +2,7 @@ package com.example.demo.unit.service;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -37,9 +38,9 @@ public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
 		when(calculator.calculateAverage()).thenReturn(0.01D);
 		politician.calculateAverageRating();
 		
-		when(politicianRepo.findByPoliticianNumber(polNumber)).thenReturn(Optional.of(politician));
+		when(politicianRepo.findByPoliticianNumber(POLITICIAN_NUMBER)).thenReturn(Optional.of(politician));
 		
-		Politicians politicianQueried = politicianService.findPoliticianByNumber(polNumber);
+		Politicians politicianQueried = politicianService.findPoliticianByNumber(POLITICIAN_NUMBER);
 		
 		assertThat(0.01D,
 				equalTo(politicianQueried.getRating().getAverageRating()));
@@ -47,18 +48,18 @@ public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
 	
 	@Test
 	public void shouldEqualDTOOutputs() {
-		when(politicianRepo.findByPoliticianNumber(polNumber)).thenReturn(Optional.of(politician));
+		when(politicianRepo.findByPoliticianNumber(POLITICIAN_NUMBER)).thenReturn(Optional.of(politician));
 		
-		Politicians politicianQueried = politicianService.findPoliticianByNumber(polNumber);
+		Politicians politicianQueried = politicianService.findPoliticianByNumber(POLITICIAN_NUMBER);
 		
-		assertDtoOutputsUtil(politician, politicianQueried);
+		assertEquals(politician, politicianQueried);
 	}
 	
 	@Test
 	public void shouldReturnTrueWhenDeletedByPoliticianNumber() {
-		when(politicianRepo.existsByPoliticianNumber(polNumber)).thenReturn(true);
+		when(politicianRepo.existsByPoliticianNumber(POLITICIAN_NUMBER)).thenReturn(true);
 		
-		assertTrue(politicianService.deletePolitician(polNumber));
+		assertTrue(politicianService.deletePolitician(POLITICIAN_NUMBER));
 	}
 	
 	@Test
@@ -68,18 +69,8 @@ public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
 		
 		Politicians politicianQueried = politicianService.savePolitician(politicianDtoRequest);
 		
-		assertDtoOutputsUtil(politician, politicianQueried);
+		assertEquals(politician, politicianQueried);
 	}
 	
-	public void assertDtoOutputsUtil(Politicians politicianToAssert, Politicians politicianToCompare) {
-		assertThat(politicianToAssert.getFirstName(),
-				equalTo(politicianToCompare.getFirstName()));
-		assertThat(politicianToAssert.getLastName(),
-				equalTo(politicianToCompare.getLastName()));
-		assertThat(politicianToAssert.getRating().getAverageRating(),
-				equalTo(politicianToCompare.getRating().getAverageRating()));
-		assertThat(politicianToAssert.getRating().getTotalRating(),
-				equalTo(politicianToCompare.getRating().getTotalRating()));
-	}
 	
 }

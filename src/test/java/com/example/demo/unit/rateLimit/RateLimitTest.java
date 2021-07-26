@@ -12,11 +12,21 @@ import com.example.demo.model.entities.RateLimit;
 
 public class RateLimitTest {
 
+	final String POLITICIAN_NUMBER = "123polNumber";
+	final String ACCOUNT_NUMBER = "TGFLM-00000000000123";
+	
 	@Test
 	public void shouldNotBeRateLimited() {
-		var rate = RateLimit.withNotExpiredRateLimit("TGFLM-00000000000123", "123polNumber");
+		var rate = RateLimit.withNotExpiredRateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER);
 		
 		assertTrue(rate.isNotRateLimited());
+	}
+	
+	@Test
+	public void shouldBeNullDaysLeft() {
+		var rate = RateLimit.withNotExpiredRateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER);
+		
+		assertNull(rate.daysLeftOfBeingRateLimited());
 	}
 	
 	@Test
@@ -46,13 +56,6 @@ public class RateLimitTest {
 		rate.setDateCreated(LocalDate.now().minusDays(5L));
 		
 		assertFalse(rate.isNotRateLimited());
-	}
-	
-	@Test
-	public void shouldBeNullDaysLeft() {
-		var rate = RateLimit.withNotExpiredRateLimit("TGFLM-00000000000123", "123polNumber");
-		
-		assertNull(rate.daysLeftOfBeingRateLimited());
 	}
 	
 }

@@ -23,33 +23,30 @@ import com.example.demo.service.RatingService;
 
 public class AbstractEntitiesServiceTest {
 
-	@Mock
-	public RatingRepository ratingRepo;
-	@Mock
-	public PoliticiansRepository politicianRepo;
-	@Mock
-	public HttpServletRequest req;
-	@Mock
-	public AverageCalculator calculator;
-	@Mock
-	public RateLimitingService rateLimitService;
+	@Mock public RatingRepository ratingRepo;
+	@Mock public PoliticiansRepository politicianRepo;
+	@Mock public HttpServletRequest req;
+	@Mock public AverageCalculator calculator;
+	@Mock public RateLimitingService rateLimitService;
 	
 	public PoliticiansService politicianService;
 	public RatingService ratingService;
 	public PoliticiansRating rating;
 	public Politicians politician;
-	public final String polNumber = "FL00-LF00-0000";
 	public AddRatingDTORequest ratingDtoRequest;
 	public AddPoliticianDTORequest politicianDtoRequest;
-	
 
+	public final String POLITICIAN_NUMBER = "FL00-LF00-0000";
+	public final String EMAIL = "test@gmail.com";
+	public final String ACCOUNT_NUMBER = "123accountNumber";
+	
 	@BeforeEach
 	public void setup() {
 		politicianService = new PoliticiansService(politicianRepo);
 		
 		ratingService = new RatingService(ratingRepo, politicianRepo, rateLimitService);
 		
-		politician = new Politicians.PoliticiansBuilder("123polNumber")
+		politician = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
 				.setRatingRepository(ratingRepo)
 				.setId(1)
 				.setFirstName("Mirriam")
@@ -61,12 +58,12 @@ public class AbstractEntitiesServiceTest {
 		rating = new PoliticiansRating();
 		rating.setId(1);
 		rating.setPolitician(politician);
-		rating.calculateRater("test@gmail", "test", "DDS", "123accountNumber", rateLimitService);
+		rating.calculateRater(EMAIL, "test", "DDS", ACCOUNT_NUMBER, rateLimitService);
 		rating.setRating(0.01D);
 		
 		ratingDtoRequest = new AddRatingDTORequest
 		(BigDecimal.valueOf(0.00D),
-		polNumber,
+		POLITICIAN_NUMBER,
 		 PoliticalParty.DDS.toString());
 		
 		politicianDtoRequest = new AddPoliticianDTORequest
