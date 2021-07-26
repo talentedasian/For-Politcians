@@ -1,11 +1,10 @@
-package com.example.demo.unit.accountNumber;
+package com.example.demo.model.userRaterNumber.facebook;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
 import com.example.demo.model.userRaterNumber.AbstractUserRaterNumber;
-import com.example.demo.model.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
 
 public class FacebookAccountNumberImplementorTest {
 
