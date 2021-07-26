@@ -1,9 +1,13 @@
 package com.example.demo;
 
 import static com.example.demo.model.enums.PoliticalParty.DDS;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import java.util.List;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -27,7 +31,11 @@ public class RatingRepoTest extends BaseClassTestsThatUsesDatabase {
 	@Autowired RatingRepository repo;
 	@Autowired PoliticiansRepository polRepo;
 	
-	Politicians politician = new Politicians.PoliticiansBuilder("123polNumber")
+	private final String EMAIL = "test@gmail.com";
+	private final String NAME = "test";
+	final String ACCOUNT_NUMBER = "123polNumber";
+	
+	Politicians politician = new Politicians.PoliticiansBuilder(ACCOUNT_NUMBER)
 			.setRatingRepository(repo)
 			.setFirstName("Test")
 			.setLastName("Name")
@@ -38,21 +46,31 @@ public class RatingRepoTest extends BaseClassTestsThatUsesDatabase {
 	@Test
 	public void shouldReturnBooleanByAccountNumber() {
 		polRepo.save(politician);
-		var userRater = new UserRater("test", DDS, "test@gmail.com", "123accNumber", mock(RateLimitingService.class));
+		var userRater = new UserRater(NAME, DDS, EMAIL, ACCOUNT_NUMBER, mock(RateLimitingService.class));
 		repo.save(new PoliticiansRating(1, 1.00D, userRater, politician));
 		
-		assertTrue(repo.existsByRater_UserAccountNumber("123accNumber"));
+		assertTrue(repo.existsByRater_UserAccountNumber(ACCOUNT_NUMBER));
 	}
 	
 	@Test
 	public void shouldReturnEmptyListWhenAfterDeletion() {
 		polRepo.save(politician);
-		var userRater = new UserRater("test", DDS, "test@gmail.com", "123accNumber", mock(RateLimitingService.class));
+		var userRater = new UserRater(NAME, DDS, EMAIL, ACCOUNT_NUMBER, mock(RateLimitingService.class));
+		
 		repo.save(new PoliticiansRating(1, 1.00D, userRater, politician));
 		repo.save(new PoliticiansRating(2, 1.21D, userRater, politician));
+		userRater.setUserAccountNumber("dummyAccountNumber");
+		repo.save(new PoliticiansRating(3, 1.32D, userRater, politician));
 		
-		repo.deleteByRater_UserAccountNumber("123accNumber");
-		assertTrue(repo.findByRater_UserAccountNumber("123accNumber").isEmpty());
+		List<PoliticiansRating> NOT_CONTAINED_ELEMENTS = repo.findByRater_UserAccountNumber(ACCOUNT_NUMBER);
+		
+		repo.deleteByRater_UserAccountNumber(ACCOUNT_NUMBER);
+		
+		List<PoliticiansRating> allPoliticianRatings = repo.findAll();
+		
+		assertThat(allPoliticianRatings)
+			.doesNotContainAnyElementsOf(NOT_CONTAINED_ELEMENTS)
+			.containsAll(repo.findByRater_UserAccountNumber("dummyAccountNumber"));
 	}
 
 }
