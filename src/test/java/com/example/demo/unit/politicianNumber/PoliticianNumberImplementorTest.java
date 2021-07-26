@@ -11,10 +11,14 @@ import com.example.demo.model.politicianNumber.PoliticianNumberImplementor;
 
 public class PoliticianNumberImplementorTest {
 
+	final String FIRST_NAME = "firstName";
+	final String LAST_NAME = "lastName";
+	final String POLITICIAN_NUMBER = "99";
+	
 	@Test
 	public void shouldThrowIllegalStateException() {
 		assertThrows(IllegalStateException.class, 
-				() -> PoliticianNumberImplementor.with("firstName", "lastName", "not number test"));
+				() -> PoliticianNumberImplementor.with(FIRST_NAME, LAST_NAME, "not number test"));
 	}
 	
 	@Test
@@ -22,9 +26,9 @@ public class PoliticianNumberImplementorTest {
 		PoliticianNumberImplementor polNumberObject = PoliticianNumberImplementor.with
 				("firstName", 
 				"lastName", 
-				"99");
+				POLITICIAN_NUMBER);
 		
-		assertEquals(polNumberObject.getPoliticianNumber(), "99");
+		assertEquals(polNumberObject.getPoliticianNumber(), POLITICIAN_NUMBER);
 	}
 	
 	@Test
@@ -32,14 +36,14 @@ public class PoliticianNumberImplementorTest {
 		PoliticianNumberImplementor polNumberObject = PoliticianNumberImplementor.with
 				("Test", 
 				"Politician", 
-				"99");
+				POLITICIAN_NUMBER);
 		
 		assertThat(polNumberObject.calculatePoliticianNumber().getPoliticianNumber(), 
 				containsString("T"));
 		assertThat(polNumberObject.calculatePoliticianNumber().getPoliticianNumber(), 
 				containsString("P"));
 		assertThat(polNumberObject.calculatePoliticianNumber().getPoliticianNumber(), 
-				containsString("99"));
+				containsString(POLITICIAN_NUMBER));
 	}
 	
 }

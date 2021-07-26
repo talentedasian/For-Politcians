@@ -11,14 +11,16 @@ import com.example.demo.model.entities.Politicians;
 
 public class PoliticiansTest {
 
-	Politicians politician = new Politicians.PoliticiansBuilder("123polNumber")
+	final String POLITICIAN_NUMBER = "123polNumber";
+	
+	Politicians politician = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
 			.setFirstName("Test")
 			.setLastName("Name")
 			.build();
 	
 	@Test
 	public void assertCustomEqualsMethod() {
-		var pol = new Politicians.PoliticiansBuilder("123polNumber").build();
+		var pol = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER).build();
 		
 		var polWrongNumber = new Politicians.PoliticiansBuilder("999polNumber").build();
 		
@@ -28,7 +30,7 @@ public class PoliticiansTest {
 	
 	@Test
 	public void testNullLastNameInBuilder() {
-		var pol = new Politicians.PoliticiansBuilder("123polNumber")
+		var pol = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
 				.setFirstName("Test")
 				.setFullName()
 				.build();
@@ -38,7 +40,7 @@ public class PoliticiansTest {
 	
 	@Test
 	public void testFullNameInBuilder() {
-		var pol = new Politicians.PoliticiansBuilder("123polNumber")
+		var pol = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
 				.setFirstName("Test")
 				.setLastName("Name")
 				.setFullName()

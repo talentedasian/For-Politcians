@@ -15,14 +15,17 @@ import io.jsonwebtoken.Jwts;
 
 public class JwtProviderTest {
 
+	final String SUBJECT = "test@gmail.com";
+	final String ID = "test";
+
 	@Test
 	public void assertEqualsEncodedJwt() {
 		Date dateNow = new Date(System.currentTimeMillis() + 3600000L);
 		
 		String actualJwts = Jwts.builder()
 				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
-				.setSubject("test@gmail.com")
-				.setId("test")
+				.setSubject(SUBJECT)
+				.setId(ID)
 				.setExpiration(dateNow)
 				.setHeaderParam("login_mechanism", "facebook")
 				.compact();

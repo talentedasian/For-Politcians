@@ -41,14 +41,19 @@ public class RatingsControllerTest {
 	Politicians politician;
 	PoliticiansRating politiciansRating;
 	RatingDTO ratingDTO;
-	PoliticianDTO politicianDTO;	
-	final UserRater userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accountNumber", limitingService);
+	PoliticianDTO politicianDTO;
+	
+	final String ACCOUNT_NUMBER = "123accountNumber";
+	final String EMAIL = "test@gmail.com";
+	final String POLITICIAN_ACCOUNT_NUMBER = "123polNumber";
+	
+	final UserRater userRater = new UserRater("test", PoliticalParty.DDS, EMAIL, ACCOUNT_NUMBER, limitingService);
 	
 	@BeforeEach
 	public void setup() {
 		controller = new RatingsController(service, assembler);
 		
-		politician = new Politicians.PoliticiansBuilder("123polNumber")
+		politician = new Politicians.PoliticiansBuilder(POLITICIAN_ACCOUNT_NUMBER)
 			.setFirstName("Mirriam")
 			.setLastName("Defensor")
 			.setFullName()
@@ -57,7 +62,7 @@ public class RatingsControllerTest {
 		
 		politiciansRating = new PoliticiansRating(1, 0.00D, userRater, politician);
 		
-		politicianDTO = new PoliticianDTO("Mirriam Defensor", "1", 0.00D, Rating.LOW);
+		politicianDTO = new PoliticianDTO(politician.getFullName(), "1", 0.00D, Rating.LOW);
 		
 		ratingDTO = new RatingDtoMapper().mapToDTO(politiciansRating);
 	}
@@ -80,7 +85,7 @@ public class RatingsControllerTest {
 		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
 		CollectionModel<EntityModel<RatingDTO>> expected = new RatingAssembler().toCollectionModel(new RatingDtoMapper().mapToDTO(listOfPoliticiansRating));
 		
-		when(service.findRatingsByFacebookEmail("test@gmail.com")).thenReturn(listOfPoliticiansRating);
+		when(service.findRatingsByFacebookEmail(EMAIL)).thenReturn(listOfPoliticiansRating);
 		when(assembler.toCollectionModel(any())).thenReturn(expected);
 		
 		CollectionModel<EntityModel<RatingDTO>> response = controller.getRatingByRaterEmail("test@gmail.com").getBody();
@@ -95,10 +100,10 @@ public class RatingsControllerTest {
 		List<PoliticiansRating> listOfPoliticiansRating = List.of(politiciansRating, politiciansRating2);
 		CollectionModel<EntityModel<RatingDTO>> expected = new RatingAssembler().toCollectionModel(new RatingDtoMapper().mapToDTO(listOfPoliticiansRating));
 				
-		when(service.findRatingsByAccountNumber("123accNumber")).thenReturn(listOfPoliticiansRating);
+		when(service.findRatingsByAccountNumber(ACCOUNT_NUMBER)).thenReturn(listOfPoliticiansRating);
 		when(assembler.toCollectionModel(any())).thenReturn(expected);
 		
-		CollectionModel<EntityModel<RatingDTO>> response = controller.getRatingByRaterAccountNumber("123accNumber").getBody();
+		CollectionModel<EntityModel<RatingDTO>> response = controller.getRatingByRaterAccountNumber(ACCOUNT_NUMBER).getBody();
 		
 		assertEquals(expected, response);
 	}

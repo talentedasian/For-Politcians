@@ -36,11 +36,13 @@ public class PoliticianControllerTest {
 	Politicians politician;
 	AddPoliticianDTORequest politicianDTORequest;
 	
+	final String POLITICIAN_NUMBER = "123polNumber";
+	
 	@BeforeEach
 	public void setUp() {
 		controller = new PoliticianController(service, assembler);
 		
-		politician =  new Politicians.PoliticiansBuilder("123polNumber") 
+		politician =  new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER) 
 			.setRating(new Rating(9.67D, 9.67D, calculator))
 			.setFirstName("Mirriam")
 			.setLastName("Defensor")
@@ -77,10 +79,10 @@ public class PoliticianControllerTest {
 	public void shouldEqualDTOOutputsByPoliticianNumber() {
 		PoliticianDTO polDTO = new PoliticiansDtoMapper().mapToDTO(politician);
 		
-		when(service.findPoliticianByNumber("1")).thenReturn(politician);
+		when(service.findPoliticianByNumber(POLITICIAN_NUMBER)).thenReturn(politician);
 		when(assembler.toModel(any())).thenReturn(EntityModel.of(polDTO));
 		
-		PoliticianDTO politicianResponse = controller.politicianById("1").getBody().getContent();
+		PoliticianDTO politicianResponse = controller.politicianById(POLITICIAN_NUMBER).getBody().getContent();
 		
 		assertEquals(polDTO, politicianResponse);
 	}			
