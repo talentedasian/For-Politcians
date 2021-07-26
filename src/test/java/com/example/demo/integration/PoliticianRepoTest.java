@@ -20,6 +20,7 @@ import org.springframework.test.annotation.Commit;
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.Politicians.PoliticiansBuilder;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.repository.PoliticiansRepository;
 
@@ -34,16 +35,17 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	@Mock
 	public AverageCalculator calculator;
 	
+	PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder("1111")
+			.setFirstName("Rodrigo")
+			.setLastName("Duterte")
+			.setFullName()
+			.setRating(new Rating(0.01D, 0.01D, calculator));
+	
 	@Test
 	@Order(1)
 	@Commit
 	public void shouldBeEqualOnSavedEntity() {
-		Politicians politicianToBeSaved = new Politicians.PoliticiansBuilder("1111")
-			.setFirstName("Rodrigo")
-			.setLastName("Duterte")
-			.setFullName()
-			.setRating(new Rating(0.01D, 0.01D, calculator))
-			.build();
+		Politicians politicianToBeSaved = politicianBuilder.build();
 		
 		Politicians politician = repo.save(politicianToBeSaved);
 		
@@ -53,12 +55,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	@Test
 	@Order(2)
 	public void shouldThrowDataIntegrityException() {
-		Politicians politicianToBeSaved = new Politicians.PoliticiansBuilder("1111")
-			.setFirstName("Rodrigo")
-			.setLastName("Duterte")
-			.setFullName()
-			.setRating(new Rating(0.01D, 0.01D, calculator))
-			.build();
+		Politicians politicianToBeSaved = politicianBuilder.build();
 		
 		assertThrows(DataIntegrityViolationException.class,
 				() -> repo.saveAndFlush(politicianToBeSaved));
@@ -66,12 +63,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	
 	@Test
 	public void assertExistsByPoliticianNumberQuery() {
-		Politicians politicianToBeSaved = new Politicians.PoliticiansBuilder("3333")
-				.setFirstName("Rodrigo")
-				.setLastName("Duterte")
-				.setFullName()
-				.setRating(new Rating(0.01D, 0.01D, calculator))
-				.build();
+		Politicians politicianToBeSaved = politicianBuilder.setPoliticianNumber("3333").build();
 		
 		repo.save(politicianToBeSaved);
 		
@@ -80,13 +72,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	
 	@Test
 	public void assertDeleteByPoliticianNumberQuery() {
-		Politicians politicianToBeSaved = new Politicians.PoliticiansBuilder("4444")
-				.setFirstName("Rodrigo")
-				.setLastName("Duterte")
-				.setFullName()
-				.setRating(new Rating(0.01D, 0.01D, calculator))
-				.build();
-		
+		Politicians politicianToBeSaved = politicianBuilder.setPoliticianNumber("4444").build();
 		repo.save(politicianToBeSaved);
 		
 		String id = politicianToBeSaved.getPoliticianNumber();

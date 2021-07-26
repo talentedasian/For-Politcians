@@ -285,13 +285,17 @@ public class Politicians implements PoliticianMethods{
 		 * method returns a new Builder with the politicianNumber
 		 */
 		public PoliticiansBuilder setPoliticianNumber(String politicianNumber) {
-			return new PoliticiansBuilder(politicianNumber)
-					.setId(id)
-					.setFirstName(firstName)
-					.setLastName(lastName)
-					.setRating(rating)
-					.setPoliticiansRating(politiciansRating)
-					.setRatingRepository(ratingRepo);
+			var builder = new PoliticiansBuilder(politicianNumber)
+				.setId(id)
+				.setFirstName(firstName)
+				.setLastName(lastName)
+				.setRating(rating)
+				.setPoliticiansRating(politiciansRating)
+				.setRatingRepository(ratingRepo);
+			if (firstName.isEmpty() || firstName == null) {
+				return builder;
+			}
+			return builder.setFullName();
 		}
 		
 		public PoliticiansBuilder setRatingRepository(RatingRepository ratingRepo) {
