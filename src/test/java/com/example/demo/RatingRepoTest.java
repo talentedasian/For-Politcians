@@ -7,7 +7,6 @@ import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -31,8 +30,8 @@ public class RatingRepoTest extends BaseClassTestsThatUsesDatabase {
 	@Autowired RatingRepository repo;
 	@Autowired PoliticiansRepository polRepo;
 	
-	private final String EMAIL = "test@gmail.com";
-	private final String NAME = "test";
+	final String EMAIL = "test@gmail.com";
+	final String NAME = "test";
 	final String ACCOUNT_NUMBER = "123polNumber";
 	
 	Politicians politician = new Politicians.PoliticiansBuilder(ACCOUNT_NUMBER)

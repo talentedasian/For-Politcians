@@ -21,9 +21,13 @@ import com.example.demo.jwt.JwtProvider;
 
 public class Oauth2ControllerTest extends BaseSpringHateoasTest{	
 	
+	final String SUBJECT = "test sub";
+	final String ID = "1111";
+	final String NAME = "test name";
+
 	@Test
 	public void shouldReturnHalForms() throws Exception {
-		String jwt = JwtProvider.createJwtWithFixedExpirationDate("test sub", "1111", "test name");
+		String jwt = JwtProvider.createJwtWithFixedExpirationDate(SUBJECT, ID, NAME);
 		Cookie cookie = new Cookie("accessJwt", jwt);
 		Cookie[] cookies = {cookie};
 		
