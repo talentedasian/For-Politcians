@@ -14,10 +14,21 @@ public abstract class AverageCalculator {
 	}
 
 	public AverageCalculator(double totalRating, double count) {
-		super();
+		org.springframework.util.Assert.state(isNumberPositive(totalRating), 
+				"total rating must not be negative");
+		
+		if (!isNumberPositive(count)) {
+			count = 0;
+		}
+		
 		this.totalRating = totalRating;
 		this.count = count;
 	}
 	
+	private boolean isNumberPositive(double number) {
+		return !String.valueOf(number).contains("-");
+	}
+	
 	public abstract double calculateAverage();
+	
 }

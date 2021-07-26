@@ -29,7 +29,7 @@ public class Oauth2ControllerTest extends BaseSpringHateoasTest{
 	public void shouldReturnHalForms() throws Exception {
 		String jwt = JwtProvider.createJwtWithFixedExpirationDate(SUBJECT, ID, NAME);
 		Cookie cookie = new Cookie("accessJwt", jwt);
-		Cookie[] cookies = {cookie};
+		Cookie[] cookies = {cookie};	
 		
 		mvc.perform(get(create("/login/oauth2/code/facebook"))
 				.accept(MediaTypes.HAL_FORMS_JSON)
