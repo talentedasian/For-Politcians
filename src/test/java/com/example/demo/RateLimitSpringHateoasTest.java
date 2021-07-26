@@ -21,25 +21,28 @@ import com.example.demo.model.userRaterNumber.facebook.FacebookUserRaterNumberIm
 
 public class RateLimitSpringHateoasTest extends BaseSpringHateoasTest {
 	
-	private String accountNumber = FacebookUserRaterNumberImplementor.with("test", "123").calculateEntityNumber().getAccountNumber();
+	final String NAME = "test";
+	final String ID = "123";
+	final String ACCOUNT_NUMBER = FacebookUserRaterNumberImplementor.with(NAME, ID).calculateEntityNumber().getAccountNumber();
+	final String POLITICIAN_NUMBER = "123polNumber";
 
-	final RateLimit rateLimit = RateLimit.withNotExpiredRateLimit(accountNumber, "123polNumber"); 
+	final RateLimit rateLimit = RateLimit.withNotExpiredRateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER); 
 	
-	final String jwt = createJwtWithFixedExpirationDate("test@gmailcom", "123", "test"); 
+	final String jwt = createJwtWithFixedExpirationDate("test@gmailcom", ID, NAME); 
 	
 	@Transactional
 	@Test
 	public void testHalFormsRateLimitStatus() throws Exception {
 		limitingService.rateLimitUserForTests(rateLimit.getId(), rateLimit.getPoliticianNumber());
 		
-		this.mvc.perform(get(create("/rate-limit/123polNumber"))
+		this.mvc.perform(get(create("/rate-limit/" + POLITICIAN_NUMBER))
 				.header("Authorization", "Bearer " + jwt)
 				.accept(HAL_FORMS_JSON))
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(HAL_FORMS_JSON))
 			.andExpect(jsonPath("days_left", equalTo("0")))
-			.andExpect(jsonPath("account_number", equalTo(accountNumber)))
-			.andExpect(jsonPath("politician_number", equalTo("123polNumber")))
+			.andExpect(jsonPath("account_number", equalTo(ACCOUNT_NUMBER)))
+			.andExpect(jsonPath("politician_number", equalTo(POLITICIAN_NUMBER)))
 			.andDo(document("rate-status", links(halLinks(),
 					linkWithRel("self").description("Rate limit status of user"),
 					linkWithRel("rating-account-number").description("All ratings by user's account number"))));

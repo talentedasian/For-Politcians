@@ -1,7 +1,6 @@
 package com.example.demo.unit;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -48,16 +47,15 @@ public class EmbeddableRatingsTest {
 		
 		politician.calculateTotalAmountOfRating(9.8822D);
 		
-		assertThat(politician.getRating().calculateAverage(), 
-				equalTo(9.9D));
+		assertEquals(politician.getRating().calculateAverage(), (9.9D));
 	}
 	
 	@Test
 	public void testLogicOfTotalAmount() {
 		when(repo.countByPolitician_Id(1)).thenReturn(0L);
 		
-		assertThat(politician.getRating().calculateTotalAmountOfRating(8.8876D, convertLongToDouble(repo.countByPolitician_Id(1))), 
-				equalTo(8.9D));
+		assertEquals(politician.getRating().calculateTotalAmountOfRating(8.8876D, convertLongToDouble(repo.countByPolitician_Id(1))), 
+				(8.9D));
 	}
 	
 	private Double convertLongToDouble(long longValue) {
