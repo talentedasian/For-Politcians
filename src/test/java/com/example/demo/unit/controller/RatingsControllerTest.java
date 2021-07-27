@@ -88,7 +88,7 @@ public class RatingsControllerTest {
 		when(service.findRatingsByFacebookEmail(EMAIL)).thenReturn(listOfPoliticiansRating);
 		when(assembler.toCollectionModel(any())).thenReturn(expected);
 		
-		CollectionModel<EntityModel<RatingDTO>> response = controller.getRatingByRaterEmail("test@gmail.com").getBody();
+		CollectionModel<EntityModel<RatingDTO>> response = controller.getRatingByRaterEmail(EMAIL).getBody();
 		
 		
 		assertEquals(expected, response);

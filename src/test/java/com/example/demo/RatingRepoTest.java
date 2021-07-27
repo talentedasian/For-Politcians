@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import static com.example.demo.model.enums.PoliticalParty.DDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -16,6 +15,7 @@ import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.UserRater;
+import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;
 import com.example.demo.service.RateLimitingService;
@@ -43,16 +43,16 @@ public class RatingRepoTest extends BaseClassTestsThatUsesDatabase {
 	@Test
 	public void shouldReturnBooleanByAccountNumber() {
 		polRepo.save(politician);
-		var userRater = new UserRater(NAME, DDS, EMAIL, ACCOUNT_NUMBER, mock(RateLimitingService.class));
+		var userRater = new UserRater(NAME, PoliticalParty.DDS, EMAIL, ACCOUNT_NUMBER, mock(RateLimitingService.class));
 		repo.save(new PoliticiansRating(1, 1.00D, userRater, politician));
 		
 		assertTrue(repo.existsByRater_UserAccountNumber(ACCOUNT_NUMBER));
 	}
 	
 	@Test
-	public void shouldReturnEmptyListWhenAfterDeletion() {
+	public void shouldReturnEmptyListAfterDeletion() {
 		polRepo.save(politician);
-		var userRater = new UserRater(NAME, DDS, EMAIL, ACCOUNT_NUMBER, mock(RateLimitingService.class));
+		var userRater = new UserRater(NAME, PoliticalParty.DDS, EMAIL, ACCOUNT_NUMBER, mock(RateLimitingService.class));
 		
 		repo.save(new PoliticiansRating(1, 1.00D, userRater, politician));
 		repo.save(new PoliticiansRating(2, 1.21D, userRater, politician));

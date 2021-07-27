@@ -32,7 +32,7 @@ public class RateLimitSpringHateoasTest extends BaseSpringHateoasTest {
 	
 	@Transactional
 	@Test
-	public void testHalFormsRateLimitStatus() throws Exception {
+	public void testHalFormsRateLimitStatusResponse() throws Exception {
 		limitingService.rateLimitUserForTests(rateLimit.getId(), rateLimit.getPoliticianNumber());
 		
 		this.mvc.perform(get(create("/rate-limit/" + POLITICIAN_NUMBER))

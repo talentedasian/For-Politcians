@@ -19,7 +19,7 @@ public class PoliticiansTest {
 			.build();
 	
 	@Test
-	public void assertCustomEqualsMethod() {
+	public void shouldReturnTrueWithSamePoliticianNumber() {
 		var pol = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER).build();
 		
 		var polWrongNumber = new Politicians.PoliticiansBuilder("999polNumber").build();

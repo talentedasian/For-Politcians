@@ -30,7 +30,7 @@ public class JwtProviderTest {
 				.setHeaderParam("login_mechanism", "facebook")
 				.compact();
 		
-		String expected =JwtProvider.createJwtWithDynamicExpirationDate("test@gmail.com", "test", dateNow);
+		String expected =JwtProvider.createJwtWithDynamicExpirationDate(SUBJECT, ID, dateNow);
 		
 		assertEquals(expected, actualJwts);
 	}
@@ -38,14 +38,14 @@ public class JwtProviderTest {
 	@Test
 	public void assertEqualsDecodedJwt() {
 		Date dateNow = new Date(System.currentTimeMillis() + 3600000L);
-		String encodedJwts = JwtProvider.createJwtWithDynamicExpirationDate("test@gmail.com", "test", dateNow);
+		String encodedJwts = JwtProvider.createJwtWithDynamicExpirationDate(SUBJECT, ID, dateNow);
 		
 		Jws<Claims> decodedJwts = JwtProvider.decodeJwt(encodedJwts);
 		
 		Claims actualJwts = decodedJwts.getBody();
 		
-		assertEquals("test@gmail.com", actualJwts.getSubject());
-		assertEquals("test", actualJwts.getId());
+		assertEquals(SUBJECT, actualJwts.getSubject());
+		assertEquals(ID, actualJwts.getId());
 		assertEquals(dateNow.toString(), actualJwts.getExpiration().toString());
 		assertEquals(true, actualJwts.getExpiration().before(dateNow));
 	}

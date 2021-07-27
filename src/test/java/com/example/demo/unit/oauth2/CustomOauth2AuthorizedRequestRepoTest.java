@@ -1,46 +1,55 @@
 package com.example.demo.unit.oauth2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.net.URISyntaxException;
 import java.time.Instant;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AccessToken.TokenType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.dto.FacebookUserInfo;
+import com.example.demo.jwt.JwtProvider;
 import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
 import com.example.demo.oauth2.FacebookOauth2UserInfoUtility;
 
 @ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { ClientRegistration.class })
 public class CustomOauth2AuthorizedRequestRepoTest {
 	
 	@MockBean ClientRegistrationRepository oauth2Client;
 	@MockBean FacebookOauth2UserInfoUtility facebookClient;
 	
-	@Mock OAuth2AuthorizedClient authorizedClient;
-	@Mock Authentication principal;
-	@Mock HttpServletRequest req;
-	@Mock HttpServletResponse res;
-	
-	final FacebookUserInfo userInfo = new FacebookUserInfo("123", "test@gmail.com", "test");
-	
+	@Autowired ClientRegistration reg;
 	final OAuth2AccessToken accessToken = new OAuth2AccessToken(TokenType.BEARER, "123accessToken", Instant.now(), Instant.now().plusSeconds(32321L));
+	
+	final String EMAIL = "test@gmail.com";
+	final String SUBJECT = EMAIL;
+	final String ID = "123";
+	final String NAME = "test";
+	
+	Authentication principal = null;
+	MockHttpServletRequest req = new MockHttpServletRequest();
+	MockHttpServletResponse res = new MockHttpServletResponse();
+	
+	final FacebookUserInfo userInfo = new FacebookUserInfo(ID, EMAIL, NAME);
+	
 	
 	CustomOauth2AuthorizedClientsRepository customRepo; 
 	
@@ -50,15 +59,15 @@ public class CustomOauth2AuthorizedRequestRepoTest {
 	}
 	
 	@Test
-	public void testLogicOfSavingAuthorizedClients() throws URISyntaxException {
+	public void shouldReturnJwtAsCookieWhenSuccessfulOauthProcess() throws URISyntaxException {
+		String jwt = JwtProvider.createJwtWithFixedExpirationDate(SUBJECT, ID, NAME);
+		
 		when(facebookClient.fetchUserInfo(any())).thenReturn(userInfo);
-		when(authorizedClient.getAccessToken()).thenReturn(accessToken);
+		OAuth2AuthorizedClient authorizedClient = new OAuth2AuthorizedClient(reg, "anonymous", accessToken);
 		
 		customRepo.saveAuthorizedClient(authorizedClient, principal, req, res);
 		
-		
-		verify(facebookClient, times(1)).fetchUserInfo(any());
-		verify(res, times(5)).addCookie(any());
+		assertEquals(jwt, res.getCookie("accessJwt").getValue());
 	}
 
 }
