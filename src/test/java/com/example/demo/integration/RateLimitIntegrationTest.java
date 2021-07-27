@@ -53,7 +53,7 @@ public class RateLimitIntegrationTest extends BaseClassTestsThatUsesDatabase {
 	}
 	
 	@Test
-	public void assertLogicOfRateLimitSupposedToThrow() throws UserRateLimitedOnPoliticianException {
+	public void shouldThrowRateLimitedExceptionWhenUserIsRateLimited() throws UserRateLimitedOnPoliticianException {
 		rateLimitRepo.save(rateLimitToBeSaved);
 		
 		var requestContent = new AddRatingDTORequest(valueOf(1L), "1number", "dds");
@@ -62,18 +62,12 @@ public class RateLimitIntegrationTest extends BaseClassTestsThatUsesDatabase {
 		
 		assertThrows(UserRateLimitedOnPoliticianException.class, 
 				() -> ratingService.saveRatings(requestContent, req));
-	}	
-	
-	@Test
-	public void assertLogicOfRateLimitShouldSuccessful() {
-		rateLimitRepo.save(rateLimitToBeSaved);
 		
-		var requestContent = new AddRatingDTORequest(valueOf(1L), "1number", "dds");
-		HttpServletRequest req = mock(HttpServletRequest.class);
-		when(req.getHeader("Authorization")).thenReturn("Bearer " + createJwtWithFixedExpirationDate("test@gmail.com", "1", "test name"));
-		
-		assertThrows(UserRateLimitedOnPoliticianException.class, 
-				() -> ratingService.saveRatings(requestContent, req));
+		/*
+		 * We are dealing with a real database here. Delete the entities
+		 * before the test finishes. 
+		 */
+		rateLimitRepo.delete(rateLimitToBeSaved);
 	}
 
 }

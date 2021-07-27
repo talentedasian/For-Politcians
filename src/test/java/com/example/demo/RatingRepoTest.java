@@ -41,7 +41,7 @@ public class RatingRepoTest extends BaseClassTestsThatUsesDatabase {
 			.build();
 	
 	@Test
-	public void shouldReturnBooleanByAccountNumber() {
+	public void testCustomExistByQueryWithAccountNumber() {
 		polRepo.save(politician);
 		var userRater = new UserRater(NAME, PoliticalParty.DDS, EMAIL, ACCOUNT_NUMBER, mock(RateLimitingService.class));
 		repo.save(new PoliticiansRating(1, 1.00D, userRater, politician));
@@ -50,7 +50,7 @@ public class RatingRepoTest extends BaseClassTestsThatUsesDatabase {
 	}
 	
 	@Test
-	public void shouldReturnEmptyListAfterDeletion() {
+	public void testCustomDeleteByQueryWithAccountNumber() {
 		polRepo.save(politician);
 		var userRater = new UserRater(NAME, PoliticalParty.DDS, EMAIL, ACCOUNT_NUMBER, mock(RateLimitingService.class));
 		

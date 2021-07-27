@@ -26,7 +26,7 @@ public class Oauth2ControllerTest extends BaseSpringHateoasTest{
 	final String NAME = "test name";
 
 	@Test
-	public void shouldReturnHalForms() throws Exception {
+	public void testHalFormsOauth2Response() throws Exception {
 		String jwt = JwtProvider.createJwtWithFixedExpirationDate(SUBJECT, ID, NAME);
 		Cookie cookie = new Cookie("accessJwt", jwt);
 		Cookie[] cookies = {cookie};	

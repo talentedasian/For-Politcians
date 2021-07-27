@@ -37,7 +37,7 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 	
 	@Transactional
 	@Test
-	public void testHalFormsSaveRating() throws Exception {
+	public void testHalFormsSaveRatingResponse() throws Exception {
 		repo.save(politician);
 		String id = ratingRepo.save(politiciansRating).getId().toString();
 		

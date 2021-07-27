@@ -14,7 +14,7 @@ import com.example.demo.model.enums.PoliticalParty;
 public class PoliticalPartyEnumTest {
 
 	@Test
-	public void shouldMapToPoliticalParty() {
+	public void shouldMapToPoliticalPartyWhenPartyIsSpecifiedEnums() {
 		PoliticalParty politicalParty = PoliticalParty.mapToPoliticalParty("dds");
 		
 		assertThat(politicalParty,
@@ -23,7 +23,7 @@ public class PoliticalPartyEnumTest {
 	
 	@ParameterizedTest
 	@ValueSource(strings = { "dsaqd", "random", "no sense" })
-	public void shouldMapToGreyZonePoliticalParty(String party) {
+	public void shouldMapToGreyZonePoliticalPartyWhenPartyIsNotOnSpecifiedEnums(String party) {
 		PoliticalParty politicalParty = PoliticalParty.mapToPoliticalParty(party);
 		
 		assertThat(politicalParty,

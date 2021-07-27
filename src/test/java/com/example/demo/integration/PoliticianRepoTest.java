@@ -52,7 +52,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	
 	@Test
 	@Order(2)
-	public void shouldThrowDataIntegrityException() {
+	public void shouldThrowDataIntegrityExceptionWhenPoliticianNumberIsTheSame() {
 		Politicians politicianToBeSaved = politicianBuilder.build();
 		
 		assertThrows(DataIntegrityViolationException.class,
