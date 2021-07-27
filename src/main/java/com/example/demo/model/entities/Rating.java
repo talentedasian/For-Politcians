@@ -60,42 +60,6 @@ public class Rating {
 		this.calculator = calculator;
 	}
 	
-	@Override
-	public String toString() {
-		return "Rating [totalRating=" + totalRating + ", averageRating=" + averageRating + "]";
-	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((averageRating == null) ? 0 : averageRating.hashCode());
-		result = prime * result + ((totalRating == null) ? 0 : totalRating.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Rating other = (Rating) obj;
-		if (averageRating == null) {
-			if (other.averageRating != null)
-				return false;
-		} else if (!averageRating.equals(other.averageRating))
-			return false;
-		if (totalRating == null) {
-			if (other.totalRating != null)
-				return false;
-		} else if (!totalRating.equals(other.totalRating))
-			return false;
-		return true;
-	}
-
 	public double calculateAverage() {
 		double rating = calculator.calculateAverage();
 		this.averageRating = rating;
