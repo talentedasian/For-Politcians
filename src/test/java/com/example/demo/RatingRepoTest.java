@@ -9,9 +9,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
@@ -23,8 +20,9 @@ import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;
 import com.example.demo.service.RateLimitingService;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
+import testAnnotations.DatabaseTest;
+
+@DatabaseTest
 public class RatingRepoTest extends BaseClassTestsThatUsesDatabase {
 	
 	@Autowired RatingRepository repo;

@@ -11,9 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Commit;
 
@@ -24,8 +21,9 @@ import com.example.demo.model.entities.Politicians.PoliticiansBuilder;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.repository.PoliticiansRepository;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
+import testAnnotations.DatabaseTest;
+
+@DatabaseTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 
