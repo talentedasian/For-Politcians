@@ -37,21 +37,21 @@ public class RateLimitController {
 	@GetMapping("/{politicianNumber}")
 	public ResponseEntity<RateLimitDTO> findRateLimitOnCurrentUser(@PathVariable String politicianNumber,
 			HttpServletRequest req) {	
-			Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
-			
-			AbstractUserRaterNumber accountNumberCalculator = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
-			String accountNumber = accountNumberCalculator.calculateEntityNumber().getAccountNumber();
-			
-			RateLimit rateLimitQueried = service.findRateLimitInPolitician(accountNumber, politicianNumber)
-					.orElseThrow(() -> new RateLimitNotFoundException("User is not rate limited"));
-			
-			RateLimitDTO rateLimit = new RateLimitDtoMapper().mapToDTO(rateLimitQueried);
-			var selfLink = linkTo(methodOn(RateLimitController.class)
-					.findRateLimitOnCurrentUser(rateLimit.getPoliticianNumber(), req))
-					.withRel("self");
-			
-			rateLimit.add(selfLink);
-			
-			return new ResponseEntity<RateLimitDTO>(rateLimit, HttpStatus.OK);
+		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
+		
+		AbstractUserRaterNumber accountNumberCalculator = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
+		String accountNumber = accountNumberCalculator.calculateEntityNumber().getAccountNumber();
+		
+		RateLimit rateLimitQueried = service.findRateLimitInPolitician(accountNumber, politicianNumber)
+				.orElseThrow(() -> new RateLimitNotFoundException("User is not rate limited"));
+		
+		RateLimitDTO rateLimit = new RateLimitDtoMapper().mapToDTO(rateLimitQueried);
+		var selfLink = linkTo(methodOn(RateLimitController.class)
+				.findRateLimitOnCurrentUser(rateLimit.getPoliticianNumber(), req))
+				.withRel("self");
+		
+		rateLimit.add(selfLink);
+		
+		return new ResponseEntity<RateLimitDTO>(rateLimit, HttpStatus.OK);
 	}
 }
