@@ -23,27 +23,17 @@ public class RateLimitTest {
 	}
 	
 	@Test
-	public void shouldBeNullDaysLeft() {
+	public void shouldBeNullDaysLeftWhenNotRateLimited() {
 		var rate = RateLimit.withNotExpiredRateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER);
 		
 		assertNull(rate.daysLeftOfBeingRateLimited());
 	}
 	
 	@Test
-	public void shouldNotBeRateLimitedNullDate() {
+	public void shouldNotBeRateLimitedWhenNullDate() {
 		var rate = new RateLimit();
 		rate.setId("1");
 		rate.setPoliticianNumber("2");
-		
-		assertTrue(rate.isNotRateLimited());
-	}
-	
-	@Test
-	public void shouldNotBeRateLimitedAfter7Days() {
-		var rate = new RateLimit();
-		rate.setId("1");
-		rate.setPoliticianNumber("2");
-		rate.setDateCreated(LocalDate.now().minusDays(8L));
 		
 		assertTrue(rate.isNotRateLimited());
 	}
