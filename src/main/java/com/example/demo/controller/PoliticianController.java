@@ -60,7 +60,7 @@ public class PoliticianController {
 			@RequestParam String firstName) {
 		List<Politicians> politicianByName = politiciansService.findPoliticianByName(lastName, firstName);
 		
-		List<PoliticianDTO> politician = mapper.mapToDTO(politicianByName);
+		List<? extends PoliticianDTO> politician = mapper.mapToDTO(politicianByName);
 		
 		CollectionModel<EntityModel<PoliticianDTO>> response = assembler.toCollectionModel(politician);
 		
@@ -83,7 +83,7 @@ public class PoliticianController {
 	public ResponseEntity<CollectionModel<EntityModel<PoliticianDTO>>> allPoliticians() {
 		List<Politicians> allPoliticians = politiciansService.allPoliticians();
 		
-		List<PoliticianDTO> politician = mapper.mapToDTO(allPoliticians);
+		List<? extends PoliticianDTO> politician = mapper.mapToDTO(allPoliticians);
 		
 		CollectionModel<EntityModel<PoliticianDTO>> response = assembler.toCollectionModel(politician);
 		

@@ -1,6 +1,7 @@
 package com.example.demo.dtomapper;
 
-import java.util.ArrayList;
+import static java.util.stream.Collectors.toList;
+
 import java.util.List;
 
 import com.example.demo.dto.PoliticianDTO;
@@ -16,13 +17,10 @@ public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 	}
 	
 	@Override
-	public List<PoliticianDTO> mapToDTO(List<Politicians> entity) {
-		List<PoliticianDTO> politicianDTOList = new ArrayList<>();
-		entity.stream().forEach(politicians -> {
-			politicianDTOList.add(mapToPoliticianDTO(politicians));
-		});
-		
-		return politicianDTOList;
+	public List<? extends PoliticianDTO> mapToDTO(List<Politicians> entity) {
+		return entity.stream()
+			.map(politicians -> mapToPoliticianDTO(politicians))
+			.collect(toList());
 	}
 	
 	private PoliticianDTO mapToPoliticianDTO(Politicians entity) {

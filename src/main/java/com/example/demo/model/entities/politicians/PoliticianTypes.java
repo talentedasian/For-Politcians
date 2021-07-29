@@ -1,14 +1,18 @@
 package com.example.demo.model.entities.politicians;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.model.entities.Politicians;
 
+import io.jsonwebtoken.lang.Assert;
+
 public class PoliticianTypes {
 	
 	@Entity
+	@DiscriminatorValue("Presidential")
 	public static class PresidentialPolitician extends Politicians{
 		
 		@Column(nullable = true, name = "law_signed")
@@ -58,6 +62,8 @@ public class PoliticianTypes {
 			private Politicians politician;
 			
 			private String mostSignificantLawSigned;
+			
+			private PoliticiansBuilder politicianBuilder;
 
 			public PresidentialBuilder(Politicians politician) {
 				this.politician = politician;
@@ -72,44 +78,72 @@ public class PoliticianTypes {
 				return this;
 			}
 			
+			public PresidentialBuilder setBuilder(PoliticiansBuilder builder) {
+				this.politicianBuilder = builder;
+				return this;
+			}
+
+			/*
+			 * Builder should be null to avoid bugs that would occur
+			 * because of builders that aren't null and would still use 
+			 * the build() method not knowing that certain fields for the 
+			 * superclass politician has changed. 
+			 */
 			public PresidentialPolitician build() {
+				org.springframework.util.Assert.isNull(politicianBuilder, 
+						"builder is not null, use the buildWithDifferentBuilderMethod()");
 				return new PresidentialPolitician(politician, mostSignificantLawSigned);
+			}
+			
+			/*
+			 * Caution must be taken when using this method to build politicians.
+			 * This must only be used when a builder is set using the setBuilder() method.
+			 */
+			public PresidentialPolitician buildWithDifferentBuilder() {
+				Assert.notNull(politicianBuilder, 
+						"builder cannot be null when building with a different builder");
+				return new PresidentialPolitician(politicianBuilder.build(), mostSignificantLawSigned);
 			}
 			
 		}
 	}
 	
 	@Entity
+	@DiscriminatorValue("Senatorial")
 	public static class SenatorialPolitician extends Politicians{
 		
-		@Column(nullable = false, name = "years_of_service")
-		private int totalYearsOfServiceAsSenator;
+		/*
+		 * This column must not be null when constructing Senatorial politicians.
+		 * This is only nullable in the database for JPA inheritance.
+		 */
+		@Column(nullable = true, name = "months_of_service")
+		private int totalMonthsOfServiceAsSenator;
 		
 		@Column(nullable = true, name = "law_made")
 		private String mostSignificantLawMade;
 
-		public int getTotalYearsOfServiceAsSenator() {
-			return totalYearsOfServiceAsSenator;
+		public int gettotalMonthsOfServiceAsSenator() {
+			return totalMonthsOfServiceAsSenator;
 		}
 
 		public String getMostSignificantLawMade() {
 			return mostSignificantLawMade;
 		}
 
-		protected SenatorialPolitician(Politicians politician, int yearsOfService, String lawMade) {
+		protected SenatorialPolitician(Politicians politician, int monthsOfService, String lawMade) {
 			super(politician.getRepo(), politician.getId(),
 					politician.getFirstName(), politician.getLastName(), 
 					politician.getFullName(), politician.getPoliticiansRating(),
 					politician.getRating(), politician.getPoliticianNumber(),
 					Type.SENATORIAL);
-			this.totalYearsOfServiceAsSenator = yearsOfService;
+			this.totalMonthsOfServiceAsSenator = monthsOfService;
 			this.mostSignificantLawMade = lawMade;			 
 		}
-		
+
 		@Override
 		@ExcludeFromJacocoGeneratedCoverage
 		public String toString() {
-			return "SenatorialPolitician [totalYearsOfServiceAsSenator=" + totalYearsOfServiceAsSenator
+			return "SenatorialPolitician [totalMonthsOfServiceAsSenator=" + totalMonthsOfServiceAsSenator
 					+ ", mostSignificantLawMade=" + mostSignificantLawMade + "]";
 		}
 
@@ -145,9 +179,11 @@ public class PoliticianTypes {
 			
 			private Politicians politician;
 			
-			private int totalYearsOfServiceAsSenator;
+			private Integer totalMonthsOfServiceAsSenator;
 			
 			private String mostSignificantLawMade;
+			
+			private PoliticiansBuilder builder;
 			
 			public SenatorialBuilder(Politicians politician) {
 				this.politician = politician;
@@ -157,18 +193,55 @@ public class PoliticianTypes {
 				this.politician = politicianBuilder.build();
 			}
 			
-			public SenatorialBuilder setTotalYearsOfService(int yearsOfService) {
-				this.totalYearsOfServiceAsSenator = yearsOfService;
+			public SenatorialBuilder setTotalMonthsOfService(int yearsOfService) {
+				this.totalMonthsOfServiceAsSenator = yearsOfService;
 				return this;
 			}
 			
-			public SenatorialBuilder setTotalYearsOfService(String lawMade) {
+			public SenatorialBuilder setMostSignificantLawMade(String lawMade) {
 				this.mostSignificantLawMade = lawMade;
 				return this;
 			}
 			
+			public SenatorialBuilder setBuilder(PoliticiansBuilder builder) {
+				this.builder = builder;
+				return this;
+			}
+			
+			/*
+			 * Builder should be null to avoid bugs that would occur
+			 * because of builders that aren't null and would still use 
+			 * the build() method not knowing that certain fields for the 
+			 * superclass politician has changed. 
+			 */
 			public SenatorialPolitician build() {
-				return new SenatorialPolitician(politician, totalYearsOfServiceAsSenator, mostSignificantLawMade);
+				Assert.isNull(builder, 
+						"builder is not null, use the buildWithDifferentBuilderMethod()");
+				org.springframework.util.Assert.notNull(totalMonthsOfServiceAsSenator,
+						"""
+						years of service must not be null. if politician has no experience, the appropriate number
+						of experience is 0
+						 """);
+				org.springframework.util.Assert.state(!isPositive(totalMonthsOfServiceAsSenator),
+						"months of experience must not be negative");
+				return new SenatorialPolitician(politician, totalMonthsOfServiceAsSenator, mostSignificantLawMade);
+			}
+			
+			public SenatorialPolitician buildWithDifferentBuilder() {
+				org.springframework.util.Assert.notNull(totalMonthsOfServiceAsSenator,
+						"""
+						years of service must not be null. if politician has no experience, the appropriate number
+						of experience is 0
+						 """);
+				org.springframework.util.Assert.state(!isPositive(totalMonthsOfServiceAsSenator),
+						"months of experience must not be negative");
+				org.springframework.util.Assert.notNull(builder,
+						"builder cannot be null when using this method");
+				return new SenatorialPolitician(builder.build(), totalMonthsOfServiceAsSenator, mostSignificantLawMade);
+			}
+			
+			private boolean isPositive(int yearsOfService) {
+				return String.valueOf(yearsOfService).contains("-");
 			}
 			
 		}

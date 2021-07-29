@@ -85,6 +85,11 @@ public class Rating {
 		return rating;
 	}
 	
+	@Override
+	public String toString() {
+		return "Rating [totalRating=" + totalRating + ", averageRating=" + averageRating + "]";
+	}
+
 	public AverageCalculator returnAverageCalculator(Double count) {
 		if (averageRating < 5D) {
 			return new LowSatisfactionAverageCalculator(totalRating, count);

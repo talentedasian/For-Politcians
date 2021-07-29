@@ -17,12 +17,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.controller.PoliticianController;
 import com.example.demo.dto.PoliticianDTO;
+import com.example.demo.dto.PresidentialPoliticianDTO;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
+import com.example.demo.dtomapper.PresidentialDtoMapper;
 import com.example.demo.hateoas.PoliticianAssembler;
 import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.Rating;
+import com.example.demo.model.entities.politicians.PoliticianTypes;
 import com.example.demo.service.PoliticiansService;
 
 @ExtendWith(SpringExtension.class)
@@ -65,13 +68,15 @@ public class PoliticianControllerTest {
 	
 	@Test
 	public void shouldEqualDTOOutputsWhenSaved() {
-		PoliticianDTO polDTO = new PoliticiansDtoMapper().mapToDTO(politician);
+		var gg = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politician)
+				.setMostSignificantLawPassed("Rice Law")
+				.build();
+		PresidentialPoliticianDTO polDTO = new PresidentialDtoMapper().mapToDTO(gg);
 		
 		when(service.savePolitician(politicianDTORequest)).thenReturn(politician);
 		when(assembler.toModel(any())).thenReturn(EntityModel.of(polDTO));
 		
 		PoliticianDTO politicianResponse = controller.savePolitician(politicianDTORequest).getBody().getContent();
-		
 		assertEquals(polDTO, politicianResponse);
 	}		
 	

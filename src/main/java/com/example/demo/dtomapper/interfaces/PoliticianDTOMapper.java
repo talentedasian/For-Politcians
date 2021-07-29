@@ -7,5 +7,5 @@ import com.example.demo.model.entities.Politicians;
 
 public interface PoliticianDTOMapper extends DTOMapper<PoliticianDTO,Politicians>{
  
-	 List<PoliticianDTO> mapToDTO(List<Politicians> entity);
+	 List<? extends PoliticianDTO> mapToDTO(List<Politicians> entity);
 }
