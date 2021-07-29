@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.model.enums.Rating;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -29,7 +30,6 @@ public class PoliticianDTO {
 	}
 
 	public PoliticianDTO(String name, String id, Double rating, Rating satisfactionRate) {
-		super();
 		this.name = name;
 		this.id = id;
 		this.rating = rating;
@@ -37,6 +37,7 @@ public class PoliticianDTO {
 	}
 
 	@Override
+	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
 		return "PoliticianDTO [name=" + name + ", id=" + id + ", rating=" + rating + "]";
 	}

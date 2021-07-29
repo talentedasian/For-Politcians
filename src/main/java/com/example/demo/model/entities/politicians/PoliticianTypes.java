@@ -3,6 +3,7 @@ package com.example.demo.model.entities.politicians;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.model.entities.Politicians;
 
 public class PoliticianTypes {
@@ -105,6 +106,13 @@ public class PoliticianTypes {
 			this.mostSignificantLawMade = lawMade;			 
 		}
 		
+		@Override
+		@ExcludeFromJacocoGeneratedCoverage
+		public String toString() {
+			return "SenatorialPolitician [totalYearsOfServiceAsSenator=" + totalYearsOfServiceAsSenator
+					+ ", mostSignificantLawMade=" + mostSignificantLawMade + "]";
+		}
+
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj)
