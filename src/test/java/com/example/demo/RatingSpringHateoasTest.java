@@ -21,6 +21,7 @@ import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.UserRater;
+import com.example.demo.model.entities.politicians.PoliticianTypes;
 import com.example.demo.model.enums.PoliticalParty;
 
 public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
@@ -33,12 +34,13 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 			.setFullName()
 			.setRating(new Rating(1.00D, 1.00D, new LowSatisfactionAverageCalculator(1.00D, 1D)))
 			.build();
-	PoliticiansRating politiciansRating = new PoliticiansRating(1, 1.00D, rater, politician);
+	Politicians savePol = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politician).build();
+	PoliticiansRating politiciansRating = new PoliticiansRating(1, 1.00D, rater, savePol);
 	
 	@Transactional
 	@Test
 	public void testHalFormsSaveRatingResponse() throws Exception {
-		repo.save(politician);
+		repo.save(savePol);
 		String id = ratingRepo.save(politiciansRating).getId().toString();
 		
 		this.mvc.perform(get(create("/api/ratings/ratings/123accNumber")))
