@@ -4,10 +4,14 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -20,6 +24,7 @@ import com.example.demo.repository.RatingRepository;
 
 @Entity
 @Table(indexes = @Index(columnList = "politicianNumber") )
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Politicians implements PoliticianMethods{
 
 	@Transient @Autowired private transient RatingRepository repo;
@@ -45,6 +50,10 @@ public class Politicians implements PoliticianMethods{
 	
 	@Column(nullable = false, unique = true)
 	private String politicianNumber;
+	
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Politicians.Type type;
 
 	public String getPoliticianNumber() {
 		return politicianNumber;
@@ -110,11 +119,19 @@ public class Politicians implements PoliticianMethods{
 		this.rating = rating;
 	}
 	
+	public Politicians.Type getType() {
+		return type;
+	}
+
+	public void setType(Politicians.Type type) {
+		this.type = type;
+	}
+
 	protected Politicians() {
 	}
 
-	public Politicians(RatingRepository repo, Integer id, String firstName, String lastName, String fullName,
-			List<PoliticiansRating> politiciansRating, Rating rating, String politicianNumber) {
+	protected Politicians(RatingRepository repo, Integer id, String firstName, String lastName, String fullName,
+			List<PoliticiansRating> politiciansRating, Rating rating, String politicianNumber, Type polType) {
 		super();
 		this.repo = repo;
 		this.id = id;
@@ -124,6 +141,7 @@ public class Politicians implements PoliticianMethods{
 		this.politiciansRating = politiciansRating;
 		this.rating = rating;
 		this.politicianNumber = politicianNumber;
+		this.type = polType;
 	}
 
 	@Override
@@ -139,25 +157,6 @@ public class Politicians implements PoliticianMethods{
 		int result = 1;
 		result = prime * result + ((politicianNumber == null) ? 0 : politicianNumber.hashCode());
 		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Politicians other = (Politicians) obj;
-		if (other.politicianNumber == null) {
-			return false;
-		} else {
-			if (!other.politicianNumber.equals(politicianNumber)) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	@Override
@@ -213,6 +212,10 @@ public class Politicians implements PoliticianMethods{
 		return fullName;
 	}
 	
+	public static enum Type {
+		PRESIDENTIAL, SENATORIAL, MAYOR
+	}
+	
 	public static class PoliticiansBuilder {
 		private RatingRepository ratingRepo;
 		
@@ -231,7 +234,6 @@ public class Politicians implements PoliticianMethods{
 		private String politicianNumber;
 
 		public PoliticiansBuilder(String politicianNumber) {
-			super();
 			this.politicianNumber = politicianNumber;
 		}
 
@@ -298,7 +300,7 @@ public class Politicians implements PoliticianMethods{
 		}
 		
 		public Politicians build() {
-			return new Politicians(ratingRepo, id, firstName, lastName, fullName, politiciansRating, rating, politicianNumber);
+			return new Politicians(ratingRepo, id, firstName, lastName, fullName, politiciansRating, rating, politicianNumber, null);
 		}
 		
 	}

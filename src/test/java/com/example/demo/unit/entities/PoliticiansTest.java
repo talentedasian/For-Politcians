@@ -8,45 +8,45 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.Politicians.PoliticiansBuilder;
 
 public class PoliticiansTest {
 
 	final String POLITICIAN_NUMBER = "123polNumber";
 	
-	Politicians politician = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
+	PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
 			.setFirstName("Test")
-			.setLastName("Name")
-			.build();
+			.setLastName("Name");
 	
 	@Test
 	public void shouldReturnTrueWithSamePoliticianNumber() {
-		var pol = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER).build();
+		var actualPolitician = politicianBuilder.build();
 		
-		var polWrongNumber = new Politicians.PoliticiansBuilder("999polNumber").build();
+		var samePoliticianNumber = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER).build();
 		
-		assertTrue(politician.equals(pol));
-		assertFalse(politician.equals(polWrongNumber));
+		var polWrongNumber = politicianBuilder.setPoliticianNumber("999polNumber").build();
+		
+		assertTrue(actualPolitician.equals(samePoliticianNumber));
+		assertFalse(actualPolitician.equals(polWrongNumber));
 	}
 	
 	@Test
 	public void testNullLastNameInBuilder() {
-		var pol = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
+		var politicianWithNoLastName = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
 				.setFirstName("Test")
 				.setFullName()
 				.build();
 		
-		assertEquals("Test", pol.getFullName());
+		assertEquals("Test", politicianWithNoLastName.getFullName());
 	}
 	
 	@Test
 	public void testFullNameInBuilder() {
-		var pol = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
-				.setFirstName("Test")
-				.setLastName("Name")
+		var politicianWithFirstAndLastName = politicianBuilder
 				.setFullName()
 				.build();
 		
-		assertEquals("Test Name", pol.getFullName());
+		assertEquals("Test Name", politicianWithFirstAndLastName.getFullName());
 	}
 	
 	@Test
