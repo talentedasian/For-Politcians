@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.Politicians.PoliticiansBuilder;
 import com.example.demo.model.entities.politicians.PoliticianTypes;
+import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 
 public class PresidentialPoliticianTest {
 
@@ -17,13 +18,13 @@ public class PresidentialPoliticianTest {
 			.setFirstName("Test")
 			.setLastName("Name");
 	
+	PresidentialBuilder presidentialBuilder = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder);
+	
 	@Test
 	public void shouldReturnTrueWithSamePoliticianNumber() {
-		var actualPolitician = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder)
-				.build();
+		var actualPolitician = presidentialBuilder.build();
 		
-		var samePoliticianNumber = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder)
-				.build();
+		var samePoliticianNumber = presidentialBuilder.build();
 		
 		var polWrongNumber = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder.setPoliticianNumber("123differentNumber"))
 				.build();
@@ -34,13 +35,10 @@ public class PresidentialPoliticianTest {
 	
 	@Test
 	public void shouldReturnFalseWithDifferentPoliticianType() {
-		var presidentialType = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder)
+		var differentPoliticianType = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politicianBuilder)
 				.build();
 		
-		var differentPoliticianType = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politicianBuilder.setPoliticianNumber("1"))
-				.build();
-		
-		assertFalse(presidentialType.equals(differentPoliticianType));
+		assertFalse(presidentialBuilder.build().equals(differentPoliticianType));
 	}
 	
 }

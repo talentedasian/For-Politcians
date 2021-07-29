@@ -1,14 +1,13 @@
 package com.example.demo.unit.entities;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.Politicians.PoliticiansBuilder;
+import com.example.demo.model.entities.politicians.PoliticianTypes;
 
 public class PoliticiansTest {
 
@@ -17,18 +16,6 @@ public class PoliticiansTest {
 	PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
 			.setFirstName("Test")
 			.setLastName("Name");
-	
-	@Test
-	public void shouldReturnTrueWithSamePoliticianNumber() {
-		var actualPolitician = politicianBuilder.build();
-		
-		var samePoliticianNumber = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER).build();
-		
-		var polWrongNumber = politicianBuilder.setPoliticianNumber("999polNumber").build();
-		
-		assertTrue(actualPolitician.equals(samePoliticianNumber));
-		assertFalse(actualPolitician.equals(polWrongNumber));
-	}
 	
 	@Test
 	public void testNullLastNameInBuilder() {
@@ -54,6 +41,12 @@ public class PoliticiansTest {
 		assertThrows(IllegalArgumentException.class, 
 				() -> new Politicians.PoliticiansBuilder("123polNumber")
 				.setFullName());
+	}
+	
+	@Test
+	public void testHashCode() {
+		assertEquals(politicianBuilder.build().hashCode(), 
+				new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder).build().hashCode());
 	}
 	
 }
