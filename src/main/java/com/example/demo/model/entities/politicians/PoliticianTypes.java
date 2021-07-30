@@ -122,7 +122,7 @@ public class PoliticianTypes {
 		@Column(nullable = true, name = "law_made")
 		private String mostSignificantLawMade;
 
-		public int gettotalMonthsOfServiceAsSenator() {
+		public int getTotalMonthsOfServiceAsSenator() {
 			return totalMonthsOfServiceAsSenator;
 		}
 
@@ -222,7 +222,7 @@ public class PoliticianTypes {
 						years of service must not be null. if politician has no experience, the appropriate number
 						of experience is 0
 						 """);
-				org.springframework.util.Assert.state(!isPositive(totalMonthsOfServiceAsSenator),
+				org.springframework.util.Assert.state(isPositive(totalMonthsOfServiceAsSenator),
 						"months of experience must not be negative");
 				return new SenatorialPolitician(politician, totalMonthsOfServiceAsSenator, mostSignificantLawMade);
 			}
@@ -233,15 +233,15 @@ public class PoliticianTypes {
 						years of service must not be null. if politician has no experience, the appropriate number
 						of experience is 0
 						 """);
-				org.springframework.util.Assert.state(!isPositive(totalMonthsOfServiceAsSenator),
+				org.springframework.util.Assert.state(isPositive(totalMonthsOfServiceAsSenator),
 						"months of experience must not be negative");
 				org.springframework.util.Assert.notNull(builder,
 						"builder cannot be null when using this method");
 				return new SenatorialPolitician(builder.build(), totalMonthsOfServiceAsSenator, mostSignificantLawMade);
 			}
-			
+
 			private boolean isPositive(int yearsOfService) {
-				return String.valueOf(yearsOfService).contains("-");
+				return !String.valueOf(yearsOfService).contains("-");
 			}
 			
 		}

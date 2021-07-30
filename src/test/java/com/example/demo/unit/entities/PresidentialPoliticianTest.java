@@ -1,14 +1,13 @@
 package com.example.demo.unit.entities;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Test;
 
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.Politicians.PoliticiansBuilder;
 import com.example.demo.model.entities.politicians.PoliticianTypes;
 import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PresidentialPoliticianTest {
 
@@ -36,9 +35,19 @@ public class PresidentialPoliticianTest {
 	@Test
 	public void shouldReturnFalseWithDifferentPoliticianType() {
 		var differentPoliticianType = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politicianBuilder)
+				.setTotalMonthsOfService(89)
 				.build();
 		
 		assertFalse(presidentialBuilder.build().equals(differentPoliticianType));
+	}
+
+	@Test
+	public void shouldFailDueToNegativeMonthsOfService() {
+		var differentPoliticianType = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politicianBuilder)
+				.setTotalMonthsOfService(-90);
+
+		assertThrows(IllegalStateException.class,
+				() -> differentPoliticianType.buildWithDifferentBuilder());
 	}
 	
 }
