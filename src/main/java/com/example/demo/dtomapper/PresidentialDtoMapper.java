@@ -1,16 +1,17 @@
 package com.example.demo.dtomapper;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.List;
-
+import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.PresidentialPoliticianDTO;
-import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician;
 import com.example.demo.model.enums.Rating;
+import org.springframework.util.Assert;
 
-public class PresidentialDtoMapper extends PoliticiansDtoMapper implements PoliticianDTOMapper {
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
+public final class PresidentialDtoMapper extends PoliticiansDtoMapper {
 
 	@Override
 	public PresidentialPoliticianDTO mapToDTO(Politicians entity) {
@@ -20,19 +21,18 @@ public class PresidentialDtoMapper extends PoliticiansDtoMapper implements Polit
 	}
 	
 	@Override
-	public List<PresidentialPoliticianDTO> mapToDTO(List<Politicians> entity) {
+	public List<PoliticianDTO> mapToDTO(List<Politicians> entity) {
 		if (entity.size() == 0) {
 			return List.of();
 		}
-		
-		org.springframework.util.Assert.state(PresidentialPolitician.class.isInstance(entity.get(0)),
-				"entity must be of type presidential");
+
 		return entity.stream()
+				.peek(politicians -> {
+						Assert.state(PresidentialPolitician.class.isInstance(politicians), "entity must be presidential");
+				})
 				.map(politicians -> mapToDto((PresidentialPolitician) politicians))
 				.collect(toList());
 	}
-
-
 
 	private PresidentialPoliticianDTO mapToDto(PresidentialPolitician entity) {
 		Double rating = entity.getRating().getAverageRating();

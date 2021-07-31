@@ -13,7 +13,7 @@ public final class PresidentialPoliticianDTO extends PoliticianDTO {
 	}
 
 	public PresidentialPoliticianDTO(Politicians entity, Rating satisfactionRate,String lawSigned) {
-		super(entity.getFullName(), String.valueOf(entity.getId()), entity.getRating().getAverageRating(), satisfactionRate);
+		super(entity.getFullName(), entity.getPoliticianNumber(), entity.getRating().getAverageRating(), satisfactionRate);
 		this.mostSignificantLawSigned = lawSigned;
 	}
 

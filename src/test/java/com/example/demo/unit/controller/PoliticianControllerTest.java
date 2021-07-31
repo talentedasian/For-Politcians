@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.controller.PoliticianController;
 import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dto.PresidentialPoliticianDTO;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.dtomapper.PresidentialDtoMapper;
@@ -67,18 +67,33 @@ public class PoliticianControllerTest {
 	}
 	
 	@Test
-	public void shouldEqualDTOOutputsWhenSaved() {
-		var gg = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politician)
+	public void shouldEqualDTOOutputsWhenSavedForPresidential() {
+		var presidentialPolitician = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politician)
 				.setMostSignificantLawPassed("Rice Law")
 				.build();
-		PresidentialPoliticianDTO polDTO = new PresidentialDtoMapper().mapToDTO(gg);
+		PoliticianDTO polDTO = new PresidentialDtoMapper().mapToDTO(presidentialPolitician);
 		
 		when(service.savePolitician(politicianDTORequest)).thenReturn(politician);
 		when(assembler.toModel(any())).thenReturn(EntityModel.of(polDTO));
 		
+		PoliticianDTO politicianResponse = Objects.requireNonNull(controller.savePolitician(politicianDTORequest).getBody()).getContent();
+		assertEquals(polDTO, politicianResponse);
+	}
+
+	@Test
+	public void shouldEqualDTOOutputsWhenSavedForSenatorial() {
+		var presidentialPolitician = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politician)
+				.setTotalMonthsOfService(12)
+				.setMostSignificantLawMade("Rice Law")
+				.build();
+		PoliticianDTO polDTO = new PresidentialDtoMapper().mapToDTO(presidentialPolitician);
+
+		when(service.savePolitician(politicianDTORequest)).thenReturn(politician);
+		when(assembler.toModel(any())).thenReturn(EntityModel.of(polDTO));
+
 		PoliticianDTO politicianResponse = controller.savePolitician(politicianDTORequest).getBody().getContent();
 		assertEquals(polDTO, politicianResponse);
-	}		
+	}
 	
 	@Test
 	public void shouldEqualDTOOutputsByPoliticianNumber() {

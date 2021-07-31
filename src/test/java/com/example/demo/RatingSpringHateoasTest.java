@@ -1,21 +1,5 @@
 package com.example.demo;
 
-import static com.example.demo.model.enums.Rating.LOW;
-import static java.net.URI.create;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.springframework.hateoas.MediaTypes.HAL_FORMS_JSON;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.halLinks;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -23,6 +7,17 @@ import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.UserRater;
 import com.example.demo.model.entities.politicians.PoliticianTypes;
 import com.example.demo.model.enums.PoliticalParty;
+import org.junit.jupiter.api.Test;
+import org.springframework.transaction.annotation.Transactional;
+
+import static java.net.URI.create;
+import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.springframework.hateoas.MediaTypes.HAL_FORMS_JSON;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 	
@@ -34,9 +29,12 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 			.setFullName()
 			.setRating(new Rating(1.00D, 1.00D, new LowSatisfactionAverageCalculator(1.00D, 1D)))
 			.build();
-	Politicians savePol = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politician).build();
+	Politicians savePol = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politician)
+			.setTotalMonthsOfService(12)
+			.setMostSignificantLawMade("law Law Law")
+			.build();
 	PoliticiansRating politiciansRating = new PoliticiansRating(1, 1.00D, rater, savePol);
-	
+
 	@Transactional
 	@Test
 	public void testHalFormsSaveRatingResponse() throws Exception {
@@ -54,8 +52,9 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.name", equalTo(politician.getFullName())))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.id", equalTo(politician.getPoliticianNumber())))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.rating", equalTo(1.0D)))
-			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.satisfaction_rate", equalTo(LOW.toString())))
-			.andDo(document("find-rate", links(halLinks(),
+			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.most_significant_law_made", containsStringIgnoringCase("law law law")))
+			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.months_of_service", equalTo(12)))
+				.andDo(document("find-rate", links(halLinks(),
 					linkWithRel("self").description("Link to a rating"))));
 		
 		/*

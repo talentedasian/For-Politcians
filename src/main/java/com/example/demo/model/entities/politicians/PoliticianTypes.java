@@ -1,13 +1,12 @@
 package com.example.demo.model.entities.politicians;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
+import com.example.demo.model.entities.Politicians;
+import io.jsonwebtoken.lang.Assert;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-
-import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
-import com.example.demo.model.entities.Politicians;
-
-import io.jsonwebtoken.lang.Assert;
 
 public class PoliticianTypes {
 	
@@ -26,7 +25,9 @@ public class PoliticianTypes {
 					Type.PRESIDENTIAL);
 			this.mostSignificantLawSigned = lawSigned;
 		}
-		
+
+		protected PresidentialPolitician() {}
+
 		public String getMostSignificantLawSigned() {
 			return mostSignificantLawSigned;
 		}
@@ -54,8 +55,6 @@ public class PoliticianTypes {
 			}
 			return true;
 		}
-
-
 
 		public static class PresidentialBuilder{
 			
@@ -139,6 +138,8 @@ public class PoliticianTypes {
 			this.totalMonthsOfServiceAsSenator = monthsOfService;
 			this.mostSignificantLawMade = lawMade;			 
 		}
+
+		protected SenatorialPolitician() {}
 
 		@Override
 		@ExcludeFromJacocoGeneratedCoverage
