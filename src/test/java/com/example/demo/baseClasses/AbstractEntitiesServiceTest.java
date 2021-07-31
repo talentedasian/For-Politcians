@@ -1,25 +1,23 @@
 package com.example.demo.baseClasses;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mock;
-
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.model.averageCalculator.AverageCalculator;
-import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;
 import com.example.demo.service.PoliticiansService;
 import com.example.demo.service.RateLimitingService;
 import com.example.demo.service.RatingService;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mock;
+
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 
 public class AbstractEntitiesServiceTest {
 
@@ -67,7 +65,7 @@ public class AbstractEntitiesServiceTest {
 		 PoliticalParty.DDS.toString());
 		
 		politicianDtoRequest = new AddPoliticianDTORequest
-				("Mirriam", 
+				("Mirriam",
 				"Defensor",
 				BigDecimal.valueOf(0.01D));
 	}

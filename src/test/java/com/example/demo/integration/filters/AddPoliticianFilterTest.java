@@ -7,22 +7,20 @@ import com.example.demo.exceptionHandling.GlobalExceptionHandling;
 import com.example.demo.filter.AddPoliticianFilter;
 import com.example.demo.hateoas.PoliticianAssembler;
 import com.example.demo.model.averageCalculator.AverageCalculator;
-import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.service.PoliticiansService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -37,13 +35,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = { PoliticianController.class,GlobalExceptionHandling.class })
+@WebMvcTest(PoliticianController.class)
 public class AddPoliticianFilterTest {
 
 	public MockMvc mvc;
-	
-	@Autowired public WebApplicationContext wac;
-	
+
 	@MockBean public PoliticiansService service;
 	
 	@MockBean public PoliticiansDtoMapper mapper;
@@ -54,9 +50,11 @@ public class AddPoliticianFilterTest {
 	
 	private final String content = """
 			{
-			    "firstName": "test",
-			    "lastName": "name",
-			    "rating": 0.01
+			    "first_name": "test",
+			    "last_name": "name",
+			    "rating": 0.01,
+			    "type": "Senatorial",
+			    "months_of_service": 99
 			}
 			""";
 	
@@ -74,8 +72,9 @@ public class AddPoliticianFilterTest {
 				.setTotalMonthsOfService(12)
 				.build();
 				
-		mvc = MockMvcBuilders.webAppContextSetup(wac)
+		mvc = MockMvcBuilders.standaloneSetup(new PoliticianController(service, assembler))
 				.addFilter(new AddPoliticianFilter(), "/api/politicians/politician")
+				.setControllerAdvice(new GlobalExceptionHandling())
 				.alwaysDo(print())
 				.build();
 	}

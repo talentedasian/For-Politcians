@@ -54,7 +54,7 @@ public class PoliticianControllerTest {
 		senatorialBuilder = new SenatorialBuilder(politicianBuilder).setTotalMonthsOfService(12).setMostSignificantLawMade("Anti Terror");
 		
 		politicianDTORequest = new AddPoliticianDTORequest
-				("Mirriam", 
+				("Mirriam",
 				"Defensor",
 				AVERAGE_RATING);
 	}

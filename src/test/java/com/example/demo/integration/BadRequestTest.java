@@ -1,15 +1,13 @@
 package com.example.demo.integration;
 
-import static java.net.URI.create;
-import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.everyItem;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.startsWithIgnoringCase;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import com.example.demo.controller.PoliticianController;
+import com.example.demo.controller.RatingsController;
+import com.example.demo.dtomapper.PoliticiansDtoMapper;
+import com.example.demo.dtomapper.RatingDtoMapper;
+import com.example.demo.hateoas.PoliticianAssembler;
+import com.example.demo.hateoas.RatingAssembler;
+import com.example.demo.service.PoliticiansService;
+import com.example.demo.service.RatingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,14 +17,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.example.demo.controller.PoliticianController;
-import com.example.demo.controller.RatingsController;
-import com.example.demo.dtomapper.PoliticiansDtoMapper;
-import com.example.demo.dtomapper.RatingDtoMapper;
-import com.example.demo.hateoas.PoliticianAssembler;
-import com.example.demo.hateoas.RatingAssembler;
-import com.example.demo.service.PoliticiansService;
-import com.example.demo.service.RatingService;
+import static java.net.URI.create;
+import static org.hamcrest.CoreMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest({ RatingsController.class, PoliticianController.class })
 @AutoConfigureMockMvc(addFilters = false, printOnlyOnFailure = false, print = MockMvcPrint.DEFAULT)
@@ -58,14 +53,16 @@ public class BadRequestTest {
 				"politicalParty": "dds"
 			}
 			""";
-	
-	private final String politicianContent = """
-			{
-				"lastNames": "name",
-				"firstNames": "test",
-				"rating": 0.09
-			}
-			""";
+
+	final String politicianContent = """
+				{
+					"firstName" : "Test",
+					"last_name" : "Name",
+					"rating": 0.09,
+					"type" : "Senatorial",
+					"months_of_service" : 31  
+				}
+				""";
 	
 	@Test
 	public void shouldReturn400BadRequestOnRatingEndpoint() throws Exception {
@@ -92,8 +89,6 @@ public class BadRequestTest {
 					equalTo("400")))
 			.andExpect(jsonPath("err", 
 					containsStringIgnoringCase("bad request")))
-			.andExpect(jsonPath("message", 
-					hasItem(startsWithIgnoringCase("error on lastName"))))
 			.andExpect(jsonPath("message", 
 					hasItem(startsWithIgnoringCase("error on firstName"))));
 	}

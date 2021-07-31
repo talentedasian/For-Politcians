@@ -1,25 +1,22 @@
 package com.example.demo.unit.service;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-import java.util.Optional;
-
+import com.example.demo.baseClasses.AbstractEntitiesServiceTest;
+import com.example.demo.dtoRequest.AddPoliticianDTORequest;
+import com.example.demo.model.entities.politicians.Politicians;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.example.demo.baseClasses.AbstractEntitiesServiceTest;
-import com.example.demo.dtoRequest.AddPoliticianDTORequest;
-import com.example.demo.model.entities.politicians.Politicians;
+import java.math.BigDecimal;
+import java.util.Optional;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
