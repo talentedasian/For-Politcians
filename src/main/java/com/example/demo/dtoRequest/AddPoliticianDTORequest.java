@@ -1,13 +1,21 @@
 package com.example.demo.dtoRequest;
 
-import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
-import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
-
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+		@JsonSubTypes.Type(value = AddSenatorialPoliticianDTORequest.class, name = "Senatorial"),
+		@JsonSubTypes.Type(value = AddSenatorialPoliticianDTORequest.class, name = "Presidential")
+})
 public class AddPoliticianDTORequest {
 
 	@NotNull
@@ -47,7 +55,6 @@ public class AddPoliticianDTORequest {
 
 	public AddPoliticianDTORequest() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public AddPoliticianDTORequest(@NotNull String firstName, @NotNull String lastName,
@@ -56,13 +63,6 @@ public class AddPoliticianDTORequest {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.rating = rating;
-	}
-
-	@ExcludeFromJacocoGeneratedCoverage
-	@Override
-	public String toString() {
-		return "AddPoliticianDTORequest [firstName=" + firstName + ", lastName=" + lastName + ", rating=" + rating
-				+ "]";
 	}
 
 }

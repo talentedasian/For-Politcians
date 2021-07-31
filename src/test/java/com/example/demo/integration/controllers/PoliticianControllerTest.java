@@ -3,13 +3,15 @@ package com.example.demo.integration.controllers;
 import com.example.demo.controller.PoliticianController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
+import com.example.demo.exceptionHandling.GlobalExceptionHandling;
+import com.example.demo.exceptionHandling.PoliticianExceptionHandling;
 import com.example.demo.hateoas.PoliticianAssembler;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
-import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.model.entities.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.service.PoliticiansService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +20,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -52,15 +53,19 @@ public class PoliticianControllerTest {
 
 	final String content = """
 				{
-					"firstName": "Test",
-					"lastName": "Name",
-					"rating": 1.00
+					"first_name" : "Test",
+					"last_name" : "Name",
+					"rating": 1.00,
+					"type" : "Senatorial",
+					"months_of_service" : 31  
 				}
 				""";
 
 	@BeforeEach
-	public void setup(WebApplicationContext wac) {
-		this.mvc = MockMvcBuilders.webAppContextSetup(wac)
+	public void setup() {
+		this.mvc = MockMvcBuilders.standaloneSetup(new PoliticianController(polService, assembler))
+				.setControllerAdvice(new GlobalExceptionHandling())
+				.setControllerAdvice(new PoliticianExceptionHandling())
 				.alwaysDo(print())
 				.build();
 
@@ -152,7 +157,7 @@ public class PoliticianControllerTest {
 		when(polService.savePolitician(any())).thenReturn(actualPolitician);
 		when(assembler.toModel(any())).thenReturn(entityModel);
 
-		this.mvc.perform(post(create("/api/politicians/politician/"))
+		this.mvc.perform(post(create("/api/politicians/politician"))
 						.content(content)
 						.contentType(APPLICATION_JSON)
 						.accept(HAL_FORMS_JSON))
