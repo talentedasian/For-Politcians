@@ -17,7 +17,8 @@
 -->
 
 [![Java CI with Maven](https://github.com/talentedasian/For-Politicians/actions/workflows/build.yml/badge.svg?branch=1.x.x.RESTFUL)](https://github.com/talentedasian/For-Politicians/actions/workflows/build.yml)
-[![codecov](https://codecov.io/gh/talentedasian/For-Politicians/branch/1.x.x.RESTFUL/graph/badge.svg?token=6VUTJC5D3G)](https://codecov.io/gh/talentedasian/For-Politicians)
+[![codecov](https://codecov.io/gh/talentedasian/For-Politicians/branch/master/graph/badge.svg?token=6VUTJC5D3G)](https://codecov.io/gh/talentedasian/For-Politicians)<sup> master </sup>
+[![codecov](https://codecov.io/gh/talentedasian/For-Politicians/branch/1.2.x.RESTFUL/graph/badge.svg?token=6VUTJC5D3G)](https://codecov.io/gh/talentedasian/For-Politicians)<sup> 1.2.x.RESTFUL </sup>
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
