@@ -1,11 +1,19 @@
 package com.example.demo.unit.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-
+import com.example.demo.controller.RatingsController;
+import com.example.demo.dto.PoliticianDTO;
+import com.example.demo.dto.RatingDTO;
+import com.example.demo.dtomapper.RatingDtoMapper;
+import com.example.demo.hateoas.RatingAssembler;
+import com.example.demo.model.averageCalculator.HighSatisfactionAverageCalculator;
+import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.PoliticiansRating;
+import com.example.demo.model.entities.UserRater;
+import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.model.enums.PoliticalParty;
+import com.example.demo.model.enums.Rating;
+import com.example.demo.service.RateLimitingService;
+import com.example.demo.service.RatingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,19 +23,11 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.example.demo.controller.RatingsController;
-import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dto.RatingDTO;
-import com.example.demo.dtomapper.RatingDtoMapper;
-import com.example.demo.hateoas.RatingAssembler;
-import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
-import com.example.demo.model.entities.Politicians;
-import com.example.demo.model.entities.PoliticiansRating;
-import com.example.demo.model.entities.UserRater;
-import com.example.demo.model.enums.PoliticalParty;
-import com.example.demo.model.enums.Rating;
-import com.example.demo.service.RateLimitingService;
-import com.example.demo.service.RatingService;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 public class RatingsControllerTest {
@@ -53,11 +53,12 @@ public class RatingsControllerTest {
 	public void setup() {
 		controller = new RatingsController(service, assembler);
 		
-		politician = new Politicians.PoliticiansBuilder(POLITICIAN_ACCOUNT_NUMBER)
-			.setFirstName("Mirriam")
-			.setLastName("Defensor")
-			.setFullName()
-			.setRating(new com.example.demo.model.entities.Rating(9.67D, 9.67D, new LowSatisfactionAverageCalculator(9.07D, 0D)))
+		politician = new PresidentialBuilder(new Politicians.PoliticiansBuilder(POLITICIAN_ACCOUNT_NUMBER)
+				.setFirstName("Mirriam")
+				.setLastName("Defensor")
+				.setFullName()
+				.setRating(new com.example.demo.model.entities.Rating(9.67D, 9.67D, new HighSatisfactionAverageCalculator(9.07D, 0D)))
+				.build())
 			.build();
 		
 		politiciansRating = new PoliticiansRating(1, 0.00D, userRater, politician);

@@ -1,26 +1,25 @@
 package com.example.demo;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.UserRater;
+import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;
 import com.example.demo.service.RateLimitingService;
-
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import testAnnotations.DatabaseTest;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 @DatabaseTest
 public class RatingRepoTest extends BaseClassTestsThatUsesDatabase {
@@ -32,12 +31,13 @@ public class RatingRepoTest extends BaseClassTestsThatUsesDatabase {
 	final String NAME = "test";
 	final String ACCOUNT_NUMBER = "123polNumber";
 	
-	Politicians politician = new Politicians.PoliticiansBuilder(ACCOUNT_NUMBER)
-			.setRatingRepository(repo)
-			.setFirstName("Test")
-			.setLastName("Name")
-			.setFullName()
-			.setRating(new Rating(0.01D, 0.01D, mock(LowSatisfactionAverageCalculator.class)))
+	Politicians politician = new PresidentialBuilder(new Politicians.PoliticiansBuilder(ACCOUNT_NUMBER)
+				.setRatingRepository(repo)
+				.setFirstName("Test")
+				.setLastName("Name")
+				.setFullName()
+				.setRating(new Rating(0.01D, 0.01D, mock(LowSatisfactionAverageCalculator.class)))
+				.build())
 			.build();
 	
 	@Test

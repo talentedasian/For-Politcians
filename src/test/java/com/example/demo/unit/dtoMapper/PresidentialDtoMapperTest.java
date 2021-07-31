@@ -2,7 +2,7 @@ package com.example.demo.unit.dtoMapper;
 
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.PresidentialPoliticianDTO;
-import com.example.demo.dtomapper.PresidentialDtoMapper;
+import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.model.enums.Rating;
 import com.example.demo.unit.dto.BaseClassForPoliticianDTOTests;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ public class PresidentialDtoMapperTest extends BaseClassForPoliticianDTOTests {
 		PoliticianDTO actual = new PresidentialPoliticianDTO(presidentialBuilder.build(), Rating.LOW, "Rice Law");
 	
 		assertEquals(actual,
-				new PresidentialDtoMapper().mapToDTO(presidentialBuilder
+				new PoliticiansDtoMapper().mapToDTO(presidentialBuilder
 						.setMostSignificantLawPassed("Rice Law")
 						.build()));
 	}
@@ -25,7 +25,7 @@ public class PresidentialDtoMapperTest extends BaseClassForPoliticianDTOTests {
 	@Test
 	public void testDtoMapperWithMultipleValues() {
 		assertThat(streamOfPresidentialPoliticianDTO())
-			.containsAll(new PresidentialDtoMapper().mapToDTO(streamOfPresidentialPoliticians()));
+			.containsAll(new PoliticiansDtoMapper().mapToDTO(streamOfPresidentialPoliticians()));
 	}
 	
 }

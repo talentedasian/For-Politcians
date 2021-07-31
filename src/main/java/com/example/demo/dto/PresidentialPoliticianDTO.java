@@ -3,7 +3,10 @@ package com.example.demo.dto;
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.enums.Rating;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public final class PresidentialPoliticianDTO extends PoliticianDTO {
 
 	private final String mostSignificantLawSigned;

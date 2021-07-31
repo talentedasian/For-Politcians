@@ -11,7 +11,10 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public final class PresidentialDtoMapper extends PoliticiansDtoMapper {
+/*
+	Callers must use only the superclass PoliticiansDtoMapper.
+ */
+class PresidentialDtoMapper extends PoliticiansDtoMapper {
 
 	@Override
 	public PresidentialPoliticianDTO mapToDTO(Politicians entity) {

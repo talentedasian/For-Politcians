@@ -1,18 +1,17 @@
 package com.example.demo.integration.filters;
 
-import static com.example.demo.model.enums.Rating.LOW;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-
+import com.example.demo.controller.PoliticianController;
+import com.example.demo.dto.PoliticianDTO;
+import com.example.demo.dtomapper.PoliticiansDtoMapper;
+import com.example.demo.exceptionHandling.GlobalExceptionHandling;
+import com.example.demo.filter.AddPoliticianFilter;
+import com.example.demo.hateoas.PoliticianAssembler;
+import com.example.demo.model.averageCalculator.AverageCalculator;
+import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.PoliticiansRating;
+import com.example.demo.model.entities.Rating;
+import com.example.demo.model.entities.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.service.PoliticiansService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -25,17 +24,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.example.demo.controller.PoliticianController;
-import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dtomapper.PoliticiansDtoMapper;
-import com.example.demo.exceptionHandling.GlobalExceptionHandling;
-import com.example.demo.filter.AddPoliticianFilter;
-import com.example.demo.hateoas.PoliticianAssembler;
-import com.example.demo.model.averageCalculator.AverageCalculator;
-import com.example.demo.model.entities.Politicians;
-import com.example.demo.model.entities.PoliticiansRating;
-import com.example.demo.model.entities.Rating;
-import com.example.demo.service.PoliticiansService;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+
+import static com.example.demo.model.enums.Rating.LOW;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = { PoliticianController.class,GlobalExceptionHandling.class })
 public class AddPoliticianFilterTest {
@@ -64,12 +64,14 @@ public class AddPoliticianFilterTest {
 	
 	@BeforeEach
 	public void setup() {
-		politician = new Politicians.PoliticiansBuilder("123polNumber")
+		politician = new SenatorialBuilder(new Politicians.PoliticiansBuilder("123polNumber")
 				.setFirstName("Test")
 				.setLastName("Name")
 				.setFullName()
 				.setRating(new Rating(0.01D, 0.01D, calculator))
 				.setPoliticiansRating(List.of(new PoliticiansRating()))
+				.build())
+				.setTotalMonthsOfService(12)
 				.build();
 				
 		mvc = MockMvcBuilders.webAppContextSetup(wac)

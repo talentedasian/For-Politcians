@@ -1,32 +1,5 @@
 package com.example.demo.integration.controllers;
 
-import static com.example.demo.jwt.JwtProvider.createJwtWithFixedExpirationDate;
-import static java.net.URI.create;
-import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-
 import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
@@ -42,10 +15,33 @@ import com.example.demo.model.entities.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.UserRater;
+import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.service.PoliticiansService;
 import com.example.demo.service.RateLimitingService;
 import com.example.demo.service.RatingService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import javax.servlet.http.HttpServletRequest;
+
+import static com.example.demo.jwt.JwtProvider.createJwtWithFixedExpirationDate;
+import static java.net.URI.create;
+import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(RatingsController.class)
 public class RatingControllerTest {
@@ -80,12 +76,13 @@ public class RatingControllerTest {
 				.alwaysDo(print())
 				.build();
 		
-		politician = new Politicians.PoliticiansBuilder("123polNumber")
-			.setId(123)
-			.setFirstName("Mirriam")
-			.setLastName("Defensor")
-			.setFullName()
-			.setRating(new Rating(1D, 1D, mock(LowSatisfactionAverageCalculator.class)))
+		politician = new PresidentialBuilder(new Politicians.PoliticiansBuilder("123polNumber")
+				.setId(123)
+				.setFirstName("Mirriam")
+				.setLastName("Defensor")
+				.setFullName()
+				.setRating(new Rating(1D, 1D, mock(LowSatisfactionAverageCalculator.class)))
+				.build())
 			.build();
 		
 		userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accNumber", rateLimitService);

@@ -1,7 +1,7 @@
 package com.example.demo.unit.dto;
 
 import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dtomapper.PresidentialDtoMapper;
+import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.model.averageCalculator.DecentSatisfactionAverageCalculator;
 import com.example.demo.model.averageCalculator.HighSatisfactionAverageCalculator;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
@@ -54,7 +54,7 @@ public class BaseClassForPoliticianDTOTests {
 
         int i = 0;
         while (i < 3) {
-            values.add(new PresidentialDtoMapper().mapToDTO(presidentialBuilder
+            values.add(new PoliticiansDtoMapper().mapToDTO(presidentialBuilder
                     .setMostSignificantLawPassed(lawSignedSequentially[i])
                     .setBuilder(politicianBuilder.setRating(ratings[i++]))
                     .buildWithDifferentBuilder()));
