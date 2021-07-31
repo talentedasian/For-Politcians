@@ -19,7 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.demo.baseClasses.AbstractEntitiesServiceTest;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
-import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.politicians.Politicians;
 
 @ExtendWith(SpringExtension.class)
 public class PoliticianServiceTest extends AbstractEntitiesServiceTest{

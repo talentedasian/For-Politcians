@@ -6,7 +6,7 @@ import java.util.List;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtomapper.interfaces.RatingDTOMapper;
-import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 
 public class RatingDtoMapper implements RatingDTOMapper{

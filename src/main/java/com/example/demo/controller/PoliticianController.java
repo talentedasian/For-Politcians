@@ -24,7 +24,7 @@ import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.hateoas.PoliticianAssembler;
-import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.service.PoliticiansService;
 
 import io.swagger.v3.oas.annotations.Hidden;

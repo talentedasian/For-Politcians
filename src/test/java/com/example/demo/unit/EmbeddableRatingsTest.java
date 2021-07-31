@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.demo.model.averageCalculator.AverageCalculator;
-import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.repository.RatingRepository;
 

@@ -5,7 +5,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.jboss.logging.MDC;
 import org.slf4j.LoggerFactory;
 
-import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.politicians.Politicians;
 
 @Aspect
 public class PoliticiansLogger {

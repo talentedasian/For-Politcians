@@ -12,7 +12,7 @@ import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.jwt.JwtProviderHttpServletRequest;
-import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.UserRater;
 import com.example.demo.model.userRaterNumber.AbstractUserRaterNumber;

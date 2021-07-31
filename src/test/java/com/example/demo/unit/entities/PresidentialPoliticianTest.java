@@ -2,8 +2,8 @@ package com.example.demo.unit.entities;
 
 import org.junit.jupiter.api.Test;
 
-import com.example.demo.model.entities.Politicians;
-import com.example.demo.model.entities.Politicians.PoliticiansBuilder;
+import com.example.demo.model.entities.politicians.Politicians;
+import com.example.demo.model.entities.politicians.Politicians.PoliticiansBuilder;
 import com.example.demo.model.entities.politicians.PoliticianTypes;
 import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 
@@ -23,12 +23,19 @@ public class PresidentialPoliticianTest {
 	public void shouldReturnTrueWithSamePoliticianNumber() {
 		var actualPolitician = presidentialBuilder.build();
 		
-		var samePoliticianNumber = presidentialBuilder.build();
-		
-		var polWrongNumber = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder.setPoliticianNumber("123differentNumber"))
-				.build();
-		
+		var samePoliticianNumber = presidentialBuilder.setBuilder(politicianBuilder.setPoliticianNumber(POLITICIAN_NUMBER))
+				.buildWithDifferentBuilder();
+
 		assertTrue(actualPolitician.equals(samePoliticianNumber));
+	}
+
+	@Test
+	public void shouldReturnFalseWithDifferentPoliticianNumber() {
+		var actualPolitician = presidentialBuilder.build();
+
+		var polWrongNumber = presidentialBuilder.setBuilder(politicianBuilder.setPoliticianNumber("differentNumber"))
+				.buildWithDifferentBuilder();
+
 		assertFalse(actualPolitician.equals(polWrongNumber));
 	}
 	
@@ -39,15 +46,6 @@ public class PresidentialPoliticianTest {
 				.build();
 		
 		assertFalse(presidentialBuilder.build().equals(differentPoliticianType));
-	}
-
-	@Test
-	public void shouldFailDueToNegativeMonthsOfService() {
-		var differentPoliticianType = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politicianBuilder)
-				.setTotalMonthsOfService(-90);
-
-		assertThrows(IllegalStateException.class,
-				() -> differentPoliticianType.buildWithDifferentBuilder());
 	}
 	
 }

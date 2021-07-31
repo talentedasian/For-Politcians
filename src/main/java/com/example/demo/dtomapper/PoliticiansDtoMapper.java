@@ -2,7 +2,7 @@ package com.example.demo.dtomapper;
 
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
-import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.enums.Rating;
 
 import java.util.List;

@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.service.RateLimitingService;
 

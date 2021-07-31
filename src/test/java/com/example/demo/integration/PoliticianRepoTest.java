@@ -16,8 +16,8 @@ import org.springframework.test.annotation.Commit;
 
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.model.averageCalculator.AverageCalculator;
-import com.example.demo.model.entities.Politicians;
-import com.example.demo.model.entities.Politicians.PoliticiansBuilder;
+import com.example.demo.model.entities.politicians.Politicians;
+import com.example.demo.model.entities.politicians.Politicians.PoliticiansBuilder;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.politicians.PoliticianTypes;
 import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;

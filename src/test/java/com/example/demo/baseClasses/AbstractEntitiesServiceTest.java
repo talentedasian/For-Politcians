@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.model.averageCalculator.AverageCalculator;
-import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.enums.PoliticalParty;

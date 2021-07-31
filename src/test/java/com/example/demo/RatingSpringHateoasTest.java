@@ -1,7 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
-import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.UserRater;

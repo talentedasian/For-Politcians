@@ -4,7 +4,7 @@ import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
-import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.RateLimit;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;

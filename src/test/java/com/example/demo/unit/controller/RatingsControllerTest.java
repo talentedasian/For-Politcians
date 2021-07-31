@@ -6,7 +6,7 @@ import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.hateoas.RatingAssembler;
 import com.example.demo.model.averageCalculator.HighSatisfactionAverageCalculator;
-import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.UserRater;
 import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;

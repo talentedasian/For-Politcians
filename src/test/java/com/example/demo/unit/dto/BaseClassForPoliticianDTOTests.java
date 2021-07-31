@@ -5,7 +5,7 @@ import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.model.averageCalculator.DecentSatisfactionAverageCalculator;
 import com.example.demo.model.averageCalculator.HighSatisfactionAverageCalculator;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
-import com.example.demo.model.entities.Politicians;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.politicians.PoliticianTypes;
 import org.junit.jupiter.api.BeforeEach;
 
