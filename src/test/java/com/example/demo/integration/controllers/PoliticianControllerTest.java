@@ -1,8 +1,6 @@
 package com.example.demo.integration.controllers;
 
 import com.example.demo.controller.PoliticianController;
-import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.exceptionHandling.GlobalExceptionHandling;
 import com.example.demo.exceptionHandling.PoliticianExceptionHandling;
 import com.example.demo.hateoas.PoliticianAssembler;
@@ -17,10 +15,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static com.example.demo.model.enums.Rating.mapToSatisfactionRate;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,13 +40,9 @@ public class PoliticianControllerTest {
 	
 	Politicians.PoliticiansBuilder politiciansBuilder;
 	PoliticiansRating politiciansRating;
-	PoliticianDTO politicianDTO;
-	EntityModel<PoliticianDTO> entityModel;
-
 	SenatorialBuilder senatorialBuilder;
 	PresidentialBuilder presidentialBuilder;
 
-	PoliticiansDtoMapper mapper = new PoliticiansDtoMapper();
 	PoliticianAssembler modelMaker = new PoliticianAssembler();
 
 	final String content = """
@@ -63,7 +57,7 @@ public class PoliticianControllerTest {
 
 	@BeforeEach
 	public void setup() {
-		this.mvc = MockMvcBuilders.standaloneSetup(new PoliticianController(polService, assembler))
+		this.mvc = MockMvcBuilders.standaloneSetup(new PoliticianController(polService, modelMaker))
 				.setControllerAdvice(new GlobalExceptionHandling())
 				.setControllerAdvice(new PoliticianExceptionHandling())
 				.alwaysDo(print())
@@ -73,7 +67,7 @@ public class PoliticianControllerTest {
 			.setId(123)
 			.setFirstName("Mirriam")
 			.setLastName("Defensor")
-			.setPoliticianNumber("123polNumber")
+			.setFullName()
 			.setRating(new Rating(1D, 1D, mock(LowSatisfactionAverageCalculator.class)));
 
 		senatorialBuilder = new SenatorialBuilder(politiciansBuilder).setTotalMonthsOfService(12);
@@ -85,20 +79,16 @@ public class PoliticianControllerTest {
 	public void shouldEqualDtoOutputsByPoliticianNumberByPresidential() throws Exception {
 		var actualPolitician = presidentialBuilder.build();
 
-		politicianDTO = mapper.mapToDTO(actualPolitician);
-		entityModel = modelMaker.toModel(politicianDTO);
-
 		when(polService.findPoliticianByNumber("123polNumber")).thenReturn(actualPolitician);
-		when(assembler.toModel(any())).thenReturn(entityModel);
 		
 		this.mvc.perform(get(create("/api/politicians/politician/123polNumber"))
 				.accept(HAL_FORMS_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(HAL_FORMS_JSON))
-				.andExpect(jsonPath("name", equalTo(politicianDTO.getName())))
-				.andExpect(jsonPath("id", equalTo(politicianDTO.getId())))
+				.andExpect(jsonPath("name", equalTo(actualPolitician.getFullName())))
+				.andExpect(jsonPath("id", equalTo(actualPolitician.getPoliticianNumber())))
 				.andExpect(jsonPath("rating", equalTo(1.0D)))
-				.andExpect(jsonPath("satisfaction_rate", equalTo(politicianDTO.getSatisfactionRate().toString())))
+				.andExpect(jsonPath("satisfaction_rate", equalTo(mapToSatisfactionRate(actualPolitician.getRating().getAverageRating()).toString())))
 				.andExpect(jsonPath("most_significant_law_signed", equalTo(actualPolitician.getMostSignificantLawSigned())));
 	}
 
@@ -106,20 +96,16 @@ public class PoliticianControllerTest {
 	public void shouldEqualDtoOutputsByPoliticianNumberBySenatorial() throws Exception {
 		var actualPolitician = senatorialBuilder.build();
 
-		politicianDTO = mapper.mapToDTO(actualPolitician);
-		entityModel = modelMaker.toModel(politicianDTO);
-
 		when(polService.findPoliticianByNumber("123polNumber")).thenReturn(actualPolitician);
-		when(assembler.toModel(any())).thenReturn(entityModel);
 
 		this.mvc.perform(get(create("/api/politicians/politician/123polNumber"))
 						.accept(HAL_FORMS_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(HAL_FORMS_JSON))
-				.andExpect(jsonPath("name", equalTo(politicianDTO.getName())))
-				.andExpect(jsonPath("id", equalTo(politicianDTO.getId())))
+				.andExpect(jsonPath("name", equalTo(actualPolitician.getFullName())))
+				.andExpect(jsonPath("id", equalTo(actualPolitician.getPoliticianNumber())))
 				.andExpect(jsonPath("rating", equalTo(1.0D)))
-				.andExpect(jsonPath("satisfaction_rate", equalTo(politicianDTO.getSatisfactionRate().toString())))
+				.andExpect(jsonPath("satisfaction_rate", equalTo(mapToSatisfactionRate(actualPolitician.getRating().getAverageRating()).toString())))
 				.andExpect(jsonPath("most_significant_law_made", equalTo(actualPolitician.getMostSignificantLawMade())))
 				.andExpect(jsonPath("months_of_service", equalTo(actualPolitician.getTotalMonthsOfServiceAsSenator())));
 	}
@@ -128,11 +114,7 @@ public class PoliticianControllerTest {
 	public void shouldEqualDtoOutputsWhenSavedByPresidential() throws Exception {
 		var actualPolitician = presidentialBuilder.build();
 
-		politicianDTO = mapper.mapToDTO(actualPolitician);
-		entityModel = modelMaker.toModel(politicianDTO);
-
 		when(polService.savePolitician(any())).thenReturn(actualPolitician);
-		when(assembler.toModel(any())).thenReturn(entityModel);
 
 		this.mvc.perform(post(create("/api/politicians/politician/"))
 				.content(content)
@@ -140,10 +122,10 @@ public class PoliticianControllerTest {
 				.accept(HAL_FORMS_JSON))
 				.andExpect(status().isCreated())
 				.andExpect(content().contentType(HAL_FORMS_JSON))
-				.andExpect(jsonPath("name", equalTo(politicianDTO.getName())))
-				.andExpect(jsonPath("id", equalTo(politicianDTO.getId())))
+				.andExpect(jsonPath("name", equalTo(actualPolitician.getFullName())))
+				.andExpect(jsonPath("id", equalTo(actualPolitician.getPoliticianNumber())))
 				.andExpect(jsonPath("rating", equalTo(1.0D)))
-				.andExpect(jsonPath("satisfaction_rate", equalTo(politicianDTO.getSatisfactionRate().toString())))
+				.andExpect(jsonPath("satisfaction_rate", equalTo(mapToSatisfactionRate(actualPolitician.getRating().getAverageRating()).toString())))
 				.andExpect(jsonPath("most_significant_law_signed", equalTo(actualPolitician.getMostSignificantLawSigned())));
 	}
 
@@ -151,11 +133,7 @@ public class PoliticianControllerTest {
 	public void shouldEqualDtoOutputsWhenSavedBySenatorial() throws Exception {
 		var actualPolitician = senatorialBuilder.build();
 
-		politicianDTO = mapper.mapToDTO(actualPolitician);
-		entityModel = modelMaker.toModel(politicianDTO);
-
 		when(polService.savePolitician(any())).thenReturn(actualPolitician);
-		when(assembler.toModel(any())).thenReturn(entityModel);
 
 		this.mvc.perform(post(create("/api/politicians/politician"))
 						.content(content)
@@ -163,10 +141,10 @@ public class PoliticianControllerTest {
 						.accept(HAL_FORMS_JSON))
 				.andExpect(status().isCreated())
 				.andExpect(content().contentType(HAL_FORMS_JSON))
-				.andExpect(jsonPath("name", equalTo(politicianDTO.getName())))
-				.andExpect(jsonPath("id", equalTo(politicianDTO.getId())))
+				.andExpect(jsonPath("name", equalTo(actualPolitician.getFullName())))
+				.andExpect(jsonPath("id", equalTo(actualPolitician.getPoliticianNumber())))
 				.andExpect(jsonPath("rating", equalTo(1.0D)))
-				.andExpect(jsonPath("satisfaction_rate", equalTo(politicianDTO.getSatisfactionRate().toString())))
+				.andExpect(jsonPath("satisfaction_rate", equalTo(mapToSatisfactionRate(actualPolitician.getRating().getAverageRating()).toString())))
 				.andExpect(jsonPath("most_significant_law_made", equalTo(actualPolitician.getMostSignificantLawMade())))
 				.andExpect(jsonPath("months_of_service", equalTo(actualPolitician.getTotalMonthsOfServiceAsSenator())));
 	}

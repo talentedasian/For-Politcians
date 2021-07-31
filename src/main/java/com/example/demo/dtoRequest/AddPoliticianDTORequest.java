@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
 		@JsonSubTypes.Type(value = AddSenatorialPoliticianDTORequest.class, name = "Senatorial"),
-		@JsonSubTypes.Type(value = AddSenatorialPoliticianDTORequest.class, name = "Presidential")
+		@JsonSubTypes.Type(value = AddPresidentialPoliticianDTORequest.class, name = "Presidential")
 })
 public class AddPoliticianDTORequest {
 
