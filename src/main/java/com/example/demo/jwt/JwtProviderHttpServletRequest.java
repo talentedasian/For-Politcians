@@ -1,25 +1,14 @@
 package com.example.demo.jwt;
 
+import com.example.demo.exceptions.*;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.SignatureException;
+import org.springframework.util.Assert;
+
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.util.Assert;
-
-import com.example.demo.exceptions.JwtExpiredException;
-import com.example.demo.exceptions.JwtMalformedFormatException;
-import com.example.demo.exceptions.JwtNotFoundException;
-import com.example.demo.exceptions.JwtTamperedExpcetion;
-import com.example.demo.exceptions.RefreshTokenException;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.security.SignatureException;
 
 public class JwtProviderHttpServletRequest {
 
@@ -42,7 +31,7 @@ public class JwtProviderHttpServletRequest {
 			throw new JwtMalformedFormatException(e.getLocalizedMessage());
 		}  catch (ExpiredJwtException e) {
 			if (checkIfJwtIsOneHourFresh(e.getClaims().getExpiration())) {
-				// RefreshJwtFilter does appropriate refreshing of JsobWeb Tokens
+				// RefreshJwtFilter does appropriate refreshing of JsonWeb Tokens
 				throw new RefreshTokenException(e.getClaims());
 			}
 			throw new JwtExpiredException(e.getMessage(), e);

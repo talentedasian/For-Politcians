@@ -3,10 +3,7 @@ package com.example.demo.integration.controllers;
 import com.example.demo.controller.RatingsController;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.dtomapper.RatingDtoMapper;
-import com.example.demo.exceptions.JwtMalformedFormatException;
-import com.example.demo.exceptions.JwtNotFoundException;
-import com.example.demo.exceptions.RatingsNotFoundException;
-import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
+import com.example.demo.exceptions.*;
 import com.example.demo.hateoas.RatingAssembler;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.PoliticiansRating;
@@ -20,7 +17,6 @@ import com.example.demo.service.RateLimitingService;
 import com.example.demo.service.RatingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -51,7 +47,7 @@ public class RatingControllerTest {
 	@MockBean PoliticiansService polService;
 	@MockBean RatingDtoMapper mapper;
 	@MockBean RateLimitingService rateLimitService;
-	@MockBean RatingAssembler assembler;;
+	@MockBean RatingAssembler assembler;
 	
 	Politicians politician;
 	PoliticiansRating politiciansRating;
@@ -64,8 +60,12 @@ public class RatingControllerTest {
 				"political_party": "dds"
 			}
 			""";
-	
-	@Mock HttpServletRequest req;
+
+	final String SUBJECT = "test@gmail.com";
+	final String ID = "1";
+	final String NAME = "test";
+	final String EMAIL = SUBJECT;
+	final String FACEBOOK_NAME = NAME;
 	
 	@BeforeEach
 	public void setup(WebApplicationContext wac) {
@@ -82,13 +82,13 @@ public class RatingControllerTest {
 				.build())
 			.build();
 		
-		userRater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accNumber", rateLimitService);
+		userRater = new UserRater(FACEBOOK_NAME, PoliticalParty.DDS, EMAIL, "123accNumber", rateLimitService);
 		
 		politiciansRating = new PoliticiansRating(1, 1D, userRater, politician);
 	}
 	
 	@Test
-	public void shouldReturn401IsUnAuthorized() throws Exception {
+	public void shouldReturn401IsUnAuthorizedNullJwt() throws Exception {
 		String message = "No jwt found on authorization header";
 		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(new JwtNotFoundException(message));
 		
@@ -99,7 +99,37 @@ public class RatingControllerTest {
 			.andExpect(jsonPath("err", containsStringIgnoringCase("no jwt found on authorization header")))
 			.andExpect(jsonPath("code", containsStringIgnoringCase("401")));
 	}
-	
+
+	@Test
+	public void shouldReturn401IsUnAuthorizedExpiredJwt() throws Exception {
+		String message = "Jwt expired and not refreshable";
+
+		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(new JwtExpiredException(message));
+
+		mvc.perform(post(create("/api/ratings/rating"))
+						.content(content)
+						.header("Authorization", "Bearer " + createJwtWithFixedExpirationDate(SUBJECT, ID, NAME))
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("err", containsStringIgnoringCase("jwt expired")))
+				.andExpect(jsonPath("code", containsStringIgnoringCase("401")));
+	}
+
+	@Test
+	public void shouldReturn401IsUnAuthorizedTamperedJwt() throws Exception {
+		String message = "Jwt tampered. Either server has restarted w/o user's knowledge or it is indeed tampered.";
+
+		when(service.saveRatings(any(AddRatingDTORequest.class), any())).thenThrow(new JwtTamperedExpcetion(message));
+
+		mvc.perform(post(create("/api/ratings/rating"))
+						.content(content)
+						.header("Authorization", "Bearer " + createJwtWithFixedExpirationDate(SUBJECT, ID, NAME))
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("err", containsStringIgnoringCase("jwt tampered")))
+				.andExpect(jsonPath("code", containsStringIgnoringCase("401")));
+	}
+
 	@Test
 	public void shouldReturn401IsUnAuthorizedWithBearerNotStart() throws Exception {
 		String message = "Authorization Header must start with Bearer";
@@ -107,7 +137,7 @@ public class RatingControllerTest {
 		
 		mvc.perform(post(create("/api/ratings/rating"))
 				.content(content)
-				.header("Authorization", "Not Bearer " + createJwtWithFixedExpirationDate("test@gmail.com", "1", "test"))
+						.header("Authorization", "Not Bearer " + createJwtWithFixedExpirationDate(SUBJECT, ID, NAME))
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnauthorized())
 			.andExpect(jsonPath("err", containsStringIgnoringCase("must start with bearer")))

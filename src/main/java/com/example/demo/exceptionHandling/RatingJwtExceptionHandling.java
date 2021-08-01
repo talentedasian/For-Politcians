@@ -1,17 +1,12 @@
 package com.example.demo.exceptionHandling;
 
+import com.example.demo.controller.RatingsController;
+import com.example.demo.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import com.example.demo.controller.RatingsController;
-import com.example.demo.exceptions.JwtMalformedFormatException;
-import com.example.demo.exceptions.JwtNotFoundException;
-import com.example.demo.exceptions.JwtNotFromServerException;
-
-import io.jsonwebtoken.ExpiredJwtException;
 
 @RestControllerAdvice(assignableTypes = { RatingsController.class })
 public class RatingJwtExceptionHandling extends ResponseEntityExceptionHandler{
@@ -36,9 +31,9 @@ public class RatingJwtExceptionHandling extends ResponseEntityExceptionHandler{
 		return exceptionModel;
 	}
 	
-	@ExceptionHandler(ExpiredJwtException.class)
+	@ExceptionHandler(JwtExpiredException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public ExceptionModel handleJwtMalformedException(ExpiredJwtException e) {
+	public ExceptionModel handleJwtExpiredException(JwtExpiredException e) {
 		var exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("401");
 		exceptionModel.setErr(e.getMessage());
@@ -46,9 +41,9 @@ public class RatingJwtExceptionHandling extends ResponseEntityExceptionHandler{
 		return exceptionModel;
 	}
 	
-	@ExceptionHandler(JwtNotFromServerException.class)
+	@ExceptionHandler(JwtTamperedExpcetion.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public ExceptionModel handleJwtNotFromServerException(JwtNotFromServerException e) {
+	public ExceptionModel handleJwtTamperedException(JwtTamperedExpcetion e) {
 		var exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("401");
 		exceptionModel.setErr(e.getMessage());
