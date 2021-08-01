@@ -48,7 +48,7 @@ public class RatingJwtExceptionHandling extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(JwtNotFromServerException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public ExceptionModel handleJwtMalformedException(JwtNotFromServerException e) {
+	public ExceptionModel handleJwtNotFromServerException(JwtNotFromServerException e) {
 		var exceptionModel = new ExceptionModel();
 		exceptionModel.setCode("401");
 		exceptionModel.setErr(e.getMessage());

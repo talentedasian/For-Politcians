@@ -1,15 +1,11 @@
 package com.example.demo.unit.oauth2;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
-import java.net.URISyntaxException;
-import java.time.Instant;
-
+import com.example.demo.dto.FacebookUserInfo;
+import com.example.demo.jwt.JwtProvider;
+import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
+import com.example.demo.oauth2.FacebookOauth2UserInfoUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -20,16 +16,16 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AccessToken.TokenType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-import com.example.demo.dto.FacebookUserInfo;
-import com.example.demo.jwt.JwtProvider;
-import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
-import com.example.demo.oauth2.FacebookOauth2UserInfoUtility;
+import java.net.URISyntaxException;
+import java.time.Instant;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { ClientRegistration.class })
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@SpringJUnitConfig(classes = { ClientRegistration.class })
 public class CustomOauth2AuthorizedRequestRepoTest {
 	
 	@MockBean ClientRegistrationRepository oauth2Client;
