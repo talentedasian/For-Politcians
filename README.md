@@ -17,7 +17,8 @@
 -->
 
 [![Java CI with Maven](https://github.com/talentedasian/For-Politicians/actions/workflows/build.yml/badge.svg?branch=1.x.x.RESTFUL)](https://github.com/talentedasian/For-Politicians/actions/workflows/build.yml)
-[![codecov](https://codecov.io/gh/talentedasian/For-Politicians/branch/1.x.x.RESTFUL/graph/badge.svg?token=6VUTJC5D3G)](https://codecov.io/gh/talentedasian/For-Politicians)
+[![codecov](https://codecov.io/gh/talentedasian/For-Politicians/branch/master/graph/badge.svg?token=6VUTJC5D3G)](https://codecov.io/gh/talentedasian/For-Politicians)<sub> master </sub>
+[![codecov](https://codecov.io/gh/talentedasian/For-Politicians/branch/1.2.x.RESTFUL/graph/badge.svg?token=6VUTJC5D3G)](https://codecov.io/gh/talentedasian/For-Politicians)<sub> 1.2.x.RESTFUL </sub>
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
@@ -188,11 +189,11 @@ X Add Account Numbers for raters
 
 
 1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-6. Append `testcontainers.reuse.enabled=true` to your testcontainer properties which is usually located in `/home/$USER/.testcontainers.properties`
+2. Append `testcontainers.reuse.enabled=true` to your testcontainer properties which is usually located in `/home/$USER/.testcontainers.properties`
+3. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+4. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+5. Push to the Branch (`git push origin feature/AmazingFeature`)
+6. Open a Pull Request
 
 
 <!-- CONTACT -->
