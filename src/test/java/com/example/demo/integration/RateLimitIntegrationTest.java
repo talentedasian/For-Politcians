@@ -4,10 +4,11 @@ import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
-import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.RateLimit;
 import com.example.demo.model.entities.Rating;
+import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician;
 import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RateLimitRepository;
@@ -36,26 +37,29 @@ public class RateLimitIntegrationTest extends BaseClassTestsThatUsesDatabase {
 	@Autowired PoliticiansRepository polRepo;
 	RateLimit rateLimitToBeSaved = new RateLimit();
 
+	final String POLITICIAN_NUMBER = "123polNumber";
+
+	PresidentialPolitician politician = new PresidentialBuilder(new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
+				.setId(1)
+				.setRating(new Rating(1D, 1D, new LowSatisfactionAverageCalculator(1D, 0D)))
+				.setFirstName("test")
+				.setLastName("name")
+				.setFullName())
+			.build();
+
 	@BeforeEach
 	public void setup() {
 		rateLimitToBeSaved.setDateCreated(LocalDate.now().minusDays(5L));
 		rateLimitToBeSaved.setId(FacebookUserRaterNumberImplementor.with("test name", "1").calculateEntityNumber().getAccountNumber());
-		rateLimitToBeSaved.setPoliticianNumber("1number");
+		rateLimitToBeSaved.setPoliticianNumber(POLITICIAN_NUMBER);
 	}
 	
 	@Test
 	public void shouldThrowRateLimitedExceptionWhenUserIsRateLimited() throws UserRateLimitedOnPoliticianException {
-		polRepo.save(new PresidentialBuilder(new Politicians.PoliticiansBuilder("1number")
-					.setId(1)
-					.setRating(new Rating(1D, 1D, new LowSatisfactionAverageCalculator(1D, 0D)))
-					.setFirstName("test")
-					.setLastName("name")
-					.setFullName()
-					.build())
-				.build());
+		polRepo.save(politician);
 		rateLimitRepo.save(rateLimitToBeSaved);
 		
-		var requestContent = new AddRatingDTORequest(valueOf(1L), "1number", "dds");
+		var requestContent = new AddRatingDTORequest(valueOf(1L), POLITICIAN_NUMBER, "dds");
 		HttpServletRequest req = mock(HttpServletRequest.class);
 		when(req.getHeader("Authorization")).thenReturn("Bearer " + createJwtWithFixedExpirationDate("test@gmail.com", "1", "test name"));
 		
@@ -67,6 +71,7 @@ public class RateLimitIntegrationTest extends BaseClassTestsThatUsesDatabase {
 		 * before the test finishes. 
 		 */
 		rateLimitRepo.delete(rateLimitToBeSaved);
+		polRepo.delete(politician);
 	}
 
 }

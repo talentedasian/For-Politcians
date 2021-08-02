@@ -5,6 +5,8 @@ import com.example.demo.dto.PresidentialPoliticianDTO;
 import com.example.demo.dto.SenatorialPoliticianDTO;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.model.enums.Rating;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

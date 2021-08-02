@@ -40,7 +40,7 @@ public final class PresidentialPoliticianDTO extends PoliticianDTO {
 		result = prime * result + ((mostSignificantLawSigned == null) ? 0 : mostSignificantLawSigned.hashCode()); 
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

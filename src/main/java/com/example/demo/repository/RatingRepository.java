@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.model.entities.PoliticiansRating;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface RatingRepository extends JpaRepository<PoliticiansRating, Integer>{
 	
 	List<PoliticiansRating> findByRater_Email(String email);
