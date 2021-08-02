@@ -29,7 +29,7 @@ public class RatingRepoTest extends BaseClassTestsThatUsesDatabase {
 	
 	final String EMAIL = "test@gmail.com";
 	final String NAME = "test";
-	final String ACCOUNT_NUMBER = "123polNumber";
+	final String ACCOUNT_NUMBER = "7889polNumber";
 	
 	Politicians politician = new PresidentialBuilder(new Politicians.PoliticiansBuilder(ACCOUNT_NUMBER)
 				.setRatingRepository(repo)
