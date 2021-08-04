@@ -1,41 +1,50 @@
 package com.example.demo.model.politicianNumber;
 
+import com.example.demo.model.entities.politicians.Politicians;
 import io.jsonwebtoken.lang.Assert;
 
 public class PoliticianNumberImplementor extends AbstractPoliticianNumber{
 
-	private final String pattern = "FL00-LF00-0000";
+	/*
+		F stands for Firstname
+		L stands for Lastname
+		T stands for what type the politician is e.g. Presidential
+		The leading zeroes are the last 4 numbers of the hashcode of the politician
+	 */
+	final String pattern = "FLTT-LFTT-0000";
 
-	private PoliticianNumberImplementor(String firstName, String lastName, String polNumber) {
-		super(firstName, lastName, polNumber);
+	final char FIRSTNAME_INITIAL = 'F';
+	final char LASTNAME_INITIAL = 'L';
+	final char TYPE_INITIAL = 'T';
+
+	private final Politicians politician;
+
+	Politicians getPolitician() {
+		return this.politician;
 	}
-	
-	public static PoliticianNumberImplementor with(String firstName, String lastName, String politicianNumber) {
-		if (!(politicianNumber.length() < 12)) {
-			Assert.state(politicianNumber.matches("\\d+"),
+	protected PoliticianNumberImplementor(Politicians politician) {
+		super(politician.getLastName(), politician.getLastName(), politician.getPoliticianNumber());
+		this.politician = politician;
+	}
+
+	public static PoliticianNumberImplementor with(Politicians politician) {
+		if (!(politician.getPoliticianNumber().length() < 12)) {
+			Assert.state(politician.getPoliticianNumber().matches("\\d+"),
 					"Politician Number must be a digit");
 		}
 		
-		return new PoliticianNumberImplementor(firstName, lastName, politicianNumber);
+		return new PoliticianNumberImplementor(politician);
 	}
 
 	@Override
 	public PoliticianNumberImplementor calculatePoliticianNumber() {
-		String trimmedPattern = convertFAndLOfPatternToNameInitials()
-				.substring(0, pattern.length() - politicianNumber.length());
-		String finalPoliticianNumber = trimmedPattern.concat(politicianNumber);
+
+		switch (politician.getType()) {
+			case PRESIDENTIAL -> {return PresidentialNumberImplementor.with(politicianNumber).calculatePoliticianNumber();}
+			case SENATORIAL -> {return SenatorialNumberImplementor.with(politicianNumber).calculatePoliticianNumber();}
+		}
 		
-		return new PoliticianNumberImplementor(getFirstName(), getLastName(), finalPoliticianNumber);
+		return new PoliticianNumberImplementor(politician);
 	}
-	
-	private String convertFAndLOfPatternToNameInitials() {
-		String initialPattern = pattern.replace('F', firstName.charAt(0));
-		String finalPattern = initialPattern.replace('L', lastName.charAt(0));
-		
-		return finalPattern;
-	}
-	
-	
-	
 
 }

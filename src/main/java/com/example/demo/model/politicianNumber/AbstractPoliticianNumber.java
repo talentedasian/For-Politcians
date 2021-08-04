@@ -6,11 +6,11 @@ public abstract class AbstractPoliticianNumber implements EntityNumberInterface 
 
 	protected final String firstName, lastName, politicianNumber;
 
-	public String getFirstName() {
+	protected String getFirstName() {
 		return firstName;
 	}
 
-	public String getLastName() {
+	protected String getLastName() {
 		return lastName;
 	}
 
