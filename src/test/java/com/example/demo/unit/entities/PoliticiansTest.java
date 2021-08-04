@@ -38,15 +38,9 @@ public class PoliticiansTest {
 	
 	@Test
 	public void testNullFirstAndLastNameInBuilder() {
-		assertThrows(IllegalArgumentException.class, 
+		assertThrows(IllegalArgumentException.class,
 				() -> new Politicians.PoliticiansBuilder("123polNumber")
-				.setFullName());
-	}
-	
-	@Test
-	public void testHashCode() {
-		assertEquals(politicianBuilder.build().hashCode(), 
-				new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder).build().hashCode());
+						.setFullName());
 	}
 	
 }

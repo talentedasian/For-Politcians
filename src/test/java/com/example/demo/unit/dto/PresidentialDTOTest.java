@@ -1,21 +1,18 @@
 package com.example.demo.unit.dto;
 
+import com.example.demo.baseClasses.BaseClassForPoliticianDTOTests;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.PresidentialPoliticianDTO;
 import com.example.demo.dto.SenatorialPoliticianDTO;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
-import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.enums.Rating;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class PresidentialDTOTest extends BaseClassForPoliticianDTOTests{
+public class PresidentialDTOTest extends BaseClassForPoliticianDTOTests {
 
     @Test
     public void testEqualsLogic() {

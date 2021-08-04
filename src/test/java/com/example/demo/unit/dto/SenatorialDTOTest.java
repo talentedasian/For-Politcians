@@ -1,5 +1,6 @@
 package com.example.demo.unit.dto;
 
+import com.example.demo.baseClasses.BaseClassForPoliticianDTOTests;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dto.SenatorialPoliticianDTO;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
