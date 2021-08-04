@@ -1,13 +1,11 @@
 package com.example.demo.unit.entities;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import org.junit.jupiter.api.Test;
-
 import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.politicians.Politicians.PoliticiansBuilder;
-import com.example.demo.model.entities.politicians.PoliticianTypes;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PoliticiansTest {
 
