@@ -32,6 +32,16 @@ public class PoliticianTypes {
 		}
 
 		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((getPoliticianNumber() == null) ? 0 : getPoliticianNumber().hashCode());
+			result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
+			result = prime * result + ((mostSignificantLawSigned == null) ? 0 : mostSignificantLawSigned.hashCode());
+			return result;
+		}
+
+		@Override
 		public boolean equals(Object obj) {
 			if (this == obj) 
 				return true;
@@ -145,6 +155,17 @@ public class PoliticianTypes {
 		public String toString() {
 			return "SenatorialPolitician [totalMonthsOfServiceAsSenator=" + totalMonthsOfServiceAsSenator
 					+ ", mostSignificantLawMade=" + mostSignificantLawMade + "]";
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((getPoliticianNumber() == null) ? 0 : getPoliticianNumber().hashCode());
+			result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
+			result = prime * result + ((mostSignificantLawMade == null) ? 0 : mostSignificantLawMade.hashCode());
+			result = prime * result + totalMonthsOfServiceAsSenator;
+			return result;
 		}
 
 		@Override

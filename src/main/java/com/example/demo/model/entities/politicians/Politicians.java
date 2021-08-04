@@ -1,28 +1,14 @@
 package com.example.demo.model.entities.politicians;
 
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import com.example.demo.model.entities.PoliticiansRating;
-import com.example.demo.model.entities.Rating;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.model.PoliticianMethods;
+import com.example.demo.model.entities.PoliticiansRating;
+import com.example.demo.model.entities.Rating;
 import com.example.demo.repository.RatingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(indexes = @Index(columnList = "politicianNumber") )
@@ -147,18 +133,10 @@ public class Politicians implements PoliticianMethods{
 	}
 
 	@Override
+	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
 		return "Politicians [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", fullName="
 				+ fullName +  ", rating=" + rating + "]";
-	}
-	
-	@ExcludeFromJacocoGeneratedCoverage
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((politicianNumber == null) ? 0 : politicianNumber.hashCode());
-		return result;
 	}
 
 	@Override

@@ -7,6 +7,9 @@ import com.example.demo.model.entities.politicians.Politicians.PoliticiansBuilde
 import com.example.demo.model.entities.politicians.PoliticianTypes;
 import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PresidentialPoliticianTest {
@@ -27,6 +30,36 @@ public class PresidentialPoliticianTest {
 				.buildWithDifferentBuilder();
 
 		assertTrue(actualPolitician.equals(samePoliticianNumber));
+	}
+
+	/*
+		basically testing the hashcode functionality
+	 */
+	@Test
+	public void shouldReturnObjectInHashMap() {
+		var actualPolitician = presidentialBuilder.build();
+
+		Map<Politicians,Politicians> map = new HashMap<>();
+		map.put(actualPolitician,actualPolitician);
+
+		var samePoliticianNumber = presidentialBuilder.setBuilder(politicianBuilder.setPoliticianNumber(POLITICIAN_NUMBER))
+				.buildWithDifferentBuilder();
+
+		assertEquals(actualPolitician, map.get(samePoliticianNumber));
+	}
+
+	@Test
+	public void keyShouldNotBeInMapEvenWithSamePoliticianNumber() {
+		var actualPolitician = presidentialBuilder.build();
+
+		Map<Politicians,Politicians> map = new HashMap<>();
+		map.put(actualPolitician,actualPolitician);
+
+		var differentPoliticianType = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politicianBuilder)
+				.setTotalMonthsOfService(89)
+				.build();
+
+		assertFalse(map.containsKey(differentPoliticianType));
 	}
 
 	@Test

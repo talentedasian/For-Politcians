@@ -1,16 +1,11 @@
 package com.example.demo.unit.dto;
 
-import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.model.averageCalculator.DecentSatisfactionAverageCalculator;
 import com.example.demo.model.averageCalculator.HighSatisfactionAverageCalculator;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
-import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.politicians.PoliticianTypes;
+import com.example.demo.model.entities.politicians.Politicians;
 import org.junit.jupiter.api.BeforeEach;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
@@ -19,6 +14,7 @@ public class BaseClassForPoliticianDTOTests {
     protected final String POLITICIAN_NUMBER = "123polNumber";
 
     protected final String LAW_SIGNED = "Gas Taxification";
+    protected final String LAW_MADE = "Very Important Law";
 
     protected Politicians.PoliticiansBuilder politicianBuilder;
 
@@ -31,9 +27,6 @@ public class BaseClassForPoliticianDTOTests {
     protected com.example.demo.model.entities.Rating highRating = new com.example.demo.model.entities.Rating(TOTAL_RATING, 9.22D, mock(HighSatisfactionAverageCalculator.class));
     protected com.example.demo.model.entities.Rating[] ratings = {lowRating, decentRating, highRating};
 
-    protected String[] lawSignedSequentially = {"Rice Law", "Any Law", "Gas Oil"};
-
-    protected final String LAW_MADE = "Very Important Law";
     protected int monthsOfService = 12;
 
     @BeforeEach
@@ -47,34 +40,6 @@ public class BaseClassForPoliticianDTOTests {
         presidentialBuilder = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder);
 
         senatorialBuilder = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politicianBuilder).setTotalMonthsOfService(monthsOfService);
-    }
-
-    protected List<PoliticianDTO> streamOfPresidentialPoliticianDTO() {
-        List<PoliticianDTO> values = new ArrayList<>();
-
-        int i = 0;
-        while (i < 3) {
-            values.add(new PoliticiansDtoMapper().mapToDTO(presidentialBuilder
-                    .setMostSignificantLawPassed(lawSignedSequentially[i])
-                    .setBuilder(politicianBuilder.setRating(ratings[i++]))
-                    .buildWithDifferentBuilder()));
-        }
-
-        return values;
-    }
-
-    protected List<Politicians> streamOfPresidentialPoliticians() {
-        List<Politicians> values = new ArrayList<>();
-
-        int i = 0;
-        while (i < 3) {
-            values.add(presidentialBuilder
-                    .setMostSignificantLawPassed(lawSignedSequentially[i])
-                    .setBuilder(politicianBuilder.setRating(ratings[i++]))
-                    .buildWithDifferentBuilder());
-        }
-
-        return values;
     }
 
 }

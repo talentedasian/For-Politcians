@@ -5,6 +5,11 @@ import com.example.demo.model.entities.politicians.PoliticianTypes.SenatorialPol
 import com.example.demo.model.entities.politicians.Politicians;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -55,12 +60,43 @@ public class SenatorialPoliticianTest {
     }
 
     @Test
-    public void shouldFailDueToNegativeMonthsOfService() {
+    public void shouldReturnObjectInHashMap() {
+        var actualPolitician = senatorialBuilder.build();
+
+        Map<Politicians,Politicians> map = new HashMap<>();
+        map.put(actualPolitician,actualPolitician);
+
+        var samePoliticianNumber = senatorialBuilder.setBuilder(politicianBuilder.setPoliticianNumber(POLITICIAN_NUMBER))
+                .buildWithDifferentBuilder();
+
+        assertEquals(actualPolitician, map.get(samePoliticianNumber));
+    }
+
+    /*
+        do not put -0 as value source. it's automatically converted to a positive 0 and test will fail
+        due to external factors.
+     */
+    @ParameterizedTest
+    @ValueSource(ints = { -90, -132, -33, -312, -1 })
+    public void shouldFailDueToNegativeMonthsOfService(int monthsOfService) {
         var differentPoliticianType = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politicianBuilder)
-                .setTotalMonthsOfService(-90);
+                .setTotalMonthsOfService(monthsOfService);
 
         assertThrows(IllegalStateException.class,
-                () -> differentPoliticianType.buildWithDifferentBuilder());
+                () -> differentPoliticianType.build());
+    }
+
+    @Test
+    public void keyShouldNotBeInMapEvenWithSamePoliticianNumber() {
+        var actualPolitician = senatorialBuilder.build();
+
+        Map<Politicians,Politicians> map = new HashMap<>();
+        map.put(actualPolitician,actualPolitician);
+
+        var differentPoliticianType = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder)
+                .build();
+
+        assertFalse(map.containsKey(differentPoliticianType));
     }
 
 }
