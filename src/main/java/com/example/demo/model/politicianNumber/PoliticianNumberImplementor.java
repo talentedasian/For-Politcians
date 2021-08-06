@@ -38,12 +38,11 @@ public class PoliticianNumberImplementor extends AbstractPoliticianNumber{
 
 	@Override
 	public PoliticianNumberImplementor calculatePoliticianNumber() {
-
 		switch (politician.getType()) {
 			case PRESIDENTIAL -> {return PresidentialNumberImplementor.with(politicianNumber).calculatePoliticianNumber();}
 			case SENATORIAL -> {return SenatorialNumberImplementor.with(politicianNumber).calculatePoliticianNumber();}
 		}
-		
+
 		return new PoliticianNumberImplementor(politician);
 	}
 

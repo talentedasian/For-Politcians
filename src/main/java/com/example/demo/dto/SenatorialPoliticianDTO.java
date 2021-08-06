@@ -22,7 +22,7 @@ public class SenatorialPoliticianDTO extends PoliticianDTO{
     }
 
     public SenatorialPoliticianDTO(Politicians entity, Rating satisfactionRate, int monthsOfService, String lawMade) {
-        super(entity.getFullName(), entity.getPoliticianNumber(), entity.getRating().getAverageRating(), satisfactionRate);
+        super(entity.getFullName(), entity.getPoliticianNumber(), entity.getRating().getAverageRating(), satisfactionRate, "senatorial");
         this.monthsOfService = monthsOfService;
         this.mostSignificantLawMade = lawMade;
     }

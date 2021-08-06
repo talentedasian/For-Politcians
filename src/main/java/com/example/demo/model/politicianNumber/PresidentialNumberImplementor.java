@@ -13,9 +13,8 @@ class PresidentialNumberImplementor extends PoliticianNumberImplementor {
         return new PresidentialNumberImplementor(politician);
     }
 
-
     @Override
-    public AbstractPoliticianNumber calculateEntityNumber() {
+    public PresidentialNumberImplementor calculateEntityNumber() {
         String initialFirstName = calculateFirstName(pattern);
         String initialLastName = calculateLastName(initialFirstName);
         String initialType = calculateType(initialLastName);

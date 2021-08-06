@@ -36,8 +36,7 @@ public class PoliticianTypes {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result + ((getPoliticianNumber() == null) ? 0 : getPoliticianNumber().hashCode());
-			result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
-			result = prime * result + ((mostSignificantLawSigned == null) ? 0 : mostSignificantLawSigned.hashCode());
+			result = prime * result + Type.PRESIDENTIAL.hashCode();
 			return result;
 		}
 
@@ -162,9 +161,7 @@ public class PoliticianTypes {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result + ((getPoliticianNumber() == null) ? 0 : getPoliticianNumber().hashCode());
-			result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
-			result = prime * result + ((mostSignificantLawMade == null) ? 0 : mostSignificantLawMade.hashCode());
-			result = prime * result + totalMonthsOfServiceAsSenator;
+			result = prime * result + Type.SENATORIAL.hashCode();
 			return result;
 		}
 

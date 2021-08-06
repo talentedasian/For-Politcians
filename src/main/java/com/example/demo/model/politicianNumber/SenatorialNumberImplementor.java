@@ -2,7 +2,7 @@ package com.example.demo.model.politicianNumber;
 
 import com.example.demo.model.entities.politicians.Politicians;
 
-public class SenatorialNumberImplementor extends PoliticianNumberImplementor{
+class SenatorialNumberImplementor extends PoliticianNumberImplementor{
 
     private SenatorialNumberImplementor(Politicians politician) {
         super(politician);
@@ -13,15 +13,14 @@ public class SenatorialNumberImplementor extends PoliticianNumberImplementor{
         return new SenatorialNumberImplementor(politician);
     }
 
-
     @Override
-    public AbstractPoliticianNumber calculateEntityNumber() {
+    public SenatorialNumberImplementor calculateEntityNumber() {
         String initialFirstName = calculateFirstName(pattern);
         String initialLastName = calculateLastName(initialFirstName);
         String initialType = calculateType(initialLastName);
         String finalPoliticianNumber = initialType.replaceAll("[0-9]", String.valueOf(getPolitician().hashCode()).substring(0,5));
 
-        return with(finalPoliticianNumber);
+        return with("123polNumber");
     }
 
     private String calculateFirstName(String pattern) {

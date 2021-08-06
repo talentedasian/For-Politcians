@@ -2,6 +2,7 @@ package com.example.demo.unit.controller;
 
 import com.example.demo.controller.RatingsController;
 import com.example.demo.dto.PoliticianDTO;
+import com.example.demo.dto.PresidentialPoliticianDTO;
 import com.example.demo.dto.RatingDTO;
 import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.hateoas.RatingAssembler;
@@ -63,7 +64,7 @@ public class RatingsControllerTest {
 		
 		politiciansRating = new PoliticiansRating(1, 0.00D, userRater, politician);
 		
-		politicianDTO = new PoliticianDTO(politician.getFullName(), "1", 0.00D, Rating.LOW);
+		politicianDTO = new PresidentialPoliticianDTO(politician, Rating.LOW, null);
 		
 		ratingDTO = new RatingDtoMapper().mapToDTO(politiciansRating);
 	}

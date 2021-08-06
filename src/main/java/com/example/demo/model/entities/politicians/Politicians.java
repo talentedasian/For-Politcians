@@ -8,7 +8,9 @@ import com.example.demo.repository.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(indexes = @Index(columnList = "politicianNumber") )
@@ -193,8 +195,25 @@ public class Politicians implements PoliticianMethods{
 	}
 	
 	public static enum Type {
-		PRESIDENTIAL, SENATORIAL, MAYOR
-	}
+		PRESIDENTIAL, SENATORIAL, MAYOR;
+
+		static Map<String, Type> cache = new HashMap<>();
+
+		static {
+			cache.put("presidential", PRESIDENTIAL);
+			cache.put("senatorial", SENATORIAL);
+			cache.put("mayorial", MAYOR);
+		}
+
+
+        public static Type mapToPoliticianType(String type) {
+			if (!cache.containsKey(type)) {
+				throw new IllegalArgumentException("type is non existing");
+			}
+
+			return cache.get(type);
+        }
+    }
 	
 	public static class PoliticiansBuilder {
 		private RatingRepository ratingRepo;
@@ -216,6 +235,8 @@ public class Politicians implements PoliticianMethods{
 		public PoliticiansBuilder(String politicianNumber) {
 			this.politicianNumber = politicianNumber;
 		}
+
+		public PoliticiansBuilder() {}
 
 		public PoliticiansBuilder setId(Integer id) {
 			this.id = id;

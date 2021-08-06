@@ -22,7 +22,7 @@ public class AddPresidentialPoliticianDTORequest extends AddPoliticianDTORequest
     }
 
     public AddPresidentialPoliticianDTORequest(String firstName, String lastName, BigDecimal rating, String mostSignificantLawSigned) {
-        super(firstName, lastName, rating);
+        super(firstName, lastName, rating, "Presidential");
         this.mostSignificantLawSigned = mostSignificantLawSigned;
     }
     
