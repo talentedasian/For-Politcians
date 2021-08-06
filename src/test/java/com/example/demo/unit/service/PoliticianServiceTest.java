@@ -1,73 +1,34 @@
 package com.example.demo.unit.service;
 
 import com.example.demo.baseClasses.AbstractEntitiesServiceTest;
-import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.model.entities.politicians.Politicians;
+import com.example.demo.model.politicianNumber.PoliticianNumberImplementor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.math.BigDecimal;
-import java.util.Optional;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
-	
+
 	@Test
-	public void verifyRepoCalledSaveMethod() {
-		when(politicianRepo.save(politician)).thenReturn(politician); 
-		when(politicianRepo.countByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(1L);
-		politicianService.savePolitician(new AddPoliticianDTORequest("Mirriam", "Defensor", BigDecimal.valueOf(0.01D)));
-		
-		verify(politicianRepo, times(1)).save(Mockito.any());	
+	public void verifyRepoSaveMethodActuallySavesPolitician() {
+		politicianRepo.save(politician);
+
+		Politicians politicianSaved = politicianService.savePolitician(politicianDtoRequest);
+
+		assertEquals(politicianSaved, politicianRepo.findByPoliticianNumber(politicianSaved.getPoliticianNumber()).get());
 	}
-	
+
 	@Test
-	public void shouldAddTotalRatingAndCorrectAverageRating() {
-		when(calculator.calculateAverage()).thenReturn(0.01D);
-		politician.calculateAverageRating();
-		
-		when(politicianRepo.findByPoliticianNumber(POLITICIAN_NUMBER)).thenReturn(Optional.of(politician));
-		
-		Politicians politicianQueried = politicianService.findPoliticianByNumber(POLITICIAN_NUMBER);
-		
-		assertThat(0.01D,
-				equalTo(politicianQueried.getRating().getAverageRating()));
+	public void verifyPoliticianNumberHasChangedWhenSavingPolitcian() {
+		String polNumber = PoliticianNumberImplementor.with(politician).calculateEntityNumber().getPoliticianNumber();
+
+		Politicians politicianSaved = politicianService.savePolitician(politicianDtoRequest);
+
+		assertEquals(polNumber, politicianSaved.getPoliticianNumber());
 	}
-	
-	@Test
-	public void shouldEqualDTOOutputs() {
-		when(politicianRepo.findByPoliticianNumber(POLITICIAN_NUMBER)).thenReturn(Optional.of(politician));
-		
-		Politicians politicianQueried = politicianService.findPoliticianByNumber(POLITICIAN_NUMBER);
-		
-		assertEquals(politician, politicianQueried);
-	}
-	
-	@Test
-	public void shouldReturnTrueWhenDeletedByPoliticianNumber() {
-		when(politicianRepo.existsByPoliticianNumber(POLITICIAN_NUMBER)).thenReturn(true);
-		
-		assertTrue(politicianService.deletePolitician(POLITICIAN_NUMBER));
-	}
-	
-	@Test
-	public void shouldEqualDTOOutputsWhenSaved() {
-		when(politicianRepo.save(any(Politicians.class))).thenReturn(politician); 
-		when(politicianRepo.countByLastNameAndFirstName("Mirriam", "Defensor")).thenReturn(1L);
-		
-		Politicians politicianQueried = politicianService.savePolitician(politicianDtoRequest);
-		
-		assertEquals(politician, politicianQueried);
-	}
-	
+
 	
 }
