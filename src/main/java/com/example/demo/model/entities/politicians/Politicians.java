@@ -138,7 +138,7 @@ public class Politicians implements PoliticianMethods{
 	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
 		return "Politicians [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", fullName="
-				+ fullName +  ", rating=" + rating + "]";
+				+ fullName +  ", rating=" + rating + ", politicianNumber=" + politicianNumber + "]";
 	}
 
 	@Override

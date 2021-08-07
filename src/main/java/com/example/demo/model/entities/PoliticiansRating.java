@@ -1,19 +1,12 @@
 package com.example.demo.model.entities;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.service.RateLimitingService;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Entity
 public class PoliticiansRating {
@@ -67,7 +60,6 @@ public class PoliticiansRating {
 
 	public PoliticiansRating() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public PoliticiansRating(Integer id, Double rating, UserRater rater, Politicians politician) {
@@ -82,6 +74,33 @@ public class PoliticiansRating {
 	public String toString() {
 		return "PoliticiansRating [id=" + id + ", rating=" + rating + ", rater=" + rater +
 				", politician=" + politician + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PoliticiansRating other = (PoliticiansRating) obj;
+		if (other.id == null) {
+			return false;
+		} else {
+			if (!other.id.equals(id)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public double calculateRating(double rating) {

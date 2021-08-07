@@ -1,14 +1,13 @@
 package com.example.demo.model.entities;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Transient;
-
 import com.example.demo.jwt.JwtProvider;
 import com.example.demo.model.enums.PoliticalParty;
 import com.example.demo.service.RateLimitingService;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.jsonwebtoken.JwtException;
+
+import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
 @Embeddable
 public class UserRater {
@@ -75,13 +74,39 @@ public class UserRater {
 
 	public UserRater() {
 		this.limitingService = null;
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String toString() {
 		return "UserRater [facebookName=" + facebookName + ", politicalParties=" + politicalParties + ", email=" + email
 				+ ", userAccountNumber=" + userAccountNumber + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((userAccountNumber == null) ? 0 : userAccountNumber.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserRater other = (UserRater) obj;
+		if (other.getUserAccountNumber() == null) {
+			return false;
+		} else {
+			if (!other.getUserAccountNumber().equals(userAccountNumber)) {
+				return false;
+			}
+		}
+		return false;
 	}
 
 	public boolean canRate(String jwt, String polNumber) {

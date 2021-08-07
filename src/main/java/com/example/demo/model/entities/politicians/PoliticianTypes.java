@@ -1,7 +1,7 @@
 package com.example.demo.model.entities.politicians;
 
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
-import io.jsonwebtoken.lang.Assert;
+import com.example.demo.model.politicianNumber.PoliticianNumberImplementor;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -35,7 +35,8 @@ public class PoliticianTypes {
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((getPoliticianNumber() == null) ? 0 : getPoliticianNumber().hashCode());
+			result = prime * result + ((getFirstName() == null) ? 0 : getFirstName().hashCode());
+			result = prime * result + ((getLastName() == null) ? 0 : getLastName().hashCode());
 			result = prime * result + Type.PRESIDENTIAL.hashCode();
 			return result;
 		}
@@ -57,9 +58,8 @@ public class PoliticianTypes {
 			if (other.getPoliticianNumber() == null) {
 				return false;
 			} else {
-				if (!other.getPoliticianNumber().equals(this.getPoliticianNumber())) {
+				if (!other.getPoliticianNumber().equals(this.getPoliticianNumber()))
 					return false;
-				}
 			}
 			return true;
 		}
@@ -69,8 +69,6 @@ public class PoliticianTypes {
 			private Politicians politician;
 			
 			private String mostSignificantLawSigned;
-			
-			private PoliticiansBuilder politicianBuilder;
 
 			public PresidentialBuilder(Politicians politician) {
 				this.politician = politician;
@@ -86,30 +84,15 @@ public class PoliticianTypes {
 			}
 			
 			public PresidentialBuilder setBuilder(PoliticiansBuilder builder) {
-				this.politicianBuilder = builder;
-				return this;
+				return new PresidentialBuilder(builder);
 			}
 
-			/*
-			 * Builder should be null to avoid bugs that would occur
-			 * because of builders that aren't null and would still use 
-			 * the build() method not knowing that certain fields for the 
-			 * superclass politician has changed. 
-			 */
 			public PresidentialPolitician build() {
-				org.springframework.util.Assert.isNull(politicianBuilder, 
-						"builder is not null, use the buildWithDifferentBuilderMethod()");
+				var entity = new PresidentialPolitician(politician, null);
+				String politicianNumber = PoliticianNumberImplementor.with(entity).calculateEntityNumber().getPoliticianNumber();
+				politician.setPoliticianNumber(politicianNumber);
+
 				return new PresidentialPolitician(politician, mostSignificantLawSigned);
-			}
-			
-			/*
-			 * Caution must be taken when using this method to build politicians.
-			 * This must only be used when a builder is set using the setBuilder() method.
-			 */
-			public PresidentialPolitician buildWithDifferentBuilder() {
-				Assert.notNull(politicianBuilder, 
-						"builder cannot be null when building with a different builder");
-				return new PresidentialPolitician(politicianBuilder.build(), mostSignificantLawSigned);
 			}
 			
 		}
@@ -153,14 +136,15 @@ public class PoliticianTypes {
 		@ExcludeFromJacocoGeneratedCoverage
 		public String toString() {
 			return "SenatorialPolitician [totalMonthsOfServiceAsSenator=" + totalMonthsOfServiceAsSenator
-					+ ", mostSignificantLawMade=" + mostSignificantLawMade + "]";
+					+ ", mostSignificantLawMade=" + mostSignificantLawMade + ", politicianNumber=" + getPoliticianNumber() + "]";
 		}
 
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((getPoliticianNumber() == null) ? 0 : getPoliticianNumber().hashCode());
+			result = prime * result + ((getFirstName() == null) ? 0 : getFirstName().hashCode());
+			result = prime * result + ((getLastName() == null) ? 0 : getLastName().hashCode());
 			result = prime * result + Type.SENATORIAL.hashCode();
 			return result;
 		}
@@ -222,40 +206,25 @@ public class PoliticianTypes {
 			}
 			
 			public SenatorialBuilder setBuilder(PoliticiansBuilder builder) {
-				this.builder = builder;
-				return this;
+				return new SenatorialBuilder(builder)
+						.setTotalMonthsOfService(totalMonthsOfServiceAsSenator)
+						.setMostSignificantLawMade(mostSignificantLawMade);
 			}
-			
-			/*
-			 * Builder should be null to avoid bugs that would occur
-			 * because of builders that aren't null and would still use 
-			 * the build() method not knowing that certain fields for the 
-			 * superclass politician has changed. 
-			 */
+
 			public SenatorialPolitician build() {
-				Assert.isNull(builder, 
-						"builder is not null, use the buildWithDifferentBuilderMethod()");
 				org.springframework.util.Assert.notNull(totalMonthsOfServiceAsSenator,
 						"""
-						years of service must not be null. if politician has no experience, the appropriate number
-						of experience is 0
-						 """);
+								years of service must not be null. if politician has no experience, the appropriate number
+								of experience is 0
+								 """);
 				org.springframework.util.Assert.state(isPositive(totalMonthsOfServiceAsSenator),
 						"months of experience must not be negative");
+
+				var entity = new SenatorialPolitician(politician, 0, null);
+				String politicianNumber = PoliticianNumberImplementor.with(entity).calculateEntityNumber().getPoliticianNumber();
+				politician.setPoliticianNumber(politicianNumber);
+
 				return new SenatorialPolitician(politician, totalMonthsOfServiceAsSenator, mostSignificantLawMade);
-			}
-			
-			public SenatorialPolitician buildWithDifferentBuilder() {
-				org.springframework.util.Assert.notNull(totalMonthsOfServiceAsSenator,
-						"""
-						years of service must not be null. if politician has no experience, the appropriate number
-						of experience is 0
-						 """);
-				org.springframework.util.Assert.state(isPositive(totalMonthsOfServiceAsSenator),
-						"months of experience must not be negative");
-				org.springframework.util.Assert.notNull(builder,
-						"builder cannot be null when using this method");
-				return new SenatorialPolitician(builder.build(), totalMonthsOfServiceAsSenator, mostSignificantLawMade);
 			}
 
 			private boolean isPositive(int yearsOfService) {
