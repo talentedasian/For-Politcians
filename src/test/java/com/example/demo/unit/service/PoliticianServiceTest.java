@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
@@ -18,11 +21,20 @@ public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
 
 		Politicians politicianSaved = politicianService.savePolitician(politicianDtoRequest);
 
-		assertEquals(politicianSaved, politicianRepo.findByPoliticianNumber(politicianSaved.getPoliticianNumber()).get());
+		Optional<Politicians> politicianQueried = politicianRepo.findByPoliticianNumber(politicianSaved.getPoliticianNumber());
+
+		assertThat(politicianQueried)
+				.isNotEmpty()
+				.get()
+				.isEqualTo(politician);
 	}
 
+	/*	verifies if the politician number has been changed and/or is correct when saving this politician
+	 *
+	 *
+	*/  
 	@Test
-	public void verifyPoliticianNumberHasChangedWhenSavingPolitcian() {
+	public void verifyPoliticianNumberIsCorrectWhenSavingPolitcian() {
 		String polNumber = PoliticianNumberImplementor.with(politician).calculateEntityNumber().getPoliticianNumber();
 
 		Politicians politicianSaved = politicianService.savePolitician(politicianDtoRequest);
