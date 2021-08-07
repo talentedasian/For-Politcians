@@ -4,7 +4,7 @@ import com.example.demo.model.entities.politicians.Politicians;
 
 class PresidentialNumberImplementor extends PoliticianNumberImplementor {
 
-    private PresidentialNumberImplementor(Politicians politician) {
+    PresidentialNumberImplementor(Politicians politician) {
         super(politician);
     }
 
@@ -14,7 +14,7 @@ class PresidentialNumberImplementor extends PoliticianNumberImplementor {
     }
 
     @Override
-    public PresidentialNumberImplementor calculateEntityNumber() {
+    PresidentialNumberImplementor calculatePoliticianNumber() {
         String initialFirstName = calculateFirstName(pattern);
         String initialLastName = calculateLastName(initialFirstName);
         String initialType = calculateType(initialLastName);

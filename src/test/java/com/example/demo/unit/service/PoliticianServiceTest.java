@@ -29,6 +29,5 @@ public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
 
 		assertEquals(polNumber, politicianSaved.getPoliticianNumber());
 	}
-
 	
 }

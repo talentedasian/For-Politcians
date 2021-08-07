@@ -2,25 +2,26 @@ package com.example.demo.model.politicianNumber;
 
 import com.example.demo.model.entities.politicians.Politicians;
 
-class SenatorialNumberImplementor extends PoliticianNumberImplementor{
+final class SenatorialNumberImplementor extends PoliticianNumberImplementor{
 
-    private SenatorialNumberImplementor(Politicians politician) {
+    SenatorialNumberImplementor(Politicians politician) {
         super(politician);
     }
 
     static SenatorialNumberImplementor with(String politicianNumber) {
-        final Politicians politician = new Politicians.PoliticiansBuilder(politicianNumber).build();
+        final Politicians politician = new Politicians.PoliticiansBuilder(politicianNumber)
+                .build();
         return new SenatorialNumberImplementor(politician);
     }
 
     @Override
-    public SenatorialNumberImplementor calculateEntityNumber() {
+    SenatorialNumberImplementor calculatePoliticianNumber() {
         String initialFirstName = calculateFirstName(pattern);
         String initialLastName = calculateLastName(initialFirstName);
         String initialType = calculateType(initialLastName);
         String finalPoliticianNumber = initialType.replaceAll("[0-9]", String.valueOf(getPolitician().hashCode()).substring(0,5));
 
-        return with("123polNumber");
+        return with(finalPoliticianNumber);
     }
 
     private String calculateFirstName(String pattern) {
@@ -28,7 +29,7 @@ class SenatorialNumberImplementor extends PoliticianNumberImplementor{
     }
 
     private String calculateLastName(String pattern) {
-        char toReplace = (lastName == null | (lastName.isBlank() || lastName.isEmpty())) ? 'S' : getLastName().charAt(0);
+        char toReplace = (lastName == null | (lastName.isBlank() || lastName.isEmpty())) ? 'S' : lastName.charAt(0);
         return pattern.replace(LASTNAME_INITIAL, toReplace);
     }
 

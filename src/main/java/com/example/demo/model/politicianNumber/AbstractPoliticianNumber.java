@@ -36,6 +36,6 @@ public abstract class AbstractPoliticianNumber implements EntityNumberInterface 
 		return calculatePoliticianNumber();
 	}
 	
-	public abstract AbstractPoliticianNumber calculatePoliticianNumber();
+	abstract AbstractPoliticianNumber calculatePoliticianNumber();
 
 }

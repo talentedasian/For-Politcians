@@ -1,26 +1,23 @@
 package com.example.demo.service;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.jwt.JwtProviderHttpServletRequest;
-import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.UserRater;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.userRaterNumber.AbstractUserRaterNumber;
 import com.example.demo.model.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;
-
 import io.jsonwebtoken.Claims;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Service
 public class RatingService {
@@ -29,8 +26,8 @@ public class RatingService {
 	private final PoliticiansRepository politicianRepo;
 	private final RateLimitingService rateLimitService;
 
-	public RatingService(RatingRepository ratingRepo, PoliticiansRepository politicianRepo, 
-			RateLimitingService rateLimitService) {
+	public RatingService(RatingRepository ratingRepo, PoliticiansRepository politicianRepo,
+						 RateLimitingService rateLimitService) {
 		this.ratingRepo = ratingRepo;
 		this.politicianRepo = politicianRepo;
 		this.rateLimitService = rateLimitService;

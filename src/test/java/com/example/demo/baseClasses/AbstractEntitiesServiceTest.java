@@ -2,11 +2,15 @@ package com.example.demo.baseClasses;
 
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
+import com.example.demo.dtoRequest.AddSenatorialPoliticianDTORequest;
 import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
+import com.example.demo.model.entities.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.enums.PoliticalParty;
+import com.example.demo.repository.FakePoliticianRepository;
+import com.example.demo.repository.FakeRatingRepo;
 import com.example.demo.repository.PoliticiansRepository;
 import com.example.demo.repository.RatingRepository;
 import com.example.demo.service.PoliticiansService;
@@ -21,8 +25,8 @@ import java.util.ArrayList;
 
 public class AbstractEntitiesServiceTest {
 
-	@Mock public RatingRepository ratingRepo;
-	@Mock public PoliticiansRepository politicianRepo;
+	public RatingRepository ratingRepo;
+	public PoliticiansRepository politicianRepo;
 	@Mock public HttpServletRequest req;
 	@Mock public AverageCalculator calculator;
 	@Mock public RateLimitingService rateLimitService;
@@ -34,23 +38,29 @@ public class AbstractEntitiesServiceTest {
 	public AddRatingDTORequest ratingDtoRequest;
 	public AddPoliticianDTORequest politicianDtoRequest;
 
-	public final String POLITICIAN_NUMBER = "FL00-LF00-0000";
 	public final String EMAIL = "test@gmail.com";
 	public final String ACCOUNT_NUMBER = "123accountNumber";
+	public final String FIRST_NAME = "Miriam Palma";
+	public final String LAST_NAME = "Defensor-Santiago";
 	
 	@BeforeEach
 	public void setup() {
+		politicianRepo = new FakePoliticianRepository();
+
+		ratingRepo = new FakeRatingRepo();
+
 		politicianService = new PoliticiansService(politicianRepo);
 		
 		ratingService = new RatingService(ratingRepo, politicianRepo, rateLimitService);
-		
-		politician = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
-				.setRatingRepository(ratingRepo)
-				.setId(1)
-				.setFirstName("Mirriam")
-				.setLastName("Defensor")
-				.setPoliticiansRating(new ArrayList<PoliticiansRating>())
-				.setRating(new Rating(0.01D, 0.01D, calculator))
+
+		politician = new SenatorialBuilder(new Politicians.PoliticiansBuilder("dummy")
+					.setRatingRepository(ratingRepo)
+					.setId(1)
+					.setFirstName(FIRST_NAME)
+					.setLastName(LAST_NAME)
+					.setPoliticiansRating(new ArrayList<PoliticiansRating>())
+					.setRating(new Rating(0.01D, 0.01D, calculator)))
+				.setTotalMonthsOfService(12)
 				.build();
 		
 		rating = new PoliticiansRating();
@@ -61,13 +71,15 @@ public class AbstractEntitiesServiceTest {
 		
 		ratingDtoRequest = new AddRatingDTORequest
 		(BigDecimal.valueOf(0.00D),
-		POLITICIAN_NUMBER,
-		 PoliticalParty.DDS.toString());
+		politician.getPoliticianNumber(),
+	 	PoliticalParty.DDS.toString());
 		
-		politicianDtoRequest = new AddPoliticianDTORequest
-				("Mirriam",
-				"Defensor",
-				BigDecimal.valueOf(0.01D));
+		politicianDtoRequest = new AddSenatorialPoliticianDTORequest
+				(FIRST_NAME,
+				LAST_NAME,
+				BigDecimal.valueOf(0.01D),
+	12,
+		"Anti Corrupt Law");
 	}
 	
 }

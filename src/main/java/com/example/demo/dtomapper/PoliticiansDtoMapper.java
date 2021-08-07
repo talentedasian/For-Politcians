@@ -20,7 +20,7 @@ public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 
 		return mapToPoliticianDTO(entity);
 	}
-	
+
 	@Override
 	public List<? extends PoliticianDTO> mapToDTO(List<Politicians> entity) {
 		return entity.stream()
@@ -36,7 +36,8 @@ public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 				entity.getFirstName() + " " + entity.getLastName(), 
 				entity.getPoliticianNumber(), 
 				rating,
-				satisfactionRate);
+				satisfactionRate,
+				"Presidential");
 	}
 
 }

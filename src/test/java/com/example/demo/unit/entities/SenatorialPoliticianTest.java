@@ -36,7 +36,7 @@ public class SenatorialPoliticianTest {
         var actualPolitician = senatorialBuilder.build();
 
         var samePoliticianNumber = senatorialBuilder.setBuilder(politicianBuilder.setPoliticianNumber(POLITICIAN_NUMBER))
-                .buildWithDifferentBuilder();
+                .build();
 
         assertTrue(actualPolitician.equals(samePoliticianNumber));
     }
@@ -46,7 +46,7 @@ public class SenatorialPoliticianTest {
         var actualPolitician = senatorialBuilder.build();
 
         var polWrongNumber = senatorialBuilder.setBuilder(politicianBuilder.setPoliticianNumber("differentNumber"))
-                .buildWithDifferentBuilder();
+                .build();
 
         assertFalse(actualPolitician.equals(polWrongNumber));
     }
@@ -67,7 +67,7 @@ public class SenatorialPoliticianTest {
         map.put(actualPolitician,actualPolitician);
 
         var samePoliticianNumber = senatorialBuilder.setBuilder(politicianBuilder.setPoliticianNumber(POLITICIAN_NUMBER))
-                .buildWithDifferentBuilder();
+                .build();
 
         assertEquals(actualPolitician, map.get(samePoliticianNumber));
     }

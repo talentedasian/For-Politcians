@@ -1,33 +1,23 @@
 package com.example.demo.integration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.annotation.Commit;
-
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.model.averageCalculator.AverageCalculator;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.entities.politicians.Politicians.PoliticiansBuilder;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.politicians.PoliticianTypes;
 import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.model.entities.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.model.entities.politicians.Politicians;
+import com.example.demo.model.entities.politicians.Politicians.PoliticiansBuilder;
 import com.example.demo.repository.PoliticiansRepository;
-
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import testAnnotations.DatabaseTest;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @DatabaseTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 
 	@Autowired
@@ -35,8 +25,10 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	
 	@Mock
 	public AverageCalculator calculator;
+
+	final String POLITICIAN_NUMBER = "1111";
 	
-	PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder("1111")
+	PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
 			.setFirstName("Rodrigo")
 			.setLastName("Duterte")
 			.setFullName()
@@ -51,13 +43,11 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 			.setMostSignificantLawMade("Taxification Law");
 	
 	@Test
-	@Order(1)
-	@Commit
 	public void shouldBeEqualOnSavedEntityForPresidential() {
 		Politicians politicianToBeSaved = presidentialBuilder.setMostSignificantLawPassed("Rice Law")
 				.build();
 		
-		Politicians politician = repo.save(politicianToBeSaved);
+		Politicians politician = repo.save(presidentialBuilder.setBuilder(politicianBuilder.setPoliticianNumber(POLITICIAN_NUMBER)).build());
 		
 		assertEquals(politicianToBeSaved, politician);
 	}
@@ -72,10 +62,9 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	}
 	
 	@Test
-	@Order(2)
 	public void shouldThrowDataIntegrityExceptionWhenPoliticianNumberIsTheSame() {
 		Politicians politicianToBeSaved = politicianBuilder.build();
-		
+
 		assertThrows(DataIntegrityViolationException.class,
 				() -> repo.saveAndFlush(politicianToBeSaved));
 	}
@@ -83,7 +72,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	@Test
 	public void assertExistsByPoliticianNumberQueryByPresidential() {
 		Politicians politicianToBeSaved = presidentialBuilder.setBuilder(politicianBuilder.setPoliticianNumber("9898"))
-				.buildWithDifferentBuilder();
+				.build();
 		
 		repo.save(politicianToBeSaved);
 		
@@ -93,7 +82,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	@Test
 	public void assertExistsByPoliticianNumberQueryBySenatorial() {
 		Politicians politicianToBeSaved = senatorialBuilder.setBuilder(politicianBuilder.setPoliticianNumber("9898"))
-				.buildWithDifferentBuilder();
+				.build();
 		
 		repo.save(politicianToBeSaved);
 		
@@ -115,7 +104,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	@Test
 	public void assertDeleteByPoliticianNumberQueryByPresidential() {
 		Politicians politicianToBeSaved = presidentialBuilder.setBuilder(politicianBuilder.setPoliticianNumber("random number"))
-				.buildWithDifferentBuilder();
+				.build();
 		repo.save(politicianToBeSaved);
 		
 		String id = politicianToBeSaved.getPoliticianNumber();

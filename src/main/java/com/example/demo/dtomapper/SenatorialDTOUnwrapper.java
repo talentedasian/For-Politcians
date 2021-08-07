@@ -26,12 +26,10 @@ class SenatorialDTOUnwrapper extends PoliticianDTOUnwrapper{
                 .setRating(new Rating(0.00D, 0.00D, new LowSatisfactionAverageCalculator(0.00D, 0D)))
                 .build();
 
-        var entity = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politician)
+        return new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politician)
                 .setTotalMonthsOfService(dto.getMonthsOfService())
                 .setMostSignificantLawMade(dto.getlawMade())
                 .build();
-
-        return entity;
     }
 
 }

@@ -65,7 +65,7 @@ public class PolymorphicQueriesTest extends BaseClassTestsThatUsesDatabase {
     @Test
     public void testPolymorphicQueriesWithDifferentPoliticianTypes() throws Exception {
         var president = presidentialBuilder.build();
-        var senator = senatorialBuilder.buildWithDifferentBuilder();
+        var senator = senatorialBuilder.build();
         List<Politicians> polymorphicPoliticians = List.of(president,senator);
 
         repo.saveAll(polymorphicPoliticians);

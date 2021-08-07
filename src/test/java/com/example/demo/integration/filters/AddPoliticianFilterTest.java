@@ -2,6 +2,7 @@ package com.example.demo.integration.filters;
 
 import com.example.demo.controller.PoliticianController;
 import com.example.demo.dto.PoliticianDTO;
+import com.example.demo.dto.SenatorialPoliticianDTO;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.exceptionHandling.GlobalExceptionHandling;
 import com.example.demo.filter.AddPoliticianFilter;
@@ -80,7 +81,7 @@ public class AddPoliticianFilterTest {
 	}
 	
 	@Test 
-	public void shouldReturn401AuthorizationRequiredMessageIfAuthorizationIsIncorrect() throws URISyntaxException, Exception {
+	public void shouldReturn401AuthorizationRequiredMessageIfAuthorizationIsIncorrect() throws Exception {
 		when(service.savePolitician(any())).thenReturn(politician);
 		
 		mvc.perform(post(URI.create("/api/politicians/politician"))
@@ -109,7 +110,7 @@ public class AddPoliticianFilterTest {
 	
 	@Test 
 	public void shouldReturn201CreatedIfAuthorizationIsCorrect() throws URISyntaxException, Exception {
-		var polDTO = new PoliticianDTO("test name", "123polNumber", 0.01D, LOW);
+		var polDTO = new SenatorialPoliticianDTO(politician, LOW, 12, null);
 		
 		when(service.savePolitician(any())).thenReturn(politician);
 		when(assembler.toModel(any(PoliticianDTO.class))).thenReturn(EntityModel.of(polDTO));

@@ -41,13 +41,13 @@ public class PolymorphicDTOTest extends BaseClassForPoliticianDTOTests {
                                 .setFirstName("Nancy")
                                 .setLastName("Binay")
                                 .setFullName())
-                        .buildWithDifferentBuilder(),
+                        .build(),
                 presidentialBuilder
                         .setBuilder(politicianBuilder
                                 .setFirstName("Ninoy")
                                 .setLastName("Aquino")
                                 .setFullName())
-                        .buildWithDifferentBuilder());
+                        .build());
     }
 
 }

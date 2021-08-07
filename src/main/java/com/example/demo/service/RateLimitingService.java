@@ -1,12 +1,11 @@
 package com.example.demo.service;
 
-import java.util.Optional;
-
+import com.example.demo.model.entities.RateLimit;
+import com.example.demo.repository.RateLimitRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.model.entities.RateLimit;
-import com.example.demo.repository.RateLimitRepository;
+import java.util.Optional;
 
 @Service
 public class RateLimitingService {
@@ -14,7 +13,6 @@ public class RateLimitingService {
 	private final RateLimitRepository repo;
 
 	public RateLimitingService(RateLimitRepository repo) {
-		super();
 		this.repo = repo;
 	}
 	

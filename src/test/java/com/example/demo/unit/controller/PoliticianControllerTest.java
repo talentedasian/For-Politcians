@@ -3,6 +3,7 @@ package com.example.demo.unit.controller;
 import com.example.demo.controller.PoliticianController;
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
+import com.example.demo.dtoRequest.AddPresidentialPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.hateoas.PoliticianAssembler;
 import com.example.demo.model.averageCalculator.AverageCalculator;
@@ -53,10 +54,11 @@ public class PoliticianControllerTest {
 
 		senatorialBuilder = new SenatorialBuilder(politicianBuilder).setTotalMonthsOfService(12).setMostSignificantLawMade("Anti Terror");
 		
-		politicianDTORequest = new AddPoliticianDTORequest
+		politicianDTORequest = new AddPresidentialPoliticianDTORequest
 				("Mirriam",
 				"Defensor",
-				AVERAGE_RATING);
+				AVERAGE_RATING,
+			null);
 	}
 	
 	@Test
