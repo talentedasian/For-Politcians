@@ -25,13 +25,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class PolymorphicQueriesTest extends BaseClassTestsThatUsesDatabase {
 
     MockMvc mvc;
 
-    @Autowired
-    PoliticiansRepository repo;
+    @Autowired PoliticiansRepository repo;
 
     Politicians.PoliticiansBuilder politiciansBuilder;
     PoliticianTypes.SenatorialPolitician.SenatorialBuilder senatorialBuilder;
@@ -43,7 +42,7 @@ public class PolymorphicQueriesTest extends BaseClassTestsThatUsesDatabase {
                 .alwaysDo(print())
                 .build();
 
-        politiciansBuilder = new Politicians.PoliticiansBuilder("773polNumber")
+        politiciansBuilder = new Politicians.PoliticiansBuilder("dummy")
                 .setFirstName("Rodrigo")
                 .setLastName("Duterte")
                 .setFullName()
@@ -92,4 +91,5 @@ public class PolymorphicQueriesTest extends BaseClassTestsThatUsesDatabase {
              */
             repo.deleteAll(polymorphicPoliticians);
         }
+
 }

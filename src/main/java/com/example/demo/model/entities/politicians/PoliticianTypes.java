@@ -84,7 +84,8 @@ public class PoliticianTypes {
 			}
 			
 			public PresidentialBuilder setBuilder(PoliticiansBuilder builder) {
-				return new PresidentialBuilder(builder);
+				return new PresidentialBuilder(builder)
+						.setMostSignificantLawPassed(mostSignificantLawSigned);
 			}
 
 			public PresidentialPolitician build() {

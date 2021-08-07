@@ -4,14 +4,11 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonTypeName("Senatorial")
 public class AddSenatorialPoliticianDTORequest extends AddPoliticianDTORequest {
 
-    @NotNull
     private int monthsOfService;
 
     private String lawMade;

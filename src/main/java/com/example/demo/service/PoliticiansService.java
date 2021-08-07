@@ -58,7 +58,6 @@ public class PoliticiansService {
 	public Politicians savePolitician(AddPoliticianDTORequest dto) {
 		try {
 			Politicians unwrappedPolitician = new PoliticianDTOUnwrapper().unWrapDTO(dto);
-
 			Politicians politician = politiciansRepo.save(unwrappedPolitician);
 
 			return politician;

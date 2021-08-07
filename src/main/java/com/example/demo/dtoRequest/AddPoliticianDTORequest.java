@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
 		@JsonSubTypes.Type(value = AddSenatorialPoliticianDTORequest.class, name = "Senatorial"),
 		@JsonSubTypes.Type(value = AddPresidentialPoliticianDTORequest.class, name = "Presidential")
@@ -25,8 +25,6 @@ public class AddPoliticianDTORequest {
 	private String lastName;
 	
 	@NotNull
-	@DecimalMin("0.01")
-	@DecimalMax("9.99")
 	private BigDecimal rating;
 
 	@NotNull
@@ -69,8 +67,7 @@ public class AddPoliticianDTORequest {
 	}
 
 	public AddPoliticianDTORequest(@NotNull String firstName, @NotNull String lastName,
-			@NotNull @DecimalMin("0.01") @DecimalMax("9.99") BigDecimal rating, @NotNull String type) {
-		super();
+			@NotNull BigDecimal rating, @NotNull String type) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.rating = rating;

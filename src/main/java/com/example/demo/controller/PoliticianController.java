@@ -1,23 +1,5 @@
  package com.example.demo.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.dto.PoliticianDTO;
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
@@ -26,8 +8,16 @@ import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.hateoas.PoliticianAssembler;
 import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.service.PoliticiansService;
-
 import io.swagger.v3.oas.annotations.Hidden;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/politicians")
@@ -47,11 +37,11 @@ public class PoliticianController {
 	@Hidden
 	public ResponseEntity<EntityModel<PoliticianDTO>> savePolitician(@Valid @RequestBody AddPoliticianDTORequest request) {
 		Politicians politicianSaved = politiciansService.savePolitician(request);
-		
+
 		PoliticianDTO politician = mapper.mapToDTO(politicianSaved);
-		
+
 		EntityModel<PoliticianDTO> response = assembler.toModel(politician);
-		
+
 		return new ResponseEntity<EntityModel<PoliticianDTO>>(response, HttpStatus.CREATED);
 	}
 	

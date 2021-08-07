@@ -200,9 +200,9 @@ public class Politicians implements PoliticianMethods{
 		static Map<String, Type> cache = new HashMap<>();
 
 		static {
-			cache.put("presidential", PRESIDENTIAL);
-			cache.put("senatorial", SENATORIAL);
-			cache.put("mayorial", MAYOR);
+			cache.put("Presidential", PRESIDENTIAL);
+			cache.put("Senatorial", SENATORIAL);
+			cache.put("Mayorial", MAYOR);
 		}
 
 
