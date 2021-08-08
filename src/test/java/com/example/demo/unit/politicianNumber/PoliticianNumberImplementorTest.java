@@ -1,5 +1,6 @@
 package com.example.demo.unit.politicianNumber;
 
+import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.model.entities.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.politicianNumber.PoliticianNumberImplementor;
@@ -27,14 +28,14 @@ public class PoliticianNumberImplementorTest {
 //	}
 	
 	@Test
-	public void shouldCreatePoliticianNumberObjectWithPoliticianNumber() {
-		var senatorial = new SenatorialBuilder(politicianBuilder)
-				.setTotalMonthsOfService(12)
+	public void assertLogicOfPoliticianNumberPatternCreatorMethodWithPresidential() {
+		var senatorial = new PresidentialBuilder(politicianBuilder)
 				.build();
 
-		PoliticianNumberImplementor polNumberObject = PoliticianNumberImplementor.with(senatorial);
+		PoliticianNumberImplementor polNumber = PoliticianNumberImplementor.with(senatorial);
 		
-		assertEquals(polNumberObject.getPoliticianNumber(), POLITICIAN_NUMBER);
+		assertEquals("FLPP-LFPP-".concat(String.valueOf(senatorial.hashCode()).substring(0, 4)),
+				polNumber.getPoliticianNumber());
 	}
 	
 	@Test
@@ -43,9 +44,10 @@ public class PoliticianNumberImplementorTest {
 				.setTotalMonthsOfService(12)
 				.build();
 
-		PoliticianNumberImplementor polNumberObject = PoliticianNumberImplementor.with(senatorial);
+		PoliticianNumberImplementor polNumber = PoliticianNumberImplementor.with(senatorial);
 
-		assertEquals(polNumberObject.calculateEntityNumber().getPoliticianNumber(), POLITICIAN_NUMBER);
+		assertEquals("FLSS-LFSS-".concat(String.valueOf(senatorial.hashCode()).substring(0, 4)),
+				polNumber.getPoliticianNumber());
 	}
 	
 }

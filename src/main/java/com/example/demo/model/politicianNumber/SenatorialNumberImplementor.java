@@ -21,7 +21,7 @@ final class SenatorialNumberImplementor extends PoliticianNumberImplementor{
         String initialType = calculateType(initialLastName);
         String finalPoliticianNumber = initialType.replaceAll("[0-9]", String.valueOf(getPolitician().hashCode()).substring(0,5));
 
-        return with(finalPoliticianNumber);
+        return with(finalPoliticianNumber.substring(0, pattern.length()).toUpperCase());
     }
 
     private String calculateFirstName(String pattern) {
