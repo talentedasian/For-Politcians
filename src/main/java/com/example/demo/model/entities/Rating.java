@@ -45,18 +45,16 @@ public class Rating {
 	}
 
 	@Transient
-	private transient AverageCalculator calculator;
+	private transient AverageCalculator calculator= null;
 	
 	public Rating() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public Rating(Double totalRating, Double averageRating, AverageCalculator calculator) {
+	public Rating(Double totalRating, Double averageRating) {
 		super();
 		this.totalRating = totalRating;
 		this.averageRating = averageRating;
-		this.calculator = calculator;
 	}
 	
 	public double calculateAverage() {

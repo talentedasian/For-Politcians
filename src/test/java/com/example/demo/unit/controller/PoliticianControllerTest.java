@@ -6,12 +6,11 @@ import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtoRequest.AddPresidentialPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.hateoas.PoliticianAssembler;
-import com.example.demo.model.averageCalculator.AverageCalculator;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.entities.politicians.Politicians.PoliticiansBuilder;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.politicians.PoliticianTypes;
 import com.example.demo.model.entities.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.model.entities.politicians.Politicians;
+import com.example.demo.model.entities.politicians.Politicians.PoliticiansBuilder;
 import com.example.demo.service.PoliticiansService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,6 @@ import static org.mockito.Mockito.*;
 public class PoliticianControllerTest {
 
 	@Mock PoliticiansService service;
-	@Mock AverageCalculator calculator;
 	@Mock PoliticianAssembler assembler;
 	
 	PoliticianController controller;
@@ -47,7 +45,7 @@ public class PoliticianControllerTest {
 		controller = new PoliticianController(service, assembler);
 
 		politicianBuilder = new PoliticiansBuilder(POLITICIAN_NUMBER)
-				.setRating(new Rating(9.67D, AVERAGE_RATING.doubleValue(), calculator))
+				.setRating(new Rating(9.67D, AVERAGE_RATING.doubleValue()))
 				.setFirstName("Mirriam")
 				.setLastName("Defensor")
 				.setFullName();

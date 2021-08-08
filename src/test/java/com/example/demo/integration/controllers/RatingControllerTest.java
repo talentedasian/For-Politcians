@@ -5,7 +5,6 @@ import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.exceptions.*;
 import com.example.demo.hateoas.RatingAssembler;
-import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.UserRater;
@@ -32,7 +31,6 @@ import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -78,7 +76,7 @@ public class RatingControllerTest {
 				.setFirstName("Mirriam")
 				.setLastName("Defensor")
 				.setFullName()
-				.setRating(new Rating(1D, 1D, mock(LowSatisfactionAverageCalculator.class)))
+				.setRating(new Rating(1D, 1D))
 				.build())
 			.build();
 		

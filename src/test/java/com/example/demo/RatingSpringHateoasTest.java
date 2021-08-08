@@ -1,11 +1,10 @@
 package com.example.demo;
 
-import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
-import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.UserRater;
 import com.example.demo.model.entities.politicians.PoliticianTypes;
+import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.enums.PoliticalParty;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +26,7 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 			.setFirstName("test")
 			.setLastName("politician")
 			.setFullName()
-			.setRating(new Rating(1.00D, 1.00D, new LowSatisfactionAverageCalculator(1.00D, 1D)))
+			.setRating(new Rating(1.00D, 1.00D))
 			.build();
 	Politicians savePol = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politician)
 			.setTotalMonthsOfService(12)

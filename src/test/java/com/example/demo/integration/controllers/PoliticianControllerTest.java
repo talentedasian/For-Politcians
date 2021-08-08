@@ -4,7 +4,6 @@ import com.example.demo.controller.PoliticianController;
 import com.example.demo.exceptionHandling.GlobalExceptionHandling;
 import com.example.demo.exceptionHandling.PoliticianExceptionHandling;
 import com.example.demo.hateoas.PoliticianAssembler;
-import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
@@ -22,7 +21,6 @@ import static com.example.demo.model.enums.Rating.mapToSatisfactionRate;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.MediaTypes.HAL_FORMS_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -68,7 +66,7 @@ public class PoliticianControllerTest {
 			.setFirstName("Mirriam")
 			.setLastName("Defensor")
 			.setFullName()
-			.setRating(new Rating(1D, 1D, mock(LowSatisfactionAverageCalculator.class)));
+			.setRating(new Rating(1D, 1D));
 
 		senatorialBuilder = new SenatorialBuilder(politiciansBuilder).setTotalMonthsOfService(12);
 

@@ -2,7 +2,6 @@ package com.example.demo.dtomapper;
 
 import com.example.demo.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtoRequest.AddSenatorialPoliticianDTORequest;
-import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.politicians.PoliticianTypes;
 import com.example.demo.model.entities.politicians.Politicians;
@@ -23,7 +22,7 @@ class SenatorialDTOUnwrapper extends PoliticianDTOUnwrapper{
                 .setFirstName(dto.getFirstName())
                 .setLastName(dto.getLastName())
                 .setFullName()
-                .setRating(new Rating(0.00D, 0.00D, new LowSatisfactionAverageCalculator(0.00D, 0D)))
+                .setRating(new Rating(0.00D, 0.00D))
                 .build();
 
         return new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politician)

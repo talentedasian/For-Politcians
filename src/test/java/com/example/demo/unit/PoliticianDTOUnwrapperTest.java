@@ -23,7 +23,7 @@ public class PoliticianDTOUnwrapperTest {
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
             .setFullName()
-            .setRating(new Rating(TOTAL_RATING, 0.00D, new LowSatisfactionAverageCalculator(TOTAL_RATING, 0)));
+            .setRating(new Rating(TOTAL_RATING, 0.00D));
 
     SenatorialBuilder senatorialBuilder = new SenatorialBuilder(politicianBuilder)
             .setTotalMonthsOfService(12);

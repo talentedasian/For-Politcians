@@ -1,7 +1,6 @@
 package com.example.demo.integration.controllers;
 
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
-import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.politicians.PoliticianTypes;
 import com.example.demo.model.entities.politicians.Politicians;
@@ -19,7 +18,6 @@ import java.util.List;
 import static com.example.demo.model.enums.Rating.mapToSatisfactionRate;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.mockito.Mockito.mock;
 import static org.springframework.hateoas.MediaTypes.HAL_FORMS_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -46,7 +44,7 @@ public class PolymorphicQueriesTest extends BaseClassTestsThatUsesDatabase {
                 .setFirstName("Rodrigo")
                 .setLastName("Duterte")
                 .setFullName()
-                .setRating(new Rating(1D, 1D, mock(LowSatisfactionAverageCalculator.class)));
+                .setRating(new Rating(1D, 1D));
 
         presidentialBuilder = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politiciansBuilder)
                 .setMostSignificantLawPassed("Banned Public Cigarette");

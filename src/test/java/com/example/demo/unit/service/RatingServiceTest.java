@@ -2,7 +2,6 @@ package com.example.demo.unit.service;
 
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
-import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.politicians.PoliticianTypes;
@@ -39,7 +38,6 @@ public class RatingServiceTest {
 	RatingRepository ratingRepo;
 	PoliticiansRepository politicianRepo;
 	@Mock HttpServletRequest req;
-	@Mock AverageCalculator calculator;
 	@Mock RateLimitingService rateLimitService;
 
 	RatingService ratingService;
@@ -64,7 +62,7 @@ public class RatingServiceTest {
 				.setFirstName("Nancy")
 				.setLastName("Binay")
 				.setPoliticiansRating(new ArrayList<PoliticiansRating>())
-				.setRating(new Rating(0.00D, 0.00D, calculator)))
+				.setRating(new Rating(0.00D, 0.00D)))
 				.setTotalMonthsOfService(12)
 				.build();
 

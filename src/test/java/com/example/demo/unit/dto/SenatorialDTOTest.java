@@ -6,13 +6,11 @@ import com.example.demo.dto.SenatorialPoliticianDTO;
 import com.example.demo.dtoRequest.AddSenatorialPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticianDTOUnwrapper;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
-import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.PoliticiansRating;
 import com.example.demo.model.entities.politicians.PoliticianTypes;
 import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.enums.Rating;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -50,11 +48,11 @@ public class SenatorialDTOTest extends BaseClassForPoliticianDTOTests {
 
         assertEquals(actual.hashCode(),
                 new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
-                        .setId(1)
-                        .setFirstName("Test")
-                        .setLastName("Name")
-                        .setPoliticiansRating(new ArrayList<PoliticiansRating>())
-                        .setRating(new com.example.demo.model.entities.Rating(0.01D, 0.01D, Mockito.mock(LowSatisfactionAverageCalculator.class))))
+                            .setId(1)
+                            .setFirstName("Test")
+                            .setLastName("Name")
+                            .setPoliticiansRating(new ArrayList<PoliticiansRating>())
+                            .setRating(new com.example.demo.model.entities.Rating(0.01D, 0.01D)))
                         .setTotalMonthsOfService(12)
                         .build()
                         .hashCode());

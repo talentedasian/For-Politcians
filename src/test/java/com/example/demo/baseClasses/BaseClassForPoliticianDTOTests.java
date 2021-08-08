@@ -22,9 +22,9 @@ public class BaseClassForPoliticianDTOTests {
     protected PoliticianTypes.SenatorialPolitician.SenatorialBuilder senatorialBuilder;
 
     protected double TOTAL_RATING = 1.0D;
-    protected com.example.demo.model.entities.Rating lowRating = new com.example.demo.model.entities.Rating(TOTAL_RATING, 2.0D, mock(LowSatisfactionAverageCalculator.class));
-    protected com.example.demo.model.entities.Rating decentRating = new com.example.demo.model.entities.Rating(TOTAL_RATING, 7.9D, mock(DecentSatisfactionAverageCalculator.class));
-    protected com.example.demo.model.entities.Rating highRating = new com.example.demo.model.entities.Rating(TOTAL_RATING, 9.22D, mock(HighSatisfactionAverageCalculator.class));
+    protected com.example.demo.model.entities.Rating lowRating = new com.example.demo.model.entities.Rating(TOTAL_RATING, 2.0D);
+    protected com.example.demo.model.entities.Rating decentRating = new com.example.demo.model.entities.Rating(TOTAL_RATING, 7.9D);
+    protected com.example.demo.model.entities.Rating highRating = new com.example.demo.model.entities.Rating(TOTAL_RATING, 9.22D);
     protected com.example.demo.model.entities.Rating[] ratings = {lowRating, decentRating, highRating};
 
     protected int monthsOfService = 12;

@@ -1,20 +1,19 @@
 package com.example.demo.unit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-
+import com.example.demo.model.averageCalculator.AverageCalculator;
+import com.example.demo.model.entities.Rating;
+import com.example.demo.model.entities.politicians.Politicians;
+import com.example.demo.repository.RatingRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.demo.model.averageCalculator.AverageCalculator;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.entities.Rating;
-import com.example.demo.repository.RatingRepository;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class EmbeddableRatingsTest {
@@ -36,8 +35,7 @@ public class EmbeddableRatingsTest {
 			.setPoliticiansRating(new ArrayList<>())
 			.setRating(new Rating
 				(0.012D,
-				2.022D, 
-				calculator))
+				2.022D))
 			.build();
 	}
 	

@@ -3,7 +3,6 @@ package com.example.demo.integration;
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
-import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.model.entities.RateLimit;
 import com.example.demo.model.entities.Rating;
 import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician;
@@ -41,7 +40,7 @@ public class RateLimitIntegrationTest extends BaseClassTestsThatUsesDatabase {
 
 	PresidentialPolitician politician = new PresidentialBuilder(new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
 				.setId(1)
-				.setRating(new Rating(1D, 1D, new LowSatisfactionAverageCalculator(1D, 0D)))
+				.setRating(new Rating(1D, 1D))
 				.setFirstName("test")
 				.setLastName("name")
 				.setFullName())

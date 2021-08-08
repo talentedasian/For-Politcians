@@ -32,7 +32,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 			.setFirstName("Rodrigo")
 			.setLastName("Duterte")
 			.setFullName()
-			.setRating(new Rating(0.01D, 0.01D, calculator));
+			.setRating(new Rating(0.01D, 0.01D));
 
 	PresidentialBuilder presidentialBuilder = new PoliticianTypes.PresidentialPolitician
 			.PresidentialBuilder(politicianBuilder)

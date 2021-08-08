@@ -67,7 +67,7 @@ public class AddPoliticianFilterTest {
 				.setFirstName("Test")
 				.setLastName("Name")
 				.setFullName()
-				.setRating(new Rating(0.01D, 0.01D, calculator))
+				.setRating(new Rating(0.01D, 0.01D))
 				.setPoliticiansRating(List.of(new PoliticiansRating()))
 				.build())
 				.setTotalMonthsOfService(12)

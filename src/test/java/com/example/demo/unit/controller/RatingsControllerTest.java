@@ -58,7 +58,7 @@ public class RatingsControllerTest {
 				.setFirstName("Mirriam")
 				.setLastName("Defensor")
 				.setFullName()
-				.setRating(new com.example.demo.model.entities.Rating(9.67D, 9.67D, new HighSatisfactionAverageCalculator(9.07D, 0D)))
+				.setRating(new com.example.demo.model.entities.Rating(9.67D, 9.67D))
 				.build())
 			.build();
 		
