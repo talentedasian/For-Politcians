@@ -1,16 +1,15 @@
 package com.example.demo.model.entities;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Transient;
-
 import com.example.demo.model.averageCalculator.AverageCalculator;
 import com.example.demo.model.averageCalculator.DecentSatisfactionAverageCalculator;
 import com.example.demo.model.averageCalculator.HighSatisfactionAverageCalculator;
 import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Transient;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Embeddable
 public class Rating {
@@ -70,7 +69,7 @@ public class Rating {
 	public double calculateTotalAmountOfRating(Double ratingToAdd, Double countOfRatings) {
 		if (totalRating == null) {
 			double rating = BigDecimal.valueOf(ratingToAdd)
-			.setScale(2, RoundingMode.HALF_DOWN).doubleValue();
+			.setScale(4, RoundingMode.HALF_DOWN).doubleValue();
 			this.totalRating = rating;
 			calculator = returnAverageCalculator(countOfRatings);
 			
@@ -78,7 +77,7 @@ public class Rating {
 		}
 		
 		double rating = BigDecimal.valueOf(totalRating + ratingToAdd)
-				.setScale(3, RoundingMode.UP).doubleValue();
+				.setScale(4, RoundingMode.UP).doubleValue();
 		this.totalRating = rating;
 		calculator = returnAverageCalculator(countOfRatings);
 		

@@ -103,29 +103,23 @@ public class PoliticiansRating {
 		return true;
 	}
 
-	public double calculateRating(double rating) {
+	public void calculateRating(double rating) {
 		double rate = BigDecimal.valueOf(rating).setScale(2, RoundingMode.HALF_DOWN).doubleValue();
 		setRating(rate);
-		
-		return rate;
 	}
 	
-	public Politicians calculatePolitician(Politicians politician) {
-		politician.calculateFullName();
-		politician.calculateTotalAmountOfRating(getRating());
-		politician.calculateAverageRating();
-		this.politician = politician;
-		
-		return politician;
+	public void calculatePolitician(Politicians politician) {
+		double totalAmountOfRating = politician.calculateTotalAmountOfRating(getRating());
+		double averageRating = politician.calculateAverageRating();
+		politician.getRating().setAverageRating(averageRating);
+		politician.getRating().setTotalRating(totalAmountOfRating);
 	}
 
-	public UserRater calculateRater(String subject, String id, String politicalParty,
+	public void calculateRater(String subject, String id, String politicalParty,
 			String accountNumber, RateLimitingService service) {
 		PoliticalParty party = PoliticalParty.mapToPoliticalParty(politicalParty);
 		var userRater = new UserRater(id, party, subject, accountNumber, service);
 		setRater(userRater);
-		
-		return userRater;
 	}
 	
 }

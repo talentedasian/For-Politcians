@@ -54,17 +54,16 @@ public class RatingService {
 		String accountNumber = accountNumberImplementor.calculateEntityNumber().getAccountNumber();
 		String polNumber = politician.getPoliticianNumber();
 		
-		var rating = new PoliticiansRating();
-		rating.calculateRating(dto.getRating().doubleValue());
+		var rating = createPoliticiansRating(dto.getRating().doubleValue(), politician);
 		rating.calculatePolitician(politician);
 		rating.calculateRater(jwt.getSubject(), jwt.getId(), dto.getPoliticalParty(), accountNumber, rateLimitService);
-		
+
 		/*
 		 * check whether the user is currently not allowed to rate
 		 * a politician. The timeout/rate limit is within a week.
 		 */
 		if (!canRate(rating.getRater(), stringJwt, polNumber)) {
-			Long daysLeft = rateLimitService.daysLeftOfBeingRateLimited(accountNumber, polNumber).longValue();
+			long daysLeft = rateLimitService.daysLeftOfBeingRateLimited(accountNumber, polNumber).longValue();
 			
 			throw new UserRateLimitedOnPoliticianException("User is rate limited on politician with " + daysLeft + " days left", 
 					daysLeft);
@@ -77,13 +76,19 @@ public class RatingService {
 		 */
 		rateLimitService.rateLimitUser(accountNumber, polNumber);
 		
-		
 		politician.calculateListOfRaters(rating);
 		
-		politicianRepo.save(politician);
+		Politicians gg = politicianRepo.save(politician);
 		PoliticiansRating savedRating = ratingRepo.save(rating);
 		
 		return savedRating;
+	}
+
+	private PoliticiansRating createPoliticiansRating(double rating, Politicians politician) {
+		var entity = new PoliticiansRating();
+		entity.calculateRating(rating);
+		entity.setPolitician(politician);
+		return entity;
 	}
 	
 	private boolean canRate(UserRater rater, String jwt, String polNumber) {

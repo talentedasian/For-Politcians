@@ -1,19 +1,56 @@
 package com.example.demo.unit.service;
 
-import com.example.demo.baseClasses.AbstractEntitiesServiceTest;
+import com.example.demo.dtoRequest.AddPoliticianDTORequest;
+import com.example.demo.dtoRequest.AddSenatorialPoliticianDTORequest;
+import com.example.demo.model.entities.politicians.PoliticianTypes;
 import com.example.demo.model.entities.politicians.Politicians;
 import com.example.demo.model.politicianNumber.PoliticianNumberImplementor;
+import com.example.demo.repository.FakePoliticianRepository;
+import com.example.demo.repository.PoliticiansRepository;
+import com.example.demo.service.PoliticiansService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
-public class PoliticianServiceTest extends AbstractEntitiesServiceTest{
+public class PoliticianServiceTest {
+
+	public PoliticiansRepository politicianRepo;
+
+	public PoliticiansService politicianService;
+	public Politicians politician;
+	public AddPoliticianDTORequest politicianDtoRequest;
+
+	public final String FIRST_NAME = "Miriam Palma";
+	public final String LAST_NAME = "Defensor-Santiago";
+
+	@BeforeEach
+	public void setup() {
+		politicianRepo = new FakePoliticianRepository();
+
+		politicianService = new PoliticiansService(politicianRepo);
+
+		politician = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(new Politicians.PoliticiansBuilder("dummy")
+					.setId(1)
+					.setFirstName(FIRST_NAME)
+					.setLastName(LAST_NAME))
+				.setTotalMonthsOfService(12)
+				.build();
+
+		politicianDtoRequest = new AddSenatorialPoliticianDTORequest
+					(FIRST_NAME,
+					LAST_NAME,
+					BigDecimal.valueOf(0.01D),
+					12,
+					"Anti Corrupt Law");
+	}
 
 	@Test
 	public void verifyRepoSaveMethodActuallySavesPolitician() {

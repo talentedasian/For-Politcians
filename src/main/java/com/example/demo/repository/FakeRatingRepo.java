@@ -82,12 +82,8 @@ public class FakeRatingRepo extends AbstractFakeRatingRepository {
 
     @Override
     public <S extends PoliticiansRating> S save(S entity) {
-        if (database.containsKey(entity.getId())) {
-            throw new DataIntegrityViolationException("Rating with " + entity.getId() + "already exists");
-        }
         entity.setId(++id);
         database.put(String.valueOf(id), entity);
-
         return entity;
     }
 

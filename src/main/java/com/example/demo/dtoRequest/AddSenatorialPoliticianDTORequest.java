@@ -30,7 +30,7 @@ public class AddSenatorialPoliticianDTORequest extends AddPoliticianDTORequest {
     }
 
     public AddSenatorialPoliticianDTORequest(String firstName, String lastName, BigDecimal rating, int monthsOfService, String lawMade) {
-        super(firstName, lastName, rating, "senatorial");
+        super(firstName, lastName, rating, "Senatorial");
         this.monthsOfService = monthsOfService;
         this.lawMade = lawMade;
     }
