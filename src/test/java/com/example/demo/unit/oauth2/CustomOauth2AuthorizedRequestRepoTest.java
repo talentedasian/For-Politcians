@@ -1,7 +1,7 @@
 package com.example.demo.unit.oauth2;
 
 import com.example.demo.adapter.dto.FacebookUserInfo;
-import com.example.demo.adapter.in.web.jwt.JwtProvider;
+import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
 import com.example.demo.domain.oauth2.CustomOauth2AuthorizedClientsRepository;
 import com.example.demo.domain.oauth2.FacebookOauth2UserInfoUtility;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,7 +55,7 @@ public class CustomOauth2AuthorizedRequestRepoTest {
 	
 	@Test
 	public void shouldReturnJwtAsCookieWhenSuccessfulOauthProcess() throws URISyntaxException {
-		String jwt = JwtProvider.createJwtWithFixedExpirationDate(SUBJECT, ID, NAME);
+		String jwt = JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate(SUBJECT, ID, NAME);
 		
 		when(facebookClient.fetchUserInfo(any())).thenReturn(userInfo);
 		OAuth2AuthorizedClient authorizedClient = new OAuth2AuthorizedClient(reg, "anonymous", accessToken);

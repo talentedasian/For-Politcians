@@ -25,7 +25,7 @@ import org.springframework.web.util.NestedServletException;
 
 import com.example.demo.exceptions.RefreshTokenException;
 import com.example.demo.filter.RefreshJwtFilter;
-import com.example.demo.adapter.in.web.jwt.JwtProvider;
+import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,7 +41,7 @@ public class RefreshingJwtTest {
 	public void shouldReturnFreshJwtWithOneHourExpiration() throws Exception {
 		LocalDateTime dateTime = LocalDateTime.now();
 		Date date = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
-		String jwt = JwtProvider.createJwtWithDynamicExpirationDate("nanay@gmail.com", "nanay", date);
+		String jwt = JwtJjwtProviderAdapater.createJwtWithDynamicExpirationDate("nanay@gmail.com", "nanay", date);
 		
 		when(req.getHeader("Authorization")).thenReturn("Bearer " + jwt);
 		

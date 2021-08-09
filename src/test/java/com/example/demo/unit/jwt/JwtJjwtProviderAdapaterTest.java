@@ -7,13 +7,13 @@ import java.util.Date;
 import org.junit.jupiter.api.Test;
 
 import com.example.demo.adapter.in.web.jwt.JwtKeys;
-import com.example.demo.adapter.in.web.jwt.JwtProvider;
+import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
-public class JwtProviderTest {
+public class JwtJjwtProviderAdapaterTest {
 
 	final String SUBJECT = "test@gmail.com";
 	final String ID = "test";
@@ -30,7 +30,7 @@ public class JwtProviderTest {
 				.setHeaderParam("login_mechanism", "facebook")
 				.compact();
 		
-		String expected =JwtProvider.createJwtWithDynamicExpirationDate(SUBJECT, ID, dateNow);
+		String expected = JwtJjwtProviderAdapater.createJwtWithDynamicExpirationDate(SUBJECT, ID, dateNow);
 		
 		assertEquals(expected, actualJwts);
 	}
@@ -38,9 +38,9 @@ public class JwtProviderTest {
 	@Test
 	public void assertEqualsDecodedJwt() {
 		Date dateNow = new Date(System.currentTimeMillis() + 3600000L);
-		String encodedJwts = JwtProvider.createJwtWithDynamicExpirationDate(SUBJECT, ID, dateNow);
+		String encodedJwts = JwtJjwtProviderAdapater.createJwtWithDynamicExpirationDate(SUBJECT, ID, dateNow);
 		
-		Jws<Claims> decodedJwts = JwtProvider.decodeJwt(encodedJwts);
+		Jws<Claims> decodedJwts = JwtJjwtProviderAdapater.decodeJwt(encodedJwts);
 		
 		Claims actualJwts = decodedJwts.getBody();
 		

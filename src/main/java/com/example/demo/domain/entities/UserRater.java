@@ -1,35 +1,24 @@
 package com.example.demo.domain.entities;
 
-import com.example.demo.adapter.in.web.jwt.JwtProvider;
+import com.example.demo.adapter.out.repository.RateLimitRepository;
+import com.example.demo.domain.JSONWebTokenException;
+import com.example.demo.domain.JwtDecoder;
 import com.example.demo.domain.enums.PoliticalParty;
-import com.example.demo.adapter.in.service.RateLimitingService;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.jsonwebtoken.JwtException;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Transient;
+import java.util.Optional;
 
-@Embeddable
 public class UserRater {
 
-	@Transient
-	private transient RateLimitingService limitingService;
-	
-	public void setLimitingService(RateLimitingService limitingService) {
-		this.limitingService = limitingService;
-	}
+	private transient RateLimitRepository rateLimitRepository;
 
-	@JsonProperty("name")
 	private String facebookName;
-	
-	@JsonProperty("political_party")
+
 	private PoliticalParty politicalParties;
 	
 	private String email;
-	
-	@JsonProperty("id")
+
 	private String userAccountNumber;
-	
+
 	public String getUserAccountNumber() {
 		return userAccountNumber;
 	}
@@ -62,18 +51,14 @@ public class UserRater {
 		this.politicalParties = politicalParties;
 	}
 
-	public UserRater(String facebookName, PoliticalParty politicalParties, String email, 
-			String accNumber, RateLimitingService limitingService) {
+	UserRater(String facebookName, PoliticalParty politicalParties, String email,
+			String accNumber, RateLimitRepository rateLimitRepository) {
 		super();
 		this.facebookName = facebookName;
 		this.politicalParties = politicalParties;
 		this.email = email;
 		this.userAccountNumber = accNumber;
-		this.limitingService = limitingService;
-	}
-
-	public UserRater() {
-		this.limitingService = null;
+		this.rateLimitRepository = rateLimitRepository;
 	}
 
 	@Override
@@ -109,12 +94,12 @@ public class UserRater {
 		return false;
 	}
 
-	public boolean canRate(String jwt, String polNumber) {
+	public boolean canRate(String jwt, String polNumber, JwtDecoder decoder) {
 		if (jwt == null | jwt.isBlank() | jwt.isEmpty()) {
 			return false;
 		}
 		
-		if (!isJwtValid(jwt)) {
+		if (!isJwtValid(jwt, decoder)) {
 			return false;
 		} else {
 			if (isRateLimited(polNumber)) {
@@ -124,17 +109,61 @@ public class UserRater {
 		return true;
 	}
 	
-	private boolean isJwtValid(String jwt) {
+	private boolean isJwtValid(String jwt, JwtDecoder decoder) {
 		try {
-			JwtProvider.decodeJwt(jwt);
+			decoder.decodeJwt(jwt);
 			return true;
-		} catch (JwtException e) {
+		} catch (JSONWebTokenException e) {
 			return false;
 		}
 	}
 	
 	private boolean isRateLimited(String politicianNumber) {
-		return !limitingService.isNotRateLimited(userAccountNumber, politicianNumber);
+		Optional<RateLimit> rateLimit = rateLimitRepository.findByIdAndPoliticianNumber(userAccountNumber, politicianNumber);
+		return rateLimit.isEmpty() ? false : rateLimit.get().isNotRateLimited();
 	}
+
+	public static class UserRaterBuilder {
+
+		private String name, email;
+
+		private PoliticalParty politicalParty;
+
+		private String userAccountNumber;
+
+		private RateLimitRepository repo;
+
+		public UserRaterBuilder setName(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public UserRaterBuilder setEmail(String email) {
+			this.email = email;
+			return this;
+		}
+
+		public UserRaterBuilder setPoliticalParty(PoliticalParty politicalParty) {
+			this.politicalParty = politicalParty;
+			return this;
+		}
+
+		public UserRaterBuilder setRateLimitRepo(RateLimitRepository repo) {
+			this.repo = repo;
+			return this;
+		}
+
+		public UserRaterBuilder setAccountNumber(String accNumber) {
+			this.userAccountNumber = accNumber;
+			return this;
+		}
+
+		public UserRater build() {
+			return new UserRater(name, politicalParty, email, userAccountNumber, repo);
+		}
+
+
+	}
+
 	
 }

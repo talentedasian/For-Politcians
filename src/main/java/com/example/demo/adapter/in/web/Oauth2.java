@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.adapter.dto.RatingDTO;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.adapter.in.web.jwt.JwtClaims;
-import com.example.demo.adapter.in.web.jwt.JwtProvider;
+import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -42,7 +42,7 @@ public class Oauth2 {
 			.filter(cookie -> cookie.getName().equalsIgnoreCase("accessJwt"))
 			.forEach(jwtCookie -> cookieMap.put("jwt", jwtCookie.getValue()));
 		
-		Jws<Claims> jwt = JwtProvider.decodeJwt(cookieMap.get("jwt"));
+		Jws<Claims> jwt = JwtJjwtProviderAdapater.decodeJwt(cookieMap.get("jwt"));
 		JwtClaims jwtResponse = new JwtClaims();
 		jwtResponse.setJwt(cookieMap.get("jwt"));
 		jwtResponse.setExpiration(jwt.getBody().getExpiration());

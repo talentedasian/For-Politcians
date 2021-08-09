@@ -1,12 +1,13 @@
 package com.example.demo.adapter.in.web.jwt;
 
-import java.util.Date;
-
+import com.example.demo.domain.JSONWebTokenClaim;
+import com.example.demo.domain.JwtDecoder;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
-public class JwtProvider {
+import java.util.Date;
+
+public class JwtJjwtProviderAdapater implements JwtDecoder {
 
 	public static String createJwtWithFixedExpirationDate(String sub, String id, String name) {
 		
@@ -47,14 +48,15 @@ public class JwtProvider {
 		return jwts;
 	}
 	
-	public static Jws<Claims> decodeJwt(String jwt) {
-		Jws<Claims> jwts = Jwts.parserBuilder()
+	public JSONWebTokenClaim decodeJwt(String jwt) {
+		Claims jwts = Jwts.parserBuilder()
 				.setSigningKey(JwtKeys.getJwtKeyPair().getPublic())
 				.setAllowedClockSkewSeconds(60 * 3)
 				.build()
-				.parseClaimsJws(jwt);
+				.parseClaimsJws(jwt)
+				.getBody();
 
-		return jwts;
+		return new JSONWebTokenClaim(jwts.getId(), jwts.getSubject(), jwts.get("name", String.class));
 	}
 	
 }

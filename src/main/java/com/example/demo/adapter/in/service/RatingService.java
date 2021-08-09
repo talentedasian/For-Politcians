@@ -1,6 +1,7 @@
 package com.example.demo.adapter.in.service;
 
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
+import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
@@ -92,7 +93,7 @@ public class RatingService {
 	}
 	
 	private boolean canRate(UserRater rater, String jwt, String polNumber) {
-		return rater.canRate(jwt, polNumber);
+		return rater.canRate(jwt, polNumber, new JwtJjwtProviderAdapater());
 	}
 	
 	@Transactional(readOnly = true)

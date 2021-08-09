@@ -17,7 +17,7 @@ import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.MediaTypes;
 
-import com.example.demo.adapter.in.web.jwt.JwtProvider;
+import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
 
 public class Oauth2ControllerTest extends BaseSpringHateoasTest{	
 	
@@ -27,7 +27,7 @@ public class Oauth2ControllerTest extends BaseSpringHateoasTest{
 
 	@Test
 	public void testHalFormsOauth2Response() throws Exception {
-		String jwt = JwtProvider.createJwtWithFixedExpirationDate(SUBJECT, ID, NAME);
+		String jwt = JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate(SUBJECT, ID, NAME);
 		Cookie cookie = new Cookie("accessJwt", jwt);
 		Cookie[] cookies = {cookie};	
 		

@@ -1,6 +1,6 @@
 package com.example.demo.integration.controllers;
 
-import static com.example.demo.adapter.in.web.jwt.JwtProvider.createJwtWithFixedExpirationDate;
+import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate;
 import static com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor.with;
 import static java.net.URI.create;
 import static org.mockito.Mockito.times;

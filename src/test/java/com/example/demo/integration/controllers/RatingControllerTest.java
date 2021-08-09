@@ -25,7 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.example.demo.adapter.in.web.jwt.JwtProvider.createJwtWithFixedExpirationDate;
+import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate;
 import static com.example.demo.domain.enums.Rating.mapToSatisfactionRate;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;

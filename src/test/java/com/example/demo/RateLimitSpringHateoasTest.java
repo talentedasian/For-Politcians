@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import static com.example.demo.adapter.in.web.jwt.JwtProvider.createJwtWithFixedExpirationDate;
+import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.hateoas.MediaTypes.HAL_FORMS_JSON;
