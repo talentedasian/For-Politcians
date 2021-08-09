@@ -26,7 +26,7 @@ public class LowSatisfactionAverageCalculator extends AverageCalculator{
 		double averageRating = BigDecimal.valueOf(getTotalRating() / (getCount() + 1D))
 				.setScale(3, RoundingMode.CEILING)
 				.doubleValue();
-		System.out.println(averageRating + " etop ang rating ng av");
+
 		return averageRating;
 	}
 
