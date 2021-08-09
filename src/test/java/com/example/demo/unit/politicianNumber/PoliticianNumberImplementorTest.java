@@ -1,9 +1,9 @@
 package com.example.demo.unit.politicianNumber;
 
-import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
-import com.example.demo.model.entities.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.politicianNumber.PoliticianNumberImplementor;
+import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.politicianNumber.PoliticianNumberImplementor;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

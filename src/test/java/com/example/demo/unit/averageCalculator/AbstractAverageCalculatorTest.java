@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.example.demo.model.averageCalculator.AverageCalculator;
-import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
+import com.example.demo.domain.averageCalculator.AverageCalculator;
+import com.example.demo.domain.averageCalculator.LowSatisfactionAverageCalculator;
 
 public class AbstractAverageCalculatorTest {
 

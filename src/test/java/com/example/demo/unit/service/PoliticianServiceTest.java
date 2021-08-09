@@ -1,13 +1,13 @@
 package com.example.demo.unit.service;
 
-import com.example.demo.dtoRequest.AddPoliticianDTORequest;
-import com.example.demo.dtoRequest.AddSenatorialPoliticianDTORequest;
-import com.example.demo.model.entities.politicians.PoliticianTypes;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.politicianNumber.PoliticianNumberImplementor;
-import com.example.demo.repository.FakePoliticianRepository;
-import com.example.demo.repository.PoliticiansRepository;
-import com.example.demo.service.PoliticiansService;
+import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
+import com.example.demo.adapter.in.dtoRequest.AddSenatorialPoliticianDTORequest;
+import com.example.demo.domain.politicians.PoliticianTypes;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.politicianNumber.PoliticianNumberImplementor;
+import com.example.demo.adapter.out.repository.FakePoliticianRepository;
+import com.example.demo.adapter.out.repository.PoliticiansRepository;
+import com.example.demo.adapter.in.service.PoliticiansService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,10 +1,10 @@
 package com.example.demo.dtomapper;
 
-import com.example.demo.dtoRequest.AddPoliticianDTORequest;
-import com.example.demo.dtoRequest.AddSenatorialPoliticianDTORequest;
-import com.example.demo.model.entities.Rating;
-import com.example.demo.model.entities.politicians.PoliticianTypes;
-import com.example.demo.model.entities.politicians.Politicians;
+import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
+import com.example.demo.adapter.in.dtoRequest.AddSenatorialPoliticianDTORequest;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.politicians.PoliticianTypes;
+import com.example.demo.domain.politicians.Politicians;
 import io.jsonwebtoken.lang.Assert;
 
 class SenatorialDTOUnwrapper extends PoliticianDTOUnwrapper{

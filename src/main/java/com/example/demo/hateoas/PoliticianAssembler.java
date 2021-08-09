@@ -5,7 +5,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.SimpleRepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.dto.PoliticianDTO;
+import com.example.demo.adapter.dto.PoliticianDTO;
 
 @Component
 public class PoliticianAssembler implements SimpleRepresentationModelAssembler<PoliticianDTO>{

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import com.example.demo.model.averageCalculator.DecentSatisfactionAverageCalculator;
+import com.example.demo.domain.averageCalculator.DecentSatisfactionAverageCalculator;
 
 public class DecentSatisfactionAverageCalculatorTest extends AbstractAverageCalculatorTest{
 

@@ -25,8 +25,8 @@ import org.springframework.web.util.NestedServletException;
 
 import com.example.demo.exceptions.RefreshTokenException;
 import com.example.demo.filter.RefreshJwtFilter;
-import com.example.demo.jwt.JwtProvider;
-import com.example.demo.jwt.JwtProviderHttpServletRequest;
+import com.example.demo.adapter.in.web.jwt.JwtProvider;
+import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 
 @ExtendWith(MockitoExtension.class)
 @ContextConfiguration(classes = { RefreshJwtFilter.class })

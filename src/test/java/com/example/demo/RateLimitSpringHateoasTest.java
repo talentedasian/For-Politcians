@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import static com.example.demo.jwt.JwtProvider.createJwtWithFixedExpirationDate;
+import static com.example.demo.adapter.in.web.jwt.JwtProvider.createJwtWithFixedExpirationDate;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.hateoas.MediaTypes.HAL_FORMS_JSON;
@@ -16,8 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.model.entities.RateLimit;
-import com.example.demo.model.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
+import com.example.demo.domain.entities.RateLimit;
+import com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
 
 public class RateLimitSpringHateoasTest extends BaseSpringHateoasTest {
 	

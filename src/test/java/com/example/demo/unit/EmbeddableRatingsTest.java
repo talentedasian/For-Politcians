@@ -1,9 +1,9 @@
 package com.example.demo.unit;
 
-import com.example.demo.model.averageCalculator.AverageCalculator;
-import com.example.demo.model.entities.Rating;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.repository.RatingRepository;
+import com.example.demo.domain.averageCalculator.AverageCalculator;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.adapter.out.repository.RatingRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

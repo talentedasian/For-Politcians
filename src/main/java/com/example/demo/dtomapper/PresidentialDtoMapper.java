@@ -1,10 +1,10 @@
 package com.example.demo.dtomapper;
 
-import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dto.PresidentialPoliticianDTO;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician;
-import com.example.demo.model.enums.Rating;
+import com.example.demo.adapter.dto.PoliticianDTO;
+import com.example.demo.adapter.dto.PresidentialPoliticianDTO;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician;
+import com.example.demo.domain.enums.Rating;
 import org.springframework.util.Assert;
 
 import java.util.List;

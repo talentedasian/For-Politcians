@@ -1,17 +1,17 @@
 package com.example.demo.integration;
 
-import com.example.demo.dtoRequest.AddRatingDTORequest;
+import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
-import com.example.demo.model.entities.PoliticiansRating;
-import com.example.demo.model.entities.RateLimit;
-import com.example.demo.model.entities.Rating;
-import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician;
-import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
-import com.example.demo.repository.*;
-import com.example.demo.service.RateLimitingService;
-import com.example.demo.service.RatingService;
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.entities.RateLimit;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician;
+import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
+import com.example.demo.adapter.out.repository.*;
+import com.example.demo.adapter.in.service.RateLimitingService;
+import com.example.demo.adapter.in.service.RatingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static com.example.demo.jwt.JwtProvider.createJwtWithFixedExpirationDate;
+import static com.example.demo.adapter.in.web.jwt.JwtProvider.createJwtWithFixedExpirationDate;
 import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;

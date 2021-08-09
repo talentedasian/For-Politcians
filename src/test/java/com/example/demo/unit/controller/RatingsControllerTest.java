@@ -1,20 +1,19 @@
 package com.example.demo.unit.controller;
 
-import com.example.demo.controller.RatingsController;
-import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dto.PresidentialPoliticianDTO;
-import com.example.demo.dto.RatingDTO;
+import com.example.demo.adapter.in.web.RatingsController;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.adapter.dto.PoliticianDTO;
+import com.example.demo.adapter.dto.PresidentialPoliticianDTO;
+import com.example.demo.adapter.dto.RatingDTO;
 import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.hateoas.RatingAssembler;
-import com.example.demo.model.averageCalculator.HighSatisfactionAverageCalculator;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.entities.PoliticiansRating;
-import com.example.demo.model.entities.UserRater;
-import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
-import com.example.demo.model.enums.PoliticalParty;
-import com.example.demo.model.enums.Rating;
-import com.example.demo.service.RateLimitingService;
-import com.example.demo.service.RatingService;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.entities.UserRater;
+import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.enums.PoliticalParty;
+import com.example.demo.adapter.in.service.RateLimitingService;
+import com.example.demo.adapter.in.service.RatingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,13 +57,13 @@ public class RatingsControllerTest {
 				.setFirstName("Mirriam")
 				.setLastName("Defensor")
 				.setFullName()
-				.setRating(new com.example.demo.model.entities.Rating(9.67D, 9.67D))
+				.setRating(new Rating(9.67D, 9.67D))
 				.build())
 			.build();
 		
 		politiciansRating = new PoliticiansRating(1, 0.00D, userRater, politician);
 		
-		politicianDTO = new PresidentialPoliticianDTO(politician, Rating.LOW, null);
+		politicianDTO = new PresidentialPoliticianDTO(politician, com.example.demo.domain.enums.Rating.LOW, null);
 		
 		ratingDTO = new RatingDtoMapper().mapToDTO(politiciansRating);
 	}

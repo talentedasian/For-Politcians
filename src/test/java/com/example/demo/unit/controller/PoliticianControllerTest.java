@@ -1,17 +1,17 @@
 package com.example.demo.unit.controller;
 
-import com.example.demo.controller.PoliticianController;
-import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dtoRequest.AddPoliticianDTORequest;
-import com.example.demo.dtoRequest.AddPresidentialPoliticianDTORequest;
+import com.example.demo.adapter.in.web.PoliticianController;
+import com.example.demo.adapter.dto.PoliticianDTO;
+import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
+import com.example.demo.adapter.in.dtoRequest.AddPresidentialPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.hateoas.PoliticianAssembler;
-import com.example.demo.model.entities.Rating;
-import com.example.demo.model.entities.politicians.PoliticianTypes;
-import com.example.demo.model.entities.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.entities.politicians.Politicians.PoliticiansBuilder;
-import com.example.demo.service.PoliticiansService;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.politicians.PoliticianTypes;
+import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
+import com.example.demo.adapter.in.service.PoliticiansService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

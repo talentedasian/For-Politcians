@@ -1,11 +1,11 @@
 package com.example.demo.unit.dto;
 
 import com.example.demo.baseClasses.BaseClassForPoliticianDTOTests;
-import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dto.PresidentialPoliticianDTO;
-import com.example.demo.dto.SenatorialPoliticianDTO;
+import com.example.demo.adapter.dto.PoliticianDTO;
+import com.example.demo.adapter.dto.PresidentialPoliticianDTO;
+import com.example.demo.adapter.dto.SenatorialPoliticianDTO;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
-import com.example.demo.model.enums.Rating;
+import com.example.demo.domain.enums.Rating;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

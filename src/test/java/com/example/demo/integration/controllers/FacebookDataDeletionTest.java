@@ -1,7 +1,7 @@
 package com.example.demo.integration.controllers;
 
-import static com.example.demo.jwt.JwtProvider.createJwtWithFixedExpirationDate;
-import static com.example.demo.model.userRaterNumber.facebook.FacebookUserRaterNumberImplementor.with;
+import static com.example.demo.adapter.in.web.jwt.JwtProvider.createJwtWithFixedExpirationDate;
+import static com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor.with;
 import static java.net.URI.create;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -17,8 +17,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.example.demo.oauth2.FacebookDataDeletion;
-import com.example.demo.service.RatingService;
+import com.example.demo.domain.oauth2.FacebookDataDeletion;
+import com.example.demo.adapter.in.service.RatingService;
 
 @ExtendWith(SpringExtension.class)
 public class FacebookDataDeletionTest {

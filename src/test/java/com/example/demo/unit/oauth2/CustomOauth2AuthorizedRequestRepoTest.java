@@ -1,9 +1,9 @@
 package com.example.demo.unit.oauth2;
 
-import com.example.demo.dto.FacebookUserInfo;
-import com.example.demo.jwt.JwtProvider;
-import com.example.demo.oauth2.CustomOauth2AuthorizedClientsRepository;
-import com.example.demo.oauth2.FacebookOauth2UserInfoUtility;
+import com.example.demo.adapter.dto.FacebookUserInfo;
+import com.example.demo.adapter.in.web.jwt.JwtProvider;
+import com.example.demo.domain.oauth2.CustomOauth2AuthorizedClientsRepository;
+import com.example.demo.domain.oauth2.FacebookOauth2UserInfoUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

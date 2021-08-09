@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
-import com.example.demo.controller.PoliticianController;
-import com.example.demo.exceptionHandling.ExceptionModel;
+import com.example.demo.adapter.in.web.PoliticianController;
+import com.example.demo.adapter.in.exceptionHandling.ExceptionModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

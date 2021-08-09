@@ -2,10 +2,10 @@ package com.example.demo.unit.entities;
 
 import org.junit.jupiter.api.Test;
 
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.entities.politicians.Politicians.PoliticiansBuilder;
-import com.example.demo.model.entities.politicians.PoliticianTypes;
-import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
+import com.example.demo.domain.politicians.PoliticianTypes;
+import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 
 import java.util.HashMap;
 import java.util.Map;

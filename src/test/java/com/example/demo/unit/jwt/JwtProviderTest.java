@@ -6,8 +6,8 @@ import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 
-import com.example.demo.jwt.JwtKeys;
-import com.example.demo.jwt.JwtProvider;
+import com.example.demo.adapter.in.web.jwt.JwtKeys;
+import com.example.demo.adapter.in.web.jwt.JwtProvider;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

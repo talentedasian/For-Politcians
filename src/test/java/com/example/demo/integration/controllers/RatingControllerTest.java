@@ -1,19 +1,19 @@
 package com.example.demo.integration.controllers;
 
-import com.example.demo.controller.RatingsController;
-import com.example.demo.dtoRequest.AddRatingDTORequest;
+import com.example.demo.adapter.in.web.RatingsController;
+import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.exceptions.*;
 import com.example.demo.hateoas.RatingAssembler;
-import com.example.demo.model.entities.PoliticiansRating;
-import com.example.demo.model.entities.Rating;
-import com.example.demo.model.entities.UserRater;
-import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.enums.PoliticalParty;
-import com.example.demo.service.PoliticiansService;
-import com.example.demo.service.RateLimitingService;
-import com.example.demo.service.RatingService;
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.entities.UserRater;
+import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.enums.PoliticalParty;
+import com.example.demo.adapter.in.service.PoliticiansService;
+import com.example.demo.adapter.in.service.RateLimitingService;
+import com.example.demo.adapter.in.service.RatingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -25,8 +25,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.example.demo.jwt.JwtProvider.createJwtWithFixedExpirationDate;
-import static com.example.demo.model.enums.Rating.mapToSatisfactionRate;
+import static com.example.demo.adapter.in.web.jwt.JwtProvider.createJwtWithFixedExpirationDate;
+import static com.example.demo.domain.enums.Rating.mapToSatisfactionRate;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.CoreMatchers.equalTo;

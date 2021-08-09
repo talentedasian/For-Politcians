@@ -1,14 +1,14 @@
 package com.example.demo.integration;
 
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
-import com.example.demo.model.averageCalculator.AverageCalculator;
-import com.example.demo.model.entities.Rating;
-import com.example.demo.model.entities.politicians.PoliticianTypes;
-import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
-import com.example.demo.model.entities.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.entities.politicians.Politicians.PoliticiansBuilder;
-import com.example.demo.repository.PoliticiansRepository;
+import com.example.demo.domain.averageCalculator.AverageCalculator;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.politicians.PoliticianTypes;
+import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
+import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;

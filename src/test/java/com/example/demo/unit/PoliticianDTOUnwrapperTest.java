@@ -1,11 +1,10 @@
 package com.example.demo.unit;
 
-import com.example.demo.dtoRequest.AddSenatorialPoliticianDTORequest;
+import com.example.demo.adapter.in.dtoRequest.AddSenatorialPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticianDTOUnwrapper;
-import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
-import com.example.demo.model.entities.Rating;
-import com.example.demo.model.entities.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
-import com.example.demo.model.entities.politicians.Politicians.PoliticiansBuilder;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

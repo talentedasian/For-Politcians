@@ -10,11 +10,11 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.mediatype.Affordances;
 import org.springframework.hateoas.server.RepresentationModelProcessor;
 
-import com.example.demo.controller.RatingsController;
-import com.example.demo.dto.RateLimitDTO;
-import com.example.demo.dtoRequest.AddRatingDTORequest;
+import com.example.demo.adapter.in.web.RatingsController;
+import com.example.demo.adapter.dto.RateLimitDTO;
+import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
-import com.example.demo.service.RateLimitingService;
+import com.example.demo.adapter.in.service.RateLimitingService;
 
 public class RateLimitProcessor implements RepresentationModelProcessor<RateLimitDTO>{
 

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
-import com.example.demo.model.entities.RateLimit;
+import com.example.demo.domain.entities.RateLimit;
 
 public class RateLimitTest {
 

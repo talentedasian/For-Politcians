@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
-import com.example.demo.model.entities.RateLimit;
-import com.example.demo.repository.RateLimitRepository;
-import com.example.demo.service.RateLimitingService;
+import com.example.demo.domain.entities.RateLimit;
+import com.example.demo.adapter.out.repository.RateLimitRepository;
+import com.example.demo.adapter.in.service.RateLimitingService;
 
 import testAnnotations.DatabaseTest;
 

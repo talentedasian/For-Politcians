@@ -1,10 +1,10 @@
 package com.example.demo.integration.controllers;
 
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
-import com.example.demo.model.entities.Rating;
-import com.example.demo.model.entities.politicians.PoliticianTypes;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.repository.PoliticiansRepository;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.politicians.PoliticianTypes;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
-import static com.example.demo.model.enums.Rating.mapToSatisfactionRate;
+import static com.example.demo.domain.enums.Rating.mapToSatisfactionRate;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.hateoas.MediaTypes.HAL_FORMS_JSON;

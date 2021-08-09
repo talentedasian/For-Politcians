@@ -1,7 +1,7 @@
 package com.example.demo.unit.entities;
 
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.entities.politicians.Politicians.PoliticiansBuilder;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

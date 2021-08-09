@@ -11,12 +11,12 @@ import org.springframework.hateoas.server.RepresentationModelProcessor;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
-import com.example.demo.controller.PoliticianController;
-import com.example.demo.controller.RatingsController;
-import com.example.demo.dto.RatingDTO;
-import com.example.demo.dtoRequest.AddRatingDTORequest;
+import com.example.demo.adapter.in.web.PoliticianController;
+import com.example.demo.adapter.in.web.RatingsController;
+import com.example.demo.adapter.dto.RatingDTO;
+import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
-import com.example.demo.service.RateLimitingService;
+import com.example.demo.adapter.in.service.RateLimitingService;
 
 public class RatingProcessor implements RepresentationModelProcessor<EntityModel<RatingDTO>>{
 

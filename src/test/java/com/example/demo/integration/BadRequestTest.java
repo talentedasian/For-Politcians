@@ -1,13 +1,13 @@
 package com.example.demo.integration;
 
-import com.example.demo.controller.PoliticianController;
-import com.example.demo.controller.RatingsController;
+import com.example.demo.adapter.in.web.PoliticianController;
+import com.example.demo.adapter.in.web.RatingsController;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.hateoas.PoliticianAssembler;
 import com.example.demo.hateoas.RatingAssembler;
-import com.example.demo.service.PoliticiansService;
-import com.example.demo.service.RatingService;
+import com.example.demo.adapter.in.service.PoliticiansService;
+import com.example.demo.adapter.in.service.RatingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

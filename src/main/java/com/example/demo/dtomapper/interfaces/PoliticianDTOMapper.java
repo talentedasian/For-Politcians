@@ -1,7 +1,7 @@
 package com.example.demo.dtomapper.interfaces;
 
-import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.model.entities.politicians.Politicians;
+import com.example.demo.adapter.dto.PoliticianDTO;
+import com.example.demo.domain.politicians.Politicians;
 
 import java.util.List;
 

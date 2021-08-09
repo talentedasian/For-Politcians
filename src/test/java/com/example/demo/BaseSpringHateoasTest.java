@@ -16,9 +16,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
-import com.example.demo.repository.PoliticiansRepository;
-import com.example.demo.repository.RatingRepository;
-import com.example.demo.service.RateLimitingService;
+import com.example.demo.adapter.out.repository.PoliticiansRepository;
+import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.adapter.in.service.RateLimitingService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class BaseSpringHateoasTest extends BaseClassTestsThatUsesDatabase {

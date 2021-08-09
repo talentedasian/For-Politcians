@@ -11,7 +11,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import com.example.demo.exceptions.RefreshTokenException;
-import com.example.demo.jwt.JwtProvider;
+import com.example.demo.adapter.in.web.jwt.JwtProvider;
 
 public class RefreshJwtFilter implements Filter{
 

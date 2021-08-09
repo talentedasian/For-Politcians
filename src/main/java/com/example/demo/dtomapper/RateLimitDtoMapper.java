@@ -1,8 +1,8 @@
 package com.example.demo.dtomapper;
 
-import com.example.demo.dto.RateLimitDTO;
+import com.example.demo.adapter.dto.RateLimitDTO;
 import com.example.demo.dtomapper.interfaces.DTOMapper;
-import com.example.demo.model.entities.RateLimit;
+import com.example.demo.domain.entities.RateLimit;
 
 public class RateLimitDtoMapper implements DTOMapper<RateLimitDTO, RateLimit>{
 

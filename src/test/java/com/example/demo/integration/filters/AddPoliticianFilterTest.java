@@ -1,18 +1,18 @@
 package com.example.demo.integration.filters;
 
-import com.example.demo.controller.PoliticianController;
-import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dto.SenatorialPoliticianDTO;
+import com.example.demo.adapter.in.web.PoliticianController;
+import com.example.demo.adapter.dto.PoliticianDTO;
+import com.example.demo.adapter.dto.SenatorialPoliticianDTO;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
-import com.example.demo.exceptionHandling.GlobalExceptionHandling;
+import com.example.demo.adapter.in.exceptionHandling.GlobalExceptionHandling;
 import com.example.demo.filter.AddPoliticianFilter;
 import com.example.demo.hateoas.PoliticianAssembler;
-import com.example.demo.model.averageCalculator.AverageCalculator;
-import com.example.demo.model.entities.PoliticiansRating;
-import com.example.demo.model.entities.Rating;
-import com.example.demo.model.entities.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.service.PoliticiansService;
+import com.example.demo.domain.averageCalculator.AverageCalculator;
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.adapter.in.service.PoliticiansService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -27,7 +27,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import static com.example.demo.model.enums.Rating.LOW;
+import static com.example.demo.domain.enums.Rating.LOW;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;

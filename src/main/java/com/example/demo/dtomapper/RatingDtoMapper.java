@@ -3,11 +3,11 @@ package com.example.demo.dtomapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dto.RatingDTO;
+import com.example.demo.adapter.dto.PoliticianDTO;
+import com.example.demo.adapter.dto.RatingDTO;
 import com.example.demo.dtomapper.interfaces.RatingDTOMapper;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.entities.PoliticiansRating;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.PoliticiansRating;
 
 public class RatingDtoMapper implements RatingDTOMapper{
 

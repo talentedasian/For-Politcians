@@ -1,11 +1,11 @@
 package com.example.demo;
 
-import com.example.demo.model.entities.PoliticiansRating;
-import com.example.demo.model.entities.Rating;
-import com.example.demo.model.entities.UserRater;
-import com.example.demo.model.entities.politicians.PoliticianTypes;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.enums.PoliticalParty;
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.entities.UserRater;
+import com.example.demo.domain.politicians.PoliticianTypes;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.enums.PoliticalParty;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 

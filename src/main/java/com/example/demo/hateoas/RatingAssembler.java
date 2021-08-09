@@ -9,8 +9,8 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.SimpleRepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.controller.RatingsController;
-import com.example.demo.dto.RatingDTO;
+import com.example.demo.adapter.in.web.RatingsController;
+import com.example.demo.adapter.dto.RatingDTO;
 
 @Component
 public class RatingAssembler implements SimpleRepresentationModelAssembler<RatingDTO>{

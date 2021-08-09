@@ -17,7 +17,7 @@ import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.MediaTypes;
 
-import com.example.demo.jwt.JwtProvider;
+import com.example.demo.adapter.in.web.jwt.JwtProvider;
 
 public class Oauth2ControllerTest extends BaseSpringHateoasTest{	
 	

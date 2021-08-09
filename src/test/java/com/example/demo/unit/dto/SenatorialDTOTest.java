@@ -1,15 +1,15 @@
 package com.example.demo.unit.dto;
 
 import com.example.demo.baseClasses.BaseClassForPoliticianDTOTests;
-import com.example.demo.dto.PoliticianDTO;
-import com.example.demo.dto.SenatorialPoliticianDTO;
-import com.example.demo.dtoRequest.AddSenatorialPoliticianDTORequest;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.adapter.dto.PoliticianDTO;
+import com.example.demo.adapter.dto.SenatorialPoliticianDTO;
+import com.example.demo.adapter.in.dtoRequest.AddSenatorialPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticianDTOUnwrapper;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
-import com.example.demo.model.entities.PoliticiansRating;
-import com.example.demo.model.entities.politicians.PoliticianTypes;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.model.enums.Rating;
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.politicians.PoliticianTypes;
+import com.example.demo.domain.politicians.Politicians;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -22,7 +22,7 @@ public class SenatorialDTOTest extends BaseClassForPoliticianDTOTests {
 
     @Test
     public void testEqualsLogic() {
-        PoliticianDTO actual = new SenatorialPoliticianDTO(politicianBuilder.build(), Rating.LOW, monthsOfService, LAW_MADE);
+        PoliticianDTO actual = new SenatorialPoliticianDTO(politicianBuilder.build(), com.example.demo.domain.enums.Rating.LOW, monthsOfService, LAW_MADE);
 
         assertEquals(actual,
                 new PoliticiansDtoMapper().mapToDTO(senatorialBuilder
@@ -32,7 +32,7 @@ public class SenatorialDTOTest extends BaseClassForPoliticianDTOTests {
 
     @Test
     public void shouldNotBeEqualDueToType() {
-        PoliticianDTO actual = new SenatorialPoliticianDTO(politicianBuilder.build(), Rating.LOW, monthsOfService, LAW_MADE);
+        PoliticianDTO actual = new SenatorialPoliticianDTO(politicianBuilder.build(), com.example.demo.domain.enums.Rating.LOW, monthsOfService, LAW_MADE);
 
         assertNotEquals(actual,
                 new PoliticiansDtoMapper().mapToDTO(presidentialBuilder
@@ -52,7 +52,7 @@ public class SenatorialDTOTest extends BaseClassForPoliticianDTOTests {
                             .setFirstName("Test")
                             .setLastName("Name")
                             .setPoliticiansRating(new ArrayList<PoliticiansRating>())
-                            .setRating(new com.example.demo.model.entities.Rating(0.01D, 0.01D)))
+                            .setRating(new Rating(0.01D, 0.01D)))
                         .setTotalMonthsOfService(12)
                         .build()
                         .hashCode());

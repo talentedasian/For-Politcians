@@ -1,15 +1,15 @@
 package com.example.demo.integration.controllers;
 
-import com.example.demo.controller.PoliticianController;
-import com.example.demo.exceptionHandling.GlobalExceptionHandling;
-import com.example.demo.exceptionHandling.PoliticianExceptionHandling;
+import com.example.demo.adapter.in.web.PoliticianController;
+import com.example.demo.adapter.in.exceptionHandling.GlobalExceptionHandling;
+import com.example.demo.adapter.in.exceptionHandling.PoliticianExceptionHandling;
 import com.example.demo.hateoas.PoliticianAssembler;
-import com.example.demo.model.entities.PoliticiansRating;
-import com.example.demo.model.entities.Rating;
-import com.example.demo.model.entities.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
-import com.example.demo.model.entities.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
-import com.example.demo.model.entities.politicians.Politicians;
-import com.example.demo.service.PoliticiansService;
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.adapter.in.service.PoliticiansService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,7 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static com.example.demo.model.enums.Rating.mapToSatisfactionRate;
+import static com.example.demo.domain.enums.Rating.mapToSatisfactionRate;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;

@@ -1,10 +1,8 @@
 package com.example.demo.baseClasses;
 
-import com.example.demo.model.averageCalculator.DecentSatisfactionAverageCalculator;
-import com.example.demo.model.averageCalculator.HighSatisfactionAverageCalculator;
-import com.example.demo.model.averageCalculator.LowSatisfactionAverageCalculator;
-import com.example.demo.model.entities.politicians.PoliticianTypes;
-import com.example.demo.model.entities.politicians.Politicians;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.politicians.PoliticianTypes;
+import com.example.demo.domain.politicians.Politicians;
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.mockito.Mockito.mock;
@@ -22,10 +20,10 @@ public class BaseClassForPoliticianDTOTests {
     protected PoliticianTypes.SenatorialPolitician.SenatorialBuilder senatorialBuilder;
 
     protected double TOTAL_RATING = 1.0D;
-    protected com.example.demo.model.entities.Rating lowRating = new com.example.demo.model.entities.Rating(TOTAL_RATING, 2.0D);
-    protected com.example.demo.model.entities.Rating decentRating = new com.example.demo.model.entities.Rating(TOTAL_RATING, 7.9D);
-    protected com.example.demo.model.entities.Rating highRating = new com.example.demo.model.entities.Rating(TOTAL_RATING, 9.22D);
-    protected com.example.demo.model.entities.Rating[] ratings = {lowRating, decentRating, highRating};
+    protected Rating lowRating = new Rating(TOTAL_RATING, 2.0D);
+    protected Rating decentRating = new Rating(TOTAL_RATING, 7.9D);
+    protected Rating highRating = new Rating(TOTAL_RATING, 9.22D);
+    protected Rating[] ratings = {lowRating, decentRating, highRating};
 
     protected int monthsOfService = 12;
 
