@@ -1,6 +1,6 @@
 package com.example.demo.domain.entities;
 
-import com.example.demo.adapter.out.repository.RateLimitRepository;
+import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.JSONWebTokenException;
 import com.example.demo.domain.JwtDecoder;
 import com.example.demo.domain.enums.PoliticalParty;
@@ -119,7 +119,7 @@ public class UserRater {
 	}
 	
 	private boolean isRateLimited(String politicianNumber) {
-		Optional<RateLimit> rateLimit = rateLimitRepository.findByIdAndPoliticianNumber(userAccountNumber, politicianNumber);
+		Optional<RateLimit> rateLimit = rateLimitRepository.findUsingIdAndPoliticianNumber(userAccountNumber, politicianNumber);
 		return rateLimit.isEmpty() ? false : rateLimit.get().isNotRateLimited();
 	}
 

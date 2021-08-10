@@ -1,13 +1,11 @@
 package com.example.demo.adapter.in.service;
 
+import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.RateLimit;
-import com.example.demo.adapter.out.repository.RateLimitRepository;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Service
 public class RateLimitingService {
 	
 	private final RateLimitRepository repo;
@@ -15,15 +13,10 @@ public class RateLimitingService {
 	public RateLimitingService(RateLimitRepository repo) {
 		this.repo = repo;
 	}
-	
-	@Transactional(readOnly = true)
-	public Optional<RateLimit> findById(String id) {
-		return repo.findById(id);
-	}
-	
+
 	@Transactional(readOnly = true)
 	public Optional<RateLimit> findRateLimitInPolitician(String accountNumber, String politicianNumber) {
-		return repo.findByIdAndPoliticianNumber(accountNumber, politicianNumber);
+		return repo.findUsingIdAndPoliticianNumber(accountNumber, politicianNumber);
 	}
 	
 	/*
@@ -31,18 +24,18 @@ public class RateLimitingService {
 	 * the first instance of the rate limit so that the most updated
 	 * rate limit is reflected and not the outdated one. 
 	 */
+
 	@Transactional
-	public RateLimit rateLimitUser(String accountNumber, String politicianNumber) {
-		var rateLimitToBeSaved = new RateLimit(accountNumber, politicianNumber);
-		
-		deleteRateLimit(accountNumber, politicianNumber);
-		RateLimit rateLimit = repo.save(rateLimitToBeSaved);
-		return rateLimit;
+	public RateLimit rateLimitUser(String accNumber, String polNumber) {
+		var rateLimit = new RateLimit(accNumber, polNumber);
+
+		deleteRateLimit(accNumber, polNumber);
+		RateLimit rateLimitSaved = repo.save(rateLimit);
+		return rateLimitSaved;
 	}
-	
-	
+
 	/*
-	 * Probably going to change the access modifier to avoid 
+	 * Probably going to change the access modifier to avoid
 	 * being used everywhere. This should only be used for tests.
 	 */
 	@Transactional
@@ -59,7 +52,7 @@ public class RateLimitingService {
 	 * being used everywhere. This should only be used for tests.
 	 */
 	public void deleteRateLimit(String id, String politicianNumber) {
-		repo.deleteByIdAndPoliticianNumber(id, politicianNumber);
+		repo.deleteUsingIdAndPoliticianNumber(id, politicianNumber);
 	}
 	
 	public boolean isNotRateLimited(String accNumber, String polNumber) {

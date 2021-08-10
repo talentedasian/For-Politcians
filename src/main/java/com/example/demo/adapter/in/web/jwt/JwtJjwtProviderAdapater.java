@@ -5,6 +5,9 @@ import com.example.demo.domain.JwtDecoder;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 public class JwtJjwtProviderAdapater implements JwtDecoder {
@@ -36,18 +39,6 @@ public class JwtJjwtProviderAdapater implements JwtDecoder {
 		return jwts;
 	}
 	
-	public static String createJwtWithNoExpirationDate(String sub, String id) {
-		
-		String jwts = Jwts.builder()
-				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
-				.setSubject(sub)
-				.setId(id)
-				.setHeaderParam("login_mechanism", "facebook")
-				.compact();
-		
-		return jwts;
-	}
-	
 	public JSONWebTokenClaim decodeJwt(String jwt) {
 		Claims jwts = Jwts.parserBuilder()
 				.setSigningKey(JwtKeys.getJwtKeyPair().getPublic())
@@ -56,7 +47,10 @@ public class JwtJjwtProviderAdapater implements JwtDecoder {
 				.parseClaimsJws(jwt)
 				.getBody();
 
-		return new JSONWebTokenClaim(jwts.getId(), jwts.getSubject(), jwts.get("name", String.class));
+		Instant instant = jwts.getExpiration().toInstant();
+		var expiration = LocalDateTime.ofInstant(instant, ZoneId.of("Asia/Manila"));
+
+		return new JSONWebTokenClaim(jwts.getId(), jwts.getSubject(), jwts.get("name", String.class), expiration);
 	}
 	
 }

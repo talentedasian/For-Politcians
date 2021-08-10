@@ -42,7 +42,12 @@ public class RatingRepoTest extends BaseClassTestsThatUsesDatabase {
 	@Test
 	public void testCustomExistByQueryWithAccountNumber() {
 		polRepo.save(politician);
-		var userRater = new UserRater(NAME, PoliticalParty.DDS, EMAIL, ACCOUNT_NUMBER, mock(RateLimitingService.class));
+		var userRater = new UserRater.UserRaterBuilder()
+				.setAccountNumber(ACCOUNT_NUMBER)
+				.setName(NAME)
+				.setEmail(EMAIL)
+				.setPoliticalParty(PoliticalParty.DDS)
+				.build();
 		repo.save(new PoliticiansRating(1, 1.00D, userRater, politician));
 		
 		assertTrue(repo.existsByRater_UserAccountNumber(ACCOUNT_NUMBER));

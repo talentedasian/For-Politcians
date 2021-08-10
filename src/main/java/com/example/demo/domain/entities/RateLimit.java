@@ -1,20 +1,14 @@
 package com.example.demo.domain.entities;
 
-import static java.lang.Integer.valueOf;
-
+import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import static java.lang.Integer.valueOf;
 
-@Entity
 public class RateLimit {
-	
-	@Transient
+
 	private transient static final Map<String, RateLimit> cache = new HashMap<>();
 	
 	static {
@@ -28,8 +22,7 @@ public class RateLimit {
 		
 		cache.put(rateLimit.getId(), rateLimit);
 	}
-	
-	@Id
+
 	private String id;
 	
 	@Column(nullable = false, name = "politician_number")
@@ -54,10 +47,6 @@ public class RateLimit {
 		this.politicianNumber = politicianNumber;
 	}
 
-	public LocalDate getDateCreated() {
-		return dateCreated;
-	}
-
 	public void setDateCreated(LocalDate dateCreated) {
 		this.dateCreated = dateCreated;
 	}
@@ -67,6 +56,13 @@ public class RateLimit {
 		this.id = id;
 		this.politicianNumber = politicianNumber;
 		this.dateCreated = LocalDate.now();
+	}
+
+	public RateLimit(String id, String politicianNumber, LocalDate date) {
+		super();
+		this.id = id;
+		this.politicianNumber = politicianNumber;
+		this.dateCreated = date;
 	}
 	
 	public static RateLimit withNotExpiredRateLimit(String id, String politicianNumber) {

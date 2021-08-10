@@ -2,18 +2,20 @@ package com.example.demo.adapter.in.service;
 
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
-import com.example.demo.exceptions.PoliticianNotFoundException;
-import com.example.demo.exceptions.RatingsNotFoundException;
-import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
+import com.example.demo.adapter.out.repository.PoliticiansRepository;
+import com.example.demo.adapter.out.repository.RateLimitJpaAdapterRepository;
+import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.userRaterNumber.AbstractUserRaterNumber;
 import com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
-import com.example.demo.adapter.out.repository.PoliticiansRepository;
-import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.exceptions.PoliticianNotFoundException;
+import com.example.demo.exceptions.RatingsNotFoundException;
+import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,11 +29,12 @@ public class RatingService {
 	private final PoliticiansRepository politicianRepo;
 	private final RateLimitingService rateLimitService;
 
+	@Autowired
 	public RatingService(RatingRepository ratingRepo, PoliticiansRepository politicianRepo,
-						 RateLimitingService rateLimitService) {
+						 RateLimitJpaAdapterRepository rateLimitRepo) {
 		this.ratingRepo = ratingRepo;
 		this.politicianRepo = politicianRepo;
-		this.rateLimitService = rateLimitService;
+		this.rateLimitService = new RateLimitingService(rateLimitRepo);
 	}
 	
 	@Transactional(readOnly = true)

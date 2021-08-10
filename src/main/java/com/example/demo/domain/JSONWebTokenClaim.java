@@ -1,8 +1,12 @@
 package com.example.demo.domain;
 
+import java.time.LocalDateTime;
+
 public class JSONWebTokenClaim {
 
     private final String id, email, name;
+
+    private final LocalDateTime expiration;
 
     public String id() {
         return id;
@@ -16,10 +20,14 @@ public class JSONWebTokenClaim {
         return name;
     }
 
-    public JSONWebTokenClaim(String id, String email, String name) {
+    public LocalDateTime expiration() {
+        return expiration;
+    }
+
+    public JSONWebTokenClaim(String id, String email, String name, LocalDateTime expiration) {
         this.id = id;
         this.email = email;
         this.name = name;
+        this.expiration = expiration;
     }
-
 }

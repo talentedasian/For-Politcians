@@ -1,15 +1,12 @@
 package com.example.demo.adapter.in.web;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.example.demo.adapter.dto.RatingDTO;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
+import com.example.demo.adapter.in.web.jwt.JwtDto;
+import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
+import com.example.demo.domain.JSONWebTokenClaim;
+import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.Affordances;
 import org.springframework.http.HttpMethod;
@@ -19,14 +16,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.adapter.dto.RatingDTO;
-import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
-import com.example.demo.adapter.in.web.jwt.JwtClaims;
-import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
+import javax.servlet.http.HttpServletRequest;
+import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.swagger.v3.oas.annotations.Hidden;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Hidden
 @RestController
@@ -35,20 +32,20 @@ public class Oauth2 {
 
 	@SuppressWarnings("deprecation")
 	@GetMapping
-	public ResponseEntity<RepresentationModel<JwtClaims>> returnCredentials(HttpServletRequest req) throws UserRateLimitedOnPoliticianException  {
+	public ResponseEntity<RepresentationModel<JwtDto>> returnCredentials(HttpServletRequest req) throws UserRateLimitedOnPoliticianException  {
 		Map<String, String> cookieMap = new HashMap<>();
 		
 		Arrays.stream(req.getCookies())
 			.filter(cookie -> cookie.getName().equalsIgnoreCase("accessJwt"))
 			.forEach(jwtCookie -> cookieMap.put("jwt", jwtCookie.getValue()));
 		
-		Jws<Claims> jwt = JwtJjwtProviderAdapater.decodeJwt(cookieMap.get("jwt"));
-		JwtClaims jwtResponse = new JwtClaims();
+		JSONWebTokenClaim jwt = new JwtJjwtProviderAdapater().decodeJwt(cookieMap.get("jwt"));
+		JwtDto jwtResponse = new JwtDto();
 		jwtResponse.setJwt(cookieMap.get("jwt"));
-		jwtResponse.setExpiration(jwt.getBody().getExpiration());
-		jwtResponse.setId(jwt.getBody().getId());
-		jwtResponse.setSubject(jwt.getBody().getSubject());
-		jwtResponse.setName(jwt.getBody().get("name", String.class));
+		jwtResponse.setExpiration(jwt.expiration());
+		jwtResponse.setId(jwt.id());
+		jwtResponse.setSubject(jwt.email());
+		jwtResponse.setName(jwt.name());
 		
 		var affordance = Affordances.of(linkTo(methodOn(PoliticianController.class).allPoliticians())
 				.withRel("politicians"))
@@ -64,7 +61,7 @@ public class Oauth2 {
 		jwtResponse.add(affordance);
 		jwtResponse.add(linkTo(methodOn(Oauth2.class).returnCredentials(null)).withRel("jwt"));
 		
-		return new ResponseEntity<RepresentationModel<JwtClaims>>(jwtResponse, HttpStatus.OK);
+		return new ResponseEntity<RepresentationModel<JwtDto>>(jwtResponse, HttpStatus.OK);
 	}
 	
 }

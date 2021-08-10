@@ -1,6 +1,7 @@
 package com.example.demo.integration;
 
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
+import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.RateLimit;
@@ -34,7 +35,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 public class RateLimitIntegrationTest {
 
-	@Mock RateLimitRepository rateLimitRepo;
+	@Mock
+	RateLimitRepository rateLimitRepo;
 	RatingService ratingService;
 	PoliticiansRepository polRepo;
 	RatingRepository ratingRepo;
@@ -73,7 +75,7 @@ public class RateLimitIntegrationTest {
 	public void shouldThrowRateLimitedExceptionWhenUserIsRateLimited() throws UserRateLimitedOnPoliticianException {
 		polRepo.save(politician);
 
-		when(rateLimitRepo.findByIdAndPoliticianNumber(anyString(), anyString())).thenReturn(Optional.of(rateLimitToBeSaved));
+		when(rateLimitRepo.findUsingIdAndPoliticianNumber(anyString(), anyString())).thenReturn(Optional.of(rateLimitToBeSaved));
 		
 		var requestContent = new AddRatingDTORequest(valueOf(1L), POLITICIAN_NUMBER, "dds");
 		HttpServletRequest req = mock(HttpServletRequest.class);
@@ -88,7 +90,7 @@ public class RateLimitIntegrationTest {
 		polRepo.save(politician);
 
 		rateLimitToBeSaved.setDateCreated(LocalDate.now().minusDays(8));
-		when(rateLimitRepo.findByIdAndPoliticianNumber(anyString(), anyString())).thenReturn(Optional.of(rateLimitToBeSaved));
+		when(rateLimitRepo.findUsingIdAndPoliticianNumber(anyString(), anyString())).thenReturn(Optional.of(rateLimitToBeSaved));
 
 		var requestContent = new AddRatingDTORequest(valueOf(1L), POLITICIAN_NUMBER, "dds");
 		HttpServletRequest req = mock(HttpServletRequest.class);

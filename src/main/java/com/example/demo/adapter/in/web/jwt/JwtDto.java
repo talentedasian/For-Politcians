@@ -1,10 +1,10 @@
 package com.example.demo.adapter.in.web.jwt;
 
-import java.util.Date;
-
 import org.springframework.hateoas.RepresentationModel;
 
-public class JwtClaims extends RepresentationModel<JwtClaims>{
+import java.time.LocalDateTime;
+
+public class JwtDto extends RepresentationModel<JwtDto>{
 	
 	private String jwt;
 
@@ -12,7 +12,7 @@ public class JwtClaims extends RepresentationModel<JwtClaims>{
 	
 	private String subject;
 	
-	private Date expiration;
+	private LocalDateTime expiration;
 	
 	private String name;
 	
@@ -48,20 +48,17 @@ public class JwtClaims extends RepresentationModel<JwtClaims>{
 		this.subject = subject;
 	}
 
-	public Date getExpiration() {
+	public LocalDateTime getExpiration() {
 		return expiration;
 	}
 
-	public void setExpiration(Date expiration) {
+	public void setExpiration(LocalDateTime expiration) {
 		this.expiration = expiration;
 	}
 
-	public JwtClaims() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	public JwtDto() {}
 
-	public JwtClaims(String jwt, String id, String subject, Date expiration, String name) {
+	public JwtDto(String jwt, String id, String subject, LocalDateTime expiration, String name) {
 		super();
 		this.jwt = jwt;
 		this.id = id;
@@ -72,7 +69,7 @@ public class JwtClaims extends RepresentationModel<JwtClaims>{
 
 	@Override
 	public String toString() {
-		return "JwtClaims [jwt=" + jwt + ", id=" + id + ", subject=" + subject + ", expiration=" + expiration + ", name=" + name + "]";
+		return "JwtDto [jwt=" + jwt + ", id=" + id + ", subject=" + subject + ", expiration=" + expiration + ", name=" + name + "]";
 	}
 	
 }
