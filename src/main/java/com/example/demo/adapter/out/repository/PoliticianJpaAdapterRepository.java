@@ -23,12 +23,16 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
 
     @Override
     public List<Politicians> findByLastNameAndFirstName(String lastName, String firstName) {
-        return politicianRepository.findByLastNameAndFirstName(lastName, firstName);
+        return politicianRepository.findByLastNameAndFirstName(lastName, firstName).stream()
+                .map(entity -> entity.toPoliticians())
+                .toList();
     }
 
     @Override
     public Optional<Politicians> findByPoliticianNumber(String polNumber) {
-        return politicianRepository.findByPoliticianNumber(polNumber);
+        Optional<PoliticiansJpaEntity> entity = politicianRepository.findByPoliticianNumber(polNumber);
+
+        return entity.isEmpty() ? Optional.empty() : Optional.of(entity.get().toPoliticians());
     }
 
     @Override

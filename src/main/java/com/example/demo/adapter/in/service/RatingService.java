@@ -11,11 +11,9 @@ import com.example.demo.domain.enums.PoliticalParty;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.userRaterNumber.AbstractUserRaterNumber;
 import com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
-import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,15 +22,16 @@ import java.util.List;
 public class RatingService {
 
 	private final RatingRepository ratingRepo;
-	private final PoliticiansRepository politicianRepo;
-	private final RateLimitRepository rateLimitRepo;
+	private final PoliticiansService politicianService;
+	private final RateLimitingService rateLimitingService;
+	private final RateLimitRepository rateLimitRepository;
 
-	@Autowired
 	public RatingService(RatingRepository ratingRepo, PoliticiansRepository politicianRepo,
 						 RateLimitRepository rateLimitRepo) {
 		this.ratingRepo = ratingRepo;
-		this.politicianRepo = politicianRepo;
-		this.rateLimitRepo = rateLimitRepo;
+		this.politicianService = new PoliticiansService(politicianRepo);
+		this.rateLimitingService = new RateLimitingService(rateLimitRepo);
+		this.rateLimitRepository = rateLimitRepo;
 	}
 	
 	@Transactional(readOnly = true)
@@ -45,12 +44,10 @@ public class RatingService {
 	
 	@Transactional
 	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) throws UserRateLimitedOnPoliticianException {
-		Politicians politician = politicianRepo.findByPoliticianNumber(dto.getId())
-				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by id"));
+		Politicians politician = politicianService.findPoliticianByNumber(dto.getId());
 		
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
-		
-		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
+
 		String polNumber = politician.getPoliticianNumber();
 		
 		var rating = createPoliticiansRating(dto, politician, jwt);
@@ -62,10 +59,11 @@ public class RatingService {
 			throw new UserRateLimitedOnPoliticianException("User is rate limited on politician with " + daysLeft + " days left", 
 					daysLeft);
 		}
-		
+
+		rateLimitingService.rateLimitUser(rating.getRater().getUserAccountNumber(), polNumber);
 		rating.ratePolitician();
 		
-		politicianRepo.save(politician);
+		politicianService.savePolitician(politician);
 		PoliticiansRating savedRating = ratingRepo.save(rating);
 		
 		return savedRating;
@@ -83,7 +81,7 @@ public class RatingService {
 						.setEmail(jwt.getSubject())
 						.setPoliticalParty(PoliticalParty.mapToPoliticalParty(dto.getPoliticalParty()))
 						.setName(jwt.get("name", String.class))
-						.setRateLimitRepo(rateLimitRepo)
+						.setRateLimitRepo(rateLimitRepository)
 					.build());
 
 		return entity;

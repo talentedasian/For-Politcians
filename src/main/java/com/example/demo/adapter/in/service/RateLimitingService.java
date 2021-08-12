@@ -63,18 +63,5 @@ public class RateLimitingService {
 		
 		return rateLimit.get().isNotRateLimited();
 	}
-	
-	public Integer daysLeftOfBeingRateLimited(String accNumber, String polNumber) {
-		Optional<RateLimit> rateLimit = this.findRateLimitInPolitician(accNumber, polNumber);
-		 if (rateLimit.isPresent()) {
-			 Integer daysLeft = rateLimit.get().daysLeftOfBeingRateLimited();
-			 if (rateLimit.get().daysLeftOfBeingRateLimited() == null) {
-				 return 0;
-			 }
-			 return daysLeft; 
-		 } 
-		 
-		 return 0;
-	}
 
 }

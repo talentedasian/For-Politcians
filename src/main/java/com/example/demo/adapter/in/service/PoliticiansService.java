@@ -1,32 +1,21 @@
 package com.example.demo.adapter.in.service;
 
-import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
-import com.example.demo.dtomapper.PoliticianDTOUnwrapper;
+import com.example.demo.adapter.out.repository.PoliticiansRepository;
+import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianAlreadyExistsException;
 import com.example.demo.exceptions.PoliticianNotFoundException;
-import com.example.demo.domain.politicians.Politicians;
-import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
-import com.example.demo.adapter.out.repository.PoliticiansRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@EnableTransactionManagement
-@Service
 public class PoliticiansService {
 
 	private final PoliticiansRepository politiciansRepo;
 
-	@Autowired
 	public PoliticiansService(PoliticiansRepository politiciansRepo) {
 		this.politiciansRepo = politiciansRepo;
 	}
-
-	PoliticiansBuilder politicianBuilder = new PoliticiansBuilder("dummy");
 
 	@Transactional(readOnly = true)
 	public Politicians findPoliticianByNumber(String polNumber) {
@@ -35,7 +24,7 @@ public class PoliticiansService {
 		
 		return politician;
 	}
-	
+
 	@Transactional(readOnly = true)
 	public List<Politicians> findPoliticianByName(String lastName, String firstName) {
 		List<Politicians> politician = politiciansRepo.findByLastNameAndFirstName(lastName, firstName);
@@ -55,12 +44,11 @@ public class PoliticiansService {
 	}
 	
 	@Transactional
-	public Politicians savePolitician(AddPoliticianDTORequest dto) {
+	public Politicians savePolitician(Politicians politician) {
 		try {
-			Politicians unwrappedPolitician = new PoliticianDTOUnwrapper().unWrapDTO(dto);
-			Politicians politician = politiciansRepo.save(unwrappedPolitician);
+			Politicians politicianSaved = politiciansRepo.save(politician);
 
-			return politician;
+			return politicianSaved;
 		} catch (DataIntegrityViolationException e) {
 			throw new PoliticianAlreadyExistsException("Politician Already exists in the database");
 		}
