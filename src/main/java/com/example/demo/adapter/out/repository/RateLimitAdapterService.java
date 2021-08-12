@@ -2,6 +2,7 @@ package com.example.demo.adapter.out.repository;
 
 import com.example.demo.adapter.dto.RateLimitJpaDto;
 import com.example.demo.adapter.in.service.RateLimitingService;
+import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.exceptions.RateLimitNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +12,7 @@ public class RateLimitAdapterService {
 
     private final RateLimitingService service;
 
-    public RateLimitAdapterService(RateLimitJpaAdapterRepository rateRepo) {
+    public RateLimitAdapterService(RateLimitRepository rateRepo) {
         this.service = new RateLimitingService(rateRepo);
     }
 

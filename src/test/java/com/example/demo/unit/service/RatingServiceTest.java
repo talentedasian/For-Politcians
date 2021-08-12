@@ -7,7 +7,6 @@ import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.enums.PoliticalParty;
-import com.example.demo.adapter.out.repository.FakePoliticianRepository;
 import com.example.demo.adapter.out.repository.FakeRatingRepo;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;

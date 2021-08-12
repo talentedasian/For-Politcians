@@ -3,23 +3,15 @@ package com.example.demo.domain.politicians;
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.politicianNumber.PoliticianNumberImplementor;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-
 public class PoliticianTypes {
-	
-	@Entity
-	@DiscriminatorValue("Presidential")
+
 	public static class PresidentialPolitician extends Politicians{
-		
-		@Column(nullable = true, name = "law_signed")
+
 		private String mostSignificantLawSigned;
 
 		protected PresidentialPolitician(Politicians politician, String lawSigned) {
-			super(politician.getRepo(), politician.getId(), 
-					politician.getFirstName(), politician.getLastName(),
-					politician.getFullName(), politician.getPoliticiansRating(), 
+			super(	politician.getFirstName(), politician.getLastName(),
+					politician.getFullName(), politician.getPoliticiansRating(),
 					politician.getRating(), politician.getPoliticianNumber(),
 					Type.PRESIDENTIAL);
 			this.mostSignificantLawSigned = lawSigned;
@@ -98,19 +90,11 @@ public class PoliticianTypes {
 			
 		}
 	}
-	
-	@Entity
-	@DiscriminatorValue("Senatorial")
+
 	public static class SenatorialPolitician extends Politicians{
-		
-		/*
-		 * This column must not be null when constructing Senatorial politicians.
-		 * This is only nullable in the database for JPA inheritance.
-		 */
-		@Column(nullable = true, name = "months_of_service")
+
 		private int totalMonthsOfServiceAsSenator;
-		
-		@Column(nullable = true, name = "law_made")
+
 		private String mostSignificantLawMade;
 
 		public int getTotalMonthsOfServiceAsSenator() {
@@ -122,8 +106,7 @@ public class PoliticianTypes {
 		}
 
 		protected SenatorialPolitician(Politicians politician, int monthsOfService, String lawMade) {
-			super(politician.getRepo(), politician.getId(),
-					politician.getFirstName(), politician.getLastName(), 
+			super(	politician.getFirstName(), politician.getLastName(),
 					politician.getFullName(), politician.getPoliticiansRating(),
 					politician.getRating(), politician.getPoliticianNumber(),
 					Type.SENATORIAL);
@@ -175,8 +158,6 @@ public class PoliticianTypes {
 			}
 			return true;
 		}
-
-
 
 		public static class SenatorialBuilder {
 			

@@ -4,6 +4,7 @@ import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.RateLimit;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class RateLimitingService {
@@ -24,10 +25,9 @@ public class RateLimitingService {
 	 * the first instance of the rate limit so that the most updated
 	 * rate limit is reflected and not the outdated one. 
 	 */
-
 	@Transactional
 	public RateLimit rateLimitUser(String accNumber, String polNumber) {
-		var rateLimit = new RateLimit(accNumber, polNumber);
+		var rateLimit = new RateLimit(accNumber, polNumber, LocalDate.now());
 
 		deleteRateLimit(accNumber, polNumber);
 		RateLimit rateLimitSaved = repo.save(rateLimit);

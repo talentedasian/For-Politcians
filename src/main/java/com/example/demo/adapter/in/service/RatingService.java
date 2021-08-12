@@ -3,10 +3,11 @@ package com.example.demo.adapter.in.service;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
-import com.example.demo.adapter.out.repository.RateLimitJpaAdapterRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.UserRater;
+import com.example.demo.domain.enums.PoliticalParty;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.userRaterNumber.AbstractUserRaterNumber;
 import com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
@@ -15,25 +16,23 @@ import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@Service
 public class RatingService {
 
 	private final RatingRepository ratingRepo;
 	private final PoliticiansRepository politicianRepo;
-	private final RateLimitingService rateLimitService;
+	private final RateLimitRepository rateLimitRepo;
 
 	@Autowired
 	public RatingService(RatingRepository ratingRepo, PoliticiansRepository politicianRepo,
-						 RateLimitJpaAdapterRepository rateLimitRepo) {
+						 RateLimitRepository rateLimitRepo) {
 		this.ratingRepo = ratingRepo;
 		this.politicianRepo = politicianRepo;
-		this.rateLimitService = new RateLimitingService(rateLimitRepo);
+		this.rateLimitRepo = rateLimitRepo;
 	}
 	
 	@Transactional(readOnly = true)
@@ -48,37 +47,23 @@ public class RatingService {
 	public PoliticiansRating saveRatings(AddRatingDTORequest dto, HttpServletRequest req) throws UserRateLimitedOnPoliticianException {
 		Politicians politician = politicianRepo.findByPoliticianNumber(dto.getId())
 				.orElseThrow(() -> new PoliticianNotFoundException("No policitian found by id"));
-		politician.setRepo(ratingRepo);
 		
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
 		
 		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
-		String accountNumber = accountNumberImplementor.calculateEntityNumber().getAccountNumber();
 		String polNumber = politician.getPoliticianNumber();
 		
-		var rating = createPoliticiansRating(dto.getRating().doubleValue(), politician);
+		var rating = createPoliticiansRating(dto, politician, jwt);
 		rating.calculatePolitician(politician);
-		rating.calculateRater(jwt.getSubject(), jwt.getId(), dto.getPoliticalParty(), accountNumber, rateLimitService);
 
-		/*
-		 * check whether the user is currently not allowed to rate
-		 * a politician. The timeout/rate limit is within a week.
-		 */
 		if (!canRate(rating.getRater(), polNumber)) {
-			long daysLeft = rateLimitService.daysLeftOfBeingRateLimited(accountNumber, polNumber).longValue();
-			
+			long daysLeft = rating.getRater().daysLeftToRate(polNumber);
+
 			throw new UserRateLimitedOnPoliticianException("User is rate limited on politician with " + daysLeft + " days left", 
 					daysLeft);
 		}
 		
-		/*
-		 * save the rate limit in the database to be fetched whenever a user
-		 * wants to rate a politician(see if statement above). this method already 
-		 * deletes the existing rate limit for the user.
-		 */
-		rateLimitService.rateLimitUser(accountNumber, polNumber);
-		
-		politician.calculateListOfRaters(rating);
+		rating.ratePolitician();
 		
 		politicianRepo.save(politician);
 		PoliticiansRating savedRating = ratingRepo.save(rating);
@@ -86,10 +71,21 @@ public class RatingService {
 		return savedRating;
 	}
 
-	private PoliticiansRating createPoliticiansRating(double rating, Politicians politician) {
+	private PoliticiansRating createPoliticiansRating(AddRatingDTORequest dto, Politicians politician, Claims jwt) {
+		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
+		String accountNumber = accountNumberImplementor.calculateEntityNumber().getAccountNumber();
+
 		var entity = new PoliticiansRating();
-		entity.calculateRating(rating);
+		entity.calculateRating(dto.getRating().doubleValue());
 		entity.setPolitician(politician);
+		entity.setRater(new UserRater.Builder()
+						.setAccountNumber(accountNumber)
+						.setEmail(jwt.getSubject())
+						.setPoliticalParty(PoliticalParty.mapToPoliticalParty(dto.getPoliticalParty()))
+						.setName(jwt.get("name", String.class))
+						.setRateLimitRepo(rateLimitRepo)
+					.build());
+
 		return entity;
 	}
 	

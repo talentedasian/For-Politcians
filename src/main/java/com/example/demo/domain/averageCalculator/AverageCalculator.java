@@ -14,8 +14,8 @@ public abstract class AverageCalculator {
 	}
 
 	public AverageCalculator(double totalRating, double count) {
-		org.springframework.util.Assert.state(isNumberPositive(totalRating), 
-				"total rating must not be negative");
+		org.springframework.util.Assert.state(isNumberPositive(totalRating),
+				"total RatingJpaEntity must not be negative");
 		
 		if (!isNumberPositive(count)) {
 			count = 0;

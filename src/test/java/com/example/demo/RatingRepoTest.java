@@ -42,7 +42,7 @@ public class RatingRepoTest extends BaseClassTestsThatUsesDatabase {
 	@Test
 	public void testCustomExistByQueryWithAccountNumber() {
 		polRepo.save(politician);
-		var userRater = new UserRater.UserRaterBuilder()
+		var userRater = new UserRater.Builder()
 				.setAccountNumber(ACCOUNT_NUMBER)
 				.setName(NAME)
 				.setEmail(EMAIL)

@@ -5,7 +5,6 @@ import com.example.demo.adapter.in.dtoRequest.AddSenatorialPoliticianDTORequest;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.politicianNumber.PoliticianNumberImplementor;
-import com.example.demo.adapter.out.repository.FakePoliticianRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.in.service.PoliticiansService;
 import org.junit.jupiter.api.BeforeEach;

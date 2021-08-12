@@ -1,47 +1,29 @@
 package com.example.demo.domain.politicians;
 
-import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
-import com.example.demo.domain.entities.Rating;
-import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.adapter.out.repository.RatingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.entities.Rating;
 
-import javax.persistence.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Entity
-@Table(indexes = @Index(columnList = "politicianNumber") )
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+
 public class Politicians {
 
-	@Transient @Autowired private transient RatingRepository repo;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
-	
-	@Column(nullable = false, name = "politician_first_name")
 	private String firstName;
-	
-	@Column(nullable = false, name = "politician_last_name")
+
 	private String lastName;
-	
-	@Column(nullable = false, name = "politician_full_name")
+
 	private String fullName;
-	
-	@OneToMany(mappedBy = "politician")
+
 	private List<PoliticiansRating> politiciansRating;
 
-	@Column(nullable = false, precision = 3, scale = 2)
 	private Rating rating;
-	
-	@Column(nullable = false, unique = true)
+
 	private String politicianNumber;
-	
-	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
+
 	private Politicians.Type type;
 
 	public String getPoliticianNumber() {
@@ -50,22 +32,6 @@ public class Politicians {
 
 	public void setPoliticianNumber(String politicianNumber) {
 		this.politicianNumber = politicianNumber;
-	}
-
-	public RatingRepository getRepo() {
-		return repo;
-	}
-
-	public void setRepo(RatingRepository repo) {
-		this.repo = repo;
-	}
-	
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getFirstName() {
@@ -119,11 +85,9 @@ public class Politicians {
 	protected Politicians() {
 	}
 
-	protected Politicians(RatingRepository repo, Integer id, String firstName, String lastName, String fullName,
+	protected Politicians(String firstName, String lastName, String fullName,
 			List<PoliticiansRating> politiciansRating, Rating rating, String politicianNumber, Type polType) {
 		super();
-		this.repo = repo;
-		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.fullName = fullName;
@@ -135,7 +99,7 @@ public class Politicians {
 
 	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
-		return "Politicians [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", fullName="
+		return "Politicians [firstName=" + firstName + ", lastName=" + lastName + ", fullName="
 				+ fullName +  ", rating=" + rating + ", politicianNumber=" + politicianNumber + "]";
 	}
 
@@ -157,16 +121,7 @@ public class Politicians {
 	}
 
 	public long returnCountsOfRatings() {
-		if (isEmptyCountOfRatings()) {
-			return 0;
-		}
-		
-		return returnCountsOfRatings(this.id);
-	}
-
-	
-	public boolean isEmptyCountOfRatings() {
-		return returnCountsOfRatings(this.id) == 0L;
+		return politiciansRating.size();
 	}
 
 	public List<PoliticiansRating> calculateListOfRaters(PoliticiansRating rater) {
@@ -175,10 +130,6 @@ public class Politicians {
 		setPoliticiansRating(listOfPoliticiansRating);
 		
 		return listOfPoliticiansRating;
-	}
-	
-	private long returnCountsOfRatings(Integer id) {
-		return repo.countByPolitician_Id(id);
 	}
 
 	public String calculateFullName() {
@@ -294,7 +245,7 @@ public class Politicians {
 		}
 		
 		public Politicians build() {
-			return new Politicians(ratingRepo, id, firstName, lastName, fullName, politiciansRating, rating, politicianNumber, null);
+			return new Politicians(firstName, lastName, fullName, politiciansRating, rating, politicianNumber, null);
 		}
 		
 	}

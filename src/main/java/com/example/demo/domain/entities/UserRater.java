@@ -100,7 +100,11 @@ public class UserRater {
 		return rateLimit.isEmpty() ? false : rateLimit.get().isNotRateLimited();
 	}
 
-	public static class UserRaterBuilder {
+    public long daysLeftToRate(String polNumber) {
+		return rateLimitRepository.findUsingIdAndPoliticianNumber(userAccountNumber, polNumber).get().daysLeftOfBeingRateLimited().longValue();
+    }
+
+    public static class Builder {
 
 		private String name, email;
 
@@ -110,27 +114,27 @@ public class UserRater {
 
 		private RateLimitRepository repo;
 
-		public UserRaterBuilder setName(String name) {
+		public Builder setName(String name) {
 			this.name = name;
 			return this;
 		}
 
-		public UserRaterBuilder setEmail(String email) {
+		public Builder setEmail(String email) {
 			this.email = email;
 			return this;
 		}
 
-		public UserRaterBuilder setPoliticalParty(PoliticalParty politicalParty) {
+		public Builder setPoliticalParty(PoliticalParty politicalParty) {
 			this.politicalParty = politicalParty;
 			return this;
 		}
 
-		public UserRaterBuilder setRateLimitRepo(RateLimitRepository repo) {
+		public Builder setRateLimitRepo(RateLimitRepository repo) {
 			this.repo = repo;
 			return this;
 		}
 
-		public UserRaterBuilder setAccountNumber(String accNumber) {
+		public Builder setAccountNumber(String accNumber) {
 			this.userAccountNumber = accNumber;
 			return this;
 		}

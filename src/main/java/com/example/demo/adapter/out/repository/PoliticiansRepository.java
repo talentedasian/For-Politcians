@@ -1,15 +1,14 @@
 package com.example.demo.adapter.out.repository;
 
 import com.example.demo.domain.politicians.Politicians;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public interface PoliticiansRepository extends JpaRepository<Politicians, Integer>{
-	
+public interface PoliticiansRepository{
+
+	Politicians save(Politicians politician);
+
 	List<Politicians> findByLastNameAndFirstName(String lastName, String firstName);
 	
 	Optional<Politicians> findByPoliticianNumber(String polNumber);
@@ -17,5 +16,6 @@ public interface PoliticiansRepository extends JpaRepository<Politicians, Intege
 	boolean existsByPoliticianNumber(String polNumber);
 	
 	void deleteByPoliticianNumber(String polNumber);
-	
+
+    List<Politicians> findAll();
 }

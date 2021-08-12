@@ -1,28 +1,22 @@
 package com.example.demo.domain.entities;
 
+import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.politicians.Politicians;
-import com.example.demo.domain.enums.PoliticalParty;
-import com.example.demo.adapter.in.service.RateLimitingService;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 
-@Entity
 public class PoliticiansRating {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+
+	private RateLimitRepository rateLimitRepo;
+
 	private Integer id;
-	
-	@Column(nullable = false, precision = 3, scale = 2)
+
 	private Double rating; 
-	
-	@Column(nullable = false)
+
 	private UserRater rater;
-	
-	@ManyToOne
-	@JoinColumn(nullable = false, name = "politician_id")
+
 	private Politicians politician;
 	
 	public Integer getId() {
@@ -115,11 +109,18 @@ public class PoliticiansRating {
 		politician.getRating().setTotalRating(totalAmountOfRating);
 	}
 
-	public void calculateRater(String subject, String id, String politicalParty,
-			String accountNumber, RateLimitingService service) {
-		PoliticalParty party = PoliticalParty.mapToPoliticalParty(politicalParty);
-		var userRater = new UserRater(id, party, subject, accountNumber, service);
-		setRater(userRater);
+	public PoliticiansRating(Integer id, Double rating, UserRater rater, Politicians politician, RateLimitRepository rateLimitRepository) {
+		super();
+		this.id = id;
+		this.rating = rating;
+		this.rater = rater;
+		this.politician = politician;
+		this.rateLimitRepo = rateLimitRepository;
 	}
-	
+
+	public void ratePolitician() {
+		politician.getPoliticiansRating().add(this);
+
+		rateLimitRepo.save(new RateLimit(rater.getUserAccountNumber(), politician.getPoliticianNumber(), LocalDate.now()));
+	}
 }
