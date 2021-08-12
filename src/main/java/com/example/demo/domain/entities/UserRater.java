@@ -1,15 +1,13 @@
 package com.example.demo.domain.entities;
 
 import com.example.demo.domain.RateLimitRepository;
-import com.example.demo.domain.JSONWebTokenException;
-import com.example.demo.domain.JwtDecoder;
 import com.example.demo.domain.enums.PoliticalParty;
 
 import java.util.Optional;
 
 public class UserRater {
 
-	private transient RateLimitRepository rateLimitRepository;
+	private RateLimitRepository rateLimitRepository;
 
 	private String facebookName;
 
@@ -94,30 +92,9 @@ public class UserRater {
 		return false;
 	}
 
-	public boolean canRate(String jwt, String polNumber, JwtDecoder decoder) {
-		if (jwt == null | jwt.isBlank() | jwt.isEmpty()) {
-			return false;
-		}
-		
-		if (!isJwtValid(jwt, decoder)) {
-			return false;
-		} else {
-			if (isRateLimited(polNumber)) {
-				return false;
-			}			
-		}
-		return true;
+	public boolean canRate(String polNumber) {
+		return isRateLimited(polNumber);
 	}
-	
-	private boolean isJwtValid(String jwt, JwtDecoder decoder) {
-		try {
-			decoder.decodeJwt(jwt);
-			return true;
-		} catch (JSONWebTokenException e) {
-			return false;
-		}
-	}
-	
 	private boolean isRateLimited(String politicianNumber) {
 		Optional<RateLimit> rateLimit = rateLimitRepository.findUsingIdAndPoliticianNumber(userAccountNumber, politicianNumber);
 		return rateLimit.isEmpty() ? false : rateLimit.get().isNotRateLimited();

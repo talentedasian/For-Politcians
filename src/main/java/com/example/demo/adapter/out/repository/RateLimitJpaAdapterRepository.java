@@ -1,6 +1,6 @@
 package com.example.demo.adapter.out.repository;
 
-import com.example.demo.adapter.dto.RateLimitDTO;
+import com.example.demo.adapter.dto.RateLimitJpaDto;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.RateLimit;
 import org.springframework.data.domain.Example;
@@ -18,7 +18,7 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
 
     @Override
     public RateLimit save(RateLimit rateLimit) {
-        var dto = RateLimitDTO.of(rateLimit);
+        var dto = RateLimitJpaDto.of(rateLimit);
 
         dto = rateRepo.save(dto);
 
@@ -27,7 +27,7 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
 
     @Override
     public Optional<RateLimit> findUsingIdAndPoliticianNumber(String id, String politicianNumber) {
-        var dto = new RateLimitDTO(id, politicianNumber, null);
+        var dto = new RateLimitJpaDto(id, politicianNumber);
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withMatcher("accountNumber", match -> match.exact())
@@ -49,7 +49,7 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
 
     @Override
     public long countUsingIdAndPoliticianNumber(String id, String polNumber) {
-        var rateLimit = new RateLimitDTO(id, polNumber, null);
+        var rateLimit = new RateLimitJpaDto(id, polNumber);
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withMatcher("accountNumber", match -> match.exact())

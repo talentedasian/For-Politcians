@@ -1,11 +1,8 @@
 package com.example.demo.domain.entities;
 
-import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.lang.Integer.valueOf;
 
 public class RateLimit {
 
@@ -16,22 +13,19 @@ public class RateLimit {
 		 * Commonly used for testing
 		 */
 		var rateLimit = new RateLimit();
-		rateLimit.setDateCreated(LocalDate.now().minusDays(8));
 		rateLimit.setId("TGFLM-00000000000123");
 		rateLimit.setPoliticianNumber("123polNumber");
 		
-		cache.put(rateLimit.getId(), rateLimit);
+		cache.put(rateLimit.id(), rateLimit);
 	}
 
 	private String id;
-	
-	@Column(nullable = false, name = "politician_number")
+
 	private String politicianNumber;
-	
-	@Column(nullable = true, name = "date_created")
+
 	private LocalDate dateCreated;
 
-	public String getId() {
+	public String id() {
 		return id;
 	}
 
@@ -39,7 +33,7 @@ public class RateLimit {
 		this.id = id;
 	}
 
-	public String getPoliticianNumber() {
+	public String politicianNumber() {
 		return politicianNumber;
 	}
 
@@ -47,22 +41,10 @@ public class RateLimit {
 		this.politicianNumber = politicianNumber;
 	}
 
-	public void setDateCreated(LocalDate dateCreated) {
+	public RateLimit(String id, String politicianNumber, LocalDate dateCreated) {
+		this.id = id;
+		this.politicianNumber = politicianNumber;
 		this.dateCreated = dateCreated;
-	}
-
-	public RateLimit(String id, String politicianNumber) {
-		super();
-		this.id = id;
-		this.politicianNumber = politicianNumber;
-		this.dateCreated = LocalDate.now();
-	}
-
-	public RateLimit(String id, String politicianNumber, LocalDate date) {
-		super();
-		this.id = id;
-		this.politicianNumber = politicianNumber;
-		this.dateCreated = date;
 	}
 	
 	public static RateLimit withNotExpiredRateLimit(String id, String politicianNumber) {
@@ -70,7 +52,6 @@ public class RateLimit {
 			var rateLimit = new RateLimit();
 			rateLimit.setId(id);
 			rateLimit.setPoliticianNumber(politicianNumber);
-			rateLimit.setDateCreated(LocalDate.now().minusDays(8));
 			
 			return rateLimit;
 		});
@@ -82,27 +63,19 @@ public class RateLimit {
 
 	@Override
 	public String toString() {
-		return "RateLimit [id=" + id + ", politicianNumber=" + politicianNumber + ", dateCreated=" + dateCreated + "]";
+		return "RateLimit [id=" + id + ", politicianNumber=" + politicianNumber + "]";
 	}
-	
+
 	public boolean isNotRateLimited() {
-		return this.dateCreated == null || (LocalDate.now().minusDays(7L).isAfter(dateCreated) | 
-				LocalDate.now().minusDays(7L).isEqual(dateCreated));
+		return this.dateCreated == null || LocalDate.now().minusDays(7).isBefore(dateCreated);
 	}
-	
-	// return null if user is not rate limited
+
 	public Integer daysLeftOfBeingRateLimited() {
-		if (isNotRateLimited()) {
-			return null;
-		}
-		
-		int daysLeft = this.dateCreated.getDayOfMonth() - LocalDate.now().minusDays(7L).getDayOfMonth();
-		
-		if (Integer.signum(daysLeft) == -1) {
-			return null;
-		}
-		
-		return valueOf(daysLeft);
+		return determineDaysLeftToRate(dateCreated);
+	}
+
+	public static int determineDaysLeftToRate(LocalDate date) {
+		return LocalDate.now().minusDays(7).getDayOfMonth() - date.getDayOfMonth();
 	}
 
 }

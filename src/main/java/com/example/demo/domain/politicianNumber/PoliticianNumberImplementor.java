@@ -28,8 +28,8 @@ public class PoliticianNumberImplementor extends AbstractPoliticianNumber{
 	}
 
 	public static PoliticianNumberImplementor with(Politicians politician) {
-//		if (!(politician.getPoliticianNumber().length() < 12)) {
-//			Assert.state(politician.getPoliticianNumber().matches("\\d+"),
+//		if (!(politician.politicianNumber().length() < 12)) {
+//			Assert.state(politician.politicianNumber().matches("\\d+"),
 //					"Politician Number must be a digit");
 //		}
 		

@@ -1,7 +1,6 @@
 package com.example.demo.adapter.in.service;
 
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
-import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RateLimitJpaAdapterRepository;
@@ -52,7 +51,6 @@ public class RatingService {
 		politician.setRepo(ratingRepo);
 		
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
-		String stringJwt = JwtProviderHttpServletRequest.extractJwtFromReq(req);
 		
 		AbstractUserRaterNumber accountNumberImplementor = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
 		String accountNumber = accountNumberImplementor.calculateEntityNumber().getAccountNumber();
@@ -66,7 +64,7 @@ public class RatingService {
 		 * check whether the user is currently not allowed to rate
 		 * a politician. The timeout/rate limit is within a week.
 		 */
-		if (!canRate(rating.getRater(), stringJwt, polNumber)) {
+		if (!canRate(rating.getRater(), polNumber)) {
 			long daysLeft = rateLimitService.daysLeftOfBeingRateLimited(accountNumber, polNumber).longValue();
 			
 			throw new UserRateLimitedOnPoliticianException("User is rate limited on politician with " + daysLeft + " days left", 
@@ -82,7 +80,7 @@ public class RatingService {
 		
 		politician.calculateListOfRaters(rating);
 		
-		Politicians gg = politicianRepo.save(politician);
+		politicianRepo.save(politician);
 		PoliticiansRating savedRating = ratingRepo.save(rating);
 		
 		return savedRating;
@@ -95,8 +93,8 @@ public class RatingService {
 		return entity;
 	}
 	
-	private boolean canRate(UserRater rater, String jwt, String polNumber) {
-		return rater.canRate(jwt, polNumber, new JwtJjwtProviderAdapater());
+	private boolean canRate(UserRater rater, String polNumber) {
+		return rater.canRate(polNumber);
 	}
 	
 	@Transactional(readOnly = true)

@@ -33,7 +33,7 @@ public class RateLimitSpringHateoasTest extends BaseSpringHateoasTest {
 	@Transactional
 	@Test
 	public void testHalFormsRateLimitStatusResponse() throws Exception {
-		limitingService.rateLimitUserForTests(rateLimit.getId(), rateLimit.getPoliticianNumber());
+		limitingService.rateLimitUserForTests(rateLimit.id(), rateLimit.politicianNumber());
 		
 		this.mvc.perform(get(create("/rate-limit/" + POLITICIAN_NUMBER))
 				.header("Authorization", "Bearer " + jwt)
@@ -51,6 +51,6 @@ public class RateLimitSpringHateoasTest extends BaseSpringHateoasTest {
 		 * We are dealing with a real database here. Delete the entities
 		 * before the test finishes. 
 		 */
-		limitingService.deleteRateLimit(rateLimit.getId(), rateLimit.getPoliticianNumber());
+		limitingService.deleteRateLimit(rateLimit.id(), rateLimit.politicianNumber());
 	}
 }

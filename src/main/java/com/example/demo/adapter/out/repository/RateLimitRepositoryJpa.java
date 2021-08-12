@@ -1,9 +1,11 @@
 package com.example.demo.adapter.out.repository;
 
-import com.example.demo.adapter.dto.RateLimitDTO;
+import com.example.demo.adapter.dto.RateLimitJpaDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RateLimitRepositoryJpa extends JpaRepository<RateLimitDTO, String> {
+import java.util.UUID;
+
+public interface RateLimitRepositoryJpa extends JpaRepository<RateLimitJpaDto, UUID> {
 
     void deleteByIdAndPoliticianNumber(String id, String politicianNumber);
 

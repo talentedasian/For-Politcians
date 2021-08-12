@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-public class RateLimitJpaDto{
+public class RateLimitJpaDto extends RepresentationModel<RateLimitJpaDto> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,15 +28,20 @@ public class RateLimitJpaDto{
 		return politicianNumber;
 	}
 
-	public RateLimitDto(int daysLeft, String accountNumber, String politicianNumber) {
+	public RateLimitJpaDto(int daysLeft, String accountNumber, String politicianNumber) {
 		super();
 		this.daysLeft = daysLeft;
 		this.accountNumber = accountNumber;
 		this.politicianNumber = politicianNumber;
 	}
 
-	public static RateLimitDto of(RateLimit rateLimit) {
-		return new RateLimitDto(rateLimit.daysLeftOfBeingRateLimited(), rateLimit.id(), rateLimit.politicianNumber());
+	public RateLimitJpaDto(String accountNumber, String politicianNumber) {
+		this.accountNumber = accountNumber;
+		this.politicianNumber = politicianNumber;
+	}
+
+	public static RateLimitJpaDto of(RateLimit rateLimit) {
+		return new RateLimitJpaDto(rateLimit.daysLeftOfBeingRateLimited(), rateLimit.id(), rateLimit.politicianNumber());
 	}
 
 	public RateLimit toRateLimit() {

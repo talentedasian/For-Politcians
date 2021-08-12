@@ -1,6 +1,6 @@
 package com.example.demo.adapter.in.web;
 
-import com.example.demo.adapter.dto.RateLimitDTO;
+import com.example.demo.adapter.dto.RateLimitJpaDto;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.adapter.out.repository.RateLimitAdapterService;
 import com.example.demo.domain.entities.RateLimit;
@@ -31,14 +31,14 @@ public class RateLimitController {
 
 
 	@GetMapping("/{politicianNumber}")
-	public ResponseEntity<RateLimitDTO> findRateLimitOnCurrentUser(@PathVariable String politicianNumber,
-			HttpServletRequest req) {	
+	public ResponseEntity<RateLimitJpaDto> findRateLimitOnCurrentUser(@PathVariable String politicianNumber,
+                                                                      HttpServletRequest req) {
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
 		
 		AbstractUserRaterNumber accountNumberCalculator = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
 		String accountNumber = accountNumberCalculator.calculateEntityNumber().getAccountNumber();
 		
-		RateLimitDTO rateLimitQueried = service.findUsingAccountNumberAndPoliticianNumber(RateLimitDTO.of(new RateLimit(accountNumber, politicianNumber)));
+		RateLimitJpaDto rateLimitQueried = service.findUsingAccountNumberAndPoliticianNumber(RateLimitJpaDto.of(new RateLimit(accountNumber, politicianNumber)));
 
 		var selfLink = linkTo(methodOn(RateLimitController.class)
 				.findRateLimitOnCurrentUser(rateLimitQueried.getPoliticianNumber(), req))
@@ -46,6 +46,6 @@ public class RateLimitController {
 		
 		rateLimitQueried.add(selfLink);
 		
-		return new ResponseEntity<RateLimitDTO>(rateLimitQueried, HttpStatus.OK);
+		return new ResponseEntity<RateLimitJpaDto>(rateLimitQueried, HttpStatus.OK);
 	}
 }
