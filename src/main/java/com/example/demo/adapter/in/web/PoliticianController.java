@@ -1,13 +1,11 @@
  package com.example.demo.adapter.in.web;
 
-import com.example.demo.adapter.dto.PoliticianDTO;
+import com.example.demo.adapter.dto.PoliticianDto;
 import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.hateoas.PoliticianAssembler;
-import com.example.demo.domain.politicians.Politicians;
-import com.example.demo.adapter.in.service.PoliticiansService;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -23,61 +21,57 @@ import java.util.List;
 @RequestMapping("/api/politicians")
 public class PoliticianController {
 	
-	private final PoliticiansService politiciansService;
+	private final PoliticianServiceAdapter politiciansService;
 	private final PoliticianAssembler assembler;
 	private PoliticianDTOMapper mapper = new PoliticiansDtoMapper();
 	
 	@Autowired
-	public PoliticianController(PoliticiansService politiciansService, PoliticianAssembler assembler) {
+	public PoliticianController(PoliticianServiceAdapter politiciansService, PoliticianAssembler assembler) {
 		this.politiciansService = politiciansService;
 		this.assembler = assembler;
 	}
 
 	@PostMapping("/politician")
 	@Hidden
-	public ResponseEntity<EntityModel<PoliticianDTO>> savePolitician(@Valid @RequestBody AddPoliticianDTORequest request) {
-		Politicians politicianSaved = politiciansService.savePolitician(request);
+	public ResponseEntity<EntityModel<PoliticianDto>> savePolitician(@Valid @RequestBody AddPoliticianDTORequest request) {
+		PoliticianDto politicianSaved = politiciansService.savePolitician(request);
 
-		PoliticianDTO politician = mapper.mapToDTO(politicianSaved);
+		EntityModel<PoliticianDto> response = assembler.toModel(politicianSaved);
 
-		EntityModel<PoliticianDTO> response = assembler.toModel(politician);
-
-		return new ResponseEntity<EntityModel<PoliticianDTO>>(response, HttpStatus.CREATED);
+		return new ResponseEntity<EntityModel<PoliticianDto>>(response, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/politician")
-	public ResponseEntity<CollectionModel<EntityModel<PoliticianDTO>>> politicianByName(@RequestParam String lastName,
-			@RequestParam String firstName) {
-		List<Politicians> politicianByName = politiciansService.findPoliticianByName(lastName, firstName);
+	public ResponseEntity<CollectionModel<EntityModel<PoliticianDto>>> politicianByName(@RequestParam String lastName,
+                                                                                        @RequestParam String firstName) {
+		List<PoliticianDto> politicianByName = politiciansService.findPoliticianUsingName(lastName, firstName);
 		
-		List<? extends PoliticianDTO> politician = mapper.mapToDTO(politicianByName);
+		List<? extends PoliticianDto> politician = mapper.mapToDTO(politicianByName);
 		
-		CollectionModel<EntityModel<PoliticianDTO>> response = assembler.toCollectionModel(politician);
+		CollectionModel<EntityModel<PoliticianDto>> response = assembler.toCollectionModel(politician);
 		
-		return new ResponseEntity<CollectionModel<EntityModel<PoliticianDTO>>>(response, HttpStatus.OK);
+		return new ResponseEntity<CollectionModel<EntityModel<PoliticianDto>>>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/politician/{id}")
-	public ResponseEntity<EntityModel<PoliticianDTO>> politicianById(@PathVariable String id) {
-		Politicians politicianQueried = politiciansService.findPoliticianByNumber(id);
+	public ResponseEntity<EntityModel<PoliticianDto>> politicianById(@PathVariable String id) {
+		PoliticianDto politicianQueried = politiciansService.findPoliticianUsingNumber(id);
 		
-		PoliticianDTO politician = mapper.mapToDTO(politicianQueried);
+		EntityModel<PoliticianDto> response = assembler.toModel(politicianQueried);
 		
-		EntityModel<PoliticianDTO> response = assembler.toModel(politician);
-		
-		return new ResponseEntity<EntityModel<PoliticianDTO>>(response, HttpStatus.OK);
+		return new ResponseEntity<EntityModel<PoliticianDto>>(response, HttpStatus.OK);
 	}
 	
 	
 	@GetMapping("/politicians")
-	public ResponseEntity<CollectionModel<EntityModel<PoliticianDTO>>> allPoliticians() {
-		List<Politicians> allPoliticians = politiciansService.allPoliticians();
+	public ResponseEntity<CollectionModel<EntityModel<PoliticianDto>>> allPoliticians() {
+		List<PoliticianDto> allPoliticians = politiciansService.allPoliticians();
 		
-		List<? extends PoliticianDTO> politician = mapper.mapToDTO(allPoliticians);
+		List<? extends PoliticianDto> politician = mapper.mapToDTO(allPoliticians);
 		
-		CollectionModel<EntityModel<PoliticianDTO>> response = assembler.toCollectionModel(politician);
+		CollectionModel<EntityModel<PoliticianDto>> response = assembler.toCollectionModel(politician);
 		
-		return new ResponseEntity<CollectionModel<EntityModel<PoliticianDTO>>>(response, HttpStatus.OK);
+		return new ResponseEntity<CollectionModel<EntityModel<PoliticianDto>>>(response, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/politician/{polNumber}")

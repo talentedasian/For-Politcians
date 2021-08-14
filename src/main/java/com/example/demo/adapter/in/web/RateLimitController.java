@@ -4,8 +4,6 @@ import com.example.demo.adapter.dto.RateLimitJpaDto;
 import com.example.demo.adapter.in.web.dto.RateLimitDto;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.adapter.out.repository.RateLimitAdapterService;
-import com.example.demo.domain.userRaterNumber.AbstractUserRaterNumber;
-import com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
 import io.jsonwebtoken.Claims;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +31,7 @@ public class RateLimitController {
 	public ResponseEntity<RateLimitDto> findRateLimitOnCurrentUser(@PathVariable String politicianNumber,
 																	  HttpServletRequest req) {
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
-
-		AbstractUserRaterNumber accountNumberCalculator = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId());
-		String accountNumber = accountNumberCalculator.calculateEntityNumber().getAccountNumber();
+		final String accountNumber = jwt.getId();
 
 		RateLimitJpaDto rateLimitQueried = service.findUsingAccountNumberAndPoliticianNumber(new RateLimitJpaDto(accountNumber, politicianNumber));
 

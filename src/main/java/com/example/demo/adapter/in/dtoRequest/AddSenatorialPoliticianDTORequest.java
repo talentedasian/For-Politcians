@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.math.BigDecimal;
 
 @JsonTypeName("Senatorial")
-public class AddSenatorialPoliticianDTORequest extends AddPoliticianDTORequest {
+public class AddSenatorialPoliticianDtoRequest extends AddPoliticianDTORequest {
 
     private int monthsOfService;
 
@@ -27,17 +27,17 @@ public class AddSenatorialPoliticianDTORequest extends AddPoliticianDTORequest {
         this.lawMade = lawMade;
     }
 
-    public AddSenatorialPoliticianDTORequest(String firstName, String lastName, BigDecimal rating, int monthsOfService, String lawMade) {
+    public AddSenatorialPoliticianDtoRequest(String firstName, String lastName, BigDecimal rating, int monthsOfService, String lawMade) {
         super(firstName, lastName, rating, "Senatorial");
         this.monthsOfService = monthsOfService;
         this.lawMade = lawMade;
     }
 
-    public AddSenatorialPoliticianDTORequest() {}
+    public AddSenatorialPoliticianDtoRequest() {}
 
     @Override
     public String toString() {
-        return "AddSenatorialPoliticianDTORequest{" +
+        return "AddSenatorialPoliticianDtoRequest{" +
                 "monthsOfService=" + monthsOfService +
                 ", lawMade='" + lawMade + '\'' +
                 '}';

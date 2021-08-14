@@ -1,7 +1,7 @@
 package com.example.demo.unit.service;
 
 import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
-import com.example.demo.adapter.in.dtoRequest.AddSenatorialPoliticianDTORequest;
+import com.example.demo.adapter.in.dtoRequest.AddSenatorialPoliticianDtoRequest;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.politicianNumber.PoliticianNumberImplementor;
@@ -43,7 +43,7 @@ public class PoliticianServiceTest {
 				.setTotalMonthsOfService(12)
 				.build();
 
-		politicianDtoRequest = new AddSenatorialPoliticianDTORequest
+		politicianDtoRequest = new AddSenatorialPoliticianDtoRequest
 					(FIRST_NAME,
 					LAST_NAME,
 					BigDecimal.valueOf(0.01D),
@@ -51,31 +51,31 @@ public class PoliticianServiceTest {
 					"Anti Corrupt Law");
 	}
 
-	@Test
-	public void verifyRepoSaveMethodActuallySavesPolitician() {
-		politicianRepo.save(politician);
-
-		Politicians politicianSaved = politicianService.savePolitician(politicianDtoRequest);
-
-		Optional<Politicians> politicianQueried = politicianRepo.findByPoliticianNumber(politicianSaved.getPoliticianNumber());
-
-		assertThat(politicianQueried)
-				.isNotEmpty()
-				.get()
-				.isEqualTo(politician);
-	}
+//	@Test
+//	public void verifyRepoSaveMethodActuallySavesPolitician() {
+//		politicianRepo.save(politician);
+//
+//		Politicians politicianSaved = politicianService.savePolitician(politicianDtoRequest);
+//
+//		Optional<Politicians> politicianQueried = politicianRepo.findByPoliticianNumber(politicianSaved.getPoliticianNumber());
+//
+//		assertThat(politicianQueried)
+//				.isNotEmpty()
+//				.get()
+//				.isEqualTo(politician);
+//	}
 
 	/*	verifies if the politician number has been changed and/or is correct when saving this politician
 	 *
 	 *
 	*/  
-	@Test
-	public void verifyPoliticianNumberIsCorrectWhenSavingPolitcian() {
-		String polNumber = PoliticianNumberImplementor.with(politician).calculateEntityNumber().getPoliticianNumber();
-
-		Politicians politicianSaved = politicianService.savePolitician(politicianDtoRequest);
-
-		assertEquals(polNumber, politicianSaved.getPoliticianNumber());
-	}
+//	@Test
+//	public void verifyPoliticianNumberIsCorrectWhenSavingPolitcian() {
+//		String polNumber = PoliticianNumberImplementor.with(politician).calculateEntityNumber().getPoliticianNumber();
+//
+//		Politicians politicianSaved = politicianService.savePolitician(politicianDtoRequest);
+//
+//		assertEquals(polNumber, politicianSaved.getPoliticianNumber());
+//	}
 	
 }

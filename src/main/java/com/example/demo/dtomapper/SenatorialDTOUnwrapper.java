@@ -1,7 +1,7 @@
 package com.example.demo.dtomapper;
 
 import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
-import com.example.demo.adapter.in.dtoRequest.AddSenatorialPoliticianDTORequest;
+import com.example.demo.adapter.in.dtoRequest.AddSenatorialPoliticianDtoRequest;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
@@ -11,13 +11,13 @@ class SenatorialDTOUnwrapper extends PoliticianDTOUnwrapper{
 
     @Override
     public Politicians unWrapDTO(AddPoliticianDTORequest dto) {
-        Assert.state(dto instanceof AddSenatorialPoliticianDTORequest,
+        Assert.state(dto instanceof AddSenatorialPoliticianDtoRequest,
                 "request dto must be a type of senatorial");
 
-        return dtoToEntity((AddSenatorialPoliticianDTORequest) dto);
+        return dtoToEntity((AddSenatorialPoliticianDtoRequest) dto);
     }
 
-    private Politicians dtoToEntity(AddSenatorialPoliticianDTORequest dto) {
+    private Politicians dtoToEntity(AddSenatorialPoliticianDtoRequest dto) {
         Politicians politician = new Politicians.PoliticiansBuilder("dummy")
                 .setFirstName(dto.getFirstName())
                 .setLastName(dto.getLastName())

@@ -3,11 +3,11 @@ package com.example.demo.adapter.in.service;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianAlreadyExistsException;
-import com.example.demo.exceptions.PoliticianNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public class PoliticiansService {
 
@@ -18,29 +18,18 @@ public class PoliticiansService {
 	}
 
 	@Transactional(readOnly = true)
-	public Politicians findPoliticianByNumber(String polNumber) {
-		Politicians politician = politiciansRepo.findByPoliticianNumber(polNumber)
-				.orElseThrow(() -> new PoliticianNotFoundException("No politician found using the given number"));
-		
-		return politician;
+	public Optional<Politicians> findPoliticianByNumber(String polNumber) {
+		return politiciansRepo.findByPoliticianNumber(polNumber);
 	}
 
 	@Transactional(readOnly = true)
 	public List<Politicians> findPoliticianByName(String lastName, String firstName) {
-		List<Politicians> politician = politiciansRepo.findByLastNameAndFirstName(lastName, firstName);
-
-		if (politician.isEmpty()) {
-			throw new PoliticianNotFoundException("No politician found by given full name");
-		}
-		
-		return politician;
+		return politiciansRepo.findByLastNameAndFirstName(lastName, firstName);
 	}
 	
 	@Transactional(readOnly = true)
 	public List<Politicians> allPoliticians() {
-		List<Politicians> politician = politiciansRepo.findAll();
-		
-		return politician;
+		return politiciansRepo.findAll();
 	}
 	
 	@Transactional
@@ -53,15 +42,24 @@ public class PoliticiansService {
 			throw new PoliticianAlreadyExistsException("Politician Already exists in the database");
 		}
 	}
-	
+
+	/*
+		Adapters that use the service must not use this method yet.
+		Updating politicians is only done on lower levels of code and not on the user side.
+	 */
 	@Transactional
-	public boolean deletePolitician(String polNumber) {
-		if (politiciansRepo.existsByPoliticianNumber(polNumber)) {
-			politiciansRepo.deleteByPoliticianNumber(polNumber);
-			return true;
-		}
-		
-		return false;
+	public Politicians updatePolitician(Politicians politician) {
+		return politiciansRepo.update(politician);
+	}
+
+	@Transactional(readOnly = true)
+	public boolean doesExistWithPoliticianNumber(String polNumber) {
+		return politiciansRepo.existsByPoliticianNumber(polNumber);
+	}
+
+	@Transactional
+	public void deletePolitician(String polNumber) {
+		politiciansRepo.deleteByPoliticianNumber(polNumber);
 	}
 	
 }

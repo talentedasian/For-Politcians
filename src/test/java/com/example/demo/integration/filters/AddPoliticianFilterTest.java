@@ -1,18 +1,17 @@
 package com.example.demo.integration.filters;
 
+import com.example.demo.adapter.dto.PoliticianDto;
+import com.example.demo.adapter.dto.SenatorialPoliticianDto;
+import com.example.demo.adapter.in.service.PoliticiansService;
 import com.example.demo.adapter.in.web.PoliticianController;
-import com.example.demo.adapter.dto.PoliticianDTO;
-import com.example.demo.adapter.dto.SenatorialPoliticianDTO;
-import com.example.demo.dtomapper.PoliticiansDtoMapper;
-import com.example.demo.adapter.in.exceptionHandling.GlobalExceptionHandling;
-import com.example.demo.filter.AddPoliticianFilter;
-import com.example.demo.hateoas.PoliticianAssembler;
 import com.example.demo.domain.averageCalculator.AverageCalculator;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.politicians.Politicians;
-import com.example.demo.adapter.in.service.PoliticiansService;
+import com.example.demo.dtomapper.PoliticiansDtoMapper;
+import com.example.demo.filter.AddPoliticianFilter;
+import com.example.demo.hateoas.PoliticianAssembler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -22,6 +21,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -62,7 +62,7 @@ public class AddPoliticianFilterTest {
 	private Politicians politician; 
 	
 	@BeforeEach
-	public void setup() {
+	public void setup(WebApplicationContext wac) {
 		politician = new SenatorialBuilder(new Politicians.PoliticiansBuilder("123polNumber")
 				.setFirstName("Test")
 				.setLastName("Name")
@@ -73,9 +73,8 @@ public class AddPoliticianFilterTest {
 				.setTotalMonthsOfService(12)
 				.build();
 				
-		mvc = MockMvcBuilders.standaloneSetup(new PoliticianController(service, assembler))
+		mvc = MockMvcBuilders.webAppContextSetup(wac)
 				.addFilter(new AddPoliticianFilter(), "/api/politicians/politician")
-				.setControllerAdvice(new GlobalExceptionHandling())
 				.alwaysDo(print())
 				.build();
 	}
@@ -110,10 +109,10 @@ public class AddPoliticianFilterTest {
 	
 	@Test 
 	public void shouldReturn201CreatedIfAuthorizationIsCorrect() throws URISyntaxException, Exception {
-		var polDTO = new SenatorialPoliticianDTO(politician, LOW, 12, null);
+		var polDTO = new SenatorialPoliticianDto(politician, LOW, 12, null);
 		
 		when(service.savePolitician(any())).thenReturn(politician);
-		when(assembler.toModel(any(PoliticianDTO.class))).thenReturn(EntityModel.of(polDTO));
+		when(assembler.toModel(any(PoliticianDto.class))).thenReturn(EntityModel.of(polDTO));
 		
 		mvc.perform(post(URI.create("/api/politicians/politician"))
 				.header("Politician-Access", "password")

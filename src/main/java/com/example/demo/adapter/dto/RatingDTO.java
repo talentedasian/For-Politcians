@@ -1,16 +1,16 @@
 package com.example.demo.adapter.dto;
 
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import org.springframework.hateoas.RepresentationModel;
-
-import com.example.demo.domain.entities.UserRater;
 
 public class RatingDTO extends RepresentationModel<RatingDTO>{
 
 	private final Double rating;
 	
-	private final UserRater rater;
+	private final UserRaterDto rater;
 	
-	private final PoliticianDTO politician;
+	private final PoliticianDto politician;
 	
 	private final String id;
 
@@ -18,11 +18,11 @@ public class RatingDTO extends RepresentationModel<RatingDTO>{
 		return rating;
 	}
 
-	public UserRater getRater() {
+	public UserRaterDto getRater() {
 		return rater;
 	}
 
-	public PoliticianDTO getPolitician() {
+	public PoliticianDto getPolitician() {
 		return politician;
 	}
 
@@ -30,7 +30,7 @@ public class RatingDTO extends RepresentationModel<RatingDTO>{
 		return id;
 	}
 
-	public RatingDTO(Double rating, UserRater rater, PoliticianDTO politician, String id) {
+	public RatingDTO(Double rating, UserRaterDto rater, PoliticianDto politician, String id) {
 		super();
 		this.rating = rating;
 		this.rater = rater;
@@ -41,6 +41,10 @@ public class RatingDTO extends RepresentationModel<RatingDTO>{
 	@Override
 	public String toString() {
 		return "RatingDTO [rating=" + rating + ", rater=" + rater + ", politician=" + politician + ", id=" + id + "]";
+	}
+
+	public static RatingDTO from(PoliticiansRating rating) {
+		return new RatingDTO(rating.getRating(), UserRaterDto.from(rating.getRater()), new PoliticiansDtoMapper().mapToDTO(rating.getPolitician()), rating.getId().toString());
 	}
 
 }

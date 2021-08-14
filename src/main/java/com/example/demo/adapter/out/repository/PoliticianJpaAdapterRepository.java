@@ -22,6 +22,11 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
     }
 
     @Override
+    public Politicians update(Politicians politician) {
+        return save(politician);
+    }
+
+    @Override
     public List<Politicians> findByLastNameAndFirstName(String lastName, String firstName) {
         return politicianRepository.findByLastNameAndFirstName(lastName, firstName).stream()
                 .map(entity -> entity.toPoliticians())

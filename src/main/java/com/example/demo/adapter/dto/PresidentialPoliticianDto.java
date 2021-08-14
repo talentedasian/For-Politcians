@@ -1,13 +1,10 @@
 package com.example.demo.adapter.dto;
 
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
-import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.enums.Rating;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.example.demo.domain.politicians.Politicians;
 
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public final class PresidentialPoliticianDTO extends PoliticianDTO {
+public final class PresidentialPoliticianDto extends PoliticianDto {
 
 	private final String mostSignificantLawSigned;
 	
@@ -15,7 +12,7 @@ public final class PresidentialPoliticianDTO extends PoliticianDTO {
 		return mostSignificantLawSigned;
 	}
 
-	public PresidentialPoliticianDTO(Politicians entity, Rating satisfactionRate,String lawSigned) {
+	public PresidentialPoliticianDto(Politicians entity, Rating satisfactionRate, String lawSigned) {
 		super(entity.getFullName(), entity.getPoliticianNumber(), entity.getRating().getAverageRating(), satisfactionRate, "presidential");
 		this.mostSignificantLawSigned = lawSigned;
 	}
@@ -49,7 +46,7 @@ public final class PresidentialPoliticianDTO extends PoliticianDTO {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PresidentialPoliticianDTO other = (PresidentialPoliticianDTO) obj;
+		PresidentialPoliticianDto other = (PresidentialPoliticianDto) obj;
 		if (this.getId() == null) {
 			if (other.getId() != null)
 				return false;

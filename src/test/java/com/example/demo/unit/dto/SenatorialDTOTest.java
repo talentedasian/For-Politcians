@@ -1,10 +1,10 @@
 package com.example.demo.unit.dto;
 
+import com.example.demo.adapter.dto.PoliticianDto;
 import com.example.demo.baseClasses.BaseClassForPoliticianDTOTests;
 import com.example.demo.domain.entities.Rating;
-import com.example.demo.adapter.dto.PoliticianDTO;
-import com.example.demo.adapter.dto.SenatorialPoliticianDTO;
-import com.example.demo.adapter.in.dtoRequest.AddSenatorialPoliticianDTORequest;
+import com.example.demo.adapter.dto.SenatorialPoliticianDto;
+import com.example.demo.adapter.in.dtoRequest.AddSenatorialPoliticianDtoRequest;
 import com.example.demo.dtomapper.PoliticianDTOUnwrapper;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.domain.entities.PoliticiansRating;
@@ -22,7 +22,7 @@ public class SenatorialDTOTest extends BaseClassForPoliticianDTOTests {
 
     @Test
     public void testEqualsLogic() {
-        PoliticianDTO actual = new SenatorialPoliticianDTO(politicianBuilder.build(), com.example.demo.domain.enums.Rating.LOW, monthsOfService, LAW_MADE);
+        PoliticianDto actual = new SenatorialPoliticianDto(politicianBuilder.build(), com.example.demo.domain.enums.Rating.LOW, monthsOfService, LAW_MADE);
 
         assertEquals(actual,
                 new PoliticiansDtoMapper().mapToDTO(senatorialBuilder
@@ -32,7 +32,7 @@ public class SenatorialDTOTest extends BaseClassForPoliticianDTOTests {
 
     @Test
     public void shouldNotBeEqualDueToType() {
-        PoliticianDTO actual = new SenatorialPoliticianDTO(politicianBuilder.build(), com.example.demo.domain.enums.Rating.LOW, monthsOfService, LAW_MADE);
+        PoliticianDto actual = new SenatorialPoliticianDto(politicianBuilder.build(), com.example.demo.domain.enums.Rating.LOW, monthsOfService, LAW_MADE);
 
         assertNotEquals(actual,
                 new PoliticiansDtoMapper().mapToDTO(presidentialBuilder
@@ -43,7 +43,7 @@ public class SenatorialDTOTest extends BaseClassForPoliticianDTOTests {
     @Test
     public void shouldEqualHashCodeWithEqualPoliticianNumberAndSameType() {
         Politicians actual = new PoliticianDTOUnwrapper()
-                .unWrapDTO(new AddSenatorialPoliticianDTORequest("Test", "Name", BigDecimal.ZERO, 12, null));
+                .unWrapDTO(new AddSenatorialPoliticianDtoRequest("Test", "Name", BigDecimal.ZERO, 12, null));
         actual.setPoliticianNumber(POLITICIAN_NUMBER);
 
         assertEquals(actual.hashCode(),

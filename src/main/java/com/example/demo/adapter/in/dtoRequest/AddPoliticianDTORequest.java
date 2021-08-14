@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
-		@JsonSubTypes.Type(value = AddSenatorialPoliticianDTORequest.class, name = "Senatorial"),
+		@JsonSubTypes.Type(value = AddSenatorialPoliticianDtoRequest.class, name = "Senatorial"),
 		@JsonSubTypes.Type(value = AddPresidentialPoliticianDTORequest.class, name = "Presidential")
 })
 public class AddPoliticianDTORequest {

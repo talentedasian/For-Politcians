@@ -5,7 +5,7 @@ import com.example.demo.domain.enums.Rating;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class PoliticianDTO {
+public class PoliticianDto {
 
 	private final String name, id;
 	
@@ -32,7 +32,7 @@ public class PoliticianDTO {
 		return rating;
 	}
 
-	public PoliticianDTO(String name, String id, Double rating, Rating satisfactionRate, String type) {
+	public PoliticianDto(String name, String id, Double rating, Rating satisfactionRate, String type) {
 		this.name = name;
 		this.id = id;
 		this.rating = rating;
@@ -43,7 +43,7 @@ public class PoliticianDTO {
 	@Override
 	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
-		return "PoliticianDTO [name=" + name + ", id=" + id + ", rating=" + rating + ", type" + type + "]";
+		return "PoliticianDto [name=" + name + ", id=" + id + ", rating=" + rating + ", type" + type + "]";
 	}
 
 }

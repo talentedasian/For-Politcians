@@ -1,15 +1,8 @@
 package com.example.demo.domain.oauth2;
 
-import java.net.URISyntaxException;
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.example.demo.adapter.dto.FacebookUserInfo;
+import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
+import com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,8 +12,14 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AccessToken.TokenType;
 
-import com.example.demo.adapter.dto.FacebookUserInfo;
-import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URISyntaxException;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CustomOauth2AuthorizedClientsRepository implements OAuth2AuthorizedClientRepository{
 	
@@ -105,15 +104,17 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 	
 	private void addJwtCookie(OAuth2AuthorizedClient authorizedClient, HttpServletResponse response) throws URISyntaxException{
 		FacebookUserInfo userInfo = userInfoEndpointUtil.fetchUserInfo(authorizedClient);
-			String jwt = JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate(
-					userInfo.getEmail(),
-					userInfo.getId(),
-					userInfo.getName());				
-			
-			Cookie jwtCookie = new Cookie("accessJwt", jwt);
-			jwtCookie.setHttpOnly(true);
-			jwtCookie.setPath("/");
-			response.addCookie(jwtCookie);
+
+		String accountNumber = FacebookUserRaterNumberImplementor.with(userInfo.getName(), userInfo.getId()).calculateEntityNumber().getAccountNumber();
+		String jwt = JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate(
+				userInfo.getEmail(),
+				accountNumber,
+				userInfo.getName());
+
+		Cookie jwtCookie = new Cookie("accessJwt", jwt);
+		jwtCookie.setHttpOnly(true);
+		jwtCookie.setPath("/");
+		response.addCookie(jwtCookie);
 	}
 	
 }

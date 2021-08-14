@@ -1,6 +1,6 @@
 package com.example.demo.unit;
 
-import com.example.demo.adapter.in.dtoRequest.AddSenatorialPoliticianDTORequest;
+import com.example.demo.adapter.in.dtoRequest.AddSenatorialPoliticianDtoRequest;
 import com.example.demo.dtomapper.PoliticianDTOUnwrapper;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
@@ -29,7 +29,7 @@ public class PoliticianDTOUnwrapperTest {
 
     @Test
     public void testUnwrappingOfDTOToPolitician() {
-        var dtoRequest = new AddSenatorialPoliticianDTORequest(FIRST_NAME, LAST_NAME, BigDecimal.ZERO, 12, null);
+        var dtoRequest = new AddSenatorialPoliticianDtoRequest(FIRST_NAME, LAST_NAME, BigDecimal.ZERO, 12, null);
 
         assertEquals(senatorialBuilder.build(), new PoliticianDTOUnwrapper().unWrapDTO(dtoRequest));
     }

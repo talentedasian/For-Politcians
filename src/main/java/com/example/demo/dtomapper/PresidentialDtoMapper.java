@@ -1,7 +1,7 @@
 package com.example.demo.dtomapper;
 
-import com.example.demo.adapter.dto.PoliticianDTO;
-import com.example.demo.adapter.dto.PresidentialPoliticianDTO;
+import com.example.demo.adapter.dto.PoliticianDto;
+import com.example.demo.adapter.dto.PresidentialPoliticianDto;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician;
 import com.example.demo.domain.enums.Rating;
@@ -17,14 +17,14 @@ import static java.util.stream.Collectors.toList;
 class PresidentialDtoMapper extends PoliticiansDtoMapper {
 
 	@Override
-	public PresidentialPoliticianDTO mapToDTO(Politicians entity) {
+	public PresidentialPoliticianDto mapToDTO(Politicians entity) {
 		org.springframework.util.Assert.state(PresidentialPolitician.class.isInstance(entity),
 				"entity must be of type presidential");
 		return mapToDto((PresidentialPolitician) entity);
 	}
 	
 	@Override
-	public List<PoliticianDTO> mapToDTO(List<Politicians> entity) {
+	public List<PoliticianDto> mapToDTO(List<PoliticianDto> entity) {
 		if (entity.size() == 0) {
 			return List.of();
 		}
@@ -37,11 +37,11 @@ class PresidentialDtoMapper extends PoliticiansDtoMapper {
 				.collect(toList());
 	}
 
-	private PresidentialPoliticianDTO mapToDto(PresidentialPolitician entity) {
+	private PresidentialPoliticianDto mapToDto(PresidentialPolitician entity) {
 		Double rating = entity.getRating().getAverageRating();
 		Rating satisfactionRate = Rating.mapToSatisfactionRate(rating);
 		
-		return new PresidentialPoliticianDTO(entity, satisfactionRate, entity.getMostSignificantLawSigned());
+		return new PresidentialPoliticianDto(entity, satisfactionRate, entity.getMostSignificantLawSigned());
 	}
 
 }

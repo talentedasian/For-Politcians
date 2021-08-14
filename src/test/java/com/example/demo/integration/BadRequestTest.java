@@ -3,7 +3,6 @@ package com.example.demo.integration;
 import com.example.demo.adapter.in.web.PoliticianController;
 import com.example.demo.adapter.in.web.RatingsController;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
-import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.hateoas.PoliticianAssembler;
 import com.example.demo.hateoas.RatingAssembler;
 import com.example.demo.adapter.in.service.PoliticiansService;

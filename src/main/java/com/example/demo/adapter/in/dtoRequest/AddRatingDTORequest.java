@@ -1,13 +1,12 @@
 package com.example.demo.adapter.in.dtoRequest;
 
-import java.math.BigDecimal;
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
-
-import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.math.BigDecimal;
 
 public class AddRatingDTORequest {
 
@@ -57,7 +56,6 @@ public class AddRatingDTORequest {
 
 	public AddRatingDTORequest() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@ExcludeFromJacocoGeneratedCoverage

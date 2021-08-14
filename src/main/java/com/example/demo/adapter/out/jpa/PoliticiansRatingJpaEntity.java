@@ -73,11 +73,26 @@ public class PoliticiansRatingJpaEntity {
         return entity;
     }
 
+    public PoliticiansRating toRating() {
+        return new PoliticiansRating(id, rating, rater.toUserRater(), toPoliticians(politician));
+    }
+
+
     private static PoliticiansJpaEntity fromPoliticians(Politicians politician) {
         return new PoliticiansJpaEntity
                 (politician.getPoliticianNumber(), politician.getFirstName(),
                 politician.getLastName(), politician.getFullName(),
                 RatingJpaEntity.from(politician.getRating()), null);
+    }
+
+    private static Politicians toPoliticians(PoliticiansJpaEntity jpaEntity) {
+        return new Politicians.PoliticiansBuilder(jpaEntity.getId())
+                .setFirstName(jpaEntity.getFirstName())
+                .setLastName(jpaEntity.getLastName())
+                .setFullName()
+                .setRating(jpaEntity.getRatingJpaEntity().toRating())
+                .setPoliticiansRating(null)
+                .build();
     }
 
 }

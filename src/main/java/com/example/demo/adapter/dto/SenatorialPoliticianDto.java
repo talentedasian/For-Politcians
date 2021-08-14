@@ -1,13 +1,10 @@
 package com.example.demo.adapter.dto;
 
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
-import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.enums.Rating;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.example.demo.domain.politicians.Politicians;
 
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class SenatorialPoliticianDTO extends PoliticianDTO{
+public class SenatorialPoliticianDto extends PoliticianDto {
 
     private final Integer monthsOfService;
 
@@ -21,7 +18,7 @@ public class SenatorialPoliticianDTO extends PoliticianDTO{
         return this.mostSignificantLawMade;
     }
 
-    public SenatorialPoliticianDTO(Politicians entity, Rating satisfactionRate, int monthsOfService, String lawMade) {
+    public SenatorialPoliticianDto(Politicians entity, Rating satisfactionRate, int monthsOfService, String lawMade) {
         super(entity.getFullName(), entity.getPoliticianNumber(), entity.getRating().getAverageRating(), satisfactionRate, "senatorial");
         this.monthsOfService = monthsOfService;
         this.mostSignificantLawMade = lawMade;
@@ -30,7 +27,7 @@ public class SenatorialPoliticianDTO extends PoliticianDTO{
     @Override
     @ExcludeFromJacocoGeneratedCoverage
     public String toString() {
-        return "SenatorialPoliticianDTO [name=" + this.getName() + ", id=" + this.getId() +
+        return "SenatorialPoliticianDto [name=" + this.getName() + ", id=" + this.getId() +
                 ", rating=" + this.getRating() + ", satisfactionRate=" + this.getSatisfactionRate() +
                 ", monthsOfService=" + this.monthsOfService + ", mostSignificantLawSigned=" + this.mostSignificantLawMade + "]";
     }
@@ -57,7 +54,7 @@ public class SenatorialPoliticianDTO extends PoliticianDTO{
             return false;
         if (getClass() != obj.getClass())
             return false;
-        SenatorialPoliticianDTO other = (SenatorialPoliticianDTO) obj;
+        SenatorialPoliticianDto other = (SenatorialPoliticianDto) obj;
         if (other.monthsOfService == null)
             return false;
         if (this.getId() == null) {

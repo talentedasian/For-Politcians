@@ -2,7 +2,6 @@ package com.example.demo.integration.controllers;
 
 import com.example.demo.adapter.in.web.RatingsController;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
-import com.example.demo.dtomapper.RatingDtoMapper;
 import com.example.demo.exceptions.*;
 import com.example.demo.hateoas.RatingAssembler;
 import com.example.demo.domain.entities.PoliticiansRating;

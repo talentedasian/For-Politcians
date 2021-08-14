@@ -9,6 +9,9 @@ public interface PoliticiansRepository{
 
 	Politicians save(Politicians politician);
 
+	Politicians update(Politicians politician);
+
+
 	List<Politicians> findByLastNameAndFirstName(String lastName, String firstName);
 	
 	Optional<Politicians> findByPoliticianNumber(String polNumber);

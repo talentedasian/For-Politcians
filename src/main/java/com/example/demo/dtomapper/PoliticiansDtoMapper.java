@@ -1,6 +1,6 @@
 package com.example.demo.dtomapper;
 
-import com.example.demo.adapter.dto.PoliticianDTO;
+import com.example.demo.adapter.dto.PoliticianDto;
 import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.enums.Rating;
@@ -12,7 +12,7 @@ import static java.util.stream.Collectors.toList;
 public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 
 	@Override
-	public PoliticianDTO mapToDTO(Politicians entity) {
+	public PoliticianDto mapToDTO(Politicians entity) {
 		switch(entity.getType()) {
 			case PRESIDENTIAL -> {return new PresidentialDtoMapper().mapToDTO(entity);}
 			case SENATORIAL -> {return new SenatorialDtoMapper().mapToDTO(entity);}
@@ -22,17 +22,17 @@ public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 	}
 
 	@Override
-	public List<? extends PoliticianDTO> mapToDTO(List<Politicians> entity) {
+	public List<? extends PoliticianDto> mapToDTO(List<PoliticianDto> entity) {
 		return entity.stream()
 			.map(politicians -> mapToDTO(politicians))
 			.collect(toList());
 	}
 	
-	private PoliticianDTO mapToPoliticianDTO(Politicians entity) {
+	private PoliticianDto mapToPoliticianDTO(Politicians entity) {
 		Double rating = entity.getRating().getAverageRating();
 		Rating satisfactionRate = Rating.mapToSatisfactionRate(rating);
 		
-		return new PoliticianDTO(
+		return new PoliticianDto(
 				entity.getFirstName() + " " + entity.getLastName(), 
 				entity.getPoliticianNumber(), 
 				rating,
