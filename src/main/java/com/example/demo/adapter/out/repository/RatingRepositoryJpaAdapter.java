@@ -4,6 +4,7 @@ import com.example.demo.adapter.out.jpa.PoliticiansRatingJpaEntity;
 import com.example.demo.domain.entities.PoliticiansRating;
 
 import java.util.List;
+import java.util.Optional;
 
 public class RatingRepositoryJpaAdapter implements RatingRepository {
 
@@ -11,6 +12,13 @@ public class RatingRepositoryJpaAdapter implements RatingRepository {
 
     public RatingRepositoryJpaAdapter(RatingJpaRepository repo) {
         this.repo = repo;
+    }
+
+    @Override
+    public Optional<PoliticiansRating> findById(String id) {
+        Optional<PoliticiansRatingJpaEntity> entity = repo.findById(Integer.valueOf(id));
+
+        return entity.isEmpty() ? Optional.empty() : Optional.of(entity.get().toRating());
     }
 
     @Override
@@ -47,5 +55,10 @@ public class RatingRepositoryJpaAdapter implements RatingRepository {
     @Override
     public boolean existsByRater_UserAccountNumber(String accountNumber) {
         return repo.existsByRater_UserAccountNumber(accountNumber);
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        repo.deleteById(id);
     }
 }

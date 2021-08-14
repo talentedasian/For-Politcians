@@ -1,16 +1,15 @@
 package com.example.demo.hateoas;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
+import com.example.demo.adapter.dto.RatingDTO;
+import com.example.demo.adapter.in.web.RatingsController;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.SimpleRepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.adapter.in.web.RatingsController;
-import com.example.demo.adapter.dto.RatingDTO;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class RatingAssembler implements SimpleRepresentationModelAssembler<RatingDTO>{
@@ -32,7 +31,7 @@ public class RatingAssembler implements SimpleRepresentationModelAssembler<Ratin
 				.getContent();
 		
 		resources.add(linkTo(methodOn(RatingsController.class)
-				.getRatingByRaterAccountNumber(entity.getRater().getUserAccountNumber()))
+				.getRatingByRaterAccountNumber(entity.getRater().getAccountNumber()))
 			.withRel("self"));
 	}
 

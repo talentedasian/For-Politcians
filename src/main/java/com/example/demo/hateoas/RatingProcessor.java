@@ -1,8 +1,11 @@
 package com.example.demo.hateoas;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
+import com.example.demo.adapter.dto.RatingDTO;
+import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
+import com.example.demo.adapter.in.service.RateLimitingService;
+import com.example.demo.adapter.in.web.PoliticianController;
+import com.example.demo.adapter.in.web.RatingsController;
+import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -11,12 +14,8 @@ import org.springframework.hateoas.server.RepresentationModelProcessor;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
-import com.example.demo.adapter.in.web.PoliticianController;
-import com.example.demo.adapter.in.web.RatingsController;
-import com.example.demo.adapter.dto.RatingDTO;
-import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
-import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
-import com.example.demo.adapter.in.service.RateLimitingService;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 public class RatingProcessor implements RepresentationModelProcessor<EntityModel<RatingDTO>>{
 
@@ -61,7 +60,7 @@ public class RatingProcessor implements RepresentationModelProcessor<EntityModel
 	}
 	
 	private boolean isRateLimited(RatingDTO entity) {
-		return !rateLimitService.isNotRateLimited(entity.getRater().getUserAccountNumber(),
+		return !rateLimitService.isNotRateLimited(entity.getRater().getAccountNumber(),
 				entity.getPolitician().getId());
 	}
 

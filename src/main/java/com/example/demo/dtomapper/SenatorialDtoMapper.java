@@ -24,7 +24,7 @@ final class SenatorialDtoMapper extends PoliticiansDtoMapper {
     }
 
     @Override
-    public List<PoliticianDto> mapToDTO(List<PoliticianDto> entity) {
+    public List<PoliticianDto> mapToDTO(List<Politicians> entity) {
         if (entity.size() == 0) {
             return List.of();
         };

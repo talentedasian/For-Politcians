@@ -1,13 +1,11 @@
 package com.example.demo.dtomapper;
 
 import com.example.demo.adapter.dto.PoliticianDto;
-import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
-import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.enums.Rating;
+import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
 
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 
@@ -22,10 +20,10 @@ public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 	}
 
 	@Override
-	public List<? extends PoliticianDto> mapToDTO(List<PoliticianDto> entity) {
+	public List<? extends PoliticianDto> mapToDTO(List<Politicians> entity) {
 		return entity.stream()
 			.map(politicians -> mapToDTO(politicians))
-			.collect(toList());
+			.toList();
 	}
 	
 	private PoliticianDto mapToPoliticianDTO(Politicians entity) {

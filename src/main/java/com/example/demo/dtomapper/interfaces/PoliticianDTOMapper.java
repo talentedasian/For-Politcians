@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface PoliticianDTOMapper extends DTOMapper<PoliticianDto,Politicians>{
  
-	 List<? extends PoliticianDto> mapToDTO(List<PoliticianDto> entity);
+	 List<? extends PoliticianDto> mapToDTO(List<Politicians> entity);
 
 }
