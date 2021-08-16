@@ -1,11 +1,12 @@
 package com.example.demo.hateoas;
 
-import com.example.demo.adapter.dto.RateLimitJpaDto;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.service.RateLimitingService;
 import com.example.demo.adapter.in.web.RatingsController;
+import com.example.demo.adapter.in.web.dto.RateLimitDto;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.mediatype.Affordances;
 import org.springframework.hateoas.server.RepresentationModelProcessor;
@@ -15,7 +16,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-public class RateLimitProcessor implements RepresentationModelProcessor<RateLimitJpaDto>{
+public class RateLimitProcessor implements RepresentationModelProcessor<EntityModel<RateLimitDto>>{
 
 	private final RateLimitingService rateLimitService;
 	
@@ -26,12 +27,12 @@ public class RateLimitProcessor implements RepresentationModelProcessor<RateLimi
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public RateLimitJpaDto process(RateLimitJpaDto model) {
+	public EntityModel<RateLimitDto> process(EntityModel<RateLimitDto> model) {
 		Link ratingLink = linkTo(methodOn(RatingsController.class)
-				.getRatingByRaterAccountNumber(model.getAccountNumber()))
+				.getRatingByRaterAccountNumber(model.getContent().getId()))
 				.withRel("rating-account-number");
 		
-		if (isRateLimited(model)) {			
+		if (model.getContent().toRateLimit().isNotRateLimited()) {
 			return model.add(ratingLink);
 		}
 			
@@ -52,11 +53,6 @@ public class RateLimitProcessor implements RepresentationModelProcessor<RateLimi
 		}
 		
 		return model.add(affordance);
-	}
-	
-	private boolean isRateLimited(RateLimitJpaDto entity) {
-		return !rateLimitService.isNotRateLimited(entity.getAccountNumber(),
-				entity.getPoliticianNumber());
 	}
 
 }

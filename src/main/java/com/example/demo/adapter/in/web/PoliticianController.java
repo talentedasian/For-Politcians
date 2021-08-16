@@ -46,9 +46,7 @@ public class PoliticianController {
                                                                                         @RequestParam String firstName) {
 		List<PoliticianDto> politicianByName = politiciansService.findPoliticianUsingName(lastName, firstName);
 		
-		List<? extends PoliticianDto> politician = mapper.mapToDTO(politicianByName);
-		
-		CollectionModel<EntityModel<PoliticianDto>> response = assembler.toCollectionModel(politician);
+		CollectionModel<EntityModel<PoliticianDto>> response = assembler.toCollectionModel(politicianByName);
 		
 		return new ResponseEntity<CollectionModel<EntityModel<PoliticianDto>>>(response, HttpStatus.OK);
 	}
@@ -67,9 +65,7 @@ public class PoliticianController {
 	public ResponseEntity<CollectionModel<EntityModel<PoliticianDto>>> allPoliticians() {
 		List<PoliticianDto> allPoliticians = politiciansService.allPoliticians();
 		
-		List<? extends PoliticianDto> politician = mapper.mapToDTO(allPoliticians);
-		
-		CollectionModel<EntityModel<PoliticianDto>> response = assembler.toCollectionModel(politician);
+		CollectionModel<EntityModel<PoliticianDto>> response = assembler.toCollectionModel(allPoliticians);
 		
 		return new ResponseEntity<CollectionModel<EntityModel<PoliticianDto>>>(response, HttpStatus.OK);
 	}

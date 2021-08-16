@@ -1,7 +1,10 @@
 package com.example.demo.domain;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+
 public interface JwtDecoder {
 
-    JSONWebTokenClaim decodeJwt(String jwt) throws JSONWebTokenException;
+    Jws<Claims> decodeJwt(String jwt) throws JSONWebTokenException;
 
 }

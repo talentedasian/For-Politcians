@@ -3,10 +3,11 @@ package com.example.demo.adapter.out.repository;
 import com.example.demo.adapter.dto.RateLimitJpaDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.UUID;
+import java.util.Optional;
 
-public interface RateLimitRepositoryJpa extends JpaRepository<RateLimitJpaDto, UUID> {
+public interface RateLimitRepositoryJpa extends JpaRepository<RateLimitJpaDto, Long> {
 
-    void deleteByIdAndPoliticianNumber(String id, String politicianNumber);
+    void deleteByAccountNumberAndPoliticianNumber(String id, String politicianNumber);
 
+    Optional<RateLimitJpaDto> findByAccountNumberAndPoliticianNumber(String id, String polNumber);
 }

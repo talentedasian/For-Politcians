@@ -34,8 +34,6 @@ public class BadRequestTest {
 	@MockBean
 	public PoliticiansDtoMapper polMapper;
 	@MockBean
-	public RatingDtoMapper ratingMapper;
-	@MockBean
 	public PoliticiansService politicianService;
 	@MockBean
 	public RatingAssembler assembler;

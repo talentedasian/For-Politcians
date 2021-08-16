@@ -1,16 +1,12 @@
 package com.example.demo.adapter.in.web.jwt;
 
-import com.example.demo.domain.JSONWebTokenClaim;
-import com.example.demo.domain.JwtDecoder;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 
-public class JwtJjwtProviderAdapater implements JwtDecoder {
+public class JwtJjwtProviderAdapater {
 
 	public static String createJwtWithFixedExpirationDate(String sub, String id, String name) {
 		
@@ -39,18 +35,12 @@ public class JwtJjwtProviderAdapater implements JwtDecoder {
 		return jwts;
 	}
 	
-	public JSONWebTokenClaim decodeJwt(String jwt) {
-		Claims jwts = Jwts.parserBuilder()
+	public static Jws<Claims> decodeJwt(String jwt) {
+		return Jwts.parserBuilder()
 				.setSigningKey(JwtKeys.getJwtKeyPair().getPublic())
 				.setAllowedClockSkewSeconds(60 * 3)
 				.build()
-				.parseClaimsJws(jwt)
-				.getBody();
-
-		Instant instant = jwts.getExpiration().toInstant();
-		var expiration = LocalDateTime.ofInstant(instant, ZoneId.of("Asia/Manila"));
-
-		return new JSONWebTokenClaim(jwts.getId(), jwts.getSubject(), jwts.get("name", String.class), expiration);
+				.parseClaimsJws(jwt);
 	}
 	
 }

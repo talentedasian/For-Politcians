@@ -51,10 +51,12 @@ public class RateLimitingService {
 	 * Probably going to change the access modifier to avoid 
 	 * being used everywhere. This should only be used for tests.
 	 */
+	@Transactional
 	public void deleteRateLimit(String id, String politicianNumber) {
 		repo.deleteUsingIdAndPoliticianNumber(id, politicianNumber);
 	}
-	
+
+	@Transactional(readOnly = true)
 	public boolean isNotRateLimited(String accNumber, String polNumber) {
 		Optional<RateLimit> rateLimit = this.findRateLimitInPolitician(accNumber, polNumber);
 		if (rateLimit.isEmpty()) {

@@ -1,19 +1,31 @@
 package com.example.demo.adapter.in.web.dto;
 
-import com.example.demo.adapter.dto.RateLimitJpaDto;
 import com.example.demo.domain.entities.RateLimit;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.time.LocalDate;
+
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class RateLimitDto extends RepresentationModel<RateLimitJpaDto> {
+public class RateLimitDto extends RepresentationModel<RateLimitDto> {
 
     private final String id, politicianNumber;
 
-    @JsonProperty("days_left_until_rate")
     private final long daysLeftToRateAgain;
+
+    public String getId() {
+        return id;
+    }
+
+    public String getPoliticianNumber() {
+        return politicianNumber;
+    }
+
+    public long getDaysLeftToRateAgain() {
+        return daysLeftToRateAgain;
+    }
 
     public RateLimitDto(String id, String politicianNumber, long daysLeftToRateAgain) {
         this.id = id;
@@ -26,4 +38,16 @@ public class RateLimitDto extends RepresentationModel<RateLimitJpaDto> {
     }
 
 
+    public RateLimit toRateLimit() {
+        var dateNow = LocalDate.now();
+
+        if (daysLeftToRateAgain == 0l) {
+            return new RateLimit(id, politicianNumber, dateNow.minusDays(7));
+        }
+
+        var dateCreated = Integer.signum(Long.valueOf(daysLeftToRateAgain).intValue()) == 0 ?
+                   dateNow.minusDays(7).plusDays(daysLeftToRateAgain) : dateNow.minusDays(7).minusDays(Math.abs(daysLeftToRateAgain));
+
+        return new RateLimit(id, politicianNumber, dateCreated);
+    }
 }

@@ -19,10 +19,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
+
+	UserRater rater = new UserRater.Builder()
+			.setAccountNumber("123accNumber")
+			.setEmail("test@gmail.com")
+			.setPoliticalParty(PoliticalParty.DDS)
+			.setName("test")
+			.setRateLimitRepo(rateLimitRepo)
+			.build();
 	
-	UserRater rater = new UserRater("test", PoliticalParty.DDS, "test@gmail.com", "123accNumber", limitingService);
-	
-	Politicians politician = new Politicians.PoliticiansBuilder("7832polNumber")
+	Politicians politician = new Politicians.PoliticiansBuilder("dummy")
 			.setFirstName("test")
 			.setLastName("politician")
 			.setFullName()
@@ -60,8 +66,8 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 		 * We are dealing with a real database here. Delete the entities
 		 * before the test finishes. 
 		 */
-		repo.delete(politician);
-		ratingRepo.delete(politiciansRating);
+		repo.deleteByPoliticianNumber(politician.getPoliticianNumber());
+		ratingRepo.deleteById(politiciansRating.getId());
 	}
 	
 }

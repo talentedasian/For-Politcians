@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(indexes = @Index(columnList = "politicianNumber") )
+@Table(indexes = @Index(columnList = "id") )
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class PoliticiansJpaEntity {
 

@@ -1,14 +1,9 @@
 package com.example.demo.unit.rateLimit;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.time.LocalDate;
-
+import com.example.demo.domain.entities.RateLimit;
 import org.junit.jupiter.api.Test;
 
-import com.example.demo.domain.entities.RateLimit;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RateLimitTest {
 
@@ -32,18 +27,15 @@ public class RateLimitTest {
 	@Test
 	public void shouldNotBeRateLimitedWhenNullDate() {
 		var rate = new RateLimit();
-		rate.setId("1");
-		rate.setPoliticianNumber("2");
+		rate.setId(ACCOUNT_NUMBER);
+		rate.setPoliticianNumber(POLITICIAN_NUMBER);
 		
 		assertTrue(rate.isNotRateLimited());
 	}
 	
 	@Test
 	public void shouldBeRateLimited() {
-		var rate = new RateLimit();
-		rate.setId("1");
-		rate.setPoliticianNumber("2");
-		rate.setDateCreated(LocalDate.now().minusDays(5L));
+		var rate = RateLimit.withNotExpiredRateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER);
 		
 		assertFalse(rate.isNotRateLimited());
 	}

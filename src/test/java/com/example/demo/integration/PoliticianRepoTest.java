@@ -1,5 +1,6 @@
 package com.example.demo.integration;
 
+import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.domain.averageCalculator.AverageCalculator;
 import com.example.demo.domain.entities.Rating;
@@ -8,11 +9,9 @@ import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPoliticia
 import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
-import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import testAnnotations.DatabaseTest;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,18 +54,10 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	@Test
 	public void shouldBeEqualOnSavedEntityForSenatorial() {
 		Politicians politicianToBeSaved = senatorialBuilder.build();
-		
-		Politicians politician = repo.save(politicianToBeSaved);
-		
-		assertEquals(politicianToBeSaved, politician);
-	}
-	
-	@Test
-	public void shouldThrowDataIntegrityExceptionWhenPoliticianNumberIsTheSame() {
-		Politicians politicianToBeSaved = politicianBuilder.build();
 
-		assertThrows(DataIntegrityViolationException.class,
-				() -> repo.saveAndFlush(politicianToBeSaved));
+		Politicians politician = repo.save(politicianToBeSaved);
+
+		assertEquals(politicianToBeSaved, politician);
 	}
 	
 	@Test

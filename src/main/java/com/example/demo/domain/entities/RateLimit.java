@@ -7,17 +7,6 @@ import java.util.Map;
 public class RateLimit {
 
 	private transient static final Map<String, RateLimit> cache = new HashMap<>();
-	
-	static {
-		/*
-		 * Commonly used for testing
-		 */
-		var rateLimit = new RateLimit();
-		rateLimit.setId("TGFLM-00000000000123");
-		rateLimit.setPoliticianNumber("123polNumber");
-		
-		cache.put(rateLimit.id(), rateLimit);
-	}
 
 	private String id;
 
@@ -41,6 +30,10 @@ public class RateLimit {
 		this.politicianNumber = politicianNumber;
 	}
 
+	public LocalDate getDateCreated() {
+		return dateCreated;
+	}
+
 	public RateLimit(String id, String politicianNumber, LocalDate dateCreated) {
 		this.id = id;
 		this.politicianNumber = politicianNumber;
@@ -49,10 +42,8 @@ public class RateLimit {
 	
 	public static RateLimit withNotExpiredRateLimit(String id, String politicianNumber) {
 		return cache.computeIfAbsent(id, (key) -> {
-			var rateLimit = new RateLimit();
-			rateLimit.setId(id);
-			rateLimit.setPoliticianNumber(politicianNumber);
-			
+			var rateLimit = new RateLimit(id, politicianNumber, LocalDate.now().minusDays(8));
+
 			return rateLimit;
 		});
 	};

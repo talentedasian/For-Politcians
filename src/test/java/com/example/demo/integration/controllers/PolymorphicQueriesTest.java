@@ -65,7 +65,8 @@ public class PolymorphicQueriesTest extends BaseClassTestsThatUsesDatabase {
         var senator = senatorialBuilder.build();
         List<Politicians> polymorphicPoliticians = List.of(president,senator);
 
-        repo.saveAll(polymorphicPoliticians);
+        repo.save(president);
+        repo.save(senator);
 
 
         this.mvc.perform(get(create("/api/politicians/politicians"))
@@ -87,7 +88,8 @@ public class PolymorphicQueriesTest extends BaseClassTestsThatUsesDatabase {
              * We are dealing with a real database here. Delete the entities
              * before the test finishes.
              */
-            repo.deleteAll(polymorphicPoliticians);
+            repo.deleteByPoliticianNumber(president.getPoliticianNumber());
+            repo.deleteByPoliticianNumber(senator.getPoliticianNumber());
         }
 
 }

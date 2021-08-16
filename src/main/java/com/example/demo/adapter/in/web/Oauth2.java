@@ -4,8 +4,8 @@ import com.example.demo.adapter.dto.RatingDTO;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.jwt.JwtDto;
 import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
-import com.example.demo.domain.JSONWebTokenClaim;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
+import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.mediatype.Affordances;
@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,13 +41,14 @@ public class Oauth2 {
 			.filter(cookie -> cookie.getName().equalsIgnoreCase("accessJwt"))
 			.forEach(jwtCookie -> cookieMap.put("jwt", jwtCookie.getValue()));
 		
-		JSONWebTokenClaim jwt = new JwtJjwtProviderAdapater().decodeJwt(cookieMap.get("jwt"));
+		Claims jwt = JwtJjwtProviderAdapater.decodeJwt(cookieMap.get("jwt")).getBody();
+
 		JwtDto jwtResponse = new JwtDto();
+		jwtResponse.setExpiration(convertToLocalDateTimeViaInstant(jwt.getExpiration()));
 		jwtResponse.setJwt(cookieMap.get("jwt"));
-		jwtResponse.setExpiration(jwt.expiration());
-		jwtResponse.setId(jwt.id());
-		jwtResponse.setSubject(jwt.email());
-		jwtResponse.setName(jwt.name());
+		jwtResponse.setId(jwt.getId());
+		jwtResponse.setSubject(jwt.getSubject());
+		jwtResponse.setName(jwt.get("name", String.class));
 		
 		var affordance = Affordances.of(linkTo(methodOn(PoliticianController.class).allPoliticians())
 				.withRel("politicians"))
@@ -62,6 +65,12 @@ public class Oauth2 {
 		jwtResponse.add(linkTo(methodOn(Oauth2.class).returnCredentials(null)).withRel("jwt"));
 		
 		return new ResponseEntity<RepresentationModel<JwtDto>>(jwtResponse, HttpStatus.OK);
+	}
+
+	public LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
+		return dateToConvert.toInstant()
+				.atZone(ZoneId.of("GMT+8"))
+				.toLocalDateTime();
 	}
 	
 }

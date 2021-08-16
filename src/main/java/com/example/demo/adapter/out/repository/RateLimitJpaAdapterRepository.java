@@ -5,9 +5,11 @@ import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.RateLimit;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public class RateLimitJpaAdapterRepository implements RateLimitRepository {
 
     private final RateLimitRepositoryJpa rateRepo;
@@ -30,8 +32,8 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
         var dto = new RateLimitJpaDto(id, politicianNumber);
 
         ExampleMatcher matcher = ExampleMatcher.matching()
-                .withMatcher("accountNumber", match -> match.exact())
-                .withMatcher("politicianNumber", match -> match.exact());
+                .withIgnorePaths("id")
+                .withIgnorePaths("daysLeft");
 
         var queriedDto = rateRepo.findOne(Example.of(dto, matcher));
 
@@ -44,7 +46,7 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
         rateLimit.setId(id);
         rateLimit.setPoliticianNumber(politicianNumber);
 
-        rateRepo.deleteByIdAndPoliticianNumber(id, politicianNumber);
+        rateRepo.deleteByAccountNumberAndPoliticianNumber(id, politicianNumber);
     }
 
     @Override

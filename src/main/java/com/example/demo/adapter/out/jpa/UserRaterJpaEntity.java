@@ -13,7 +13,7 @@ import javax.persistence.Enumerated;
 @Embeddable
 public class UserRaterJpaEntity {
 
-    @Autowired RateLimitRepository rateLimitRepository;
+    @Autowired transient RateLimitRepository rateLimitRepository;
 
     @Column(nullable = false)
     private String name;

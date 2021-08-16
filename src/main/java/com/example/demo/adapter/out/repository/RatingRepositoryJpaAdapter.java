@@ -2,10 +2,12 @@ package com.example.demo.adapter.out.repository;
 
 import com.example.demo.adapter.out.jpa.PoliticiansRatingJpaEntity;
 import com.example.demo.domain.entities.PoliticiansRating;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class RatingRepositoryJpaAdapter implements RatingRepository {
 
     private final RatingJpaRepository repo;

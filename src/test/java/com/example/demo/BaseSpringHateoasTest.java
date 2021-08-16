@@ -1,9 +1,9 @@
 package com.example.demo;
 
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
+import com.example.demo.adapter.out.repository.PoliticiansRepository;
+import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
+import com.example.demo.domain.RateLimitRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +15,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
-import com.example.demo.adapter.out.repository.PoliticiansRepository;
-import com.example.demo.adapter.out.repository.RatingRepository;
-import com.example.demo.adapter.in.service.RateLimitingService;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class BaseSpringHateoasTest extends BaseClassTestsThatUsesDatabase {
 	
 	@Autowired PoliticiansRepository repo;
 	@Autowired RatingRepository ratingRepo;
-	@Autowired RateLimitingService limitingService;
+	@Autowired RateLimitRepository rateLimitRepo;
 
 	@RegisterExtension
 	final RestDocumentationExtension restDocumentation = new RestDocumentationExtension("rest-docs");

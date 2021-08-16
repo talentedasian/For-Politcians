@@ -2,10 +2,12 @@ package com.example.demo.adapter.out.repository;
 
 import com.example.demo.adapter.out.jpa.PoliticiansJpaEntity;
 import com.example.demo.domain.politicians.Politicians;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
 
     private final PoliticiansJpaRepository politicianRepository;
@@ -35,19 +37,19 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
 
     @Override
     public Optional<Politicians> findByPoliticianNumber(String polNumber) {
-        Optional<PoliticiansJpaEntity> entity = politicianRepository.findByPoliticianNumber(polNumber);
+        Optional<PoliticiansJpaEntity> entity = politicianRepository.findById(polNumber);
 
         return entity.isEmpty() ? Optional.empty() : Optional.of(entity.get().toPoliticians());
     }
 
     @Override
     public boolean existsByPoliticianNumber(String polNumber) {
-        return politicianRepository.existsByPoliticianNumber(polNumber);
+        return politicianRepository.existsById(polNumber);
     }
 
     @Override
     public void deleteByPoliticianNumber(String polNumber) {
-        politicianRepository.deleteByPoliticianNumber(polNumber);
+        politicianRepository.deleteById(polNumber);
     }
 
     @Override
