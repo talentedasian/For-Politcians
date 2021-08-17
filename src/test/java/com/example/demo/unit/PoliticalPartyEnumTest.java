@@ -1,21 +1,20 @@
 package com.example.demo.unit;
 
+import com.example.demo.domain.enums.PoliticalParty;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
 import static com.example.demo.domain.enums.PoliticalParty.DDS;
 import static com.example.demo.domain.enums.PoliticalParty.GREY_ZONE;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-
-import com.example.demo.domain.enums.PoliticalParty;
-
 public class PoliticalPartyEnumTest {
 
 	@Test
 	public void shouldMapToPoliticalPartyWhenPartyIsSpecifiedEnums() {
-		PoliticalParty politicalParty = PoliticalParty.mapToPoliticalParty("dds");
+		PoliticalParty politicalParty = PoliticalParty.valueOf("dds");
 		
 		assertThat(politicalParty,
 				equalTo(DDS));
@@ -24,7 +23,7 @@ public class PoliticalPartyEnumTest {
 	@ParameterizedTest
 	@ValueSource(strings = { "dsaqd", "random", "no sense" })
 	public void shouldMapToGreyZonePoliticalPartyWhenPartyIsNotOnSpecifiedEnums(String party) {
-		PoliticalParty politicalParty = PoliticalParty.mapToPoliticalParty(party);
+		PoliticalParty politicalParty = PoliticalParty.valueOf(party);
 		
 		assertThat(politicalParty,
 				equalTo(GREY_ZONE));

@@ -21,9 +21,6 @@ public class UserRater {
 		return userAccountNumber;
 	}
 
-	public void setUserAccountNumber(String userAccountNumber) {
-		this.userAccountNumber = userAccountNumber;
-	}
 
 	public String getEmail() {
 		return email;
@@ -37,20 +34,16 @@ public class UserRater {
 		return facebookName;
 	}
 
-	public void setFacebookName(String facebookName) {
-		this.facebookName = facebookName;
-	}
-
 	public PoliticalParty getPoliticalParties() {
 		return politicalParties;
 	}
 
-	public void setPoliticalParties(PoliticalParty politicalParties) {
-		this.politicalParties = politicalParties;
+	public RateLimitRepository getRateLimitRepository() {
+		return rateLimitRepository;
 	}
 
 	UserRater(String facebookName, PoliticalParty politicalParties, String email,
-			String accNumber, RateLimitRepository rateLimitRepository) {
+			  String accNumber, RateLimitRepository rateLimitRepository) {
 		super();
 		this.facebookName = facebookName;
 		this.politicalParties = politicalParties;
@@ -97,7 +90,8 @@ public class UserRater {
 	}
 	private boolean isRateLimited(String politicianNumber) {
 		Optional<RateLimit> rateLimit = rateLimitRepository.findUsingIdAndPoliticianNumber(userAccountNumber, politicianNumber);
-		return rateLimit.isEmpty() ? false : rateLimit.get().isNotRateLimited();
+
+		return rateLimit.isPresent() ? !rateLimit.get().isNotRateLimited() : false;
 	}
 
     public long daysLeftToRate(String polNumber) {

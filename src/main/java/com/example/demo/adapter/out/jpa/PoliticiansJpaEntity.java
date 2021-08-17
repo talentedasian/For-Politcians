@@ -104,7 +104,13 @@ public class PoliticiansJpaEntity {
 
     private List<PoliticiansRating> toPoliticiansRating(List<PoliticiansRatingJpaEntity> entities) {
         return entities.stream()
-                .map(entity -> new PoliticiansRating(entity.getId(), entity.getRating(), entity.getRater().toUserRater(), null))
+                .map(entity -> new PoliticiansRating.Builder()
+                        .setId(id)
+                        .setRating(entity.getRating())
+                        .setRepo(entity.toRating().getRateLimitRepo())
+                        .setRater(entity.getRater().toUserRater())
+                        .setPolitician(null)
+                        .build())
                 .toList();
     }
 

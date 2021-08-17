@@ -5,19 +5,13 @@ import com.example.demo.domain.averageCalculator.DecentSatisfactionAverageCalcul
 import com.example.demo.domain.averageCalculator.HighSatisfactionAverageCalculator;
 import com.example.demo.domain.averageCalculator.LowSatisfactionAverageCalculator;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-@Embeddable
 public class Rating {
-	
-	@Column(nullable = false, precision = 3, scale = 2)
+
 	protected Double totalRating;
-	
-	@Column(nullable = false, precision = 3, scale = 2)
+
 	protected Double averageRating;
 	
 	public Double getTotalRating() {
@@ -28,24 +22,7 @@ public class Rating {
 		return averageRating;
 	}
 
-	public AverageCalculator getCalculator() {
-		return calculator;
-	}
-
-	public void setCalculator(AverageCalculator calculator) {
-		this.calculator = calculator;
-	}
-
-	public void setTotalRating(Double totalRating) {
-		this.totalRating = totalRating;
-	}
-
-	public void setAverageRating(Double averageRating) {
-		this.averageRating = averageRating;
-	}
-
-	@Transient
-	private transient AverageCalculator calculator= null;
+	private  AverageCalculator calculator= null;
 	
 	public Rating() {
 		super();
@@ -57,29 +34,28 @@ public class Rating {
 		this.averageRating = averageRating;
 	}
 	
-	public double calculateAverage() {
+	public double calculateAverage(double ratingToAdd, double countsOfRatings){
+		calculateTotalAmountOfRating(ratingToAdd, countsOfRatings);
 		double rating = calculator.calculateAverage();
 		this.averageRating = rating;
 		
 		return rating;
 	}
 	
-	public double calculateTotalAmountOfRating(Double ratingToAdd, Double countOfRatings) {
-		if (totalRating == null) {
+	public void calculateTotalAmountOfRating(Double ratingToAdd, Double countOfRatings) {
+		if (totalRating == null || totalRating == 0D) {
 			double rating = BigDecimal.valueOf(ratingToAdd)
 			.setScale(4, RoundingMode.HALF_DOWN).doubleValue();
 			this.totalRating = rating;
 			calculator = returnAverageCalculator(countOfRatings);
-			
-			return rating;
+			return;
 		}
 		
 		double rating = BigDecimal.valueOf(totalRating + ratingToAdd)
 				.setScale(4, RoundingMode.UP).doubleValue();
 		this.totalRating = rating;
 		calculator = returnAverageCalculator(countOfRatings);
-		
-		return rating;
+		return;
 	}
 	
 	@Override

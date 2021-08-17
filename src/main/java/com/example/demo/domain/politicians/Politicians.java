@@ -5,9 +5,8 @@ import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.Rating;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 public class Politicians {
@@ -97,67 +96,30 @@ public class Politicians {
 		this.type = polType;
 	}
 
+	@Override
 	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
 		return "Politicians [firstName=" + firstName + ", lastName=" + lastName + ", fullName="
 				+ fullName +  ", rating=" + rating + ", politicianNumber=" + politicianNumber + "]";
 	}
 
-	public double calculateAverageRating() {
-		double rating = getRating().calculateAverage();
+	public double calculateAverageRating(double ratingToAdd) {
+		double rating = getRating().calculateAverage(ratingToAdd, Long.valueOf(countsOfRatings()).doubleValue());
 		
 		return rating;
 	}
-	
-	private Double convertLongToDouble(long longValue) {
-		return Double.valueOf(String.valueOf(longValue));
+
+	public long countsOfRatings() {
+		return politiciansRating == null ? 0 : politiciansRating.size();
 	}
 
-	
-	public double calculateTotalAmountOfRating(Double rating) {
-		double totalRating = getRating().calculateTotalAmountOfRating(rating, convertLongToDouble(returnCountsOfRatings()));
-		
-		return totalRating;
-	}
-
-	public long returnCountsOfRatings() {
-		return politiciansRating.size();
-	}
-
-	public List<PoliticiansRating> calculateListOfRaters(PoliticiansRating rater) {
-		List<PoliticiansRating> listOfPoliticiansRating = getPoliticiansRating();
-		listOfPoliticiansRating.add(rater);
-		setPoliticiansRating(listOfPoliticiansRating);
-		
-		return listOfPoliticiansRating;
-	}
-
-	public String calculateFullName() {
-		String fullName = this.firstName + "\s" + this.lastName;
-		this.fullName = fullName;
-		
-		return fullName;
-	}
-	
 	public static enum Type {
-		PRESIDENTIAL, SENATORIAL, MAYOR;
+		PRESIDENTIAL("presidential, PRESIDENTIAL"), SENATORIAL("senatorial, SENATORIAL"),
+		MAYOR("mayorial, MAYORIAL");
 
-		static Map<String, Type> cache = new HashMap<>();
-
-		static {
-			cache.put("Presidential", PRESIDENTIAL);
-			cache.put("Senatorial", SENATORIAL);
-			cache.put("Mayorial", MAYOR);
+		Type(String s) {
 		}
-
-        public static Type mapToPoliticianType(String type) {
-			if (!cache.containsKey(type)) {
-				throw new IllegalArgumentException("type is non existing");
-			}
-
-			return cache.get(type);
-        }
-    }
+	}
 	
 	public static class PoliticiansBuilder {
 		private RatingRepository ratingRepo;
@@ -212,6 +174,10 @@ public class Politicians {
 		}
 
 		public PoliticiansBuilder setPoliticiansRating(List<PoliticiansRating> politiciansRating) {
+			if (politiciansRating == null) {
+				this.politiciansRating = new ArrayList<>();
+				return this;
+			}
 			this.politiciansRating = politiciansRating;
 			return this;
 		}
@@ -247,7 +213,7 @@ public class Politicians {
 		public Politicians build() {
 			return new Politicians(firstName, lastName, fullName, politiciansRating, rating, politicianNumber, null);
 		}
-		
+
 	}
 	
 }

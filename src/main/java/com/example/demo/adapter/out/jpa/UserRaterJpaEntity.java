@@ -3,7 +3,6 @@ package com.example.demo.adapter.out.jpa;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -13,7 +12,7 @@ import javax.persistence.Enumerated;
 @Embeddable
 public class UserRaterJpaEntity {
 
-    @Autowired transient RateLimitRepository rateLimitRepository;
+    private transient RateLimitRepository rateLimitRepository;
 
     @Column(nullable = false)
     private String name;
@@ -28,11 +27,12 @@ public class UserRaterJpaEntity {
     @Column(nullable = false, name = "account_number")
     private String userAccountNumber;
 
-    UserRaterJpaEntity(String name, PoliticalParty politicalParties, String email, String userAccountNumber) {
+    UserRaterJpaEntity(String name, PoliticalParty politicalParties, String email, String userAccountNumber, RateLimitRepository repo) {
         this.name = name;
         this.politicalParties = politicalParties;
         this.email = email;
         this.userAccountNumber = userAccountNumber;
+        this.rateLimitRepository = repo;
     }
 
     public static UserRaterJpaEntity from(UserRater rater) {
@@ -41,6 +41,7 @@ public class UserRaterJpaEntity {
                 .setPoliticalParties(rater.getPoliticalParties())
                 .setFacebookName(rater.getFacebookName())
                 .setEmail(rater.getEmail())
+                .setRepo(rater.getRateLimitRepository())
                 .build();
     }
 
@@ -86,7 +87,7 @@ public class UserRaterJpaEntity {
         this.userAccountNumber = userAccountNumber;
     }
 
-    public static class Builder {
+    private static class Builder {
 
         private String facebookName;
 
@@ -95,6 +96,13 @@ public class UserRaterJpaEntity {
         private String email;
 
         private String userAccountNumber;
+
+        private RateLimitRepository repo;
+
+        public Builder setRepo(RateLimitRepository rateLimitRepository) {
+            repo = rateLimitRepository;
+            return this;
+        }
 
         public Builder setFacebookName(String facebookName) {
             this.facebookName = facebookName;
@@ -117,7 +125,7 @@ public class UserRaterJpaEntity {
         }
 
         public UserRaterJpaEntity build() {
-            return new UserRaterJpaEntity(facebookName, politicalParties, email, userAccountNumber);
+            return new UserRaterJpaEntity(facebookName, politicalParties, email, userAccountNumber, repo);
         }
     }
 

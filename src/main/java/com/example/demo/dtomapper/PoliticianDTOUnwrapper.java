@@ -6,10 +6,10 @@ import com.example.demo.domain.politicians.Politicians;
 public class PoliticianDTOUnwrapper {
 
     public Politicians unWrapDTO(AddPoliticianDTORequest dto) {
-        switch (Politicians.Type.mapToPoliticianType(dto.getType())) {
+        switch (Politicians.Type.valueOf(dto.getType())) {
             case PRESIDENTIAL -> {return new PresidentialDTOUnwrapper().unWrapDTO(dto);}
             case SENATORIAL -> {return new SenatorialDTOUnwrapper().unWrapDTO(dto);}
-            default -> throw new IllegalStateException("Unexpected value: " + Politicians.Type.mapToPoliticianType(dto.getType()));
+            default -> throw new IllegalStateException("Unexpected value: " + Politicians.Type.valueOf(dto.getType()));
         }
     }
 }

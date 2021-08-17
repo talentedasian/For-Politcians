@@ -40,14 +40,18 @@ public class RatingServiceAdapter {
                 .setName(jwts.get("name", String.class))
                 .setAccountNumber(jwts.getId())
                 .setEmail(jwts.getSubject())
-                .setPoliticalParty(PoliticalParty.mapToPoliticalParty(dtoRequest.getPoliticalParty()))
+                .setPoliticalParty(PoliticalParty.valueOf(dtoRequest.getPoliticalParty()))
                 .setRateLimitRepo(rateLimitRepo)
                 .build();
-        PoliticiansRating rating = new PoliticiansRating(Integer.valueOf(dtoRequest.getId()), dtoRequest.getRating().doubleValue(), rater, null);
+
+        PoliticiansRating rating = new PoliticiansRating.Builder()
+                .setRepo(rateLimitRepo)
+                .setRater(rater)
+                .build();
 
         return RatingDTO.from(service.saveRatings(rating));
-
     }
+
     public List<RatingDTO> findRatingsUsingFacebookEmail(String email) {
         return service.findRatingsByFacebookEmail(email).stream()
                 .map(entity -> RatingDTO.from(entity))

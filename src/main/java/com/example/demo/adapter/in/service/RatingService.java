@@ -40,12 +40,10 @@ public class RatingService {
 
 		String polNumber = politician.getPoliticianNumber();
 
-		rating.calculatePolitician(politician);
-
 		if (!canRate(rating.getRater(), polNumber)) {
 			long daysLeft = rating.getRater().daysLeftToRate(polNumber);
 
-			throw new UserRateLimitedOnPoliticianException("User is rate limited on politician with " + daysLeft + " days left", 
+			throw new UserRateLimitedOnPoliticianException("User is rate limited on politician with " + daysLeft + " days left",
 					daysLeft);
 		}
 

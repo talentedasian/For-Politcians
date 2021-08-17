@@ -1,16 +1,11 @@
 package com.example.demo.adapter.out.jpa;
 
 import com.example.demo.domain.averageCalculator.AverageCalculator;
-import com.example.demo.domain.averageCalculator.DecentSatisfactionAverageCalculator;
-import com.example.demo.domain.averageCalculator.HighSatisfactionAverageCalculator;
-import com.example.demo.domain.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.domain.entities.Rating;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 @Embeddable
 public class RatingJpaEntity {
@@ -62,46 +57,13 @@ public class RatingJpaEntity {
         this.averageRating = averageRating;
     }
 
-    public double calculateAverage() {
-        double rating = calculator.calculateAverage();
-        this.averageRating = rating;
-
-        return rating;
-    }
-
-    public double calculateTotalAmountOfRating(Double ratingToAdd, Double countOfRatings) {
-        if (totalRating == null) {
-            double rating = BigDecimal.valueOf(ratingToAdd)
-                    .setScale(4, RoundingMode.HALF_DOWN).doubleValue();
-            this.totalRating = rating;
-            calculator = returnAverageCalculator(countOfRatings);
-
-            return rating;
-        }
-
-        double rating = BigDecimal.valueOf(totalRating + ratingToAdd)
-                .setScale(4, RoundingMode.UP).doubleValue();
-        this.totalRating = rating;
-        calculator = returnAverageCalculator(countOfRatings);
-
-        return rating;
-    }
-
     @Override
     public String toString() {
-        return "Rating [totalRating=" + totalRating + ", averageRating=" + averageRating + "]";
-    }
-
-    public AverageCalculator returnAverageCalculator(Double count) {
-        if (averageRating < 5D) {
-            return new LowSatisfactionAverageCalculator(totalRating, count);
-        } else if (averageRating < 8.89D) {
-            return new DecentSatisfactionAverageCalculator(totalRating, count);
-        } else if (averageRating >= 8.89D) {
-            return new HighSatisfactionAverageCalculator(totalRating, count);
-        }
-
-        return null;
+        return "RatingJpaEntity{" +
+                "totalRating=" + totalRating +
+                ", averageRating=" + averageRating +
+                ", calculator=" + calculator +
+                '}';
     }
 
     public Rating toRating() {

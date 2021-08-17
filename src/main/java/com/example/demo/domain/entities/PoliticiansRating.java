@@ -2,9 +2,8 @@ package com.example.demo.domain.entities;
 
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.politicians.Politicians;
+import org.springframework.util.Assert;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 
 public class PoliticiansRating {
@@ -43,6 +42,9 @@ public class PoliticiansRating {
 		this.rater = rater;
 	}
 
+	public RateLimitRepository getRateLimitRepo() {
+		return rateLimitRepo;
+	}
 
 	public Politicians getPolitician() {
 		return politician;
@@ -90,23 +92,8 @@ public class PoliticiansRating {
 		if (other.id == null) {
 			return false;
 		} else {
-			if (!other.id.equals(id)) {
-				return false;
-			}
+			return other.id.equals(id);
 		}
-		return true;
-	}
-
-	public void calculateRating(double rating) {
-		double rate = BigDecimal.valueOf(rating).setScale(2, RoundingMode.HALF_DOWN).doubleValue();
-		setRating(rate);
-	}
-	
-	public void calculatePolitician(Politicians politician) {
-		double totalAmountOfRating = politician.calculateTotalAmountOfRating(getRating());
-		double averageRating = politician.calculateAverageRating();
-		politician.getRating().setAverageRating(averageRating);
-		politician.getRating().setTotalRating(totalAmountOfRating);
 	}
 
 	public PoliticiansRating(Integer id, Double rating, UserRater rater, Politicians politician, RateLimitRepository rateLimitRepository) {
@@ -119,8 +106,68 @@ public class PoliticiansRating {
 	}
 
 	public void ratePolitician() {
+		politician.calculateAverageRating(rating);
 		politician.getPoliticiansRating().add(this);
 
 		rateLimitRepo.save(new RateLimit(rater.getUserAccountNumber(), politician.getPoliticianNumber(), LocalDate.now()));
 	}
+
+	public static class Builder {
+		private String id;
+
+		private double rating;
+
+		private UserRater rater;
+
+		private Politicians politician;
+
+		private RateLimitRepository rateLimitRepo;
+
+		public Builder () {}
+
+		public Builder (Politicians politicians) {
+			this.politician = politicians;
+		}
+
+		public Builder (Politicians.PoliticiansBuilder politiciansBuilder) {
+			this.politician = politiciansBuilder.build();
+		}
+
+		public Builder setId(String id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder setRating(double rating) {
+			Assert.state(Math.signum(rating) != -1.0
+					, "rating must not be null");
+			this.rating = rating;
+			return this;
+		}
+
+		public Builder setRater(UserRater rater) {
+			this.rater = rater;
+			return this;
+		}
+
+		public Builder setPolitician(Politicians politician) {
+			this.politician = politician;
+			return this;
+		}
+
+		public Builder setRepo(RateLimitRepository repo) {
+			rateLimitRepo = repo;
+			return this;
+		}
+
+		public PoliticiansRating build() {
+			try {
+				return new PoliticiansRating(Integer.valueOf(id),rating, rater, politician, rateLimitRepo);
+			} catch (NumberFormatException e) {
+				return new PoliticiansRating(null, rating, rater, politician, rateLimitRepo);
+			}
+		}
+
+	}
+
 }
