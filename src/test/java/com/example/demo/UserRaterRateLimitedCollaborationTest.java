@@ -39,8 +39,11 @@ public class UserRaterRateLimitedCollaborationTest {
             .setRating(new Rating(0D, 0D))
             .build();
 
-    final String ACCOUNT_NUMBER = "123accNumber";
+    final String NAME = "Any Name Really";
+
+    final String ID = "123456";
     final String POLITICIAN_NUMBER = politician.getPoliticianNumber();
+
     @Mock RatingRepository ratingRepo;
     @Mock PoliticiansRepository polRepo;
 
@@ -51,15 +54,14 @@ public class UserRaterRateLimitedCollaborationTest {
 
     @Test
     public void shouldThrowAnExceptionBecauseUserIsRateLimited() {
-        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now()));
 
         when(polRepo.findByPoliticianNumber(anyString())).thenReturn(Optional.of(politician));
 
         var service = new RatingService(ratingRepo, polRepo, rateLimitRepository);
 
         var rater = new UserRater.Builder()
-                .setAccountNumber(ACCOUNT_NUMBER)
-                .setName("Any Name Really")
+                .setAccountNumber(ID)
+                .setName(NAME)
                 .setPoliticalParty(PoliticalParty.DDS)
                 .setRateLimitRepo(rateLimitRepository)
                 .build();
@@ -70,20 +72,22 @@ public class UserRaterRateLimitedCollaborationTest {
                 .setRepo(rateLimitRepository)
                 .setRater(rater)
                 .build();
+
+        final String ACCOUNT_NUMBER = rater.returnUserAccountNumber();
+        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now()));
 
         Assertions.assertThrows(UserRateLimitedOnPoliticianException.class, () -> service.saveRatings(rating));
     }
 
     @Test
     public void shouldSaveRateLimitWithUsersAccountNumberAndPoliticianNumberThatIsRated() throws UserRateLimitedOnPoliticianException {
-        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now().minusDays(8)));
 
         when(polRepo.findByPoliticianNumber(anyString())).thenReturn(Optional.of(politician));
 
         var service = new RatingService(ratingRepo, polRepo, rateLimitRepository);
 
         var rater = new UserRater.Builder()
-                .setAccountNumber(ACCOUNT_NUMBER)
+                .setAccountNumber(ID)
                 .setName("Any Name Really")
                 .setPoliticalParty(PoliticalParty.DDS)
                 .setRateLimitRepo(rateLimitRepository)
@@ -96,6 +100,8 @@ public class UserRaterRateLimitedCollaborationTest {
                 .setRater(rater)
                 .build();
 
+        final String ACCOUNT_NUMBER = rater.returnUserAccountNumber();
+        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now().minusDays(8)));
         service.saveRatings(rating);
 
         var rateLimit = rateLimitRepository.findUsingIdAndPoliticianNumber(ACCOUNT_NUMBER, POLITICIAN_NUMBER);
