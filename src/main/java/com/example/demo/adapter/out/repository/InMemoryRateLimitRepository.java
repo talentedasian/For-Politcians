@@ -21,7 +21,6 @@ public class InMemoryRateLimitRepository implements RateLimitRepository {
     public Optional<RateLimit> findUsingIdAndPoliticianNumber(String id, String politicianNumber) {
         for (RateLimit entity : List.copyOf(database.values())) {
             if (entity.id().equals(id) && entity.politicianNumber().equals(politicianNumber)) {
-                System.out.println("hahah nice" + entity);
                 return Optional.of(entity);
             }
         }

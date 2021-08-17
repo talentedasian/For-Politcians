@@ -5,12 +5,10 @@ import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.RateLimitRepository;
-import com.example.demo.domain.entities.PoliticiansRating;
-import com.example.demo.domain.entities.RateLimit;
-import com.example.demo.domain.entities.Rating;
-import com.example.demo.domain.entities.UserRater;
+import com.example.demo.domain.entities.*;
 import com.example.demo.domain.enums.PoliticalParty;
 import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +42,8 @@ public class UserRaterRateLimitedCollaborationTest {
     final String ID = "123456";
     final String POLITICIAN_NUMBER = politician.getPoliticianNumber();
 
+    final String ACCOUNT_NUMBER = new AccountNumber(ID, FacebookUserRaterNumberImplementor.with(NAME, ID)).retrieveAccountNumber();
+
     @Mock RatingRepository ratingRepo;
     @Mock PoliticiansRepository polRepo;
 
@@ -73,7 +73,6 @@ public class UserRaterRateLimitedCollaborationTest {
                 .setRater(rater)
                 .build();
 
-        final String ACCOUNT_NUMBER = rater.returnUserAccountNumber();
         rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now()));
 
         Assertions.assertThrows(UserRateLimitedOnPoliticianException.class, () -> service.saveRatings(rating));
@@ -100,7 +99,6 @@ public class UserRaterRateLimitedCollaborationTest {
                 .setRater(rater)
                 .build();
 
-        final String ACCOUNT_NUMBER = rater.returnUserAccountNumber();
         rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now().minusDays(8)));
         service.saveRatings(rating);
 
