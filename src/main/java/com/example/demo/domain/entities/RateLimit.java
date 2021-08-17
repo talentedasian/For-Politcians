@@ -12,7 +12,7 @@ public class RateLimit {
 
 	private String politicianNumber;
 
-	private LocalDate dateCreated;
+	private ExpirationDate expirationDate;
 
 	public String id() {
 		return id;
@@ -30,16 +30,22 @@ public class RateLimit {
 		this.politicianNumber = politicianNumber;
 	}
 
-	public LocalDate getDateCreated() {
-		return dateCreated;
+	public LocalDate expirationDate() {
+		return expirationDate.expirationDate();
 	}
 
-	public RateLimit(String id, String politicianNumber, LocalDate dateCreated) {
+	public RateLimit(String id, String politicianNumber, LocalDate expirationDate) {
 		this.id = id;
 		this.politicianNumber = politicianNumber;
-		this.dateCreated = dateCreated;
+		this.expirationDate = new ExpirationDate(expirationDate);
 	}
-	
+
+	public RateLimit(String id, String politicianNumber, ExpirationDate expirationDate) {
+		this.id = id;
+		this.politicianNumber = politicianNumber;
+		this.expirationDate = expirationDate;
+	}
+
 	public static RateLimit withNotExpiredRateLimit(String id, String politicianNumber) {
 		return cache.computeIfAbsent(id, (key) -> {
 			var rateLimit = new RateLimit(id, politicianNumber, LocalDate.now().minusDays(8));
@@ -58,15 +64,11 @@ public class RateLimit {
 	}
 
 	public boolean isNotRateLimited() {
-		return this.dateCreated == null || LocalDate.now().minusDays(7).isBefore(dateCreated);
+		return expirationDate.isNotRateLimited();
 	}
 
 	public Integer daysLeftOfBeingRateLimited() {
-		return determineDaysLeftToRate(dateCreated);
-	}
-
-	public static int determineDaysLeftToRate(LocalDate date) {
-		return LocalDate.now().minusDays(7).getDayOfMonth() - date.getDayOfMonth();
+		return Integer.valueOf(expirationDate.daysLeftTillRateLimited());
 	}
 
 }
