@@ -37,7 +37,7 @@ public class UserRaterJpaEntity {
 
     public static UserRaterJpaEntity from(UserRater rater) {
         return new Builder()
-                .setUserAccountNumber(rater.getUserAccountNumber())
+                .setUserAccountNumber(rater.returnUserAccountNumber())
                 .setPoliticalParties(rater.getPoliticalParties())
                 .setFacebookName(rater.getFacebookName())
                 .setEmail(rater.getEmail())

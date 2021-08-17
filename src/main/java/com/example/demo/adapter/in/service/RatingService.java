@@ -48,7 +48,7 @@ public class RatingService {
 		}
 
 		// INFO : Make sure to rate limit the rater
-		rateLimitingService.rateLimitUser(rating.getRater().getUserAccountNumber(), polNumber);
+		rateLimitingService.rateLimitUser(rating.getRater().returnUserAccountNumber(), polNumber);
 
 		rating.ratePolitician();
 		

@@ -14,7 +14,7 @@ public class UserRaterDto {
         return accountNumber;
     }
 
-    public String getname() {
+    public String getName() {
         return name;
     }
 
@@ -34,7 +34,7 @@ public class UserRaterDto {
     }
 
     public static UserRaterDto from(UserRater rater) {
-        return new UserRaterDto(rater.getUserAccountNumber(), rater.getFacebookName(), rater.getEmail());
+        return new UserRaterDto(rater.returnUserAccountNumber(), rater.getFacebookName(), rater.getEmail());
     }
 
     public UserRater toUserRater(RateLimitRepository rateLimitRepo) {
