@@ -12,23 +12,23 @@ public class InMemoryPoliticianAdapterRepo implements PoliticiansRepository {
 
     @Override
     public Politicians save(Politicians politician) {
-        if (database.containsKey(politician.getPoliticianNumber())) {
+        if (database.containsKey(politician.retrievePoliticianNumber())) {
             throw new PoliticianAlreadyExistsException("Politician already exists in the database");
         }
-        database.put(politician.getPoliticianNumber(), politician);
+        database.put(politician.retrievePoliticianNumber(), politician);
         return politician;
     }
 
     @Override
     public Politicians update(Politicians politician) {
-        return database.put(politician.getPoliticianNumber(), politician);
+        return database.put(politician.retrievePoliticianNumber(), politician);
     }
 
     @Override
     public List<Politicians> findByLastNameAndFirstName(String lastName, String firstName) {
         List<Politicians> result = new ArrayList<>();
         for (Politicians entity : List.copyOf(database.values())) {
-            if (entity.getFirstName().equals(firstName) && entity.getLastName().equals(lastName)) {
+            if (entity.firstName().equals(firstName) && entity.lastName().equals(lastName)) {
                 result.add(entity);
             }
         }

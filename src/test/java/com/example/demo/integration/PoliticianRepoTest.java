@@ -67,7 +67,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 		
 		repo.save(politicianToBeSaved);
 		
-		assertTrue(repo.existsByPoliticianNumber(politicianToBeSaved.getPoliticianNumber()));
+		assertTrue(repo.existsByPoliticianNumber(politicianToBeSaved.retrievePoliticianNumber()));
 	}
 	
 	@Test
@@ -77,7 +77,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 		
 		repo.save(politicianToBeSaved);
 		
-		assertTrue(repo.existsByPoliticianNumber(politicianToBeSaved.getPoliticianNumber()));
+		assertTrue(repo.existsByPoliticianNumber(politicianToBeSaved.retrievePoliticianNumber()));
 	}
 	
 	@Test
@@ -85,7 +85,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 		Politicians politicianToBeSaved = senatorialBuilder.build();
 		repo.save(politicianToBeSaved);
 		
-		String id = politicianToBeSaved.getPoliticianNumber();
+		String id = politicianToBeSaved.retrievePoliticianNumber();
 		
 		assertTrue(repo.existsByPoliticianNumber(id));
 		repo.deleteByPoliticianNumber(id);
@@ -98,7 +98,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 				.build();
 		repo.save(politicianToBeSaved);
 		
-		String id = politicianToBeSaved.getPoliticianNumber();
+		String id = politicianToBeSaved.retrievePoliticianNumber();
 		
 		assertTrue(repo.existsByPoliticianNumber(id));
 		repo.deleteByPoliticianNumber(id);

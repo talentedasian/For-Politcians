@@ -109,7 +109,7 @@ public class PoliticiansRating {
 		politician.calculateAverageRating(rating);
 		politician.getPoliticiansRating().add(this);
 
-		rateLimitRepo.save(new RateLimit(rater.returnUserAccountNumber(), politician.getPoliticianNumber(), LocalDate.now()));
+		rateLimitRepo.save(new RateLimit(rater.returnUserAccountNumber(), politician.retrievePoliticianNumber(), LocalDate.now()));
 	}
 
 	public static class Builder {

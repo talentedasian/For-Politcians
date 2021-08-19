@@ -1,16 +1,17 @@
 package com.example.demo.domain.politicianNumber;
 
 import com.example.demo.domain.entityNumber.EntityNumberInterface;
+import com.example.demo.domain.politicians.Name;
 
 public abstract class AbstractPoliticianNumber implements EntityNumberInterface {
 
 	protected final String firstName, lastName, politicianNumber;
 
-	protected String getFirstName() {
+	protected String firstName() {
 		return firstName;
 	}
 
-	protected String getLastName() {
+	protected String lastName() {
 		return lastName;
 	}
 
@@ -18,10 +19,10 @@ public abstract class AbstractPoliticianNumber implements EntityNumberInterface 
 		return politicianNumber;
 	}
 
-	public AbstractPoliticianNumber(String firstName, String lastName, String politicianNumber) {
+	public AbstractPoliticianNumber(Name name, String politicianNumber) {
 		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.firstName = name.firstName();
+		this.lastName = name.lastName();
 		this.politicianNumber = politicianNumber;
 	}
 

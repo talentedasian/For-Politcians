@@ -40,7 +40,7 @@ public class UserRaterRateLimitedCollaborationTest {
     final String NAME = "Any Name Really";
 
     final String ID = "123456";
-    final String POLITICIAN_NUMBER = politician.getPoliticianNumber();
+    final String POLITICIAN_NUMBER = politician.retrievePoliticianNumber();
 
     final String ACCOUNT_NUMBER = new AccountNumber(ID, FacebookUserRaterNumberImplementor.with(NAME, ID)).retrieveAccountNumber();
 

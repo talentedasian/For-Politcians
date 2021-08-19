@@ -35,10 +35,10 @@ public class RatingService {
 	
 	@Transactional
 	public PoliticiansRating saveRatings(PoliticiansRating rating) throws UserRateLimitedOnPoliticianException {
-		Politicians politician = politicianService.findPoliticianByNumber(rating.getPolitician().getPoliticianNumber())
+		Politicians politician = politicianService.findPoliticianByNumber(rating.getPolitician().retrievePoliticianNumber())
 				.orElseThrow(PoliticianNotFoundException::new);
 
-		String polNumber = politician.getPoliticianNumber();
+		String polNumber = politician.retrievePoliticianNumber();
 
 		if (!canRate(rating.getRater(), polNumber)) {
 			long daysLeft = rating.getRater().daysLeftToRate(polNumber);

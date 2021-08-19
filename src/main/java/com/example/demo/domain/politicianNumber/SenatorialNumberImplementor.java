@@ -1,17 +1,15 @@
 package com.example.demo.domain.politicianNumber;
 
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.politicians.Name;
 
-final class SenatorialNumberImplementor extends PoliticianNumberImplementor{
+public final class SenatorialNumberImplementor extends PoliticianNumberImplementor{
 
-    SenatorialNumberImplementor(Politicians politician) {
-        super(politician);
+    SenatorialNumberImplementor(Name name, String politicianNumber) {
+        super(name, politicianNumber);
     }
 
-    static SenatorialNumberImplementor with(String politicianNumber) {
-        final Politicians politician = new Politicians.PoliticiansBuilder(politicianNumber)
-                .build();
-        return new SenatorialNumberImplementor(politician);
+    public static SenatorialNumberImplementor with(Name name) {
+        return new SenatorialNumberImplementor(name, null);
     }
 
     @Override
@@ -21,7 +19,7 @@ final class SenatorialNumberImplementor extends PoliticianNumberImplementor{
         String initialType = calculateType(initialLastName);
         String finalPoliticianNumber = initialType.replaceAll("[0-9]", String.valueOf(getPolitician().hashCode()).substring(0,5));
 
-        return with(finalPoliticianNumber.substring(0, pattern.length()).toUpperCase());
+        return new SenatorialNumberImplementor(getPolitician().recordName(), finalPoliticianNumber.substring(0, pattern.length()).toUpperCase());
     }
 
     private String calculateFirstName(String pattern) {

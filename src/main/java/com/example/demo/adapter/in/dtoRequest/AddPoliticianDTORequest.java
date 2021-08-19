@@ -44,7 +44,7 @@ public class AddPoliticianDTORequest {
 		this.firstName = firstName;
 	}
 
-	public String getLastName() {
+	public String lastName() {
 		return lastName;
 	}
 

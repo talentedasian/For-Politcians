@@ -1,5 +1,6 @@
 package com.example.demo.unit.politicianNumber;
 
+import com.example.demo.domain.politicianNumber.SenatorialNumberImplementor;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.politicians.Politicians;
@@ -14,28 +15,20 @@ public class PoliticianNumberImplementorTest {
 	final String LAST_NAME = "lastName";
 	final String POLITICIAN_NUMBER = "99";
 
-	Politicians.PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
+	Politicians politicianBuilder = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
 			.setFirstName(FIRST_NAME)
 			.setLastName(LAST_NAME)
-			.setFullName();
-
-	PoliticianNumberImplementor politicianNumberCalculator = PoliticianNumberImplementor.with(politicianBuilder.build());
-
-//	@Test
-//	public void shouldThrowIllegalStateExceptionWhenCriteriaNotMet() {
-//		assertThrows(IllegalStateException.class,
-//				() -> PoliticianNumberImplementor.with(FIRST_NAME, LAST_NAME, "not number test"));
-//	}
-	
+			.setFullName()
+			.build();
 	@Test
 	public void assertLogicOfPoliticianNumberPatternCreatorMethodWithPresidential() {
-		var senatorial = new PresidentialBuilder(politicianBuilder)
+		var presidential = new PresidentialBuilder(politicianBuilder)
 				.build();
 
-		PoliticianNumberImplementor polNumber = PoliticianNumberImplementor.with(senatorial);
+		PoliticianNumberImplementor polNumber = PoliticianNumberImplementor.with(presidential.recordName(), Politicians.Type.PRESIDENTIAL);
 		
-		assertEquals("FLPP-LFPP-".concat(String.valueOf(senatorial.hashCode()).substring(0, 4)),
-				polNumber.getPoliticianNumber());
+		assertEquals("FLPP-LFPP-".concat(String.valueOf(presidential.hashCode()).substring(0, 4)),
+				polNumber.calculateEntityNumber().getPoliticianNumber());
 	}
 	
 	@Test
@@ -44,10 +37,10 @@ public class PoliticianNumberImplementorTest {
 				.setTotalMonthsOfService(12)
 				.build();
 
-		PoliticianNumberImplementor polNumber = PoliticianNumberImplementor.with(senatorial);
+		PoliticianNumberImplementor polNumber = SenatorialNumberImplementor.with(senatorial.recordName(), Politicians.Type.SENATORIAL);
 
 		assertEquals("FLSS-LFSS-".concat(String.valueOf(senatorial.hashCode()).substring(0, 4)),
-				polNumber.getPoliticianNumber());
+				polNumber.calculateEntityNumber().getPoliticianNumber());
 	}
 	
 }

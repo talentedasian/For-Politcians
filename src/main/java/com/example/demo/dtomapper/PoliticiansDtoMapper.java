@@ -31,8 +31,8 @@ public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 		Rating satisfactionRate = Rating.mapToSatisfactionRate(rating);
 		
 		return new PoliticianDto(
-				entity.getFirstName() + " " + entity.getLastName(), 
-				entity.getPoliticianNumber(), 
+				entity.firstName() + " " + entity.lastName(),
+				entity.retrievePoliticianNumber(),
 				rating,
 				satisfactionRate,
 				"Presidential");

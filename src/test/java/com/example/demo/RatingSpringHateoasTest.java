@@ -54,8 +54,8 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].rater.email", equalTo(rater.getEmail())))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].rater.name", equalTo(rater.getFacebookName())))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].rater.political_party", equalTo(rater.getPoliticalParties().toString())))
-			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.name", equalTo(politician.getFullName())))
-			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.id", equalTo(politician.getPoliticianNumber())))
+			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.name", equalTo(politician.name())))
+			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.id", equalTo(politician.retrievePoliticianNumber())))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.rating", equalTo(1.0D)))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.most_significant_law_made", containsStringIgnoringCase("law law law")))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.months_of_service", equalTo(12)))
@@ -66,7 +66,7 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 		 * We are dealing with a real database here. Delete the entities
 		 * before the test finishes. 
 		 */
-		repo.deleteByPoliticianNumber(politician.getPoliticianNumber());
+		repo.deleteByPoliticianNumber(politician.retrievePoliticianNumber());
 		ratingRepo.deleteById(politiciansRating.getId());
 	}
 	

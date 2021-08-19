@@ -22,7 +22,7 @@ public class PoliticiansTest {
 				.setFullName()
 				.build();
 		
-		assertEquals("Test", politicianWithNoLastName.getFullName());
+		assertEquals("Test", politicianWithNoLastName.name());
 	}
 	
 	@Test
@@ -31,7 +31,7 @@ public class PoliticiansTest {
 				.setFullName()
 				.build();
 		
-		assertEquals("Test Name", politicianWithFirstAndLastName.getFullName());
+		assertEquals("Test Name", politicianWithFirstAndLastName.name());
 	}
 	
 	@Test

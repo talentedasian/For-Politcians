@@ -1,16 +1,15 @@
 package com.example.demo.domain.politicianNumber;
 
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.politicians.Name;
 
 class PresidentialNumberImplementor extends PoliticianNumberImplementor {
 
-    PresidentialNumberImplementor(Politicians politician) {
-        super(politician);
+    PresidentialNumberImplementor(Name name, String politicianNumber) {
+        super(name, politicianNumber);
     }
 
-    static PresidentialNumberImplementor with(String politicianNumber) {
-        final Politicians politician = new Politicians.PoliticiansBuilder(politicianNumber).build();
-        return new PresidentialNumberImplementor(politician);
+    public static PresidentialNumberImplementor with(Name name) {
+        return new PresidentialNumberImplementor(name, null);
     }
 
     @Override
@@ -20,7 +19,7 @@ class PresidentialNumberImplementor extends PoliticianNumberImplementor {
         String initialType = calculateType(initialLastName);
         String finalPoliticianNumber = initialType.replaceAll("[0-9]", String.valueOf(getPolitician().hashCode()).substring(0,5));
 
-        return with(finalPoliticianNumber.substring(0, pattern.length()).toUpperCase());
+        return new PresidentialNumberImplementor(new Name(firstName, lastName), finalPoliticianNumber.substring(0, pattern.length()).toUpperCase());
     }
 
     private String calculateFirstName(String pattern) {
@@ -28,7 +27,7 @@ class PresidentialNumberImplementor extends PoliticianNumberImplementor {
     }
 
     private String calculateLastName(String pattern) {
-        char toReplace = (lastName == null | (lastName.isBlank() || lastName.isEmpty())) ? 'P' : getLastName().charAt(0);
+        char toReplace = (lastName == null | (lastName.isBlank() || lastName.isEmpty())) ? 'P' : lastName().charAt(0);
         return pattern.replace(LASTNAME_INITIAL, toReplace);
     }
 

@@ -80,15 +80,15 @@ public class PoliticiansRatingJpaEntity {
 
     private static PoliticiansJpaEntity fromPoliticians(Politicians politician) {
         return new PoliticiansJpaEntity
-                (politician.getPoliticianNumber(), politician.getFirstName(),
-                politician.getLastName(), politician.getFullName(),
+                (politician.retrievePoliticianNumber(), politician.firstName(),
+                politician.lastName(), politician.name(),
                 RatingJpaEntity.from(politician.getRating()), null);
     }
 
     private static Politicians toPoliticians(PoliticiansJpaEntity jpaEntity) {
         return new Politicians.PoliticiansBuilder(jpaEntity.getId())
                 .setFirstName(jpaEntity.getFirstName())
-                .setLastName(jpaEntity.getLastName())
+                .setLastName(jpaEntity.lastName())
                 .setFullName()
                 .setRating(jpaEntity.getRatingJpaEntity().toRating())
                 .setPoliticiansRating(null)

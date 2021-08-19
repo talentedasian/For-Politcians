@@ -73,13 +73,13 @@ public class PolymorphicQueriesTest extends BaseClassTestsThatUsesDatabase {
                         .accept(HAL_FORMS_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(HAL_FORMS_JSON))
-                .andExpect(jsonPath("_embedded.SenatorialPoliticianDtoList[0].id", equalTo(senator.getPoliticianNumber())))
-                .andExpect(jsonPath("_embedded.SenatorialPoliticianDtoList[0].name", equalTo(senator.getFullName())))
+                .andExpect(jsonPath("_embedded.SenatorialPoliticianDtoList[0].id", equalTo(senator.retrievePoliticianNumber())))
+                .andExpect(jsonPath("_embedded.SenatorialPoliticianDtoList[0].name", equalTo(senator.name())))
                 .andExpect(jsonPath("_embedded.SenatorialPoliticianDtoList[0].rating", equalTo(senator.getRating().getAverageRating())))
                 .andExpect(jsonPath("_embedded.SenatorialPoliticianDtoList[0].months_of_service", equalTo(senator.getTotalMonthsOfServiceAsSenator())))
                 .andExpect(jsonPath("_embedded.SenatorialPoliticianDtoList[0].most_significant_law_made", equalTo(senator.getMostSignificantLawMade())))
-                .andExpect(jsonPath("_embedded.presidentialPoliticianDTOList[0].id", equalTo(president.getPoliticianNumber())))
-                .andExpect(jsonPath("_embedded.presidentialPoliticianDTOList[0].name", equalTo(president.getFullName())))
+                .andExpect(jsonPath("_embedded.presidentialPoliticianDTOList[0].id", equalTo(president.retrievePoliticianNumber())))
+                .andExpect(jsonPath("_embedded.presidentialPoliticianDTOList[0].name", equalTo(president.name())))
                 .andExpect(jsonPath("_embedded.presidentialPoliticianDTOList[0].rating", equalTo(president.getRating().getAverageRating())))
                 .andExpect(jsonPath("_embedded.presidentialPoliticianDTOList[0].most_significant_law_signed", equalTo(president.getMostSignificantLawSigned())))
                 .andExpect(jsonPath("_embedded.presidentialPoliticianDTOList[0].satisfaction_rate", equalTo(mapToSatisfactionRate(president.getRating().getAverageRating()).toString())));
@@ -88,8 +88,8 @@ public class PolymorphicQueriesTest extends BaseClassTestsThatUsesDatabase {
              * We are dealing with a real database here. Delete the entities
              * before the test finishes.
              */
-            repo.deleteByPoliticianNumber(president.getPoliticianNumber());
-            repo.deleteByPoliticianNumber(senator.getPoliticianNumber());
+            repo.deleteByPoliticianNumber(president.retrievePoliticianNumber());
+            repo.deleteByPoliticianNumber(senator.retrievePoliticianNumber());
         }
 
 }

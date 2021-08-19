@@ -123,7 +123,7 @@ public class RatingServiceTest {
 //		ratingService.saveRatings(ratingDtoRequest, req);
 
 		assertThat(5.03D)
-				.isEqualTo(politicianRepo.findByPoliticianNumber(politician.getPoliticianNumber()).get().getRating().getAverageRating());
+				.isEqualTo(politicianRepo.findByPoliticianNumber(politician.retrievePoliticianNumber()).get().getRating().getAverageRating());
 	}
 
 

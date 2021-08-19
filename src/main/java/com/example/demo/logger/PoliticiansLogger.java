@@ -10,17 +10,17 @@ import com.example.demo.domain.politicians.Politicians;
 @Aspect
 public class PoliticiansLogger {
 
-	@AfterReturning(
-			pointcut = "execution(* com.example.demo.adapter.in.service.PoliticiansService.savePolitician(..))",
-			returning = "politician"
-			)
-	public void logSuccessfulSavedPolitician(Politicians politician) {
-		MDC.put("fullname", politician.getFullName());
-		MDC.put("polNumber", politician.getPoliticianNumber());
-		
-		LoggerFactory.getLogger(PoliticiansLogger.class).info("saved with");
-		
-		MDC.clear();
-	}
+//	@AfterReturning(
+//			pointcut = "execution(* com.example.demo.adapter.in.service.PoliticiansService.savePolitician(..))",
+//			returning = "politician"
+//			)
+//	public void logSuccessfulSavedPolitician(Politicians politician) {
+//		MDC.put("fullname", politician.name());
+//		MDC.put("polNumber", politician.retrievePoliticianNumber());
+//
+//		LoggerFactory.getLogger(PoliticiansLogger.class).info("saved with");
+//
+//		MDC.clear();
+//	}
 
 }

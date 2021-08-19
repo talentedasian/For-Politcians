@@ -4,6 +4,7 @@ import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.Rating;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,50 +12,18 @@ import java.util.List;
 
 public class Politicians {
 
-	private String firstName;
-
-	private String lastName;
-
-	private String fullName;
+	private Name name;
 
 	private List<PoliticiansRating> politiciansRating;
 
 	private Rating rating;
 
-	private String politicianNumber;
+	private PoliticianNumber politicianNumber;
 
 	private Politicians.Type type;
 
-	public String getPoliticianNumber() {
-		return politicianNumber;
-	}
-
-	public void setPoliticianNumber(String politicianNumber) {
-		this.politicianNumber = politicianNumber;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getFullName() {
-		return this.fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public String retrievePoliticianNumber() {
+		return politicianNumber.returnPoliticianNumber();
 	}
 
 	public List<PoliticiansRating> getPoliticiansRating() {
@@ -84,12 +53,20 @@ public class Politicians {
 	protected Politicians() {
 	}
 
+	@Deprecated //TODO : Change to a constructor consisting of all the fields.
 	protected Politicians(String firstName, String lastName, String fullName,
 			List<PoliticiansRating> politiciansRating, Rating rating, String politicianNumber, Type polType) {
 		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.fullName = fullName;
+		this.name = new Name(firstName, lastName);
+		this.politiciansRating = politiciansRating;
+		this.rating = rating;
+		this.politicianNumber = new PoliticianNumber(name, type);
+		this.type = polType;
+	}
+
+	protected Politicians(Name name,List<PoliticiansRating> politiciansRating, Rating rating, PoliticianNumber politicianNumber, Type polType) {
+		super();
+		this.name = name;
 		this.politiciansRating = politiciansRating;
 		this.rating = rating;
 		this.politicianNumber = politicianNumber;
@@ -97,10 +74,30 @@ public class Politicians {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Politicians that = (Politicians) o;
+
+		if (!politicianNumber.equals(that.politicianNumber)) return false;
+		return type == that.type;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = name.firstName().hashCode();
+		result = 31 * result + name.lastName().hashCode();
+		result = 31 * result + name.fullName().hashCode();
+		result = 31 * result + type.hashCode();
+		return result;
+	}
+
+	@Override
 	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
-		return "Politicians [firstName=" + firstName + ", lastName=" + lastName + ", fullName="
-				+ fullName +  ", rating=" + rating + ", politicianNumber=" + politicianNumber + "]";
+		return "Politicians [name=" + name.fullName() + ", rating=" + rating + ", politicianNumber=" + politicianNumber.returnPoliticianNumber()
+				+ ", type=" + type.toString() +  "]";
 	}
 
 	public double calculateAverageRating(double ratingToAdd) {
@@ -111,6 +108,22 @@ public class Politicians {
 
 	public long countsOfRatings() {
 		return politiciansRating == null ? 0 : politiciansRating.size();
+	}
+
+	public Name recordName() {
+		return this.name;
+	}
+
+	public String name() {
+		return name.fullName();
+	}
+
+	public String firstName() {
+		return name.firstName();
+	}
+
+	public String lastName() {
+		return name.lastName();
 	}
 
 	public static enum Type {
@@ -211,7 +224,10 @@ public class Politicians {
 		}
 		
 		public Politicians build() {
-			return new Politicians(firstName, lastName, fullName, politiciansRating, rating, politicianNumber, null);
+			Assert.state(firstName != null | !firstName.isEmpty() | !firstName.isBlank(), "first name cannot be null");
+
+			var name = new Name(firstName, lastName);
+			return new Politicians(name, politiciansRating, rating, new PoliticianNumber(name, null), null);
 		}
 
 	}

@@ -20,7 +20,7 @@ class PresidentialDTOUnwrapper extends PoliticianDTOUnwrapper {
     private Politicians dtoToEntity(AddPresidentialPoliticianDTORequest dto) {
         Politicians politician = new Politicians.PoliticiansBuilder("dummy")
                 .setFirstName(dto.getFirstName())
-                .setLastName(dto.getLastName())
+                .setLastName(dto.lastName())
                 .setFullName()
                 .setRating(new Rating(0.00D, 0.00D))
                 .build();

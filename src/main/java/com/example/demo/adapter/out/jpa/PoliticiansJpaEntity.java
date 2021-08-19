@@ -45,7 +45,7 @@ public class PoliticiansJpaEntity {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
+    public String lastName() {
         return lastName;
     }
 
@@ -53,7 +53,7 @@ public class PoliticiansJpaEntity {
         this.lastName = lastName;
     }
 
-    public String getFullName() {
+    public String name() {
         return fullName;
     }
 
@@ -90,8 +90,8 @@ public class PoliticiansJpaEntity {
     }
 
     public static PoliticiansJpaEntity from(Politicians politician) {
-        return new PoliticiansJpaEntity(politician.getPoliticianNumber(), politician.getFirstName(),
-                politician.getLastName(), politician.getFullName(),
+        return new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
+                politician.lastName(), politician.name(),
                 RatingJpaEntity.from(politician.getRating()), fromPoliticiansRating(politician.getPoliticiansRating()));
     }
 
