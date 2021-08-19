@@ -14,9 +14,8 @@ public class PoliticianNumberImplementorTest {
 
 	final String FIRST_NAME = "firstName";
 	final String LAST_NAME = "lastName";
-	final String POLITICIAN_NUMBER = "99";
 
-	Politicians politicianBuilder = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
+	Politicians politicianBuilder = new Politicians.PoliticiansBuilder()
 			.setFirstName(FIRST_NAME)
 			.setLastName(LAST_NAME)
 			.setFullName()

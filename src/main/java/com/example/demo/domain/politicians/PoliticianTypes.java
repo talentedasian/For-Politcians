@@ -127,7 +127,6 @@ public class PoliticianTypes {
 				org.springframework.util.Assert.state(isPositive(totalMonthsOfServiceAsSenator),
 						"months of experience must not be negative");
 
-
 				return new SenatorialPolitician(politician, totalMonthsOfServiceAsSenator, mostSignificantLawMade);
 			}
 
