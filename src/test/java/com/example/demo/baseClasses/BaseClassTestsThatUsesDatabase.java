@@ -3,22 +3,15 @@ package com.example.demo.baseClasses;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 /*
  * Classes that use an underlying database such as 
  * {@DataJpaTest} and {@SpringBootTest} must extend this class.
  */
-@Testcontainers
 public class BaseClassTestsThatUsesDatabase {
 
-	public static final PostgreSQLContainer<?> container = new PostgreSQLContainer<>(DockerImageName.parse("postgres"))
-		.withDatabaseName("test-container")
-		.withPassword("test")
-		.withUsername("test")
-		.withStartupTimeoutSeconds(120)
-		.withReuse(true);
+	public static final PostgreSQLContainer<?> container = new PostgreSQLContainer<>(DockerImageName.parse("postgres")).withReuse(true);
 	
 	static {
 		container.start();
