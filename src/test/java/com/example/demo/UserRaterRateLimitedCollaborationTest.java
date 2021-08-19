@@ -7,10 +7,11 @@ import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.*;
 import com.example.demo.domain.enums.PoliticalParty;
+import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
 import com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +23,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -30,11 +32,13 @@ public class UserRaterRateLimitedCollaborationTest {
 
     RateLimitRepository rateLimitRepository;
 
-    Politicians politician = new Politicians.PoliticiansBuilder("dummy")
+    PoliticiansBuilder politicianBuilder = new PoliticiansBuilder("dummy")
             .setFirstName("Random")
             .setLastName("Name")
             .setPoliticiansRating(null)
-            .setRating(new Rating(0D, 0D))
+            .setRating(new Rating(0D, 0D));
+
+    Politicians politician = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder)
             .build();
 
     final String NAME = "Any Name Really";
@@ -75,7 +79,7 @@ public class UserRaterRateLimitedCollaborationTest {
 
         rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now()));
 
-        Assertions.assertThrows(UserRateLimitedOnPoliticianException.class, () -> service.saveRatings(rating));
+        assertThrows(UserRateLimitedOnPoliticianException.class, () -> service.saveRatings(rating));
     }
 
     @Test
