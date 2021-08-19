@@ -37,7 +37,7 @@ public class RatingServiceAdapter {
         Claims jwts = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
 
         var rater = new UserRater.Builder()
-                .setName(jwts.get("name", String.class))
+                .setName(jwts.get("fullName", String.class))
                 .setAccountNumber(jwts.getId())
                 .setEmail(jwts.getSubject())
                 .setPoliticalParty(PoliticalParty.valueOf(dtoRequest.getPoliticalParty()))

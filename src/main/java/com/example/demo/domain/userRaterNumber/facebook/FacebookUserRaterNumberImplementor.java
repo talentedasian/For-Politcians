@@ -8,9 +8,9 @@ public final class FacebookUserRaterNumberImplementor extends AbstractUserRaterN
 	/*OP stands for the Oauth2 Provider that is used for logging into the application. 
 	 * If facebook is used as the login mechanism or OP, OP will be replaced to FLM which 
 	 * stands for Facebook Login Mechanism. FL stands for the first two initials of your facebook
-	 * name. For example your facebook name is "test name politics", FL will be replaced to 'T' and 'N'.
-	 * If your facebook name is only made up of one word, FL will then be replaced with the first letter
-	 * of your name appended with "G".
+	 * fullName. For example your facebook fullName is "test fullName politics", FL will be replaced to 'T' and 'N'.
+	 * If your facebook fullName is only made up of one word, FL will then be replaced with the first letter
+	 * of your fullName appended with "G".
 	 */
 	private final String pattern = "FLOP-00000000000000";
 
@@ -23,8 +23,8 @@ public final class FacebookUserRaterNumberImplementor extends AbstractUserRaterN
 	}
 	
 	/*
-	 * Since there is no accurate way of knowing the facebook user's first name and last name 
-	 * using its user info on facebook, the first two words in its name are considered as its Full Name.
+	 * Since there is no accurate way of knowing the facebook user's first fullName and last fullName
+	 * using its user info on facebook, the first two words in its fullName are considered as its Full Name.
 	 */
 	public static FacebookUserRaterNumberImplementor with(String name, String accountNumber) {
 		String[] nameArray = name.split(" ");
@@ -32,7 +32,7 @@ public final class FacebookUserRaterNumberImplementor extends AbstractUserRaterN
 			String firstName = nameArray[0];
 			nameArray = new String[2];
 			nameArray[0] = firstName;
-			nameArray[1] = "Gss"; //Assignment for "G" if name is a single word
+			nameArray[1] = "Gss"; //Assignment for "G" if fullName is a single word
 		}
 		String finalName = nameArray[0].concat(" " + nameArray[1]);
 		

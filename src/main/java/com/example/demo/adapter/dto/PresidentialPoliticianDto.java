@@ -13,14 +13,14 @@ public final class PresidentialPoliticianDto extends PoliticianDto {
 	}
 
 	public PresidentialPoliticianDto(Politicians entity, Rating satisfactionRate, String lawSigned) {
-		super(entity.name(), entity.retrievePoliticianNumber(), entity.getRating().getAverageRating(), satisfactionRate, "presidential");
+		super(entity.fullName(), entity.retrievePoliticianNumber(), entity.getRating().getAverageRating(), satisfactionRate, "presidential");
 		this.mostSignificantLawSigned = lawSigned;
 	}
 
 	@Override
 	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
-		return "PresidentialPoliticianDTO [name=" + this.getName() + ", id=" + this.getId() + 
+		return "PresidentialPoliticianDTO [fullName=" + this.getName() + ", id=" + this.getId() +
 				", rating=" + this.getRating() + ", satisfactionRate=" + this.getSatisfactionRate() +   
 				", mostSignificantLawSigned=" + this.mostSignificantLawSigned + "]";
 	}

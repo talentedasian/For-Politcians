@@ -5,7 +5,6 @@ import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PoliticiansTest {
 
@@ -22,7 +21,7 @@ public class PoliticiansTest {
 				.setFullName()
 				.build();
 		
-		assertEquals("Test", politicianWithNoLastName.name());
+		assertEquals("Test", politicianWithNoLastName.fullName());
 	}
 	
 	@Test
@@ -31,14 +30,7 @@ public class PoliticiansTest {
 				.setFullName()
 				.build();
 		
-		assertEquals("Test Name", politicianWithFirstAndLastName.name());
-	}
-	
-	@Test
-	public void testNullFirstAndLastNameInBuilder() {
-		assertThrows(IllegalArgumentException.class,
-				() -> new Politicians.PoliticiansBuilder("123polNumber")
-						.setFullName());
+		assertEquals("Test Name", politicianWithFirstAndLastName.fullName());
 	}
 	
 }

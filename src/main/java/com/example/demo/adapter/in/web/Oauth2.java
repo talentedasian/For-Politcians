@@ -48,7 +48,7 @@ public class Oauth2 {
 		jwtResponse.setJwt(cookieMap.get("jwt"));
 		jwtResponse.setId(jwt.getId());
 		jwtResponse.setSubject(jwt.getSubject());
-		jwtResponse.setName(jwt.get("name", String.class));
+		jwtResponse.setName(jwt.get("fullName", String.class));
 		
 		var affordance = Affordances.of(linkTo(methodOn(PoliticianController.class).allPoliticians())
 				.withRel("politicians"))

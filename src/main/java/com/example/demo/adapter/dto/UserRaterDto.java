@@ -28,7 +28,7 @@ public class UserRaterDto {
     public String toString() {
         return "UserRaterDto{" +
                 "accountNumber='" + accountNumber + '\'' +
-                ", name='" + name + '\'' +
+                ", fullName='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }

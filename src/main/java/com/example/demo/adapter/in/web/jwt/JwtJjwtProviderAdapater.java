@@ -13,7 +13,7 @@ public class JwtJjwtProviderAdapater {
 		String jwts = Jwts.builder()
 				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
 				.setSubject(sub)
-				.claim("name", name)
+				.claim("fullName", name)
 				.setId(id)
 				.setExpiration(new Date(System.currentTimeMillis() + 3600000L))
 				.setHeaderParam("login_mechanism", "facebook")

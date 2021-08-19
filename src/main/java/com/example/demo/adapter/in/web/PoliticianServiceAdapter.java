@@ -30,7 +30,7 @@ public class PoliticianServiceAdapter {
     public List<PoliticianDto> findPoliticianUsingName(String lastName, String firstName) {
         List<Politicians> politician = service.findPoliticianByName(lastName, firstName);
         if (politician.isEmpty()) {
-            throw new PoliticianNotFoundException("Politicians with " + firstName + lastName + " as name does not exist");
+            throw new PoliticianNotFoundException("Politicians with " + firstName + lastName + " as fullName does not exist");
         }
 
         return politician.stream()

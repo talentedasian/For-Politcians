@@ -19,7 +19,7 @@ public class SenatorialPoliticianDto extends PoliticianDto {
     }
 
     public SenatorialPoliticianDto(Politicians entity, Rating satisfactionRate, int monthsOfService, String lawMade) {
-        super(entity.name(), entity.retrievePoliticianNumber(), entity.getRating().getAverageRating(), satisfactionRate, "senatorial");
+        super(entity.fullName(), entity.retrievePoliticianNumber(), entity.getRating().getAverageRating(), satisfactionRate, "senatorial");
         this.monthsOfService = monthsOfService;
         this.mostSignificantLawMade = lawMade;
     }
@@ -27,7 +27,7 @@ public class SenatorialPoliticianDto extends PoliticianDto {
     @Override
     @ExcludeFromJacocoGeneratedCoverage
     public String toString() {
-        return "SenatorialPoliticianDto [name=" + this.getName() + ", id=" + this.getId() +
+        return "SenatorialPoliticianDto [fullName=" + this.getName() + ", id=" + this.getId() +
                 ", rating=" + this.getRating() + ", satisfactionRate=" + this.getSatisfactionRate() +
                 ", monthsOfService=" + this.monthsOfService + ", mostSignificantLawSigned=" + this.mostSignificantLawMade + "]";
     }

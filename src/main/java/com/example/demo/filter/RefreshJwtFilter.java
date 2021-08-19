@@ -26,7 +26,7 @@ public class RefreshJwtFilter implements Filter{
 			if (ex.getCause() instanceof RefreshTokenException) {
 				RefreshTokenException e = (RefreshTokenException) ex.getCause();
 				String jwt = JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate(e.getClaims().getSubject(),
-						e.getClaims().getId(), e.getClaims().get("name", String.class));
+						e.getClaims().getId(), e.getClaims().get("fullName", String.class));
 								
 				Cookie jwtCookie = new Cookie("accessJwt", jwt);
 				jwtCookie.setHttpOnly(true);

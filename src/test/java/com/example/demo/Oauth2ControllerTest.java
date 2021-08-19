@@ -23,7 +23,7 @@ public class Oauth2ControllerTest extends BaseSpringHateoasTest{
 	
 	final String SUBJECT = "test sub";
 	final String ID = "1111";
-	final String NAME = "test name";
+	final String NAME = "test fullName";
 
 	@Test
 	public void testHalFormsOauth2Response() throws Exception {

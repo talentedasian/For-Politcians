@@ -26,7 +26,7 @@ public class FacebookDataDeletion {
 	public ResponseEntity<?> deleteFacebookRelatedUserData(HttpServletRequest req) {
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
 		
-		String accNumber = FacebookUserRaterNumberImplementor.with(jwt.get("name", String.class), jwt.getId()).calculateEntityNumber().getAccountNumber();
+		String accNumber = FacebookUserRaterNumberImplementor.with(jwt.get("fullName", String.class), jwt.getId()).calculateEntityNumber().getAccountNumber();
 		
 		service.deleteUsingAccountNumber(accNumber);
 		

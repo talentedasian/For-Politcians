@@ -43,7 +43,7 @@ public class PoliticianDto {
 	@Override
 	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
-		return "PoliticianDto [name=" + name + ", id=" + id + ", rating=" + rating + ", type" + type + "]";
+		return "PoliticianDto [fullName=" + name + ", id=" + id + ", rating=" + rating + ", type" + type + "]";
 	}
 
 }

@@ -8,7 +8,7 @@ public record Name(String firstName, String lastName) {
     }
 
     public String fullName() {
-        if (lastName.isBlank() | lastName.isEmpty() | lastName == null) {
+        if (lastName == null || lastName.isBlank() || lastName.isEmpty()) {
             return firstName;
         }
         return firstName + " " + lastName;

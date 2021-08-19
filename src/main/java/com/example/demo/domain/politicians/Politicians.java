@@ -96,7 +96,7 @@ public class Politicians {
 	@Override
 	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
-		return "Politicians [name=" + name.fullName() + ", rating=" + rating + ", politicianNumber=" + politicianNumber.returnPoliticianNumber()
+		return "Politicians [fullName=" + name.fullName() + ", rating=" + rating + ", politicianNumber=" + politicianNumber.returnPoliticianNumber()
 				+ ", type=" + type.toString() +  "]";
 	}
 
@@ -114,7 +114,7 @@ public class Politicians {
 		return this.name;
 	}
 
-	public String name() {
+	public String fullName() {
 		return name.fullName();
 	}
 
@@ -174,7 +174,7 @@ public class Politicians {
 
 		public PoliticiansBuilder setFullName() {
 			if (firstName == null && lastName == null) {
-				throw new IllegalArgumentException("First and Last name cannot be null");
+				throw new IllegalArgumentException("First and Last fullName cannot be null");
 			}
 			
 			if (lastName == null) {
@@ -224,7 +224,7 @@ public class Politicians {
 		}
 		
 		public Politicians build() {
-			Assert.state(firstName != null | !firstName.isEmpty() | !firstName.isBlank(), "first name cannot be null");
+			Assert.state(firstName != null | !firstName.isEmpty() | !firstName.isBlank(), "first name cannot be left unspecified");
 
 			var name = new Name(firstName, lastName);
 			return new Politicians(name, politiciansRating, rating, new PoliticianNumber(name, null), null);

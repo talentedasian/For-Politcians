@@ -52,7 +52,7 @@ public class AddPoliticianFilterTest {
 	private final String content = """
 			{
 			    "first_name": "test",
-			    "last_name": "name",
+			    "last_name": "fullName",
 			    "rating": 0.01,
 			    "type": "Senatorial",
 			    "months_of_service": 99
@@ -120,7 +120,7 @@ public class AddPoliticianFilterTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("name", 
-					equalTo("test name")))
+					equalTo("test fullName")))
 			.andExpect(jsonPath("rating", 
 					equalTo(0.01)));
 	}

@@ -69,7 +69,7 @@ public class JwtDto extends RepresentationModel<JwtDto>{
 
 	@Override
 	public String toString() {
-		return "JwtDto [jwt=" + jwt + ", id=" + id + ", subject=" + subject + ", expiration=" + expiration + ", name=" + name + "]";
+		return "JwtDto [jwt=" + jwt + ", id=" + id + ", subject=" + subject + ", expiration=" + expiration + ", fullName=" + name + "]";
 	}
 	
 }

@@ -54,7 +54,7 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].rater.email", equalTo(rater.getEmail())))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].rater.name", equalTo(rater.getFacebookName())))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].rater.political_party", equalTo(rater.getPoliticalParties().toString())))
-			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.name", equalTo(politician.name())))
+			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.name", equalTo(politician.fullName())))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.id", equalTo(politician.retrievePoliticianNumber())))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.rating", equalTo(1.0D)))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.most_significant_law_made", containsStringIgnoringCase("law law law")))

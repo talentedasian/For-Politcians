@@ -18,7 +18,7 @@ public class PoliticianBuilderNumberCreationTest {
             .setFullName()
             .build();
 
-    @Test  // INFO : Using a Presidential Politician ( name was too long already)
+    @Test  // INFO : Using a Presidential Politician ( fullName was too long already)
     public void politicianNumberRetrievalShouldReturnCorrectPoliticianNumberWhenInstanceIsCreated() {
         var presidential = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder)
                 .build();
@@ -32,7 +32,7 @@ public class PoliticianBuilderNumberCreationTest {
                 .isEqualTo(presidential.retrievePoliticianNumber());
     }
 
-    @Test  // INFO : Using a Senatorial Politician ( name was too long already)
+    @Test  // INFO : Using a Senatorial Politician ( fullName was too long already)
     public void politicianNumberRetrievalShouldReturnCorrectPoliticianNumberWhenInstanceIsCreated2() {
         var presidential = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politicianBuilder)
                 .setTotalMonthsOfService(12)

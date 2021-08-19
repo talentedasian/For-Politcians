@@ -15,7 +15,7 @@ public class PoliticiansLogger {
 //			returning = "politician"
 //			)
 //	public void logSuccessfulSavedPolitician(Politicians politician) {
-//		MDC.put("fullname", politician.name());
+//		MDC.put("fullname", politician.fullName());
 //		MDC.put("polNumber", politician.retrievePoliticianNumber());
 //
 //		LoggerFactory.getLogger(PoliticiansLogger.class).info("saved with");
