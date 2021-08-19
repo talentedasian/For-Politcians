@@ -9,11 +9,12 @@ import org.testcontainers.utility.DockerImageName;
  * Classes that use an underlying database such as 
  * {@DataJpaTest} and {@SpringBootTest} must extend this class.
  */
-public class BaseClassTestsThatUsesDatabase {
+public abstract class BaseClassTestsThatUsesDatabase {
 
-	public static final PostgreSQLContainer<?> container = new PostgreSQLContainer<>(DockerImageName.parse("postgres")).withReuse(true);
+	public static PostgreSQLContainer<?> container;
 	
 	static {
+		container = new PostgreSQLContainer<>(DockerImageName.parse("postgres")).withReuse(true);
 		container.start();
 	}
 	
