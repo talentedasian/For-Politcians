@@ -1,24 +1,18 @@
 package com.example.demo.domain.userRaterNumber.facebook;
 
+import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.domain.userRaterNumber.AbstractUserRaterNumber;
 import com.example.demo.domain.userRaterNumber.LoginMechanism;
 
-public final class FacebookUserRaterNumberImplementor extends AbstractUserRaterNumber{
-	
-	/*OP stands for the Oauth2 Provider that is used for logging into the application. 
-	 * If facebook is used as the login mechanism or OP, OP will be replaced to FLM which 
-	 * stands for Facebook Login Mechanism. FL stands for the first two initials of your facebook
-	 * fullName. For example your facebook fullName is "test fullName politics", FL will be replaced to 'T' and 'N'.
-	 * If your facebook fullName is only made up of one word, FL will then be replaced with the first letter
-	 * of your fullName appended with "G".
-	 */
-	private final String pattern = "FLOP-00000000000000";
+public final class FacebookAccountNumberCalculator extends AbstractUserRaterNumber{
+
+	private final String pattern = AccountNumber.pattern;
 
 	public String getPattern() {
 		return pattern;
 	}
 	
-	private FacebookUserRaterNumberImplementor(String name, String accountNumber) {
+	private FacebookAccountNumberCalculator(String name, String accountNumber) {
 		super(name.split(" ")[0], name.split(" ")[1], accountNumber, LoginMechanism.FACEBOOK);
 	}
 	
@@ -26,7 +20,7 @@ public final class FacebookUserRaterNumberImplementor extends AbstractUserRaterN
 	 * Since there is no accurate way of knowing the facebook user's first fullName and last fullName
 	 * using its user info on facebook, the first two words in its fullName are considered as its Full Name.
 	 */
-	public static FacebookUserRaterNumberImplementor with(String name, String accountNumber) {
+	public static FacebookAccountNumberCalculator with(String name, String accountNumber) {
 		String[] nameArray = name.split(" ");
 		if (nameArray.length < 2) {
 			String firstName = nameArray[0];
@@ -36,18 +30,18 @@ public final class FacebookUserRaterNumberImplementor extends AbstractUserRaterN
 		}
 		String finalName = nameArray[0].concat(" " + nameArray[1]);
 		
-		return new FacebookUserRaterNumberImplementor(finalName, accountNumber);
+		return new FacebookAccountNumberCalculator(finalName, accountNumber);
 	}
 
 	@Override
-	protected FacebookUserRaterNumberImplementor calculateUserAccountNumber() {
+	protected FacebookAccountNumberCalculator calculateUserAccountNumber() {
 		String finalFirstSectionOfPattern = calculateFirstSectionOfPattern();
 		
 		String finalSecondSectionOfPattern = calculateSecondSectionOfPattern();
 		
 		String finalAccountNumber = combineSectionsOfPattern(finalFirstSectionOfPattern, "-" + finalSecondSectionOfPattern);
 		
-		return new FacebookUserRaterNumberImplementor(firstName() + " " + lastName(), finalAccountNumber);
+		return new FacebookAccountNumberCalculator(firstName() + " " + lastName(), finalAccountNumber);
 	}
 	
 	String calculateFirstSectionOfPattern() {

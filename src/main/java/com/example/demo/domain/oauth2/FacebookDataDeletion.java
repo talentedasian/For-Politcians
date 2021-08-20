@@ -2,7 +2,7 @@ package com.example.demo.domain.oauth2;
 
 import com.example.demo.adapter.in.service.RatingServiceAdapter;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
-import com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
+import com.example.demo.domain.userRaterNumber.facebook.FacebookAccountNumberCalculator;
 import io.jsonwebtoken.Claims;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +26,7 @@ public class FacebookDataDeletion {
 	public ResponseEntity<?> deleteFacebookRelatedUserData(HttpServletRequest req) {
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
 		
-		String accNumber = FacebookUserRaterNumberImplementor.with(jwt.get("fullName", String.class), jwt.getId()).calculateEntityNumber().getAccountNumber();
+		String accNumber = FacebookAccountNumberCalculator.with(jwt.get("fullName", String.class), jwt.getId()).calculateEntityNumber().getAccountNumber();
 		
 		service.deleteUsingAccountNumber(accNumber);
 		

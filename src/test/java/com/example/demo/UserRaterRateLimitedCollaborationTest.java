@@ -10,7 +10,8 @@ import com.example.demo.domain.enums.PoliticalParty;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
-import com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
+import com.example.demo.domain.userRaterNumber.AbstractUserRaterNumber;
+import com.example.demo.domain.userRaterNumber.facebook.FacebookAccountNumberCalculator;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,10 +44,12 @@ public class UserRaterRateLimitedCollaborationTest {
 
     final String NAME = "Any Name Really";
 
-    final String ID = "123456";
+    final String FACEBOOK_ID = "123456";
     final String POLITICIAN_NUMBER = politician.retrievePoliticianNumber();
 
-    final String ACCOUNT_NUMBER = new AccountNumber(ID, FacebookUserRaterNumberImplementor.with(NAME, ID)).retrieveAccountNumber();
+    AbstractUserRaterNumber accNumberCalc = FacebookAccountNumberCalculator.with(NAME, FACEBOOK_ID);
+
+    final String ACCOUNT_NUMBER = new AccountNumber(accNumberCalc.calculateEntityNumber().getAccountNumber()).accountNumber();
 
     @Mock RatingRepository ratingRepo;
     @Mock PoliticiansRepository polRepo;
@@ -58,13 +61,12 @@ public class UserRaterRateLimitedCollaborationTest {
 
     @Test
     public void shouldThrowAnExceptionBecauseUserIsRateLimited() {
-
         when(polRepo.findByPoliticianNumber(anyString())).thenReturn(Optional.of(politician));
 
         var service = new RatingService(ratingRepo, polRepo, rateLimitRepository);
 
         var rater = new UserRater.Builder()
-                .setAccountNumber(ID)
+                .setAccountNumber(ACCOUNT_NUMBER)
                 .setName(NAME)
                 .setPoliticalParty(PoliticalParty.DDS)
                 .setRateLimitRepo(rateLimitRepository)
@@ -84,13 +86,12 @@ public class UserRaterRateLimitedCollaborationTest {
 
     @Test
     public void shouldSaveRateLimitWithUsersAccountNumberAndPoliticianNumberThatIsRated() throws UserRateLimitedOnPoliticianException {
-
         when(polRepo.findByPoliticianNumber(anyString())).thenReturn(Optional.of(politician));
 
         var service = new RatingService(ratingRepo, polRepo, rateLimitRepository);
 
         var rater = new UserRater.Builder()
-                .setAccountNumber(ID)
+                .setAccountNumber(ACCOUNT_NUMBER)
                 .setName("Any Name Really")
                 .setPoliticalParty(PoliticalParty.DDS)
                 .setRateLimitRepo(rateLimitRepository)

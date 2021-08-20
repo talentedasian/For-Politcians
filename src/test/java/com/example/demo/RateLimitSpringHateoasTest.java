@@ -3,7 +3,7 @@ package com.example.demo;
 import com.example.demo.adapter.in.service.RateLimitingService;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.RateLimit;
-import com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
+import com.example.demo.domain.userRaterNumber.facebook.FacebookAccountNumberCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class RateLimitSpringHateoasTest {
 
 	final String NAME = "test";
 	final String ID = "123";
-	final String ACCOUNT_NUMBER = FacebookUserRaterNumberImplementor.with(NAME, ID).calculateEntityNumber().getAccountNumber();
+	final String ACCOUNT_NUMBER = FacebookAccountNumberCalculator.with(NAME, ID).calculateEntityNumber().getAccountNumber();
 	final String POLITICIAN_NUMBER = "123polNumber";
 
 	RateLimit rateLimit;

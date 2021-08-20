@@ -2,7 +2,6 @@ package com.example.demo.domain.entities;
 
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.enums.PoliticalParty;
-import com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
 
 import java.util.Optional;
 
@@ -19,9 +18,8 @@ public class UserRater {
 	private AccountNumber userAccountNumber;
 
 	public String returnUserAccountNumber() {
-		return userAccountNumber.retrieveAccountNumber();
+		return userAccountNumber.accountNumber();
 	}
-
 
 	public String getEmail() {
 		return email;
@@ -44,12 +42,12 @@ public class UserRater {
 	}
 
 	UserRater(String facebookName, PoliticalParty politicalParties, String email,
-			  String accNumber, RateLimitRepository rateLimitRepository) {
+			  AccountNumber accountNumber, RateLimitRepository rateLimitRepository) {
 		super();
 		this.facebookName = facebookName;
 		this.politicalParties = politicalParties;
-		this.email = email;  												// TODO : change with dependency injection rather than constructing itself.
-		this.userAccountNumber = new AccountNumber(accNumber, FacebookUserRaterNumberImplementor.with(facebookName, accNumber));
+		this.email = email;  									// TODO : change with dependency injection rather than constructing itself.
+		this.userAccountNumber = accountNumber;
 		this.rateLimitRepository = rateLimitRepository;
 	}
 
@@ -89,14 +87,15 @@ public class UserRater {
 	public boolean canRate(String polNumber) {
 		return isRateLimited(polNumber);
 	}
+
 	private boolean isRateLimited(String politicianNumber) {
-		Optional<RateLimit> rateLimit = rateLimitRepository.findUsingIdAndPoliticianNumber(userAccountNumber.retrieveAccountNumber(), politicianNumber);
+		Optional<RateLimit> rateLimit = rateLimitRepository.findUsingIdAndPoliticianNumber(userAccountNumber.accountNumber(), politicianNumber);
 
 		return rateLimit.isPresent() ? !rateLimit.get().isNotRateLimited() : false;
 	}
 
     public long daysLeftToRate(String polNumber) {
-		return rateLimitRepository.findUsingIdAndPoliticianNumber(userAccountNumber.retrieveAccountNumber(), polNumber).get().daysLeftOfBeingRateLimited().longValue();
+		return rateLimitRepository.findUsingIdAndPoliticianNumber(userAccountNumber.accountNumber(), polNumber).get().daysLeftOfBeingRateLimited().longValue();
     }
 
     public static class Builder {
@@ -135,7 +134,7 @@ public class UserRater {
 		}
 
 		public UserRater build() {
-			return new UserRater(name, politicalParty, email, userAccountNumber, repo);
+			return new UserRater(name, politicalParty, email, new AccountNumber(userAccountNumber), repo);
 		}
 
 

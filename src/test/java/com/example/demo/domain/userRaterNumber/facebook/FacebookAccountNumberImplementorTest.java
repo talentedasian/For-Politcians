@@ -15,7 +15,7 @@ public class FacebookAccountNumberImplementorTest {
 	
 	@Test
 	public void assertBehaviourOfFacebookAccountNumberPatternCreatorMethod() {
-		var accountNumberImplementor = FacebookUserRaterNumberImplementor
+		var accountNumberImplementor = FacebookAccountNumberCalculator
 				.with("Test Name Anything", NUMBER);
 		
 		Assertions.assertEquals(accountNumberImplementor.calculateEntityNumber().getAccountNumber(), ACCOUNT_NUMBER);
@@ -23,7 +23,7 @@ public class FacebookAccountNumberImplementorTest {
 	
 	@Test
 	public void assertBehaviourOfFacebookAccountNumberPatternCreatorMethodWithSingleWordName() {
-		var accountNumberImplementor = FacebookUserRaterNumberImplementor
+		var accountNumberImplementor = FacebookAccountNumberCalculator
 				.with("Test", NUMBER);
 		
 		Assertions.assertEquals(accountNumberImplementor.calculateEntityNumber().getAccountNumber(), ACCOUNT_NUMBER_SINGLE_WORD);
@@ -32,7 +32,7 @@ public class FacebookAccountNumberImplementorTest {
 	@ParameterizedTest
 	@ValueSource(strings = { "Jacob", "Christian", "Word", "Single" })
 	public void assertBehaviourOfFacebookAccountNumberPatternCreatorMethodWithSingleWordName(String name) {
-		var accountNumberImplementor = FacebookUserRaterNumberImplementor
+		var accountNumberImplementor = FacebookAccountNumberCalculator
 				.with(name, NUMBER);
 		
 		Assertions.assertEquals(accountNumberImplementor.calculateEntityNumber().getAccountNumber().substring(1),

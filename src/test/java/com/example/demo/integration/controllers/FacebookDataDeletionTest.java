@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate;
-import static com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor.with;
+import static com.example.demo.domain.userRaterNumber.facebook.FacebookAccountNumberCalculator.with;
 import static java.net.URI.create;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

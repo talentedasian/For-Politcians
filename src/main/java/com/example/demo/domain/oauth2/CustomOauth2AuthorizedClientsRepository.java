@@ -2,7 +2,7 @@ package com.example.demo.domain.oauth2;
 
 import com.example.demo.adapter.dto.FacebookUserInfo;
 import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
-import com.example.demo.domain.userRaterNumber.facebook.FacebookUserRaterNumberImplementor;
+import com.example.demo.domain.userRaterNumber.facebook.FacebookAccountNumberCalculator;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -105,7 +105,7 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 	private void addJwtCookie(OAuth2AuthorizedClient authorizedClient, HttpServletResponse response) throws URISyntaxException{
 		FacebookUserInfo userInfo = userInfoEndpointUtil.fetchUserInfo(authorizedClient);
 
-		String accountNumber = FacebookUserRaterNumberImplementor.with(userInfo.getName(), userInfo.getId()).calculateEntityNumber().getAccountNumber();
+		String accountNumber = FacebookAccountNumberCalculator.with(userInfo.getName(), userInfo.getId()).calculateEntityNumber().getAccountNumber();
 		String jwt = JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate(
 				userInfo.getEmail(),
 				accountNumber,
