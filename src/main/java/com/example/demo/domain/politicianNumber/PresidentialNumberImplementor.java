@@ -17,7 +17,7 @@ class PresidentialNumberImplementor extends PoliticianNumberImplementor {
         String initialFirstName = calculateFirstName(pattern);
         String initialLastName = calculateLastName(initialFirstName);
         String initialType = calculateType(initialLastName);
-        String finalPoliticianNumber = initialType.replaceAll("[0-9]", String.valueOf(getPolitician().hashCode()).substring(0,5));
+        String finalPoliticianNumber = initialType.replaceAll("[0-9]", String.valueOf(Math.abs(getPolitician().hashCode())).substring(0,5));
 
         return new PresidentialNumberImplementor(new Name(firstName, lastName), finalPoliticianNumber.substring(0, pattern.length()).toUpperCase());
     }

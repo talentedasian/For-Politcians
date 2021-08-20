@@ -1,17 +1,12 @@
 package com.example.demo.domain.politicianNumber;
 
 import com.example.demo.domain.politicians.Name;
+import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.Politicians;
 
 public class PoliticianNumberImplementor extends AbstractPoliticianNumber{
 
-	/*
-		F stands for Firstname
-		L stands for Lastname
-		T stands for what type the politician is e.g. Presidential
-		The leading zeroes are the last 4 numbers of the hashcode of the politician
-	 */
-	final String pattern = "FLTT-LFTT-0000";
+	final String pattern = PoliticianNumber.pattern;
 
 	final char FIRSTNAME_INITIAL = 'F';
 	final char LASTNAME_INITIAL = 'L';

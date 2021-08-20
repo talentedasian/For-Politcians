@@ -1,7 +1,9 @@
 package com.example.demo.unit.entities;
 
+import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,6 +33,20 @@ public class PoliticiansTest {
 				.build();
 		
 		assertEquals("Test Name", politicianWithFirstAndLastName.fullName());
+	}
+
+	@Test
+	public void testHashCodeActuallyWorksAsIntended() {
+		int expectedHashCode = new SenatorialBuilder(politicianBuilder)
+				.setTotalMonthsOfService(12)
+				.build()
+				.hashCode();
+		Politicians politician = politicianBuilder.build();
+		politician.setType(Politicians.Type.SENATORIAL);
+		int actualHashCode = politician.hashCode();
+
+
+		Assertions.assertEquals(expectedHashCode, actualHashCode);
 	}
 	
 }

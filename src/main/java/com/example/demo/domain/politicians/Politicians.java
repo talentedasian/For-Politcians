@@ -23,7 +23,7 @@ public class Politicians {
 	private Politicians.Type type;
 
 	public String retrievePoliticianNumber() {
-		return politicianNumber.returnPoliticianNumber();
+		return politicianNumber.politicianNumber();
 	}
 
 	public List<PoliticiansRating> getPoliticiansRating() {
@@ -48,20 +48,6 @@ public class Politicians {
 
 	public void setType(Politicians.Type type) {
 		this.type = type;
-	}
-
-	protected Politicians() {
-	}
-
-	@Deprecated //TODO : Change to a constructor consisting of all the fields.
-	protected Politicians(String firstName, String lastName, String fullName,
-			List<PoliticiansRating> politiciansRating, Rating rating, String politicianNumber, Type polType) {
-		super();
-		this.name = new Name(firstName, lastName);
-		this.politiciansRating = politiciansRating;
-		this.rating = rating;
-		this.politicianNumber = new PoliticianNumber(name, type);
-		this.type = polType;
 	}
 
 	protected Politicians(Name name,List<PoliticiansRating> politiciansRating, Rating rating, PoliticianNumber politicianNumber, Type polType) {
@@ -96,7 +82,7 @@ public class Politicians {
 	@Override
 	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
-		return "Politicians [fullName=" + name.fullName() + ", rating=" + rating + ", politicianNumber=" + politicianNumber.returnPoliticianNumber()
+		return "Politicians [fullName=" + name.fullName() + ", rating=" + rating + ", politicianNumber=" + politicianNumber.politicianNumber()
 				+ ", type=" + type.toString() +  "]";
 	}
 
@@ -227,7 +213,7 @@ public class Politicians {
 			Assert.state(firstName != null | !firstName.isEmpty() | !firstName.isBlank(), "first name cannot be left unspecified");
 
 			var name = new Name(firstName, lastName);
-			return new Politicians(name, politiciansRating, rating, new PoliticianNumber(name, null), null);
+			return new Politicians(name, politiciansRating, rating, null, null);
 		}
 
 	}

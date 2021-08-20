@@ -1,21 +1,41 @@
 package com.example.demo.domain.politicians;
 
-import com.example.demo.domain.politicianNumber.PoliticianNumberImplementor;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
-public record PoliticianNumber(Name name, Politicians.Type type) {
+public record PoliticianNumber(String politicianNumber) {
 
-    public static PoliticianNumber from(String firstName, String lastName, Politicians.Type type) {
-        return new PoliticianNumber(new Name(firstName, lastName), type);
+    /*
+		F stands for Firstname
+		L stands for Lastname
+		T stands for what type the politician is e.g. Presidential
+		The leading zeroes are the last 4 numbers of the hashcode of the politician
+	 */
+    public static final String pattern = "FLTT-LFTT-0000";
+
+    public PoliticianNumber(String politicianNumber) {
+        Assert.state(politicianNumber == null || StringUtils.hasText(politicianNumber), "politician number cannot be null or empty");
+        this.politicianNumber = politicianNumber;
+        Assert.state(isValid(), "politician number invalid");
     }
 
-    public String returnPoliticianNumber() {
-        var politician = new Politicians.PoliticiansBuilder()
-                .setFirstName(name.firstName())
-                .setLastName(name.lastName())
-                .build();
-        politician.setType(type);
+    private boolean isValid() {
+        return isPlaceMentOfHyphenCorrect() && lastSectionOnlyContainsDigits();
+    }
 
-        return PoliticianNumberImplementor.with(politician.recordName(), politician.getType()).calculateEntityNumber().getPoliticianNumber();
+    private boolean isPlaceMentOfHyphenCorrect() {
+        if (!politicianNumber.contains("-")) {
+            return false;
+        }
+        try {
+            return politicianNumber.charAt(4) == '-' && politicianNumber.charAt(9) == '-';
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
+    }
+
+    private boolean lastSectionOnlyContainsDigits() {
+        return politicianNumber.split("-")[2].matches("[0-9]+");
     }
 
 }
