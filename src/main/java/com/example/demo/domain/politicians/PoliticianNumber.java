@@ -16,26 +16,32 @@ public record PoliticianNumber(String politicianNumber) {
     public PoliticianNumber(String politicianNumber) {
         Assert.state(politicianNumber == null || StringUtils.hasText(politicianNumber), "politician number cannot be null or empty");
         this.politicianNumber = politicianNumber;
-        Assert.state(isValid(), "politician number invalid");
+        isValid();
     }
 
-    private boolean isValid() {
-        return isPlaceMentOfHyphenCorrect() && lastSectionOnlyContainsDigits();
+    private void isValid() {
+        isNumberOfSeparatorsCorrect();
+        isPlaceMentOfSeparatorsCorrect();
+        lastSectionOnlyContainsDigits();
     }
 
-    private boolean isPlaceMentOfHyphenCorrect() {
-        if (!politicianNumber.contains("-")) {
-            return false;
-        }
+    private void isNumberOfSeparatorsCorrect() {
+        long separatorCount = politicianNumber.chars().filter(it -> it == '-').count();
+        Assert.state(separatorCount == 2, "politician number has insufficient amount of separators");
+    }
+
+    private void isPlaceMentOfSeparatorsCorrect() {
+        Assert.state(politicianNumber.contains("-"), "politician number does not contain a separator");
         try {
-            return politicianNumber.charAt(4) == '-' && politicianNumber.charAt(9) == '-';
+            Assert.state(politicianNumber.charAt(4) == '-' && politicianNumber.charAt(9) == '-', "separators are wrongly placed");
         } catch (ArrayIndexOutOfBoundsException e) {
-            return false;
+            throw new IllegalStateException("politician number does not meet minimum length");
         }
     }
 
-    private boolean lastSectionOnlyContainsDigits() {
-        return politicianNumber.split("-")[2].matches("[0-9]+");
+    private void lastSectionOnlyContainsDigits() {
+        Assert.state(politicianNumber.split("-")[2].matches("[0-9]+"),
+                "last section of politician number contains invalid characters. should only contain digits");
     }
 
 }
