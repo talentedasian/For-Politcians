@@ -7,6 +7,7 @@ import com.example.demo.domain.averageCalculator.LowSatisfactionAverageCalculato
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 public class Rating {
 
@@ -74,5 +75,22 @@ public class Rating {
 		
 		return null;
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Rating rating = (Rating) o;
+
+		if (!Objects.equals(totalRating, rating.totalRating)) return false;
+		return Objects.equals(averageRating, rating.averageRating);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = totalRating != null ? totalRating.hashCode() : 0;
+		result = 31 * result + (averageRating != null ? averageRating.hashCode() : 0);
+		return result;
+	}
 }

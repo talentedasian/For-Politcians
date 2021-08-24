@@ -1,7 +1,6 @@
 package com.example.demo.domain.politicians;
 
 import com.example.demo.adapter.out.repository.RatingRepository;
-import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.Rating;
 import org.springframework.util.Assert;
@@ -38,6 +37,10 @@ public class Politicians {
 		return rating;
 	}
 
+	public double averageRating() {
+		return rating.getAverageRating();
+	}
+
 	public void setRating(Rating rating) {
 		this.rating = rating;
 	}
@@ -60,6 +63,17 @@ public class Politicians {
 	}
 
 	@Override
+	public String toString() {
+		return "Politicians{" +
+				"name=" + name +
+				", politiciansRating=" + politiciansRating +
+				", rating=" + rating +
+				", politicianNumber=" + politicianNumber +
+				", type=" + type +
+				'}';
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
@@ -67,23 +81,14 @@ public class Politicians {
 		Politicians that = (Politicians) o;
 
 		if (!politicianNumber.equals(that.politicianNumber)) return false;
-		return type == that.type;
+		return rating.equals(that.rating);
 	}
 
 	@Override
 	public int hashCode() {
-		int result = name.firstName().hashCode();
-		result = 31 * result + name.lastName().hashCode();
-		result = 31 * result + name.fullName().hashCode();
-		result = 31 * result + (type == null ? "type" : type.toString()).hashCode();
+		int result = rating != null ? rating.hashCode() : 0;
+		result = 31 * result + politicianNumber.hashCode();
 		return result;
-	}
-
-	@Override
-	@ExcludeFromJacocoGeneratedCoverage
-	public String toString() {
-		return "Politicians [fullName=" + name.fullName() + ", rating=" + rating + ", politicianNumber=" + politicianNumber.politicianNumber()
-				+ ", type=" + type.toString() +  "]";
 	}
 
 	public double calculateAverageRating(double ratingToAdd) {
@@ -219,7 +224,7 @@ public class Politicians {
 			Assert.state(firstName != null | !firstName.isEmpty() | !firstName.isBlank(), "first name cannot be left unspecified");
 
 			var name = new Name(firstName, lastName);
-			return new Politicians(name, politiciansRating, rating, null, null);
+			return new Politicians(name, politiciansRating, rating, new PoliticianNumber(politicianNumber), null);
 		}
 
 	}

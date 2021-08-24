@@ -19,6 +19,13 @@ public class PoliticianTypes {
 			return mostSignificantLawSigned;
 		}
 
+		@Override
+		@ExcludeFromJacocoGeneratedCoverage
+		public String toString() {
+			return "Politicians [name=" + fullName() + ", rating=" + averageRating() + ", politicianNumber=" + retrievePoliticianNumber()
+					+ ", mostSignificantLawMSigned=" + mostSignificantLawSigned + ", type=" + Type.SENATORIAL.toString() +  "]";
+		}
+
 		public static class PresidentialBuilder{
 			
 			private Politicians politician;
@@ -75,8 +82,9 @@ public class PoliticianTypes {
 		@Override
 		@ExcludeFromJacocoGeneratedCoverage
 		public String toString() {
-			return "SenatorialPolitician [totalMonthsOfServiceAsSenator=" + totalMonthsOfServiceAsSenator
-					+ ", mostSignificantLawMade=" + mostSignificantLawMade + ", politicianNumber=" + retrievePoliticianNumber() + "]";
+			return "Politicians [name=" + fullName() + ", rating=" + averageRating() + ", politicianNumber=" + retrievePoliticianNumber()
+					+ ", totalMonthsOfServiceAsSenator=" + totalMonthsOfServiceAsSenator + ", mostSignificantLawMade=" + mostSignificantLawMade
+					+ ", type=" + Type.SENATORIAL.toString() +  "]";
 		}
 
 		public static class SenatorialBuilder {

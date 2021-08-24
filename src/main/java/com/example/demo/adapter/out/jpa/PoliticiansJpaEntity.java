@@ -1,10 +1,13 @@
 package com.example.demo.adapter.out.jpa;
 
 import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician;
+import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician;
 import com.example.demo.domain.politicians.Politicians;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(indexes = @Index(columnList = "id") )
@@ -12,7 +15,8 @@ import java.util.List;
 public class PoliticiansJpaEntity {
 
     @Id
-    public String id;
+    @Column(unique = true)
+    private String id;
 
     @Column(nullable = false, name = "politician_first_name")
     private String firstName;
@@ -45,7 +49,7 @@ public class PoliticiansJpaEntity {
         this.firstName = firstName;
     }
 
-    public String lastName() {
+    public String getLastName() {
         return lastName;
     }
 
@@ -55,6 +59,10 @@ public class PoliticiansJpaEntity {
 
     public String name() {
         return fullName;
+    }
+
+    public String getFullName() {
+        return toPoliticians().fullName();
     }
 
     public void setFullName(String fullName) {
@@ -79,7 +87,7 @@ public class PoliticiansJpaEntity {
 
     public PoliticiansJpaEntity() {}
 
-    public PoliticiansJpaEntity(String id, String firstName, String lastName, String fullName,
+    protected PoliticiansJpaEntity(String id, String firstName, String lastName, String fullName,
                 RatingJpaEntity ratingJpaEntity, List<PoliticiansRatingJpaEntity> politiciansRating) {
         this.id = id;
         this.firstName = firstName;
@@ -90,9 +98,58 @@ public class PoliticiansJpaEntity {
     }
 
     public static PoliticiansJpaEntity from(Politicians politician) {
-        return new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
+        var jpaEntity = new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
                 politician.lastName(), politician.fullName(),
                 RatingJpaEntity.from(politician.getRating()), fromPoliticiansRating(politician.getPoliticiansRating()));
+
+        switch (politician.getType()) {
+            case PRESIDENTIAL -> {
+                var presidential = (PresidentialPolitician) politician;
+                return new PresidentialJpaEntity(jpaEntity, presidential.getMostSignificantLawSigned());
+            }
+            case SENATORIAL -> {
+                var senatorial = (SenatorialPolitician) politician;
+                return new SenatorialJpaEntity(jpaEntity, senatorial.getMostSignificantLawMade(), senatorial.getTotalMonthsOfServiceAsSenator());
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + politician.getType());
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "PoliticiansJpaEntity{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", ratingJpaEntity=" + ratingJpaEntity +
+                ", politiciansRating=" + politiciansRating +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PoliticiansJpaEntity that = (PoliticiansJpaEntity) o;
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(firstName, that.firstName)) return false;
+        if (!Objects.equals(lastName, that.lastName)) return false;
+        if (!Objects.equals(fullName, that.fullName)) return false;
+        if (!Objects.equals(ratingJpaEntity, that.ratingJpaEntity)) return false;
+        return Objects.equals(politiciansRating, that.politiciansRating);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (fullName != null ? fullName.hashCode() : 0);
+        result = 31 * result + (ratingJpaEntity != null ? ratingJpaEntity.hashCode() : 0);
+        result = 31 * result + (politiciansRating != null ? politiciansRating.hashCode() : 0);
+        return result;
     }
 
     private static List<PoliticiansRatingJpaEntity> fromPoliticiansRating(List<PoliticiansRating> entities) {
@@ -113,7 +170,6 @@ public class PoliticiansJpaEntity {
                         .build())
                 .toList();
     }
-
 
     public Politicians toPoliticians() {
         return new Politicians.PoliticiansBuilder(id)

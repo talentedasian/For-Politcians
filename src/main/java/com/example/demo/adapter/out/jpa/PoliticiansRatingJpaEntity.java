@@ -88,7 +88,7 @@ public class PoliticiansRatingJpaEntity {
     private static Politicians toPoliticians(PoliticiansJpaEntity jpaEntity) {
         return new Politicians.PoliticiansBuilder(jpaEntity.getId())
                 .setFirstName(jpaEntity.getFirstName())
-                .setLastName(jpaEntity.lastName())
+                .setLastName(jpaEntity.getLastName())
                 .setFullName()
                 .setRating(jpaEntity.getRatingJpaEntity().toRating())
                 .setPoliticiansRating(null)

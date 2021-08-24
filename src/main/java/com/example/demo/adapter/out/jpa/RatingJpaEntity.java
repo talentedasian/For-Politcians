@@ -6,6 +6,7 @@ import com.example.demo.domain.entities.Rating;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
+import java.util.Objects;
 
 @Embeddable
 public class RatingJpaEntity {
@@ -62,8 +63,27 @@ public class RatingJpaEntity {
         return "RatingJpaEntity{" +
                 "totalRating=" + totalRating +
                 ", averageRating=" + averageRating +
-                ", calculator=" + calculator +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RatingJpaEntity that = (RatingJpaEntity) o;
+
+        if (!Objects.equals(totalRating, that.totalRating)) return false;
+        if (!Objects.equals(averageRating, that.averageRating)) return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = totalRating != null ? totalRating.hashCode() : 0;
+        result = 31 * result + (averageRating != null ? averageRating.hashCode() : 0);
+        result = 31 * result + (calculator != null ? calculator.hashCode() : 0);
+        return result;
     }
 
     public Rating toRating() {
