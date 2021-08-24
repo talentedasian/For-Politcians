@@ -116,6 +116,10 @@ public class Politicians {
 		this.politicianNumber = new PoliticianNumber(politicianNumber);
     }
 
+    protected PoliticianNumber getPoliticianNumber() {
+		return this.politicianNumber;
+    }
+
     public static enum Type {
 		PRESIDENTIAL("presidential, PRESIDENTIAL"), SENATORIAL("senatorial, SENATORIAL"),
 		MAYOR("mayorial, MAYORIAL");

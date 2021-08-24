@@ -16,21 +16,22 @@ public record AccountNumber(String accountNumber) {
 
     public AccountNumber(String accountNumber) {
         Assert.state(accountNumber != null | StringUtils.hasText(accountNumber), "account number cannot be null or empty");
+        doesAccountNumberContainHyphen(accountNumber);
+        doesAccountNumberHaveSufficientLengthOnFirstSection(accountNumber);
+
         this.accountNumber = accountNumber;
-        Assert.state(isValid(), "Account number invalid");
     }
 
-    private boolean isValid() {
-        String accNumber = this.accountNumber;
-        return doesAccountNumberContainHyphen() && !(accNumber.split("-")[0].length() < 5);
+    private void doesAccountNumberHaveSufficientLengthOnFirstSection(String accountNumber) {
+        Assert.state(!(accountNumber.split("-")[0].length() < 5), "account number does not have sufficient length for the first section");
     }
 
-    private boolean doesAccountNumberContainHyphen() {
-        return accountNumber.contains("-");
+    private void doesAccountNumberContainHyphen(String accountNumber) {
+        Assert.state(accountNumber.contains("-"), "account number does not contain separator");
     }
 
     public static boolean isValid(String accountNumber) {
-        return new AccountNumber(accountNumber).isValid();
+        return new AccountNumber(accountNumber).isValid(accountNumber);
     }
 
 }

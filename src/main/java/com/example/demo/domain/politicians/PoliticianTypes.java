@@ -10,7 +10,7 @@ public class PoliticianTypes {
 
 		protected PresidentialPolitician(Politicians politician, String lawSigned) {
 			super(	politician.recordName(), politician.getPoliticiansRating(),
-					politician.getRating(), new PoliticianNumber(politician.retrievePoliticianNumber()),
+					politician.getRating(), politician.getPoliticianNumber(),
 					Type.PRESIDENTIAL);
 			this.mostSignificantLawSigned = lawSigned;
 		}
