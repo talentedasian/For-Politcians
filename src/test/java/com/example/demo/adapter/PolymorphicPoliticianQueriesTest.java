@@ -1,6 +1,5 @@
 package com.example.demo.adapter;
 
-import com.example.demo.adapter.out.jpa.PoliticiansJpaEntity;
 import com.example.demo.adapter.out.repository.PoliticianJpaAdapterRepository;
 import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
@@ -16,14 +15,15 @@ import testAnnotations.DatabaseTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DatabaseTest
-public class PolymorphicPoliticianPersistenceTest extends BaseClassTestsThatUsesDatabase {
+public class PolymorphicPoliticianQueriesTest extends BaseClassTestsThatUsesDatabase {
 
     final String FIRST_NAME = "firstName";
     final String LAST_NAME = "lastName";
 
     final String ID = "1";
 
-    @Autowired PoliticiansJpaRepository jpaRepo;
+    @Autowired
+    PoliticiansJpaRepository jpaRepo;
 
     PoliticianJpaAdapterRepository repo;
 
@@ -40,29 +40,26 @@ public class PolymorphicPoliticianPersistenceTest extends BaseClassTestsThatUses
     }
 
     @Test
-    public void shouldSavePoliticianOntoDatabaseWithCorrectTypeByPresidential() {
-        var presidential = new PresidentialBuilder(politician)
-                .setMostSignificantLawPassed("any law")
-                .build();
-
-        repo.save(presidential);
-        var politicianJpaEntity = PoliticiansJpaEntity.from(presidential);
-
-        assertThat(jpaRepo.findById(presidential.retrievePoliticianNumber()).get())
-                .isEqualTo(politicianJpaEntity);
-    }
-
-    @Test
-    public void shouldSavePoliticianOntoDatabaseWithCorrectTypeBySenatorial() {
+    public void polymorphicQueryShouldEqualToSenatorialPolitician() {
         var senatorial = new SenatorialBuilder(politician)
                 .setTotalMonthsOfService(12)
                 .build();
 
         repo.save(senatorial);
-        var politicianJpaEntity = PoliticiansJpaEntity.from(senatorial);
 
-        assertThat(jpaRepo.findById(senatorial.retrievePoliticianNumber()).get())
-                .isEqualTo(politicianJpaEntity);
+        assertThat(repo.findByPoliticianNumber(senatorial.retrievePoliticianNumber()).get())
+                .isEqualTo(senatorial);
+    }
+
+    @Test
+    public void polymorphicQueryShouldEqualToPresidentialPolitician() {
+        var presidential = new PresidentialBuilder(politician)
+                .build();
+
+        repo.save(presidential);
+
+        assertThat(repo.findByPoliticianNumber(presidential.retrievePoliticianNumber()).get())
+                .isEqualTo(presidential);
     }
 
 }
