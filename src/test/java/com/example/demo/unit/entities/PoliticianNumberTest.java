@@ -1,11 +1,8 @@
 package com.example.demo.unit.entities;
 
-import com.example.demo.domain.politicians.Name;
 import com.example.demo.domain.politicians.PoliticianNumber;
 import org.junit.jupiter.api.Test;
 
-import static com.example.demo.domain.politicianNumber.PoliticianNumberImplementor.with;
-import static com.example.demo.domain.politicians.Politicians.Type.PRESIDENTIAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -34,6 +31,26 @@ public class PoliticianNumberTest {
     }
 
     @Test
+    public void shouldThrowIllegalStateExceptionIfNullIsPassed() {
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> new PoliticianNumber(null));
+
+        assertThat(exception.getMessage())
+                .containsIgnoringCase("cannot be null");
+    }
+
+    @Test
+    public void shouldThrowIllegalStateExceptionIfOnlyWhitespaceIsPassed() {
+        String WHITESPACE_ONLY_POLITICIAN_NUMBER = "    ";
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> new PoliticianNumber(WHITESPACE_ONLY_POLITICIAN_NUMBER));
+
+        assertThat(exception.getMessage())
+                .containsIgnoringCase("cannot be null or empty");
+    }
+
+    @Test
     public void shouldThrowIllegalStateExceptionIfLastSectionContainsNonDigits() {
         String POLITICIAN_NUMBER_LAST_SECTION_CONTAINS_NON_DIGITS = "RDPP-DRPP-0000dasd";
 
@@ -46,7 +63,7 @@ public class PoliticianNumberTest {
 
     @Test
     public void shouldCreateInstanceOfPoliticianNumberWhenConstraintsAreMet() {
-        String EXPECTED_POLITICIAN_NUMBER = with(new Name("firstname", "lastname"), PRESIDENTIAL).calculateEntityNumber().getPoliticianNumber();
+        String EXPECTED_POLITICIAN_NUMBER = "RDPP-DRPP-00000000";
 
         assertThat(new PoliticianNumber(EXPECTED_POLITICIAN_NUMBER).politicianNumber())
                 .isEqualTo(EXPECTED_POLITICIAN_NUMBER);

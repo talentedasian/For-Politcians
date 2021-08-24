@@ -3,12 +3,12 @@ package com.example.demo.domain.politicianNumber;
 import com.example.demo.domain.politicians.Name;
 import com.example.demo.domain.politicians.PoliticianNumber;
 
-import static com.example.demo.domain.politicians.Politicians.Type.PRESIDENTIAL;
+import static com.example.demo.domain.politicians.Politicians.Type.SENATORIAL;
 
-class PresidentialNumberImplementor extends AbstractPoliticianNumberCalculator {
+final class SenatorialNumberCalculator extends AbstractPoliticianNumberCalculator{
 
-    public static PoliticianNumberCalculator create() {
-        return new PresidentialNumberImplementor();
+    static PoliticianNumberCalculator create() {
+        return new SenatorialNumberCalculator();
     }
 
     @Override
@@ -26,19 +26,19 @@ class PresidentialNumberImplementor extends AbstractPoliticianNumberCalculator {
     }
 
     private String calculateLastName(String pattern, String lastName) {
-        char toReplace = (lastName == null | (lastName.isBlank() || lastName.isEmpty())) ? 'P' : lastName.charAt(0);
+        char toReplace = (lastName == null | (lastName.isBlank() || lastName.isEmpty())) ? 'S' : lastName.charAt(0);
         return pattern.replace(LASTNAME_INITIAL, toReplace);
     }
 
     private String calculateType(String pattern) {
-        return pattern.replace(TYPE_INITIAL, 'P');
+        return pattern.replace(TYPE_INITIAL, 'S');
     }
 
     private String numberOfPoliticianUsingNameAndType(Name name) {
         int result = name.firstName().hashCode();
         result = 31 * result + name.lastName() == null ? "lastname".hashCode() : name.lastName().hashCode();
         result = 31 * result + name.fullName().hashCode();
-        result = 31 * result + PRESIDENTIAL.toString().hashCode();
+        result = 31 * result + SENATORIAL.toString().hashCode();
         return String.valueOf(Math.abs(result));
     }
 

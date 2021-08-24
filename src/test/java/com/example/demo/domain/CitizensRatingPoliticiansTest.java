@@ -4,6 +4,9 @@ import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
+import com.example.demo.domain.politicianNumber.PoliticianNumberCalculator;
+import com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory;
+import com.example.demo.domain.politicians.Name;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
@@ -21,7 +24,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 public class CitizensRatingPoliticiansTest {
 
-    PoliticiansBuilder politicianBuilder = new PoliticiansBuilder()
+    PoliticianNumberCalculator polNumberCalculator = PoliticianNumberCalculatorFactory.politicianCalculator(Politicians.Type.PRESIDENTIAL);
+    final String POLITICIAN_NUMBER  = polNumberCalculator.calculatePoliticianNumber(new Name("random", "name")).politicianNumber();
+
+    PoliticiansBuilder politicianBuilder = new PoliticiansBuilder(POLITICIAN_NUMBER)
             .setPoliticiansRating(null)
             .setFirstName("Random")
             .setLastName("Name")

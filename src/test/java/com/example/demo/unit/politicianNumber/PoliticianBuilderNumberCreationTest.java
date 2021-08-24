@@ -1,6 +1,8 @@
 package com.example.demo.unit.politicianNumber;
 
-import com.example.demo.domain.politicianNumber.PoliticianNumberImplementor;
+import com.example.demo.domain.politicianNumber.PoliticianNumberCalculator;
+import com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory;
+import com.example.demo.domain.politicians.Name;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
 import org.junit.jupiter.api.Test;
@@ -12,7 +14,10 @@ public class PoliticianBuilderNumberCreationTest {
     final String FIRST_NAME = "firstname";
     final String LAST_NAME = "lastname";
 
-    Politicians politicianBuilder = new Politicians.PoliticiansBuilder()
+    PoliticianNumberCalculator polNumberCalculator = PoliticianNumberCalculatorFactory.politicianCalculator(Politicians.Type.PRESIDENTIAL);
+    final String POLITICIAN_NUMBER  = polNumberCalculator.calculatePoliticianNumber(new Name(FIRST_NAME, LAST_NAME)).politicianNumber();
+
+    Politicians politicianBuilder = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
             .setFullName()
@@ -25,8 +30,8 @@ public class PoliticianBuilderNumberCreationTest {
 
         Politicians.Type POLITICIAN_TYPE = presidential.getType();
 
-        PoliticianNumberImplementor polNumberCalculator = PoliticianNumberImplementor.with(presidential.recordName(), POLITICIAN_TYPE);
-        final String EXPECTED_POLITICIAN_NUMBER = polNumberCalculator.calculateEntityNumber().getPoliticianNumber();
+        PoliticianNumberCalculator polNumberCalculator = PoliticianNumberCalculatorFactory.politicianCalculator(Politicians.Type.PRESIDENTIAL);
+        final String EXPECTED_POLITICIAN_NUMBER = polNumberCalculator.calculatePoliticianNumber(presidential.recordName()).politicianNumber();
 
         assertThat(EXPECTED_POLITICIAN_NUMBER)
                 .isEqualTo(presidential.retrievePoliticianNumber());
@@ -40,8 +45,8 @@ public class PoliticianBuilderNumberCreationTest {
 
         Politicians.Type POLITICIAN_TYPE = presidential.getType();
 
-        PoliticianNumberImplementor polNumberCalculator = PoliticianNumberImplementor.with(presidential.recordName(), POLITICIAN_TYPE);
-        final String EXPECTED_POLITICIAN_NUMBER = polNumberCalculator.calculateEntityNumber().getPoliticianNumber();
+        PoliticianNumberCalculator polNumberCalculator = PoliticianNumberCalculatorFactory.politicianCalculator(Politicians.Type.SENATORIAL);
+        final String EXPECTED_POLITICIAN_NUMBER = polNumberCalculator.calculatePoliticianNumber(presidential.recordName()).politicianNumber();
 
         assertThat(EXPECTED_POLITICIAN_NUMBER)
                 .isEqualTo(presidential.retrievePoliticianNumber());

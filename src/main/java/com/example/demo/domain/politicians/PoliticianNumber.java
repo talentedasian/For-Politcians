@@ -14,7 +14,7 @@ public record PoliticianNumber(String politicianNumber) {
     public static final String pattern = "FLTT-LFTT-0000";
 
     public PoliticianNumber(String politicianNumber) {
-        Assert.state(politicianNumber == null || StringUtils.hasText(politicianNumber), "politician number cannot be null or empty");
+        if (politicianNumber == null || !StringUtils.hasText(politicianNumber)) throw new IllegalStateException("politician number cannot be null or empty");
         this.politicianNumber = politicianNumber;
         isValid();
     }

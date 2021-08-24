@@ -2,8 +2,6 @@ package com.example.demo.domain.politicians;
 
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 
-import static com.example.demo.domain.politicianNumber.PoliticianNumberImplementor.with;
-
 public class PoliticianTypes {
 
 	public static class PresidentialPolitician extends Politicians{
@@ -12,7 +10,7 @@ public class PoliticianTypes {
 
 		protected PresidentialPolitician(Politicians politician, String lawSigned) {
 			super(	politician.recordName(), politician.getPoliticiansRating(),
-					politician.getRating(), new PoliticianNumber(with(politician.recordName(), Type.PRESIDENTIAL).calculateEntityNumber().getPoliticianNumber()),
+					politician.getRating(), new PoliticianNumber(politician.retrievePoliticianNumber()),
 					Type.PRESIDENTIAL);
 			this.mostSignificantLawSigned = lawSigned;
 		}
@@ -46,7 +44,6 @@ public class PoliticianTypes {
 			}
 
 			public PresidentialPolitician build() {
-
 				return new PresidentialPolitician(politician, mostSignificantLawSigned);
 			}
 			
@@ -69,7 +66,7 @@ public class PoliticianTypes {
 
 		protected SenatorialPolitician(Politicians politician, int monthsOfService, String lawMade) {
 			super(	politician.recordName(), politician.getPoliticiansRating(),
-					politician.getRating(), new PoliticianNumber(with(politician.recordName(), Type.SENATORIAL).calculateEntityNumber().getPoliticianNumber()),
+					politician.getRating(), new PoliticianNumber(politician.retrievePoliticianNumber()),
 					Type.SENATORIAL);
 			this.totalMonthsOfServiceAsSenator = monthsOfService;
 			this.mostSignificantLawMade = lawMade;			 

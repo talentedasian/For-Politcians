@@ -23,7 +23,7 @@ public class Politicians {
 	private Politicians.Type type;
 
 	public String retrievePoliticianNumber() {
-		return politicianNumber.politicianNumber();
+		return politicianNumber == null ? null : politicianNumber.politicianNumber();
 	}
 
 	public List<PoliticiansRating> getPoliticiansRating() {
@@ -75,7 +75,7 @@ public class Politicians {
 		int result = name.firstName().hashCode();
 		result = 31 * result + name.lastName().hashCode();
 		result = 31 * result + name.fullName().hashCode();
-		result = 31 * result + type.hashCode();
+		result = 31 * result + (type == null ? "type" : type.toString()).hashCode();
 		return result;
 	}
 
@@ -112,7 +112,11 @@ public class Politicians {
 		return name.lastName();
 	}
 
-	public static enum Type {
+    public void registerPoliticianNumber(String politicianNumber) {
+		this.politicianNumber = new PoliticianNumber(politicianNumber);
+    }
+
+    public static enum Type {
 		PRESIDENTIAL("presidential, PRESIDENTIAL"), SENATORIAL("senatorial, SENATORIAL"),
 		MAYOR("mayorial, MAYORIAL");
 
@@ -140,8 +144,6 @@ public class Politicians {
 		public PoliticiansBuilder(String politicianNumber) {
 			this.politicianNumber = politicianNumber;
 		}
-
-		public PoliticiansBuilder() {}
 
 		public PoliticiansBuilder setId(Integer id) {
 			this.id = id;
