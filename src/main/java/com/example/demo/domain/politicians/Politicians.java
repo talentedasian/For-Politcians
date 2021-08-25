@@ -105,6 +105,7 @@ public class Politicians {
 	}
 
 	public void rate(PoliticiansRating rating) {
+		calculateAverageRating(rating.getRating());
 		politiciansRating.add(rating);
 		totalCountsOfRating++;
 	}

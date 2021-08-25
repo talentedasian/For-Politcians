@@ -5,6 +5,7 @@ import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.UserRater;
+import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
@@ -48,7 +49,7 @@ public class RatingService {
 		}
 
 		// INFO : Make sure to rate limit the rater
-		rateLimitingService.rateLimitUser(rating.getRater().returnUserAccountNumber(), polNumber);
+		rateLimitingService.rateLimitUser(rating.getRater().returnUserAccountNumber(), new PoliticianNumber(polNumber));
 
 		rating.ratePolitician();
 		

@@ -3,6 +3,7 @@ package com.example.demo.adapter.out.repository;
 import com.example.demo.adapter.dto.RateLimitJpaEntity;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.RateLimit;
+import com.example.demo.domain.politicians.PoliticianNumber;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Repository;
@@ -29,8 +30,8 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
     }
 
     @Override
-    public Optional<RateLimit> findUsingIdAndPoliticianNumber(String id, String politicianNumber) {
-        var dto = new RateLimitJpaEntity(id, politicianNumber);
+    public Optional<RateLimit> findUsingIdAndPoliticianNumber(String id, PoliticianNumber politicianNumber) {
+        var dto = new RateLimitJpaEntity(id, politicianNumber.politicianNumber());
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnorePaths("id")
@@ -42,17 +43,13 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
     }
 
     @Override
-    public void deleteUsingIdAndPoliticianNumber(String id, String politicianNumber) {
-        var rateLimit = new RateLimit();
-        rateLimit.setId(id);
-        rateLimit.setPoliticianNumber(politicianNumber);
-
-        rateRepo.deleteByAccountNumberAndPoliticianNumber(id, politicianNumber);
+    public void deleteUsingIdAndPoliticianNumber(String id, PoliticianNumber politicianNumber) {
+        rateRepo.deleteByAccountNumberAndPoliticianNumber(id, politicianNumber.politicianNumber());
     }
 
     @Override
-    public long countUsingIdAndPoliticianNumber(String id, String polNumber) {
-        var rateLimit = new RateLimitJpaEntity(id, polNumber);
+    public long countUsingIdAndPoliticianNumber(String id, PoliticianNumber polNumber) {
+        var rateLimit = new RateLimitJpaEntity(id, polNumber.politicianNumber());
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withMatcher("accountNumber", match -> match.exact())

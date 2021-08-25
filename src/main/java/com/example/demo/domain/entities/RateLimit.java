@@ -1,5 +1,7 @@
 package com.example.demo.domain.entities;
 
+import com.example.demo.domain.politicians.PoliticianNumber;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +13,7 @@ public class RateLimit {
 
 	private String id;
 
-	private String politicianNumber;
+	private PoliticianNumber politicianNumber;
 
 	private ExpirationDate expirationDate;
 
@@ -24,36 +26,28 @@ public class RateLimit {
 	}
 
 	public String politicianNumber() {
-		return politicianNumber;
+		return politicianNumber.politicianNumber();
 	}
 
 	public void setPoliticianNumber(String politicianNumber) {
-		this.politicianNumber = politicianNumber;
+		this.politicianNumber = new PoliticianNumber(politicianNumber);
 	}
 
 	public LocalDate expirationDate() {
 		return expirationDate.expirationDate();
 	}
 
-	public RateLimit(String id, String politicianNumber, LocalDate expirationDate) {
+	public RateLimit(String id, PoliticianNumber politicianNumber, LocalDate expirationDate) {
 		this.id = id;
 		this.politicianNumber = politicianNumber;
 		this.expirationDate = new ExpirationDate(expirationDate);
 	}
 
-	public RateLimit(String id, String politicianNumber, ExpirationDate expirationDate) {
+	public RateLimit(String id, PoliticianNumber politicianNumber, ExpirationDate expirationDate) {
 		this.id = id;
 		this.politicianNumber = politicianNumber;
 		this.expirationDate = expirationDate;
 	}
-
-	public static RateLimit withNotExpiredRateLimit(String id, String politicianNumber) {
-		return cache.computeIfAbsent(id, (key) -> {
-			var rateLimit = new RateLimit(id, politicianNumber, LocalDate.now().minusDays(8));
-
-			return rateLimit;
-		});
-	};
 
 	public RateLimit() {
 		super();
@@ -86,7 +80,7 @@ public class RateLimit {
 	}
 
 	public boolean isNotRateLimited() {
-		return expirationDate.isNotRateLimited();
+		return expirationDate == null ? true : expirationDate.isNotRateLimited();
 	}
 
 	public Integer daysLeftOfBeingRateLimited() {

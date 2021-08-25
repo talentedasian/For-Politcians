@@ -2,6 +2,7 @@ package com.example.demo.adapter.out.repository;
 
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.RateLimit;
+import com.example.demo.domain.politicians.PoliticianNumber;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,7 @@ public class InMemoryRateLimitRepository implements RateLimitRepository {
     }
 
     @Override
-    public Optional<RateLimit> findUsingIdAndPoliticianNumber(String id, String politicianNumber) {
+    public Optional<RateLimit> findUsingIdAndPoliticianNumber(String id, PoliticianNumber politicianNumber) {
         for (RateLimit entity : List.copyOf(database.values())) {
             if (entity.id().equals(id) && entity.politicianNumber().equals(politicianNumber)) {
                 return Optional.of(entity);
@@ -29,19 +30,19 @@ public class InMemoryRateLimitRepository implements RateLimitRepository {
     }
 
     @Override
-    public void deleteUsingIdAndPoliticianNumber(String id, String politicianNumber) {
+    public void deleteUsingIdAndPoliticianNumber(String id, PoliticianNumber politicianNumber) {
         for (RateLimit entity : List.copyOf(database.values())) {
-            if (entity.id().equals(id) && entity.politicianNumber().equals(politicianNumber)) {
+            if (entity.id().equals(id) && entity.politicianNumber().equals(politicianNumber.politicianNumber())) {
                 database.remove(entity);
             }
         }
     }
 
     @Override
-    public long countUsingIdAndPoliticianNumber(String id, String polNumber) {
+    public long countUsingIdAndPoliticianNumber(String id, PoliticianNumber polNumber) {
         long count = 0;
         for (RateLimit entity : List.copyOf(database.values())) {
-            if (entity.id().equals(id) && entity.politicianNumber().equals(polNumber)) {
+            if (entity.id().equals(id) && entity.politicianNumber().equals(polNumber.politicianNumber())) {
                 count++;
             }
         }

@@ -2,6 +2,7 @@ package com.example.demo.adapter.in.service;
 
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.RateLimit;
+import com.example.demo.domain.politicians.PoliticianNumber;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -17,7 +18,8 @@ public class RateLimitingService {
 
 	@Transactional(readOnly = true)
 	public Optional<RateLimit> findRateLimitInPolitician(String accountNumber, String politicianNumber) {
-		return repo.findUsingIdAndPoliticianNumber(accountNumber, politicianNumber);
+		PoliticianNumber.tryParse(politicianNumber);
+		return repo.findUsingIdAndPoliticianNumber(accountNumber, new PoliticianNumber(politicianNumber));
 	}
 	
 	/*
@@ -26,7 +28,7 @@ public class RateLimitingService {
 	 * rate limit is reflected and not the outdated one. 
 	 */
 	@Transactional
-	public RateLimit rateLimitUser(String accNumber, String polNumber) {
+	public RateLimit rateLimitUser(String accNumber, PoliticianNumber polNumber) {
 		var rateLimit = new RateLimit(accNumber, polNumber, LocalDate.now());
 
 		deleteRateLimit(accNumber, polNumber);
@@ -35,24 +37,11 @@ public class RateLimitingService {
 	}
 
 	/*
-	 * Probably going to change the access modifier to avoid
-	 * being used everywhere. This should only be used for tests.
-	 */
-	@Transactional
-	public RateLimit rateLimitUserForTests(String accNumber, String polNumber) {
-		var rateLimitToBeSaved = RateLimit.withNotExpiredRateLimit(accNumber, polNumber);
-		
-		deleteRateLimit(accNumber, polNumber);
-		RateLimit rateLimit = repo.save(rateLimitToBeSaved);
-		return rateLimit;
-	}
-	
-	/*
 	 * Probably going to change the access modifier to avoid 
 	 * being used everywhere. This should only be used for tests.
 	 */
 	@Transactional
-	public void deleteRateLimit(String id, String politicianNumber) {
+	public void deleteRateLimit(String id, PoliticianNumber politicianNumber) {
 		repo.deleteUsingIdAndPoliticianNumber(id, politicianNumber);
 	}
 

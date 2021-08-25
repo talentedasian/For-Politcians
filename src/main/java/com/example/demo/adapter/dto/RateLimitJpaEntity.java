@@ -1,6 +1,7 @@
 package com.example.demo.adapter.dto;
 
 import com.example.demo.domain.entities.RateLimit;
+import com.example.demo.domain.politicians.PoliticianNumber;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -78,7 +79,7 @@ public class RateLimitJpaEntity {
 	}
 
 	public RateLimit toRateLimit() {
-		return new RateLimit(accountNumber, politicianNumber, dateCreated);
+		return new RateLimit(accountNumber, new PoliticianNumber(politicianNumber), dateCreated);
 	}
 
 }

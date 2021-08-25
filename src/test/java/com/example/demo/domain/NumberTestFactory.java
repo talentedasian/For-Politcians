@@ -5,12 +5,12 @@ import com.example.demo.domain.politicians.PoliticianNumber;
 
 public final class NumberTestFactory {
 
-    public static String ACC_NUMBER() {
-        return AccountNumber.pattern;
+    public static AccountNumber ACC_NUMBER() {
+        return new AccountNumber("FLOPM-00000000000000");
     }
 
-    public static String POL_NUMBER() {
-        return PoliticianNumber.pattern;
+    public static PoliticianNumber POL_NUMBER() {
+        return new PoliticianNumber(PoliticianNumber.pattern);
     }
 
 }

@@ -13,11 +13,11 @@ public record ExpirationDate(LocalDate dateCreated) {
     }
 
     public boolean isNotRateLimited() {
-        return this.dateCreated == null || LocalDate.now().minusDays(DAYS_TILL_EXPIRATION).isBefore(dateCreated);
+        return this.dateCreated == null || LocalDate.now().minusDays(DAYS_TILL_EXPIRATION).isAfter(dateCreated);
     }
 
     public String daysLeftTillRateLimited() {
-        Assert.state(isNotRateLimited(), "should not be rate limited");
+        Assert.state(!isNotRateLimited(), "should be rate limited");
         return String.valueOf(dateCreated.getDayOfMonth() - LocalDate.now().minusDays(DAYS_TILL_EXPIRATION).getDayOfMonth());
     }
 

@@ -19,6 +19,10 @@ public record PoliticianNumber(String politicianNumber) {
         isValid();
     }
 
+    public static void tryParse(String politicianNumber) {
+        new PoliticianNumber(politicianNumber);
+    }
+
     private void isValid() {
         isNumberOfSeparatorsCorrect();
         isPlaceMentOfSeparatorsCorrect();
@@ -27,7 +31,8 @@ public record PoliticianNumber(String politicianNumber) {
 
     private void isNumberOfSeparatorsCorrect() {
         long separatorCount = politicianNumber.chars().filter(it -> it == '-').count();
-        Assert.state(separatorCount == 2, "politician number has insufficient amount of separators");
+        Assert.state(separatorCount == 2, "politician number has insufficient amount of separators. only "
+                + separatorCount + " separators found");
     }
 
     private void isPlaceMentOfSeparatorsCorrect() {

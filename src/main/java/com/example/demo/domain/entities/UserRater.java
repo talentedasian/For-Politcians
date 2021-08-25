@@ -81,7 +81,7 @@ public class UserRater {
 	}
 
 	public void rateLimitUser(PoliticianNumber polNumber) {
-		rateLimit.put(polNumber, new RateLimit(userAccountNumber.accountNumber(), polNumber.politicianNumber(), LocalDate.now()));
+		rateLimit.put(polNumber, new RateLimit(userAccountNumber.accountNumber(), polNumber, LocalDate.now()));
 	}
 
 	private boolean isRateLimited(String politicianNumber) {

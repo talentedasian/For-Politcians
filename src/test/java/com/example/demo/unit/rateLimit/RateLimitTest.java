@@ -1,41 +1,54 @@
 package com.example.demo.unit.rateLimit;
 
+import com.example.demo.domain.NumberTestFactory;
 import com.example.demo.domain.entities.RateLimit;
+import com.example.demo.domain.politicians.PoliticianNumber;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RateLimitTest {
 
-	final String POLITICIAN_NUMBER = "123polNumber";
-	final String ACCOUNT_NUMBER = "TGFLM-00000000000123";
+	final PoliticianNumber POLITICIAN_NUMBER = NumberTestFactory.POL_NUMBER();
+	final String ACCOUNT_NUMBER = NumberTestFactory.ACC_NUMBER().accountNumber();
 	
 	@Test
 	public void shouldNotBeRateLimited() {
-		var rate = RateLimit.withNotExpiredRateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER);
+		var rate = new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now().minusDays(8));
 		
 		assertTrue(rate.isNotRateLimited());
 	}
 	
 	@Test
-	public void shouldBeNullDaysLeftWhenNotRateLimited() {
-		var rate = RateLimit.withNotExpiredRateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER);
-		
-		assertNull(rate.daysLeftOfBeingRateLimited());
+	public void shouldThrowIllegalStateExceptionWhenRetrievingDaysLeftToRateWhenRateIsNotRateLimited() {
+		var rate = new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now().minusDays(9));
+
+		assertThrows(IllegalStateException.class, () -> rate.daysLeftOfBeingRateLimited(), "should be rate limited");
+	}
+
+	@Test
+	public void shouldReturnDaysLeftToRateAgainWhenRateIsRateLimited() {
+		var rate = new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now());
+
+		assertThat(rate.daysLeftOfBeingRateLimited())
+				.isEqualTo(7);
 	}
 	
 	@Test
 	public void shouldNotBeRateLimitedWhenNullDate() {
 		var rate = new RateLimit();
 		rate.setId(ACCOUNT_NUMBER);
-		rate.setPoliticianNumber(POLITICIAN_NUMBER);
+		rate.setPoliticianNumber(POLITICIAN_NUMBER.politicianNumber());
 		
 		assertTrue(rate.isNotRateLimited());
 	}
 	
 	@Test
 	public void shouldBeRateLimited() {
-		var rate = RateLimit.withNotExpiredRateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER);
+		var rate = new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now());
 		
 		assertFalse(rate.isNotRateLimited());
 	}

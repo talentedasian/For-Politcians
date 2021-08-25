@@ -8,6 +8,7 @@ import com.example.demo.domain.NumberTestFactory;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.*;
 import com.example.demo.domain.enums.PoliticalParty;
+import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
@@ -34,7 +35,7 @@ public class UserRaterRateLimitedCollaborationTest {
 
     RateLimitRepository rateLimitRepository;
 
-    PoliticiansBuilder politicianBuilder = new PoliticiansBuilder(NumberTestFactory.POL_NUMBER())
+    PoliticiansBuilder politicianBuilder = new PoliticiansBuilder(NumberTestFactory.POL_NUMBER().politicianNumber())
             .setFirstName("Random")
             .setLastName("Name")
             .setPoliticiansRating(null)
@@ -70,6 +71,7 @@ public class UserRaterRateLimitedCollaborationTest {
                 .setAccountNumber(ACCOUNT_NUMBER)
                 .setName(NAME)
                 .setPoliticalParty(PoliticalParty.DDS)
+                .setRateLimit(null)
                 .build();
 
         var rating = new PoliticiansRating.Builder()
@@ -79,7 +81,7 @@ public class UserRaterRateLimitedCollaborationTest {
                 .setRater(rater)
                 .build();
 
-        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now()));
+        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER, new PoliticianNumber(POLITICIAN_NUMBER), LocalDate.now()));
 
         assertThrows(UserRateLimitedOnPoliticianException.class, () -> service.saveRatings(rating));
     }
@@ -104,10 +106,10 @@ public class UserRaterRateLimitedCollaborationTest {
                 .setRater(rater)
                 .build();
 
-        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now().minusDays(8)));
+        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER, new PoliticianNumber(POLITICIAN_NUMBER), LocalDate.now().minusDays(8)));
         service.saveRatings(rating);
 
-        var rateLimit = rateLimitRepository.findUsingIdAndPoliticianNumber(ACCOUNT_NUMBER, POLITICIAN_NUMBER);
+        var rateLimit = rateLimitRepository.findUsingIdAndPoliticianNumber(ACCOUNT_NUMBER, new PoliticianNumber(POLITICIAN_NUMBER));
 
         assertAll(
                 () -> assertThat(rateLimit)

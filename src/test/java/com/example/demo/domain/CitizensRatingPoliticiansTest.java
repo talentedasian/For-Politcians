@@ -48,10 +48,11 @@ public class CitizensRatingPoliticiansTest {
         Double EXPECTED_CALCULATED_AVERAGE_RATING = 2.734D;
 
         var rater = new UserRater.Builder()
-                .setAccountNumber(NumberTestFactory.ACC_NUMBER())
+                .setAccountNumber(NumberTestFactory.ACC_NUMBER().accountNumber())
                 .setName("Random Name")
                 .setEmail("test@gmail.com")
                 .setPoliticalParty(PoliticalParty.DDS)
+                .setRateLimit(null)
                 .build();
 
         var firstRating = new PoliticiansRating.Builder()
@@ -79,10 +80,11 @@ public class CitizensRatingPoliticiansTest {
         int EXPECTED_NUMBER_OF_RATINGS = 2;
 
         var rater = new UserRater.Builder()
-                .setAccountNumber(NumberTestFactory.ACC_NUMBER())
+                .setAccountNumber(NumberTestFactory.ACC_NUMBER().accountNumber())
                 .setName("Random Name")
                 .setEmail("test@gmail.com")
                 .setPoliticalParty(PoliticalParty.DDS)
+                .setRateLimit(null)
                 .build();
 
         var firstRating = new PoliticiansRating.Builder()
