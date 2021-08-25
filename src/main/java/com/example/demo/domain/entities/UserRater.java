@@ -2,12 +2,12 @@ package com.example.demo.domain.entities;
 
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.enums.PoliticalParty;
+import com.example.demo.domain.politicians.PoliticianNumber;
 
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 public class UserRater {
-
-	private RateLimitRepository rateLimitRepository;
 
 	private String facebookName;
 
@@ -17,38 +17,35 @@ public class UserRater {
 
 	private AccountNumber userAccountNumber;
 
+	private Map<PoliticianNumber, RateLimit> rateLimit;
+
 	public String returnUserAccountNumber() {
 		return userAccountNumber.accountNumber();
 	}
 
-	public String getEmail() {
+	public String email() {
 		return email;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getFacebookName() {
+	public String name() {
 		return facebookName;
 	}
 
-	public PoliticalParty getPoliticalParties() {
+	public Optional<RateLimit> findRateLimitUsingPolitician(String politicianNumber) {
+		return Optional.ofNullable(rateLimit.get(new PoliticianNumber(politicianNumber)));
+	}
+
+	public PoliticalParty politicalParty() {
 		return politicalParties;
 	}
 
-	public RateLimitRepository getRateLimitRepository() {
-		return rateLimitRepository;
-	}
-
-	UserRater(String facebookName, PoliticalParty politicalParties, String email,
-			  AccountNumber accountNumber, RateLimitRepository rateLimitRepository) {
-		super();
+	public UserRater(String facebookName, PoliticalParty politicalParties, String email,
+					 AccountNumber userAccountNumber, Map<PoliticianNumber, RateLimit> rateLimit) {
 		this.facebookName = facebookName;
 		this.politicalParties = politicalParties;
-		this.email = email;  									// TODO : change with dependency injection rather than constructing itself.
-		this.userAccountNumber = accountNumber;
-		this.rateLimitRepository = rateLimitRepository;
+		this.email = email;
+		this.userAccountNumber = userAccountNumber;
+		this.rateLimit = rateLimit;
 	}
 
 	@Override
@@ -74,28 +71,30 @@ public class UserRater {
 		if (getClass() != obj.getClass())
 			return false;
 		UserRater other = (UserRater) obj;
-		if (other.returnUserAccountNumber() == null) {
-			return false;
-		} else {
-			if (!other.returnUserAccountNumber().equals(userAccountNumber)) {
-				return false;
-			}
-		}
-		return false;
+		if (!Objects.equals(new AccountNumber(other.returnUserAccountNumber()), userAccountNumber)) return false;
+		if (!Objects.equals(other.rateLimit, rateLimit)) return false;
+		return true;
 	}
 
 	public boolean canRate(String polNumber) {
-		return isRateLimited(polNumber);
+		return !isRateLimited(polNumber);
+	}
+
+	public void rateLimitUser(PoliticianNumber polNumber) {
+		rateLimit.put(polNumber, new RateLimit(userAccountNumber.accountNumber(), polNumber.politicianNumber(), LocalDate.now()));
 	}
 
 	private boolean isRateLimited(String politicianNumber) {
-		Optional<RateLimit> rateLimit = rateLimitRepository.findUsingIdAndPoliticianNumber(userAccountNumber.accountNumber(), politicianNumber);
-
-		return rateLimit.isPresent() ? !rateLimit.get().isNotRateLimited() : false;
+	return rateLimit.containsKey(new PoliticianNumber(politicianNumber)) ? !rateLimit.get(politicianNumber).isNotRateLimited() : false;
 	}
 
     public long daysLeftToRate(String polNumber) {
-		return rateLimitRepository.findUsingIdAndPoliticianNumber(userAccountNumber.accountNumber(), polNumber).get().daysLeftOfBeingRateLimited().longValue();
+		var rl = rateLimit.get(new PoliticianNumber(polNumber));
+		if (rl == null) {
+			throw new IllegalStateException("user is not rate limited on politician with politician number " + polNumber);
+		}
+
+		return rl.daysLeftOfBeingRateLimited();
     }
 
     public static class Builder {
@@ -107,6 +106,8 @@ public class UserRater {
 		private String userAccountNumber;
 
 		private RateLimitRepository repo;
+
+		private Map<PoliticianNumber, RateLimit> rateLimit = null;
 
 		public Builder setName(String name) {
 			this.name = name;
@@ -123,18 +124,22 @@ public class UserRater {
 			return this;
 		}
 
-		public Builder setRateLimitRepo(RateLimitRepository repo) {
-			this.repo = repo;
-			return this;
-		}
-
 		public Builder setAccountNumber(String accNumber) {
 			this.userAccountNumber = accNumber;
 			return this;
 		}
 
+		public Builder setRateLimit(List<RateLimit> rateLimits) {
+			Map<PoliticianNumber, RateLimit> map = new HashMap<>();
+			rateLimits.stream()
+					.forEach(it -> map.put(new PoliticianNumber(it.politicianNumber()), it));
+
+			this.rateLimit = map;
+			return this;
+		}
+
 		public UserRater build() {
-			return new UserRater(name, politicalParty, email, new AccountNumber(userAccountNumber), repo);
+			return new UserRater(name, politicalParty, email, new AccountNumber(userAccountNumber), rateLimit);
 		}
 
 

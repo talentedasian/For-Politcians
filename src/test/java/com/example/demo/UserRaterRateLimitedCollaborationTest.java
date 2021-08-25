@@ -69,7 +69,6 @@ public class UserRaterRateLimitedCollaborationTest {
                 .setAccountNumber(ACCOUNT_NUMBER)
                 .setName(NAME)
                 .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimitRepo(rateLimitRepository)
                 .build();
 
         var rating = new PoliticiansRating.Builder()
@@ -94,7 +93,6 @@ public class UserRaterRateLimitedCollaborationTest {
                 .setAccountNumber(ACCOUNT_NUMBER)
                 .setName("Any Name Really")
                 .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimitRepo(rateLimitRepository)
                 .build();
 
         var rating = new PoliticiansRating.Builder()

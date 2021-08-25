@@ -1,12 +1,13 @@
 package com.example.demo.adapter.out.repository;
 
-import com.example.demo.adapter.dto.RateLimitJpaDto;
+import com.example.demo.adapter.dto.RateLimitJpaEntity;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.RateLimit;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -20,7 +21,7 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
 
     @Override
     public RateLimit save(RateLimit rateLimit) {
-        var dto = RateLimitJpaDto.of(rateLimit);
+        var dto = RateLimitJpaEntity.of(rateLimit);
 
         dto = rateRepo.save(dto);
 
@@ -29,7 +30,7 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
 
     @Override
     public Optional<RateLimit> findUsingIdAndPoliticianNumber(String id, String politicianNumber) {
-        var dto = new RateLimitJpaDto(id, politicianNumber);
+        var dto = new RateLimitJpaEntity(id, politicianNumber);
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnorePaths("id")
@@ -51,12 +52,19 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
 
     @Override
     public long countUsingIdAndPoliticianNumber(String id, String polNumber) {
-        var rateLimit = new RateLimitJpaDto(id, polNumber);
+        var rateLimit = new RateLimitJpaEntity(id, polNumber);
 
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withMatcher("accountNumber", match -> match.exact())
                 .withMatcher("politicianNumber", match -> match.exact());
 
         return rateRepo.count(Example.of(rateLimit, matcher));
+    }
+
+    @Override
+    public List<RateLimit> findUsingId(String id) {
+        return rateRepo.findByAccountNumber(id).stream()
+                .map(it -> it.toRateLimit())
+                .toList();
     }
 }

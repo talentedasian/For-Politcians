@@ -25,7 +25,6 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 			.setEmail("test@gmail.com")
 			.setPoliticalParty(PoliticalParty.DDS)
 			.setName("test")
-			.setRateLimitRepo(rateLimitRepo)
 			.build();
 	
 	Politicians politician = new Politicians.PoliticiansBuilder("dummy")
@@ -51,9 +50,9 @@ public class RatingSpringHateoasTest extends BaseSpringHateoasTest{
 			.andExpect(content().contentType(HAL_FORMS_JSON))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].rating", equalTo(1.0D)))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].id", equalTo(id)))
-			.andExpect(jsonPath("_embedded.ratingDTOList[0].rater.email", equalTo(rater.getEmail())))
-			.andExpect(jsonPath("_embedded.ratingDTOList[0].rater.name", equalTo(rater.getFacebookName())))
-			.andExpect(jsonPath("_embedded.ratingDTOList[0].rater.political_party", equalTo(rater.getPoliticalParties().toString())))
+			.andExpect(jsonPath("_embedded.ratingDTOList[0].rater.email", equalTo(rater.email())))
+			.andExpect(jsonPath("_embedded.ratingDTOList[0].rater.name", equalTo(rater.name())))
+			.andExpect(jsonPath("_embedded.ratingDTOList[0].rater.political_party", equalTo(rater.politicalParty().toString())))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.name", equalTo(politician.fullName())))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.id", equalTo(politician.retrievePoliticianNumber())))
 			.andExpect(jsonPath("_embedded.ratingDTOList[0].politician.rating", equalTo(1.0D)))

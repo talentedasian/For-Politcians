@@ -1,18 +1,14 @@
 package com.example.demo.adapter.out.jpa;
 
-import com.example.demo.domain.RateLimitRepository;
+import com.example.demo.adapter.dto.RateLimitJpaEntity;
 import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
+import java.util.List;
 
 @Embeddable
 public class UserRaterJpaEntity {
-
-    private transient RateLimitRepository rateLimitRepository;
 
     @Column(nullable = false)
     private String name;
@@ -27,21 +23,25 @@ public class UserRaterJpaEntity {
     @Column(nullable = false, name = "account_number")
     private String userAccountNumber;
 
-    UserRaterJpaEntity(String name, PoliticalParty politicalParties, String email, String userAccountNumber, RateLimitRepository repo) {
+    @Column(nullable = false)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RateLimitJpaEntity> rateLimits;
+
+    UserRaterJpaEntity(String name, PoliticalParty politicalParties, String email, String userAccountNumber,
+                       List<RateLimitJpaEntity> rateLimits) {
         this.name = name;
         this.politicalParties = politicalParties;
         this.email = email;
         this.userAccountNumber = userAccountNumber;
-        this.rateLimitRepository = repo;
+        this.rateLimits = rateLimits;
     }
 
     public static UserRaterJpaEntity from(UserRater rater) {
         return new Builder()
                 .setUserAccountNumber(rater.returnUserAccountNumber())
-                .setPoliticalParties(rater.getPoliticalParties())
-                .setFacebookName(rater.getFacebookName())
-                .setEmail(rater.getEmail())
-                .setRepo(rater.getRateLimitRepository())
+                .setPoliticalParties(rater.politicalParty())
+                .setFacebookName(rater.name())
+                .setEmail(rater.email())
                 .build();
     }
 
@@ -50,8 +50,8 @@ public class UserRaterJpaEntity {
                 .setAccountNumber(userAccountNumber)
                 .setName(name)
                 .setPoliticalParty(politicalParties)
-                .setRateLimitRepo(rateLimitRepository)
                 .setEmail(email)
+                .setRateLimit(rateLimits.stream().map(RateLimitJpaEntity::toRateLimit).toList())
                 .build();
     }
 
@@ -97,12 +97,7 @@ public class UserRaterJpaEntity {
 
         private String userAccountNumber;
 
-        private RateLimitRepository repo;
-
-        public Builder setRepo(RateLimitRepository rateLimitRepository) {
-            repo = rateLimitRepository;
-            return this;
-        }
+        private List<RateLimitJpaEntity> rateLimits;
 
         public Builder setFacebookName(String facebookName) {
             this.facebookName = facebookName;
@@ -124,8 +119,13 @@ public class UserRaterJpaEntity {
             return this;
         }
 
+        public Builder setRateLimits(List<RateLimitJpaEntity> rateLimits) {
+            this.rateLimits = rateLimits;
+            return this;
+        }
+
         public UserRaterJpaEntity build() {
-            return new UserRaterJpaEntity(facebookName, politicalParties, email, userAccountNumber, repo);
+            return new UserRaterJpaEntity(facebookName, politicalParties, email, userAccountNumber, rateLimits);
         }
     }
 

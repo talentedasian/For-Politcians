@@ -1,6 +1,6 @@
 package com.example.demo.adapter.in.web;
 
-import com.example.demo.adapter.dto.RateLimitJpaDto;
+import com.example.demo.adapter.dto.RateLimitJpaEntity;
 import com.example.demo.adapter.in.web.dto.RateLimitDto;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.adapter.out.repository.RateLimitAdapterService;
@@ -34,7 +34,7 @@ public class RateLimitController {
 		Claims jwt = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
 		final String accountNumber = jwt.getId();
 
-		RateLimitJpaDto rateLimitQueried = service.findUsingAccountNumberAndPoliticianNumber(new RateLimitJpaDto(accountNumber, politicianNumber));
+		RateLimitJpaEntity rateLimitQueried = service.findUsingAccountNumberAndPoliticianNumber(new RateLimitJpaEntity(accountNumber, politicianNumber));
 
 		var selfLink = linkTo(methodOn(RateLimitController.class)
 				.findRateLimitOnCurrentUser(rateLimitQueried.getPoliticianNumber(), req))

@@ -1,10 +1,9 @@
 package com.example.demo.domain.entities;
 
 import com.example.demo.domain.RateLimitRepository;
+import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.Politicians;
 import org.springframework.util.Assert;
-
-import java.time.LocalDate;
 
 public class PoliticiansRating {
 
@@ -108,7 +107,7 @@ public class PoliticiansRating {
 	public void ratePolitician() {
 		politician.rate(this);
 
-		rateLimitRepo.save(new RateLimit(rater.returnUserAccountNumber(), politician.retrievePoliticianNumber(), LocalDate.now()));
+		rater.rateLimitUser(new PoliticianNumber(politician.retrievePoliticianNumber()));
 	}
 
 	public static class Builder {

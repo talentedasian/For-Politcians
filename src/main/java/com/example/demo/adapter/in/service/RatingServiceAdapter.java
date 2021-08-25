@@ -41,7 +41,7 @@ public class RatingServiceAdapter {
                 .setAccountNumber(jwts.getId())
                 .setEmail(jwts.getSubject())
                 .setPoliticalParty(PoliticalParty.valueOf(dtoRequest.getPoliticalParty()))
-                .setRateLimitRepo(rateLimitRepo)
+                .setRateLimit(rateLimitRepo.findUsingId(jwts.getId()))
                 .build();
 
         PoliticiansRating rating = new PoliticiansRating.Builder()

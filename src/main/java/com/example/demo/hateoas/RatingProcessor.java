@@ -59,7 +59,7 @@ public class RatingProcessor implements RepresentationModelProcessor<EntityModel
 	}
 
 	private boolean canRate(RatingDTO rating) {
-		return rating.getRater().toUserRater(rateLimitRepo).canRate(rating.getPolitician().getId());
+		return rating.getRater().toUserRater().canRate(rating.getPolitician().getId());
 	}
 
 

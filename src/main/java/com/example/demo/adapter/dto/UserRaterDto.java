@@ -1,6 +1,5 @@
 package com.example.demo.adapter.dto;
 
-import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.UserRater;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -34,15 +33,14 @@ public class UserRaterDto {
     }
 
     public static UserRaterDto from(UserRater rater) {
-        return new UserRaterDto(rater.returnUserAccountNumber(), rater.getFacebookName(), rater.getEmail());
+        return new UserRaterDto(rater.returnUserAccountNumber(), rater.name(), rater.email());
     }
 
-    public UserRater toUserRater(RateLimitRepository rateLimitRepo) {
+    public UserRater toUserRater() {
         return new UserRater.Builder()
                 .setName(name)
                 .setEmail(email)
                 .setAccountNumber(accountNumber)
-                .setRateLimitRepo(rateLimitRepo)
                 .build();
     }
 }

@@ -35,7 +35,7 @@ public class SenatorialJpaEntity extends PoliticiansJpaEntity {
 
     protected SenatorialJpaEntity(PoliticiansJpaEntity politician, String mostSignificantLawMade, Integer totalMonthsOfServiceAsSenator) {
         super(politician.getId(), politician.getFirstName(), politician.getLastName(), politician.getFullName(),
-                politician.getRatingJpaEntity(), politician.getPoliticiansRating());
+                politician.getRatingJpaEntity(), politician.getTotalCountRating(), politician.getPoliticiansRating());
         this.totalMonthsOfServiceAsSenator = totalMonthsOfServiceAsSenator;
         this.mostSignificantLawMade = mostSignificantLawMade;
     }

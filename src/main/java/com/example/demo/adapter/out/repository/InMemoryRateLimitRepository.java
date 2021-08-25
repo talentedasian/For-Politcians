@@ -47,4 +47,9 @@ public class InMemoryRateLimitRepository implements RateLimitRepository {
         }
         return count;
     }
+
+    @Override
+    public List<RateLimit> findUsingId(String id) {
+        return null;
+    }
 }
