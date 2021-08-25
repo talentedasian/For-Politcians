@@ -4,6 +4,7 @@ import com.example.demo.adapter.in.service.RatingService;
 import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.domain.NumberTestFactory;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.*;
 import com.example.demo.domain.enums.PoliticalParty;
@@ -33,7 +34,7 @@ public class UserRaterRateLimitedCollaborationTest {
 
     RateLimitRepository rateLimitRepository;
 
-    PoliticiansBuilder politicianBuilder = new PoliticiansBuilder("dummy")
+    PoliticiansBuilder politicianBuilder = new PoliticiansBuilder(NumberTestFactory.POL_NUMBER())
             .setFirstName("Random")
             .setLastName("Name")
             .setPoliticiansRating(null)
@@ -93,6 +94,7 @@ public class UserRaterRateLimitedCollaborationTest {
                 .setAccountNumber(ACCOUNT_NUMBER)
                 .setName("Any Name Really")
                 .setPoliticalParty(PoliticalParty.DDS)
+                .setRateLimit(null)
                 .build();
 
         var rating = new PoliticiansRating.Builder()

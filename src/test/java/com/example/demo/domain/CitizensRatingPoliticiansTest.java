@@ -48,7 +48,7 @@ public class CitizensRatingPoliticiansTest {
         Double EXPECTED_CALCULATED_AVERAGE_RATING = 2.734D;
 
         var rater = new UserRater.Builder()
-                .setAccountNumber(AccountNumber.accountNumber())
+                .setAccountNumber(NumberTestFactory.ACC_NUMBER())
                 .setName("Random Name")
                 .setEmail("test@gmail.com")
                 .setPoliticalParty(PoliticalParty.DDS)
@@ -79,7 +79,7 @@ public class CitizensRatingPoliticiansTest {
         int EXPECTED_NUMBER_OF_RATINGS = 2;
 
         var rater = new UserRater.Builder()
-                .setAccountNumber(AccountNumber.accountNumber())
+                .setAccountNumber(NumberTestFactory.ACC_NUMBER())
                 .setName("Random Name")
                 .setEmail("test@gmail.com")
                 .setPoliticalParty(PoliticalParty.DDS)

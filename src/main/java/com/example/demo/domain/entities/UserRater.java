@@ -131,9 +131,12 @@ public class UserRater {
 
 		public Builder setRateLimit(List<RateLimit> rateLimits) {
 			Map<PoliticianNumber, RateLimit> map = new HashMap<>();
+			if (rateLimits == null) {
+				this.rateLimit = map;
+				return this;
+			}
 			rateLimits.stream()
 					.forEach(it -> map.put(new PoliticianNumber(it.politicianNumber()), it));
-
 			this.rateLimit = map;
 			return this;
 		}
