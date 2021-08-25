@@ -10,6 +10,7 @@ import com.example.demo.domain.politicians.Name;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
+import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,11 +45,18 @@ public class CitizensRatingPoliticiansTest {
     }
 
     @Test
-    public void ratingShouldBeCalculatedAsExpectedWhenRatePoliticianCalled() {
+    public void ratingShouldBeCalculatedAsExpectedWhenRatePoliticianCalled() throws UserRateLimitedOnPoliticianException {
         Double EXPECTED_CALCULATED_AVERAGE_RATING = 2.734D;
 
         var rater = new UserRater.Builder()
                 .setAccountNumber(NumberTestFactory.ACC_NUMBER().accountNumber())
+                .setName("Random Name")
+                .setEmail("test@gmail.com")
+                .setPoliticalParty(PoliticalParty.DDS)
+                .setRateLimit(null)
+                .build();
+        var raterThatsNotRateLimited = new UserRater.Builder()
+                .setAccountNumber("FLPOM-00003123")
                 .setName("Random Name")
                 .setEmail("test@gmail.com")
                 .setPoliticalParty(PoliticalParty.DDS)
@@ -64,7 +72,7 @@ public class CitizensRatingPoliticiansTest {
         var fourScaledRatingForHalfDownRoundingMode = new PoliticiansRating.Builder()
                 .setRating(3.22326D)
                 .setRepo(rateLimitRepo)
-                .setRater(rater)
+                .setRater(raterThatsNotRateLimited)
                 .setPolitician(politicians)
                 .build();
 
@@ -76,11 +84,19 @@ public class CitizensRatingPoliticiansTest {
     }
 
     @Test
-    public void countsOfRatingsShouldReflectOnPoliticianAsCitizensRatePoliticians() {
+    public void countsOfRatingsShouldReflectOnPoliticianAsCitizensRatePoliticians() throws UserRateLimitedOnPoliticianException {
         int EXPECTED_NUMBER_OF_RATINGS = 2;
 
         var rater = new UserRater.Builder()
                 .setAccountNumber(NumberTestFactory.ACC_NUMBER().accountNumber())
+                .setName("Random Name")
+                .setEmail("test@gmail.com")
+                .setPoliticalParty(PoliticalParty.DDS)
+                .setRateLimit(null)
+                .build();
+
+        var raterThatsNotRateLimited = new UserRater.Builder()
+                .setAccountNumber("FLPOM-00003123")
                 .setName("Random Name")
                 .setEmail("test@gmail.com")
                 .setPoliticalParty(PoliticalParty.DDS)
@@ -96,7 +112,7 @@ public class CitizensRatingPoliticiansTest {
         var secondRating = new PoliticiansRating.Builder()
                 .setRating(3.22326D)
                 .setRepo(rateLimitRepo)
-                .setRater(rater)
+                .setRater(raterThatsNotRateLimited)
                 .setPolitician(politicians)
                 .build();
 
@@ -104,6 +120,50 @@ public class CitizensRatingPoliticiansTest {
         secondRating.ratePolitician();
 
         assertThat(politicians.countsOfRatings())
+                .isEqualTo(EXPECTED_NUMBER_OF_RATINGS);
+    }
+
+    @Test
+    public void totalCountsOfRatingsShouldStillBe2WhenRaterDeletesPolitician() throws UserRateLimitedOnPoliticianException {
+        int EXPECTED_NUMBER_OF_RATINGS = 2;
+
+        var rater = new UserRater.Builder()
+                .setAccountNumber(NumberTestFactory.ACC_NUMBER().accountNumber())
+                .setName("Random Name")
+                .setEmail("test@gmail.com")
+                .setPoliticalParty(PoliticalParty.DDS)
+                .setRateLimit(null)
+                .build();
+
+        var raterThatsNotRateLimited = new UserRater.Builder()
+                .setAccountNumber("FLPOM-00003123")
+                .setName("Random Name")
+                .setEmail("test@gmail.com")
+                .setPoliticalParty(PoliticalParty.DDS)
+                .setRateLimit(null)
+                .build();
+
+        var firstRating = new PoliticiansRating.Builder()
+                .setRating(2.243D)
+                .setRepo(rateLimitRepo)
+                .setRater(rater)
+                .setPolitician(politicians)
+                .build();
+        var secondRating = new PoliticiansRating.Builder()
+                .setRating(3.22326D)
+                .setRepo(rateLimitRepo)
+                .setRater(raterThatsNotRateLimited)
+                .setPolitician(politicians)
+                .build();
+
+        firstRating.ratePolitician();
+        secondRating.ratePolitician();
+
+        secondRating.deleteRating();
+
+        assertThat(politicians.countsOfRatings())
+                .isEqualTo(1);
+        assertThat(politicians.totalCountsOfRatings())
                 .isEqualTo(EXPECTED_NUMBER_OF_RATINGS);
     }
 

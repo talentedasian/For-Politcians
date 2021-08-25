@@ -77,22 +77,19 @@ public class UserRater {
 	}
 
 	public boolean canRate(String polNumber) {
-		return !isRateLimited(polNumber);
+		return !isRateLimited(new PoliticianNumber(polNumber));
 	}
 
 	public void rateLimitUser(PoliticianNumber polNumber) {
 		rateLimit.put(polNumber, new RateLimit(userAccountNumber.accountNumber(), polNumber, LocalDate.now()));
 	}
 
-	private boolean isRateLimited(String politicianNumber) {
-	return rateLimit.containsKey(new PoliticianNumber(politicianNumber)) ? !rateLimit.get(politicianNumber).isNotRateLimited() : false;
+	private boolean isRateLimited(PoliticianNumber politicianNumber) {
+		return rateLimit.containsKey(politicianNumber) ? !rateLimit.get(politicianNumber).isNotRateLimited() : false;
 	}
 
     public long daysLeftToRate(String polNumber) {
 		var rl = rateLimit.get(new PoliticianNumber(polNumber));
-		if (rl == null) {
-			throw new IllegalStateException("user is not rate limited on politician with politician number " + polNumber);
-		}
 
 		return rl.daysLeftOfBeingRateLimited();
     }

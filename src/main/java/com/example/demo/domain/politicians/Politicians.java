@@ -110,6 +110,11 @@ public class Politicians {
 		totalCountsOfRating++;
 	}
 
+	// INFO : DOES NOT CHANGE OVERALL BEHAVIOUR OF POLITICIAN. DELETING A RATING DOES NOT CHANGE THE TOTAL RATING AND THE AVERAGE RATING
+	public void deleteRate(PoliticiansRating secondRating) {
+		politiciansRating.remove(secondRating);
+	}
+
 	public long countsOfRatings() {
 		return politiciansRating == null ? 0 : politiciansRating.size();
 	}

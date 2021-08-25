@@ -3,6 +3,7 @@ package com.example.demo.domain.entities;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.springframework.util.Assert;
 
 public class PoliticiansRating {
@@ -88,11 +89,9 @@ public class PoliticiansRating {
 		if (getClass() != obj.getClass())
 			return false;
 		PoliticiansRating other = (PoliticiansRating) obj;
-		if (other.id == null) {
-			return false;
-		} else {
-			return other.id.equals(id);
-		}
+		if (other.id == null) return false;
+		if (other.rater == null) return false;
+		return other.id.equals(id) && other.rater.equals(rater);
 	}
 
 	public PoliticiansRating(Integer id, Double rating, UserRater rater, Politicians politician, RateLimitRepository rateLimitRepository) {
@@ -104,10 +103,17 @@ public class PoliticiansRating {
 		this.rateLimitRepo = rateLimitRepository;
 	}
 
-	public void ratePolitician() {
+	public void ratePolitician() throws UserRateLimitedOnPoliticianException {
+		if (!rater.canRate(politician.retrievePoliticianNumber())) {
+			throw new UserRateLimitedOnPoliticianException(rater.daysLeftToRate(politician.retrievePoliticianNumber()));
+		}
 		politician.rate(this);
 
 		rater.rateLimitUser(new PoliticianNumber(politician.retrievePoliticianNumber()));
+	}
+
+	public void deleteRating() {
+		politician.deleteRate(this);
 	}
 
 	public static class Builder {
