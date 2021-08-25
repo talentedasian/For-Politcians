@@ -82,7 +82,7 @@ public class PoliticiansRatingJpaEntity {
         return new PoliticiansJpaEntity
                 (politician.retrievePoliticianNumber(), politician.firstName(),
                 politician.lastName(), politician.fullName(),
-                RatingJpaEntity.from(politician.getRating()), null);
+                RatingJpaEntity.from(politician.getRating()), politician.totalCountsOfRatings(), null);
     }
 
     private static Politicians toPoliticians(PoliticiansJpaEntity jpaEntity) {

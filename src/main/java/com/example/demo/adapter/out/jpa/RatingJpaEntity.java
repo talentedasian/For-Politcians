@@ -1,20 +1,18 @@
 package com.example.demo.adapter.out.jpa;
 
-import com.example.demo.domain.averageCalculator.AverageCalculator;
 import com.example.demo.domain.entities.Rating;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Transient;
 import java.util.Objects;
 
 @Embeddable
 public class RatingJpaEntity {
 
-    @Column(nullable = false, precision = 3, scale = 2)
+    @Column(nullable = false, precision = 3, scale = 3)
     protected Double totalRating;
 
-    @Column(nullable = false, precision = 3, scale = 2)
+    @Column(nullable = false, precision = 3, scale = 4)
     protected Double averageRating;
 
     public static RatingJpaEntity from(Rating rating) {
@@ -29,14 +27,6 @@ public class RatingJpaEntity {
         return averageRating;
     }
 
-    public AverageCalculator getCalculator() {
-        return calculator;
-    }
-
-    public void setCalculator(AverageCalculator calculator) {
-        this.calculator = calculator;
-    }
-
     public void setTotalRating(Double totalRating) {
         this.totalRating = totalRating;
     }
@@ -44,9 +34,6 @@ public class RatingJpaEntity {
     public void setAverageRating(Double averageRating) {
         this.averageRating = averageRating;
     }
-
-    @Transient
-    private transient AverageCalculator calculator= null;
 
     public RatingJpaEntity() {
         super();
@@ -82,7 +69,6 @@ public class RatingJpaEntity {
     public int hashCode() {
         int result = totalRating != null ? totalRating.hashCode() : 0;
         result = 31 * result + (averageRating != null ? averageRating.hashCode() : 0);
-        result = 31 * result + (calculator != null ? calculator.hashCode() : 0);
         return result;
     }
 

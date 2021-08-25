@@ -21,6 +21,9 @@ public class Politicians {
 
 	private Politicians.Type type;
 
+	// count of ratings regardless of deletion of ratings.
+	private int totalCountsOfRating;
+
 	public String retrievePoliticianNumber() {
 		return politicianNumber == null ? null : politicianNumber.politicianNumber();
 	}
@@ -91,10 +94,19 @@ public class Politicians {
 		return result;
 	}
 
+	public int totalCountsOfRatings() {
+		return this.totalCountsOfRating;
+	}
+
 	public double calculateAverageRating(double ratingToAdd) {
 		double rating = getRating().calculateAverage(ratingToAdd, Long.valueOf(countsOfRatings()).doubleValue());
 		
 		return rating;
+	}
+
+	public void rate(PoliticiansRating rating) {
+		politiciansRating.add(rating);
+		totalCountsOfRating++;
 	}
 
 	public long countsOfRatings() {
@@ -125,7 +137,7 @@ public class Politicians {
 		return this.politicianNumber;
     }
 
-    public static enum Type {
+    public enum Type {
 		PRESIDENTIAL("presidential, PRESIDENTIAL"), SENATORIAL("senatorial, SENATORIAL"),
 		MAYOR("mayorial, MAYORIAL");
 

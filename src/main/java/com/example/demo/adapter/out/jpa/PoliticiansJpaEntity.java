@@ -30,6 +30,9 @@ public class PoliticiansJpaEntity {
     @Column(nullable = false)
     private RatingJpaEntity ratingJpaEntity;
 
+    @Column(nullable = false, name = "total_count_of_rating")
+    private int totalCountRating;
+
     @OneToMany(mappedBy = "politician")
     private List<PoliticiansRatingJpaEntity> politiciansRating;
 
@@ -85,22 +88,32 @@ public class PoliticiansJpaEntity {
         this.ratingJpaEntity = ratingJpaEntity;
     }
 
-    public PoliticiansJpaEntity() {}
+    public int getTotalCountRating() {
+        return totalCountRating;
+    }
 
-    protected PoliticiansJpaEntity(String id, String firstName, String lastName, String fullName,
-                RatingJpaEntity ratingJpaEntity, List<PoliticiansRatingJpaEntity> politiciansRating) {
+    public void setTotalCountRating(int totalCountRating) {
+        this.totalCountRating = totalCountRating;
+    }
+
+    PoliticiansJpaEntity() {}
+
+    public PoliticiansJpaEntity(String id, String firstName, String lastName, String fullName,
+                                RatingJpaEntity ratingJpaEntity, int totalCountRating,
+                                List<PoliticiansRatingJpaEntity> politiciansRating) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.fullName = fullName;
         this.ratingJpaEntity = ratingJpaEntity;
+        this.totalCountRating = totalCountRating;
         this.politiciansRating = politiciansRating;
     }
 
     public static PoliticiansJpaEntity from(Politicians politician) {
         var jpaEntity = new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
                 politician.lastName(), politician.fullName(),
-                RatingJpaEntity.from(politician.getRating()), fromPoliticiansRating(politician.getPoliticiansRating()));
+                RatingJpaEntity.from(politician.getRating()), politician.totalCountsOfRatings(), fromPoliticiansRating(politician.getPoliticiansRating()));
 
         switch (politician.getType()) {
             case PRESIDENTIAL -> {
