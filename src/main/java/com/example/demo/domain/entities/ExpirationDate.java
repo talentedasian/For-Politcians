@@ -6,19 +6,17 @@ import java.time.LocalDate;
 
 public record ExpirationDate(LocalDate dateCreated) {
 
-    static final int DAYS_TILL_EXPIRATION = 7;
-
-    public LocalDate expirationDate() {
-        return this.dateCreated.plusDays(DAYS_TILL_EXPIRATION);
+    public LocalDate expirationDate(long daysToExpire) {
+        return this.dateCreated.plusDays(daysToExpire);
     }
 
-    public boolean isNotRateLimited() {
-        return this.dateCreated == null || LocalDate.now().minusDays(DAYS_TILL_EXPIRATION).isAfter(dateCreated);
+    public boolean isExpired(long daysBeforeExpiration) {
+        return this.dateCreated == null || LocalDate.now().minusDays(daysBeforeExpiration).isAfter(dateCreated);
     }
 
-    public String daysLeftTillRateLimited() {
-        Assert.state(!isNotRateLimited(), "should be rate limited");
-        return String.valueOf(dateCreated.getDayOfMonth() - LocalDate.now().minusDays(DAYS_TILL_EXPIRATION).getDayOfMonth());
+    public String daysLeftTillExpiration(long daysLeftTillExpiration) {
+        Assert.state(!isExpired(daysLeftTillExpiration), "should not be expired");
+        return String.valueOf(dateCreated.getDayOfMonth() - LocalDate.now().minusDays(daysLeftTillExpiration).getDayOfMonth());
     }
 
 }

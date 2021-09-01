@@ -10,6 +10,7 @@ import java.util.Objects;
 public class RateLimit {
 
 	private transient static final Map<String, RateLimit> cache = new HashMap<>();
+	private static final long RATE_LIMIT = 7;
 
 	private String id;
 
@@ -34,7 +35,7 @@ public class RateLimit {
 	}
 
 	public LocalDate expirationDate() {
-		return expirationDate.expirationDate();
+		return expirationDate.expirationDate(RATE_LIMIT);
 	}
 
 	public RateLimit(String id, PoliticianNumber politicianNumber, LocalDate expirationDate) {
@@ -80,12 +81,12 @@ public class RateLimit {
 	}
 
 	public boolean isNotRateLimited() {
-		return expirationDate == null ? true : expirationDate.isNotRateLimited();
+		return expirationDate == null ? true : expirationDate.isExpired(RATE_LIMIT);
 	}
 
 	public Integer daysLeftOfBeingRateLimited() {
 		try {
-			return Integer.valueOf(expirationDate.daysLeftTillRateLimited());
+			return Integer.valueOf(expirationDate.daysLeftTillExpiration(RATE_LIMIT));
 		} catch (IllegalStateException e) {
 			return 0;
 		}
