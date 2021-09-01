@@ -31,10 +31,6 @@ public class UserRater {
 		return facebookName;
 	}
 
-	public Optional<RateLimit> findRateLimitUsingPolitician(String politicianNumber) {
-		return Optional.ofNullable(rateLimit.get(new PoliticianNumber(politicianNumber)));
-	}
-
 	public PoliticalParty politicalParty() {
 		return politicalParties;
 	}
@@ -91,7 +87,11 @@ public class UserRater {
     public long daysLeftToRate(String polNumber) {
 		var rl = rateLimit.get(new PoliticianNumber(polNumber));
 
-		return rl.daysLeftOfBeingRateLimited();
+		try {
+			return	rl.daysLeftOfBeingRateLimited();
+		} catch (IllegalStateException e) {
+			return 0l;
+		}
     }
 
     public static class Builder {
