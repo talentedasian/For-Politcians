@@ -99,7 +99,7 @@ public class Politicians {
 	}
 
 	public double calculateAverageRating(double ratingToAdd) {
-		double rating = getRating().calculateAverage(ratingToAdd, Long.valueOf(countsOfRatings()).doubleValue());
+		double rating = getRating().calculateAverage(ratingToAdd, Long.valueOf(totalCountsOfRating).doubleValue());
 		
 		return rating;
 	}
@@ -134,10 +134,6 @@ public class Politicians {
 	public String lastName() {
 		return name.lastName();
 	}
-
-    public void registerPoliticianNumber(String politicianNumber) {
-		this.politicianNumber = new PoliticianNumber(politicianNumber);
-    }
 
     protected PoliticianNumber getPoliticianNumber() {
 		return this.politicianNumber;

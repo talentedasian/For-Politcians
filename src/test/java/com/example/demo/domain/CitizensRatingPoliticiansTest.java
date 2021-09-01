@@ -48,33 +48,11 @@ public class CitizensRatingPoliticiansTest {
     public void ratingShouldBeCalculatedAsExpectedWhenRatePoliticianCalled() throws UserRateLimitedOnPoliticianException {
         Double EXPECTED_CALCULATED_AVERAGE_RATING = 2.734D;
 
-        var rater = new UserRater.Builder()
-                .setAccountNumber(NumberTestFactory.ACC_NUMBER().accountNumber())
-                .setName("Random Name")
-                .setEmail("test@gmail.com")
-                .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimit(null)
-                .build();
-        var raterThatsNotRateLimited = new UserRater.Builder()
-                .setAccountNumber("FLPOM-00003123")
-                .setName("Random Name")
-                .setEmail("test@gmail.com")
-                .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimit(null)
-                .build();
+        var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
+        var raterThatsNotRateLimited = createRater("FLPOM-00003123");
 
-        var firstRating = new PoliticiansRating.Builder()
-                .setRating(2.243D)
-                .setRepo(rateLimitRepo)
-                .setRater(rater)
-                .setPolitician(politicians)
-                .build();
-        var fourScaledRatingForHalfDownRoundingMode = new PoliticiansRating.Builder()
-                .setRating(3.22326D)
-                .setRepo(rateLimitRepo)
-                .setRater(raterThatsNotRateLimited)
-                .setPolitician(politicians)
-                .build();
+        var firstRating = createPolRating(2.243, rater);
+        var fourScaledRatingForHalfDownRoundingMode = createPolRating(3.22326, raterThatsNotRateLimited);
 
         firstRating.ratePolitician();
         fourScaledRatingForHalfDownRoundingMode.ratePolitician();
@@ -84,37 +62,35 @@ public class CitizensRatingPoliticiansTest {
     }
 
     @Test
+    public void ratingShouldBeCalculatedAsExpectedWhenRatePoliticianCalledMoreThan2Times() throws UserRateLimitedOnPoliticianException {
+        Double EXPECTED_CALCULATED_AVERAGE_RATING = 3.897D;
+
+        var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
+        var raterThatsNotRateLimited = createRater("FLPOM-00003123");
+        var secondRaterThatsNotRateLimited = createRater("FLPOM-000120312");
+
+        var firstRating = createPolRating(2.243, rater);
+        var fourScaledRating = createPolRating(3.22326, raterThatsNotRateLimited);
+        var threeScaledRating = createPolRating(6.223, secondRaterThatsNotRateLimited);
+
+        firstRating.ratePolitician();
+        fourScaledRating.ratePolitician();
+        threeScaledRating.ratePolitician();
+
+        assertThat(politicians.getRating().getAverageRating())
+                .isEqualTo(EXPECTED_CALCULATED_AVERAGE_RATING);
+    }
+
+    @Test
     public void countsOfRatingsShouldReflectOnPoliticianAsCitizensRatePoliticians() throws UserRateLimitedOnPoliticianException {
         int EXPECTED_NUMBER_OF_RATINGS = 2;
 
-        var rater = new UserRater.Builder()
-                .setAccountNumber(NumberTestFactory.ACC_NUMBER().accountNumber())
-                .setName("Random Name")
-                .setEmail("test@gmail.com")
-                .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimit(null)
-                .build();
+        var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
-        var raterThatsNotRateLimited = new UserRater.Builder()
-                .setAccountNumber("FLPOM-00003123")
-                .setName("Random Name")
-                .setEmail("test@gmail.com")
-                .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimit(null)
-                .build();
+        var raterThatsNotRateLimited = createRater("FLPOM-00003123");
 
-        var firstRating = new PoliticiansRating.Builder()
-                .setRating(2.243D)
-                .setRepo(rateLimitRepo)
-                .setRater(rater)
-                .setPolitician(politicians)
-                .build();
-        var secondRating = new PoliticiansRating.Builder()
-                .setRating(3.22326D)
-                .setRepo(rateLimitRepo)
-                .setRater(raterThatsNotRateLimited)
-                .setPolitician(politicians)
-                .build();
+        var firstRating = createPolRating(2.243, rater);
+        var secondRating = createPolRating(3.22326, raterThatsNotRateLimited);
 
         firstRating.ratePolitician();
         secondRating.ratePolitician();
@@ -127,34 +103,12 @@ public class CitizensRatingPoliticiansTest {
     public void totalCountsOfRatingsShouldStillBe2WhenRaterDeletesPolitician() throws UserRateLimitedOnPoliticianException {
         int EXPECTED_NUMBER_OF_RATINGS = 2;
 
-        var rater = new UserRater.Builder()
-                .setAccountNumber(NumberTestFactory.ACC_NUMBER().accountNumber())
-                .setName("Random Name")
-                .setEmail("test@gmail.com")
-                .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimit(null)
-                .build();
+        var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber().toString());
 
-        var raterThatsNotRateLimited = new UserRater.Builder()
-                .setAccountNumber("FLPOM-00003123")
-                .setName("Random Name")
-                .setEmail("test@gmail.com")
-                .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimit(null)
-                .build();
+        var raterThatsNotRateLimited = createRater("FLPOM-00003123");
 
-        var firstRating = new PoliticiansRating.Builder()
-                .setRating(2.243D)
-                .setRepo(rateLimitRepo)
-                .setRater(rater)
-                .setPolitician(politicians)
-                .build();
-        var secondRating = new PoliticiansRating.Builder()
-                .setRating(3.22326D)
-                .setRepo(rateLimitRepo)
-                .setRater(raterThatsNotRateLimited)
-                .setPolitician(politicians)
-                .build();
+        var firstRating = createPolRating(2.243, rater);
+        var secondRating = createPolRating(3.2232, raterThatsNotRateLimited);
 
         firstRating.ratePolitician();
         secondRating.ratePolitician();
@@ -165,6 +119,25 @@ public class CitizensRatingPoliticiansTest {
                 .isEqualTo(1);
         assertThat(politicians.totalCountsOfRatings())
                 .isEqualTo(EXPECTED_NUMBER_OF_RATINGS);
+    }
+
+    private PoliticiansRating createPolRating(double rating, UserRater rater) {
+        return new PoliticiansRating.Builder()
+                .setRating(rating)
+                .setRepo(rateLimitRepo)
+                .setRater(rater)
+                .setPolitician(politicians)
+                .build();
+    }
+
+    private UserRater createRater(String accountNumber) {
+        return new UserRater.Builder()
+                .setAccountNumber(accountNumber)
+                .setName("Random Name")
+                .setEmail("test@gmail.com")
+                .setPoliticalParty(PoliticalParty.DDS)
+                .setRateLimit(null)
+                .build();
     }
 
 }
