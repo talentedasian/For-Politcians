@@ -1,6 +1,6 @@
 package com.example.demo.domain.averageCalculator;
 
-public abstract class AverageCalculator {
+public abstract class AverageCalculator implements Calculator{
 	
 	private final double totalRating;
 	private final double count;
@@ -28,7 +28,5 @@ public abstract class AverageCalculator {
 	private boolean isNumberPositive(double number) {
 		return !String.valueOf(number).contains("-");
 	}
-	
-	public abstract double calculateAverage();
 	
 }

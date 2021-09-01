@@ -28,12 +28,7 @@ public class CitizensRatingPoliticiansTest {
     PoliticianNumberCalculator polNumberCalculator = PoliticianNumberCalculatorFactory.politicianCalculator(Politicians.Type.PRESIDENTIAL);
     final String POLITICIAN_NUMBER  = polNumberCalculator.calculatePoliticianNumber(new Name("random", "name")).politicianNumber();
 
-    PoliticiansBuilder politicianBuilder = new PoliticiansBuilder(POLITICIAN_NUMBER)
-            .setPoliticiansRating(null)
-            .setFirstName("Random")
-            .setLastName("Name")
-            .setFullName()
-            .setRating(new Rating(0D, 0D));
+    PoliticiansBuilder politicianBuilder;
 
     Politicians politicians;
 
@@ -41,6 +36,13 @@ public class CitizensRatingPoliticiansTest {
 
     @BeforeEach
     public void setup() {
+        politicianBuilder = new PoliticiansBuilder(POLITICIAN_NUMBER)
+                .setPoliticiansRating(null)
+                .setFirstName("Random")
+                .setLastName("Name")
+                .setFullName()
+                .setRating(new Rating(0D, 0D));
+
         politicians = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder).build();
     }
 

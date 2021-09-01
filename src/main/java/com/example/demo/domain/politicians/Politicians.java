@@ -1,6 +1,10 @@
 package com.example.demo.domain.politicians;
 
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.domain.averageCalculator.AverageCalculator;
+import com.example.demo.domain.averageCalculator.DecentSatisfactionAverageCalculator;
+import com.example.demo.domain.averageCalculator.HighSatisfactionAverageCalculator;
+import com.example.demo.domain.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.Rating;
 import org.springframework.util.Assert;
@@ -99,15 +103,27 @@ public class Politicians {
 	}
 
 	public double calculateAverageRating(double ratingToAdd) {
-		double rating = getRating().calculateAverage(ratingToAdd, Long.valueOf(totalCountsOfRating).doubleValue());
-		
+		double rating = getRating().calculateAverage(ratingToAdd,
+				returnAverageCalculator(getRating().getAverageRating(), getRating().calculateTotalAmountOfRating(ratingToAdd)));
 		return rating;
 	}
 
+
+	public AverageCalculator returnAverageCalculator(double averageRating, double totalRating) {
+		if (averageRating < 5D) {
+			return new LowSatisfactionAverageCalculator(totalRating, totalCountsOfRatings());
+		} else if (averageRating < 8.89D) {
+			return new DecentSatisfactionAverageCalculator(totalRating, totalCountsOfRatings());
+		} else if (averageRating >= 8.89D) {
+			return new HighSatisfactionAverageCalculator(totalRating, totalCountsOfRatings());
+		}
+		return null;
+	}
+
 	public void rate(PoliticiansRating rating) {
+		totalCountsOfRating++;
 		calculateAverageRating(rating.getRating());
 		politiciansRating.add(rating);
-		totalCountsOfRating++;
 	}
 
 	// INFO : DOES NOT CHANGE OVERALL BEHAVIOUR OF POLITICIAN. DELETING A RATING DOES NOT CHANGE THE TOTAL RATING AND THE AVERAGE RATING

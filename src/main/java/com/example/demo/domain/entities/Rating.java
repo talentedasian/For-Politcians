@@ -1,9 +1,6 @@
 package com.example.demo.domain.entities;
 
-import com.example.demo.domain.averageCalculator.AverageCalculator;
-import com.example.demo.domain.averageCalculator.DecentSatisfactionAverageCalculator;
-import com.example.demo.domain.averageCalculator.HighSatisfactionAverageCalculator;
-import com.example.demo.domain.averageCalculator.LowSatisfactionAverageCalculator;
+import com.example.demo.domain.averageCalculator.Calculator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -22,58 +19,49 @@ public class Rating {
 	public Double getAverageRating() {
 		return averageRating;
 	}
-
-	private  AverageCalculator calculator= null;
 	
 	public Rating() {
 		super();
 	}
 
 	public Rating(Double totalRating, Double averageRating) {
-		super();
 		this.totalRating = totalRating;
 		this.averageRating = averageRating;
 	}
 	
-	public double calculateAverage(double ratingToAdd, double countsOfRatings){
-		calculateTotalAmountOfRating(ratingToAdd, countsOfRatings);
+	public double calculateAverage(double ratingToAdd, Calculator calculator){
+		calculateTotalRating(ratingToAdd);
 		double rating = calculator.calculateAverage();
 		this.averageRating = rating;
 		
 		return rating;
 	}
-	
-	public void calculateTotalAmountOfRating(Double ratingToAdd, Double countOfRatings) {
+
+	private void calculateTotalRating(Double ratingToAdd) {
 		if (totalRating == null || totalRating == 0D) {
 			double rating = BigDecimal.valueOf(ratingToAdd)
-			.setScale(4, RoundingMode.HALF_DOWN).doubleValue();
+					.setScale(4, RoundingMode.HALF_DOWN).doubleValue();
 			this.totalRating = rating;
-			calculator = returnAverageCalculator(countOfRatings);
 			return;
 		}
-		
+
 		double rating = BigDecimal.valueOf(totalRating + ratingToAdd)
 				.setScale(4, RoundingMode.UP).doubleValue();
 		this.totalRating = rating;
-		calculator = returnAverageCalculator(countOfRatings);
-		return;
+	}
+	public double calculateTotalAmountOfRating(Double ratingToAdd) {
+		if (totalRating == null || totalRating == 0D) {
+			return BigDecimal.valueOf(ratingToAdd)
+			.setScale(4, RoundingMode.HALF_DOWN).doubleValue();
+		}
+		
+		return BigDecimal.valueOf(totalRating + ratingToAdd)
+				.setScale(4, RoundingMode.UP).doubleValue();
 	}
 	
 	@Override
 	public String toString() {
 		return "Rating [totalRating=" + totalRating + ", averageRating=" + averageRating + "]";
-	}
-
-	public AverageCalculator returnAverageCalculator(Double count) {
-		if (averageRating < 5D) {
-			return new LowSatisfactionAverageCalculator(totalRating, count);
-		} else if (averageRating < 8.89D) {
-			return new DecentSatisfactionAverageCalculator(totalRating, count);
-		} else if (averageRating >= 8.89D) {
-			return new HighSatisfactionAverageCalculator(totalRating, count);
-		}
-		
-		return null;
 	}
 
 	@Override
