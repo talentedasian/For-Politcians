@@ -85,11 +85,7 @@ public class RateLimit {
 	}
 
 	public Integer daysLeftOfBeingRateLimited() {
-		try {
-			return Integer.valueOf(expirationDate.daysLeftTillExpiration(RATE_LIMIT));
-		} catch (IllegalStateException e) {
-			return 0;
-		}
+		return Integer.valueOf(expirationDate.daysLeftTillExpiration(RATE_LIMIT));
 	}
 
 	public LocalDate dateCreated() {

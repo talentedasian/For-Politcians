@@ -21,7 +21,7 @@ public class RateLimitTest {
 		
 		assertTrue(rate.isNotRateLimited());
 	}
-	
+
 	@Test
 	public void shouldThrowIllegalStateExceptionWhenRetrievingDaysLeftToRateWhenRateIsNotRateLimited() {
 		var rate = new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now().minusDays(9));
@@ -30,7 +30,7 @@ public class RateLimitTest {
 	}
 
 	@Test
-	public void shouldReturnDaysLeftToRateAgainWhenRateIsRateLimited() {
+	public void shouldReturnCorrectDaysLeftToRateAgainWhenRateIsRateLimited() {
 		var rate = new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, LocalDate.now());
 
 		assertThat(rate.daysLeftOfBeingRateLimited())

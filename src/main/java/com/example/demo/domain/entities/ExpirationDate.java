@@ -7,16 +7,24 @@ import java.time.LocalDate;
 public record ExpirationDate(LocalDate dateCreated) {
 
     public LocalDate expirationDate(long daysToExpire) {
+        checkForNegativeNumber(daysToExpire);
         return this.dateCreated.plusDays(daysToExpire);
     }
 
     public boolean isExpired(long daysBeforeExpiration) {
-        return this.dateCreated == null || LocalDate.now().minusDays(daysBeforeExpiration).isAfter(dateCreated);
+        checkForNegativeNumber(daysBeforeExpiration);
+        return this.dateCreated == null || LocalDate.now().minusDays(daysBeforeExpiration).isAfter(dateCreated)
+                || LocalDate.now().minusDays(daysBeforeExpiration).isEqual(dateCreated);
     }
 
     public String daysLeftTillExpiration(long daysLeftTillExpiration) {
-        Assert.state(!isExpired(daysLeftTillExpiration), "should not be expired");
-        return String.valueOf(dateCreated.getDayOfMonth() - LocalDate.now().minusDays(daysLeftTillExpiration).getDayOfMonth());
+        checkForNegativeNumber(daysLeftTillExpiration);
+        Assert.state(!isExpired(daysLeftTillExpiration), "should be not be expired when getting days left till expiration");
+        return String.valueOf(expirationDate(daysLeftTillExpiration).getDayOfMonth() - dateCreated.getDayOfMonth());
+    }
+
+    private void checkForNegativeNumber(long number) {
+        Assert.state(!String.valueOf(number).contains("-"), "argument passed must not be a negative number");
     }
 
 }
