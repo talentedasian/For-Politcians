@@ -94,6 +94,9 @@ public class UserRater {
 
     public long daysLeftToRate(String polNumber) {
 		var rl = rateLimit.get(new PoliticianNumber(polNumber));
+		if (rl == null) {
+			return 0;
+		}
 
 		try {
 			return	rl.daysLeftOfBeingRateLimited();

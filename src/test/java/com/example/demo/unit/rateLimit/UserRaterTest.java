@@ -24,8 +24,55 @@ public class UserRaterTest {
                 .build();
 
         rater.rateLimitUser(POLITICIAN_NUMBER);
+
         assertThat(rater.canRate(POLITICIAN_NUMBER.politicianNumber()))
                 .isEqualTo(false);
     }
 
+    @Test
+    public void shouldReturnNonEmptyOptionalWhenFindingExistentRateLimitOnUser() {
+        var rater = new UserRater.Builder()
+                .setAccountNumber(ACCOUNT_NUMBER)
+                .setName("Random Name")
+                .setEmail("test@gmail.com")
+                .setPoliticalParty(PoliticalParty.DDS)
+                .setRateLimit(null)
+                .build();
+
+        rater.rateLimitUser(POLITICIAN_NUMBER);
+
+        assertThat(rater.findRateLimit(POLITICIAN_NUMBER))
+                .isNotEmpty();
+    }
+
+    @Test
+    public void shouldReturn0IfUserIsNotRateLimit() {
+        var rater = new UserRater.Builder()
+                .setAccountNumber(ACCOUNT_NUMBER)
+                .setName("Random Name")
+                .setEmail("test@gmail.com")
+                .setPoliticalParty(PoliticalParty.DDS)
+                .setRateLimit(null)
+                .build();
+
+        assertThat(rater.daysLeftToRate(POLITICIAN_NUMBER.politicianNumber()))
+                .isEqualTo(0);
+    }
+
+    @Test
+    public void shouldReturn7IfUserJustGotRateLimited() {
+        var rater = new UserRater.Builder()
+                .setAccountNumber(ACCOUNT_NUMBER)
+                .setName("Random Name")
+                .setEmail("test@gmail.com")
+                .setPoliticalParty(PoliticalParty.DDS)
+                .setRateLimit(null)
+                .build();
+
+        rater.rateLimitUser(POLITICIAN_NUMBER);
+
+        assertThat(rater.daysLeftToRate(POLITICIAN_NUMBER.politicianNumber()))
+                .isEqualTo(7);
+    }
+    
 }
