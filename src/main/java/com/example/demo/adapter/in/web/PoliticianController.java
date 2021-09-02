@@ -5,6 +5,7 @@ import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;
 import com.example.demo.exceptions.PoliticianNotFoundException;
+import com.example.demo.exceptions.PoliticianNotPersistableException;
 import com.example.demo.hateoas.PoliticianAssembler;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class PoliticianController {
 
 	@PostMapping("/politician")
 	@Hidden
-	public ResponseEntity<EntityModel<PoliticianDto>> savePolitician(@Valid @RequestBody AddPoliticianDTORequest request) {
+	public ResponseEntity<EntityModel<PoliticianDto>> savePolitician(@Valid @RequestBody AddPoliticianDTORequest request) throws PoliticianNotPersistableException {
 		PoliticianDto politicianSaved = politiciansService.savePolitician(request);
 
 		EntityModel<PoliticianDto> response = assembler.toModel(politicianSaved);

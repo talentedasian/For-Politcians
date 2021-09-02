@@ -74,5 +74,5 @@ public class UserRaterTest {
         assertThat(rater.daysLeftToRate(POLITICIAN_NUMBER.politicianNumber()))
                 .isEqualTo(7);
     }
-    
+
 }

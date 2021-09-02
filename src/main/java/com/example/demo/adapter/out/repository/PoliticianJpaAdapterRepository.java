@@ -2,6 +2,7 @@ package com.example.demo.adapter.out.repository;
 
 import com.example.demo.adapter.out.jpa.PoliticiansJpaEntity;
 import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,7 +18,11 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
     }
 
     @Override
-    public Politicians save(Politicians politician) {
+    public Politicians save(Politicians politician) throws PoliticianNotPersistableException {
+        if (politician.getType() == null) {
+            throw new PoliticianNotPersistableException("Politician trying to persist does not have a type");
+        }
+
         PoliticiansJpaEntity entitySaved = politicianRepository.save(PoliticiansJpaEntity.from(politician));
 
         return entitySaved.toPoliticians();
@@ -25,7 +30,12 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
 
     @Override
     public Politicians update(Politicians politician) {
-        return save(politician);
+        try {
+            return save(politician);
+        } catch (PoliticianNotPersistableException e) {
+            e.printStackTrace(); // GOAL : ADD LOG MESSAGE
+        }
+        return politician;
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.dtomapper.PoliticianDTOUnwrapper;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.exceptions.PoliticianNotFoundException;
+import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public class PoliticianServiceAdapter {
                 .toList();
     }
 
-    public PoliticianDto savePolitician(AddPoliticianDTORequest dtoRequest) {
+    public PoliticianDto savePolitician(AddPoliticianDTORequest dtoRequest) throws PoliticianNotPersistableException {
         return new PoliticiansDtoMapper().mapToDTO(service.savePolitician(new PoliticianDTOUnwrapper().unWrapDTO(dtoRequest)));
     }
 

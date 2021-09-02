@@ -3,6 +3,7 @@ package com.example.demo.domain;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianAlreadyExistsException;
+import com.example.demo.exceptions.PoliticianNotPersistableException;
 
 import java.util.*;
 
@@ -11,7 +12,11 @@ public class InMemoryPoliticianAdapterRepo implements PoliticiansRepository {
     Map<String, Politicians> database = new HashMap<>();
 
     @Override
-    public Politicians save(Politicians politician) {
+    public Politicians save(Politicians politician) throws PoliticianNotPersistableException {
+        if (politician.getType() == null) {
+            throw new PoliticianNotPersistableException("Politician trying to persist does not have a type");
+        }
+
         if (database.containsKey(politician.retrievePoliticianNumber())) {
             throw new PoliticianAlreadyExistsException("Politician already exists in the database");
         }

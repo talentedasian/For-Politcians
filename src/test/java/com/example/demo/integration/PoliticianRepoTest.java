@@ -9,6 +9,7 @@ import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPoliticia
 import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
+import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 			.setMostSignificantLawMade("Taxification Law");
 	
 	@Test
-	public void shouldBeEqualOnSavedEntityForPresidential() {
+	public void shouldBeEqualOnSavedEntityForPresidential() throws PoliticianNotPersistableException {
 		Politicians politicianToBeSaved = presidentialBuilder.setMostSignificantLawPassed("Rice Law")
 				.build();
 		
@@ -52,7 +53,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	}
 	
 	@Test
-	public void shouldBeEqualOnSavedEntityForSenatorial() {
+	public void shouldBeEqualOnSavedEntityForSenatorial() throws PoliticianNotPersistableException {
 		Politicians politicianToBeSaved = senatorialBuilder.build();
 
 		Politicians politician = repo.save(politicianToBeSaved);
@@ -61,7 +62,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	}
 	
 	@Test
-	public void assertExistsByPoliticianNumberQueryByPresidential() {
+	public void assertExistsByPoliticianNumberQueryByPresidential() throws PoliticianNotPersistableException {
 		Politicians politicianToBeSaved = presidentialBuilder.setBuilder(politicianBuilder.setPoliticianNumber("9898"))
 				.build();
 		
@@ -71,7 +72,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	}
 	
 	@Test
-	public void assertExistsByPoliticianNumberQueryBySenatorial() {
+	public void assertExistsByPoliticianNumberQueryBySenatorial() throws PoliticianNotPersistableException {
 		Politicians politicianToBeSaved = senatorialBuilder.setBuilder(politicianBuilder.setPoliticianNumber("9898"))
 				.build();
 		
@@ -81,7 +82,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	}
 	
 	@Test
-	public void assertDeleteByPoliticianNumberQueryBySenatorial() {
+	public void assertDeleteByPoliticianNumberQueryBySenatorial() throws PoliticianNotPersistableException {
 		Politicians politicianToBeSaved = senatorialBuilder.build();
 		repo.save(politicianToBeSaved);
 		
@@ -93,7 +94,7 @@ public class PoliticianRepoTest extends BaseClassTestsThatUsesDatabase{
 	}
 	
 	@Test
-	public void assertDeleteByPoliticianNumberQueryByPresidential() {
+	public void assertDeleteByPoliticianNumberQueryByPresidential() throws PoliticianNotPersistableException {
 		Politicians politicianToBeSaved = presidentialBuilder.setBuilder(politicianBuilder.setPoliticianNumber("random number"))
 				.build();
 		repo.save(politicianToBeSaved);

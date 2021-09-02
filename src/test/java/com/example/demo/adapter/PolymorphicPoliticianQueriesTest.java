@@ -7,6 +7,7 @@ import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class PolymorphicPoliticianQueriesTest extends BaseClassTestsThatUsesData
     }
 
     @Test
-    public void polymorphicQueryShouldEqualToSenatorialPolitician() {
+    public void polymorphicQueryShouldEqualToSenatorialPolitician() throws PoliticianNotPersistableException {
         var senatorial = new SenatorialBuilder(politician)
                 .setTotalMonthsOfService(12)
                 .build();
@@ -52,7 +53,7 @@ public class PolymorphicPoliticianQueriesTest extends BaseClassTestsThatUsesData
     }
 
     @Test
-    public void polymorphicQueryShouldEqualToPresidentialPolitician() {
+    public void polymorphicQueryShouldEqualToPresidentialPolitician() throws PoliticianNotPersistableException {
         var presidential = new PresidentialBuilder(politician)
                 .build();
 

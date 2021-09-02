@@ -8,6 +8,7 @@ import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class PolymorphicPoliticianPersistenceTest extends BaseClassTestsThatUses
     }
 
     @Test
-    public void shouldSavePoliticianOntoDatabaseWithCorrectTypeByPresidential() {
+    public void shouldSavePoliticianOntoDatabaseWithCorrectTypeByPresidential() throws PoliticianNotPersistableException {
         var presidential = new PresidentialBuilder(politician)
                 .setMostSignificantLawPassed("any law")
                 .build();
@@ -53,7 +54,7 @@ public class PolymorphicPoliticianPersistenceTest extends BaseClassTestsThatUses
     }
 
     @Test
-    public void shouldSavePoliticianOntoDatabaseWithCorrectTypeBySenatorial() {
+    public void shouldSavePoliticianOntoDatabaseWithCorrectTypeBySenatorial() throws PoliticianNotPersistableException {
         var senatorial = new SenatorialBuilder(politician)
                 .setTotalMonthsOfService(12)
                 .build();

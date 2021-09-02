@@ -6,11 +6,13 @@ import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianNotFoundException;
+import com.example.demo.exceptions.PoliticianNotPersistableException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 public class RatingService {
 
@@ -40,8 +42,12 @@ public class RatingService {
 		String polNumber = politician.retrievePoliticianNumber();
 
 		rating.ratePolitician();
-		
-		politicianService.updatePolitician(politician);
+
+		try {
+			politicianService.updatePolitician(politician);
+		} catch (PoliticianNotPersistableException e) {
+			Logger.getLogger("PoliticiansLogger").warning("Save method should have not thrown an exception");
+		}
 		PoliticiansRating savedRating = ratingRepo.save(rating);
 		
 		return savedRating;

@@ -3,6 +3,7 @@ package com.example.demo.adapter.in.service;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianAlreadyExistsException;
+import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,7 @@ public class PoliticiansService {
 	}
 	
 	@Transactional
-	public Politicians savePolitician(Politicians politician) {
+	public Politicians savePolitician(Politicians politician) throws PoliticianNotPersistableException {
 		try {
 			Politicians politicianSaved = politiciansRepo.save(politician);
 
@@ -48,7 +49,7 @@ public class PoliticiansService {
 		Updating politicians is only done on lower levels of code and not on the user side.
 	 */
 	@Transactional
-	public Politicians updatePolitician(Politicians politician) {
+	public Politicians updatePolitician(Politicians politician) throws PoliticianNotPersistableException {
 		return politiciansRepo.update(politician);
 	}
 
