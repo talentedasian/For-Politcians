@@ -5,4 +5,14 @@ public enum PoliticalParty {
 
 	PoliticalParty(String s) {
 	}
+
+	public static PoliticalParty value(String party) {
+		try {
+			return PoliticalParty.valueOf(party);
+		} catch (IllegalArgumentException e) {
+			return GREY_ZONE;
+		}
+	}
+
+
 }

@@ -14,7 +14,7 @@ public class PoliticalPartyEnumTest {
 
 	@Test
 	public void shouldMapToPoliticalPartyWhenPartyIsSpecifiedEnums() {
-		PoliticalParty politicalParty = PoliticalParty.valueOf("dds");
+		PoliticalParty politicalParty = PoliticalParty.value("DDS");
 		
 		assertThat(politicalParty,
 				equalTo(DDS));
@@ -23,7 +23,7 @@ public class PoliticalPartyEnumTest {
 	@ParameterizedTest
 	@ValueSource(strings = { "dsaqd", "random", "no sense" })
 	public void shouldMapToGreyZonePoliticalPartyWhenPartyIsNotOnSpecifiedEnums(String party) {
-		PoliticalParty politicalParty = PoliticalParty.valueOf(party);
+		PoliticalParty politicalParty = PoliticalParty.value(party);
 		
 		assertThat(politicalParty,
 				equalTo(GREY_ZONE));
