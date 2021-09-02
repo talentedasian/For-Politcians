@@ -35,6 +35,10 @@ public class UserRater {
 		return politicalParties;
 	}
 
+	public List<RateLimit> getRateLimits() {
+		return List.copyOf(rateLimit.values());
+	}
+
 	public UserRater(String facebookName, PoliticalParty politicalParties, String email,
 					 AccountNumber userAccountNumber, Map<PoliticianNumber, RateLimit> rateLimit) {
 		this.facebookName = facebookName;
@@ -78,6 +82,10 @@ public class UserRater {
 
 	public void rateLimitUser(PoliticianNumber polNumber) {
 		rateLimit.put(polNumber, new RateLimit(userAccountNumber.accountNumber(), polNumber, LocalDate.now()));
+	}
+
+	public Optional<RateLimit> findRateLimit(PoliticianNumber politicianNumber) {
+		return Optional.ofNullable(rateLimit.get(politicianNumber));
 	}
 
 	private boolean isRateLimited(PoliticianNumber politicianNumber) {

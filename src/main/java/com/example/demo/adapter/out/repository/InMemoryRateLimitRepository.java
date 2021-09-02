@@ -21,7 +21,7 @@ public class InMemoryRateLimitRepository implements RateLimitRepository {
     @Override
     public Optional<RateLimit> findUsingIdAndPoliticianNumber(String id, PoliticianNumber politicianNumber) {
         for (RateLimit entity : List.copyOf(database.values())) {
-            if (entity.id().equals(id) && entity.politicianNumber().equals(politicianNumber)) {
+            if (entity.id().equals(id) && entity.politicianNumber().equals(politicianNumber.politicianNumber())) {
                 return Optional.of(entity);
             }
         }
@@ -52,5 +52,11 @@ public class InMemoryRateLimitRepository implements RateLimitRepository {
     @Override
     public List<RateLimit> findUsingId(String id) {
         return null;
+    }
+
+    @Override
+    public void saveAll(List<RateLimit> rateLimits) {
+        rateLimits.stream()
+                .forEach(it -> database.put(it.id(), it));
     }
 }

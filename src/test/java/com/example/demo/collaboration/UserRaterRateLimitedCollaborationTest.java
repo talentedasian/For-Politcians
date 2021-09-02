@@ -1,12 +1,16 @@
-package com.example.demo;
+package com.example.demo.collaboration;
 
 import com.example.demo.adapter.in.service.RatingService;
 import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.domain.InMemoryRatingAdapterRepo;
 import com.example.demo.domain.NumberTestFactory;
 import com.example.demo.domain.RateLimitRepository;
-import com.example.demo.domain.entities.*;
+import com.example.demo.domain.entities.AccountNumber;
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
 import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.PoliticianTypes;
@@ -21,7 +25,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,12 +56,13 @@ public class UserRaterRateLimitedCollaborationTest {
 
     final String ACCOUNT_NUMBER = new AccountNumber(accNumberCalc.calculateEntityNumber().getAccountNumber()).accountNumber();
 
-    @Mock RatingRepository ratingRepo;
+    RatingRepository ratingRepo;
     @Mock PoliticiansRepository polRepo;
 
     @BeforeEach
     public void setup() {
         rateLimitRepository = new InMemoryRateLimitRepository();
+        ratingRepo = new InMemoryRatingAdapterRepo(rateLimitRepository);
     }
 
     @Test
@@ -81,7 +85,7 @@ public class UserRaterRateLimitedCollaborationTest {
                 .setRater(rater)
                 .build();
 
-        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER, new PoliticianNumber(POLITICIAN_NUMBER), LocalDate.now()));
+        rater.rateLimitUser(new PoliticianNumber(politician.retrievePoliticianNumber()));
 
         assertThrows(UserRateLimitedOnPoliticianException.class, () -> service.saveRatings(rating));
     }
@@ -100,13 +104,13 @@ public class UserRaterRateLimitedCollaborationTest {
                 .build();
 
         var rating = new PoliticiansRating.Builder()
+                .setId("1")
                 .setRating(0.D)
                 .setPolitician(politician)
                 .setRepo(rateLimitRepository)
                 .setRater(rater)
                 .build();
 
-        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER, new PoliticianNumber(POLITICIAN_NUMBER), LocalDate.now().minusDays(8)));
         service.saveRatings(rating);
 
         var rateLimit = rateLimitRepository.findUsingIdAndPoliticianNumber(ACCOUNT_NUMBER, new PoliticianNumber(POLITICIAN_NUMBER));

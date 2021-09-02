@@ -4,8 +4,6 @@ import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.PoliticiansRating;
-import com.example.demo.domain.entities.UserRater;
-import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
@@ -41,16 +39,6 @@ public class RatingService {
 
 		String polNumber = politician.retrievePoliticianNumber();
 
-		if (!canRate(rating.getRater(), polNumber)) {
-			long daysLeft = rating.getRater().daysLeftToRate(polNumber);
-
-			throw new UserRateLimitedOnPoliticianException("User is rate limited on politician with " + daysLeft + " days left",
-					daysLeft);
-		}
-
-		// INFO : Make sure to rate limit the rater
-		rateLimitingService.rateLimitUser(rating.getRater().returnUserAccountNumber(), new PoliticianNumber(polNumber));
-
 		rating.ratePolitician();
 		
 		politicianService.updatePolitician(politician);
@@ -59,10 +47,6 @@ public class RatingService {
 		return savedRating;
 	}
 
-	private boolean canRate(UserRater rater, String polNumber) {
-		return rater.canRate(polNumber);
-	}
-	
 	@Transactional(readOnly = true)
 	public List<PoliticiansRating> findRatingsByFacebookEmail(String email) {
 		return ratingRepo.findByRater_Email(email);

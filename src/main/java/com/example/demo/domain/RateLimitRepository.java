@@ -17,4 +17,6 @@ public interface RateLimitRepository {
 	long countUsingIdAndPoliticianNumber(String id, PoliticianNumber polNumber);
 
 	List<RateLimit> findUsingId(String id);
+
+    void saveAll(List<RateLimit> rateLimits);
 }

@@ -24,8 +24,12 @@ public class UserRaterJpaEntity {
     private String userAccountNumber;
 
     @Column(nullable = false)
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<RateLimitJpaEntity> rateLimits;
+
+    public List<RateLimitJpaEntity> getRateLimits() {
+        return rateLimits;
+    }
 
     UserRaterJpaEntity(String name, PoliticalParty politicalParties, String email, String userAccountNumber,
                        List<RateLimitJpaEntity> rateLimits) {

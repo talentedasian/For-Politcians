@@ -64,4 +64,10 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
                 .map(it -> it.toRateLimit())
                 .toList();
     }
+
+    @Override
+    public void saveAll(List<RateLimit> rateLimits) {
+        rateRepo.saveAll(rateLimits.stream().map(RateLimitJpaEntity::of).toList());
+    }
+
 }
