@@ -49,7 +49,7 @@ public class PresidentialPoliticianTest {
 	}
 
 	@Test
-	public void keyShouldNotBeInMapEvenWithSamePoliticianNumber() {
+	public void keyShouldNotBeInMapEvenWithSamePoliticianNumberWithDifferentType() {
 		var actualPolitician = presidentialBuilder.build();
 
 		Map<Politicians,Politicians> map = new HashMap<>();

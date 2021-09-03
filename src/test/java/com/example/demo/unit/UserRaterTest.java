@@ -1,4 +1,4 @@
-package com.example.demo.unit.rateLimit;
+package com.example.demo.unit;
 
 import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.entities.UserRater;

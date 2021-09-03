@@ -45,7 +45,6 @@ public class PoliticiansTest {
 		politician.setType(Politicians.Type.SENATORIAL);
 		int actualHashCode = politician.hashCode();
 
-
 		Assertions.assertEquals(expectedHashCode, actualHashCode);
 	}
 	

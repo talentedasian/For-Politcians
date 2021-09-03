@@ -18,7 +18,7 @@ public class AccountNumberTest {
 
     final String ACCOUNT_NUMBER = new AccountNumber(accNumberCalc.calculateEntityNumber().getAccountNumber()).accountNumber();
 
-    @Test                         // ( "-" )
+    @Test
     public void shouldThrowIllegalStateExceptionIfNoHyphen() {
         String ACCOUNT_NUMBER_WITHOUT_HYPHEN = "DFFLM".concat(FACEBOOK_ID);
 

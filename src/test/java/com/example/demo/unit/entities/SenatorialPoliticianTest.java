@@ -87,7 +87,7 @@ public class SenatorialPoliticianTest {
     }
 
     @Test
-    public void keyShouldNotBeInMapEvenWithSamePoliticianNumber() {
+    public void keyShouldNotBeInMapEvenWithSamePoliticianNumberButDifferentTypeq() {
         var actualPolitician = senatorialBuilder.build();
 
         Map<Politicians,Politicians> map = new HashMap<>();
