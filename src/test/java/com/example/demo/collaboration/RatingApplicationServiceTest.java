@@ -2,7 +2,7 @@ package com.example.demo.collaboration;
 
 import com.example.demo.adapter.in.service.RateLimitingService;
 import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
-import com.example.demo.domain.NumberTestFactory;
+import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.RateLimit;
 import org.junit.jupiter.api.BeforeEach;

@@ -5,11 +5,9 @@ import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
 import org.junit.jupiter.api.BeforeEach;
 
-import static org.mockito.Mockito.mock;
-
 public class BaseClassForPoliticianDTOTests {
 
-    protected final String POLITICIAN_NUMBER = "123polNumber";
+    protected final String POLITICIAN_NUMBER = NumberTestFactory.POL_NUMBER().politicianNumber();
 
     protected final String LAW_SIGNED = "Gas Taxification";
     protected final String LAW_MADE = "Very Important Law";

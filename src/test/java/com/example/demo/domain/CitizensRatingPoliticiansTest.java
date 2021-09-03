@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicianNumber.PoliticianNumberCalculator;
 import com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory;

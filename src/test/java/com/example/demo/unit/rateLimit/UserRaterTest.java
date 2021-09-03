@@ -1,6 +1,6 @@
 package com.example.demo.unit.rateLimit;
 
-import com.example.demo.domain.NumberTestFactory;
+import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
 import com.example.demo.domain.politicians.PoliticianNumber;

@@ -3,7 +3,7 @@ package com.example.demo.collaboration;
 import com.example.demo.adapter.in.service.PoliticiansService;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
-import com.example.demo.domain.NumberTestFactory;
+import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;

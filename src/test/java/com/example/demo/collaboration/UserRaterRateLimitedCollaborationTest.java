@@ -6,7 +6,7 @@ import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.baseClasses.BuilderFactory;
 import com.example.demo.domain.InMemoryRatingAdapterRepo;
-import com.example.demo.domain.NumberTestFactory;
+import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.*;
 import com.example.demo.domain.enums.PoliticalParty;

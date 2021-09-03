@@ -6,7 +6,7 @@ import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
 import com.example.demo.domain.InMemoryRatingAdapterRepo;
-import com.example.demo.domain.NumberTestFactory;
+import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
 import static com.example.demo.baseClasses.BuilderFactory.createRater;
-import static com.example.demo.domain.NumberTestFactory.ACC_NUMBER;
+import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RatingPoliticiansTest {
