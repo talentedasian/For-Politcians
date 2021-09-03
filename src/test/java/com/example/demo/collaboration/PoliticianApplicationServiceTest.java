@@ -68,9 +68,6 @@ public class PoliticianApplicationServiceTest {
 
         assertThat(politicianSaved)
                 .isEqualTo(polRepo.findByPoliticianNumber(senatorial.retrievePoliticianNumber()).get());
-        assertThat(polRepo.findAll())
-                .size()
-                .isEqualTo(2);
     }
 
 

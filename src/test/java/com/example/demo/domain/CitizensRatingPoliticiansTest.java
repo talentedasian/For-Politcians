@@ -3,7 +3,6 @@ package com.example.demo.domain;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.entities.UserRater;
-import com.example.demo.domain.enums.PoliticalParty;
 import com.example.demo.domain.politicianNumber.PoliticianNumberCalculator;
 import com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory;
 import com.example.demo.domain.politicians.Name;
@@ -17,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
+import static com.example.demo.baseClasses.BuilderFactory.createRater;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /*
@@ -53,8 +54,8 @@ public class CitizensRatingPoliticiansTest {
         var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
 
-        var firstRating = createPolRating(2.243, rater);
-        var fourScaledRatingForHalfDownRoundingMode = createPolRating(3.22326, raterThatsNotRateLimited);
+        var firstRating = createPolRating(2.243, rater, politicians);
+        var fourScaledRatingForHalfDownRoundingMode = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
 
         firstRating.ratePolitician();
         fourScaledRatingForHalfDownRoundingMode.ratePolitician();
@@ -71,9 +72,9 @@ public class CitizensRatingPoliticiansTest {
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
         var secondRaterThatsNotRateLimited = createRater("FLPOM-000120312");
 
-        var firstRating = createPolRating(2.243, rater);
-        var fourScaledRating = createPolRating(3.22326, raterThatsNotRateLimited);
-        var threeScaledRating = createPolRating(6.223, secondRaterThatsNotRateLimited);
+        var firstRating = createPolRating(2.243, rater, politicians);
+        var fourScaledRating = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
+        var threeScaledRating = createPolRating(6.223, secondRaterThatsNotRateLimited, politicians);
 
         firstRating.ratePolitician();
         fourScaledRating.ratePolitician();
@@ -91,8 +92,8 @@ public class CitizensRatingPoliticiansTest {
 
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
 
-        var firstRating = createPolRating(2.243, rater);
-        var secondRating = createPolRating(3.22326, raterThatsNotRateLimited);
+        var firstRating = createPolRating(2.243, rater, politicians);
+        var secondRating = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
 
         firstRating.ratePolitician();
         secondRating.ratePolitician();
@@ -109,8 +110,8 @@ public class CitizensRatingPoliticiansTest {
 
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
 
-        var firstRating = createPolRating(2.243, rater);
-        var secondRating = createPolRating(3.2232, raterThatsNotRateLimited);
+        var firstRating = createPolRating(2.243, rater, politicians);
+        var secondRating = createPolRating(3.2232, raterThatsNotRateLimited, politicians);
 
         firstRating.ratePolitician();
         secondRating.ratePolitician();
@@ -121,25 +122,6 @@ public class CitizensRatingPoliticiansTest {
                 .isEqualTo(1);
         assertThat(politicians.totalCountsOfRatings())
                 .isEqualTo(EXPECTED_NUMBER_OF_RATINGS);
-    }
-
-    private PoliticiansRating createPolRating(double rating, UserRater rater) {
-        return new PoliticiansRating.Builder()
-                .setRating(rating)
-                .setRepo(rateLimitRepo)
-                .setRater(rater)
-                .setPolitician(politicians)
-                .build();
-    }
-
-    private UserRater createRater(String accountNumber) {
-        return new UserRater.Builder()
-                .setAccountNumber(accountNumber)
-                .setName("Random Name")
-                .setEmail("test@gmail.com")
-                .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimit(null)
-                .build();
     }
 
 }
