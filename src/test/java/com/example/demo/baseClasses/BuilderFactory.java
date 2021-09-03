@@ -20,6 +20,7 @@ public class BuilderFactory {
     // USE THIS TO CREATE INSTANCES OF POLITICIANSRATING THAT DOES NOT REQUIRE AN ID
     public static PoliticiansRating createPolRating(double rating, UserRater rater, Politicians politicians) {
         return new PoliticiansRating.Builder()
+                .setId("1")
                 .setRating(rating)
                 .setRater(rater)
                 .setPolitician(politicians)
