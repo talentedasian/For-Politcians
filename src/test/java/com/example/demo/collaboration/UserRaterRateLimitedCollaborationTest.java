@@ -8,10 +8,7 @@ import com.example.demo.baseClasses.BuilderFactory;
 import com.example.demo.domain.InMemoryRatingAdapterRepo;
 import com.example.demo.domain.NumberTestFactory;
 import com.example.demo.domain.RateLimitRepository;
-import com.example.demo.domain.entities.AccountNumber;
-import com.example.demo.domain.entities.PoliticiansRating;
-import com.example.demo.domain.entities.Rating;
-import com.example.demo.domain.entities.UserRater;
+import com.example.demo.domain.entities.*;
 import com.example.demo.domain.enums.PoliticalParty;
 import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
@@ -26,6 +23,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
@@ -110,8 +108,8 @@ public class UserRaterRateLimitedCollaborationTest {
         assertAll(
                 () -> assertThat(rateLimit)
                         .isNotEmpty(),
-                () -> assertThat(rateLimit.get().daysLeftOfBeingRateLimited())
-                        .isEqualTo(7));
+                () -> assertThat(rateLimit.get())
+                        .isEqualTo(new RateLimit(ACCOUNT_NUMBER, new PoliticianNumber(POLITICIAN_NUMBER), LocalDate.now())));
     }
 
 }
