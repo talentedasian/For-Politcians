@@ -1,9 +1,12 @@
 package com.example.demo.collaboration;
 
-import com.example.demo.adapter.in.service.PoliticiansService;
+import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
+import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
+import com.example.demo.domain.InMemoryRatingAdapterRepo;
 import com.example.demo.domain.NumberTestFactory;
+import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.Politicians;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +17,8 @@ public class ExpectedAverageRatingWhenRatingPoliticiansTest {
     final String LAST_NAME = "Duterte";
 
     PoliticiansRepository polRepo;
-
-    PoliticiansService polService;
+    RateLimitRepository rateLimitRepo;
+    RatingRepository ratingRepo;
 
     Politicians.PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder(NumberTestFactory.POL_NUMBER().politicianNumber())
             .setFirstName(FIRST_NAME)
@@ -27,7 +30,9 @@ public class ExpectedAverageRatingWhenRatingPoliticiansTest {
     public void setup() {
         polRepo = new InMemoryPoliticianAdapterRepo();
 
-        polService = new PoliticiansService(polRepo);
+        rateLimitRepo = new InMemoryRateLimitRepository();
+
+        ratingRepo = new InMemoryRatingAdapterRepo();
     }
 
 

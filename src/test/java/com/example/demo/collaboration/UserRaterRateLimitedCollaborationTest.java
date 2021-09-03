@@ -4,6 +4,7 @@ import com.example.demo.adapter.in.service.RatingService;
 import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.baseClasses.BuilderFactory;
 import com.example.demo.domain.InMemoryRatingAdapterRepo;
 import com.example.demo.domain.NumberTestFactory;
 import com.example.demo.domain.RateLimitRepository;
@@ -13,7 +14,7 @@ import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
 import com.example.demo.domain.politicians.PoliticianNumber;
-import com.example.demo.domain.politicians.PoliticianTypes;
+import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
 import com.example.demo.domain.userRaterNumber.AbstractUserRaterNumber;
@@ -27,6 +28,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
+import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -44,7 +46,7 @@ public class UserRaterRateLimitedCollaborationTest {
             .setPoliticiansRating(null)
             .setRating(new Rating(0D, 0D));
 
-    Politicians politician = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder)
+    Politicians politician = new PresidentialBuilder(politicianBuilder)
             .build();
 
     final String NAME = "Any Name Really";
@@ -61,8 +63,9 @@ public class UserRaterRateLimitedCollaborationTest {
 
     @BeforeEach
     public void setup() {
+        ratingRepo = new InMemoryRatingAdapterRepo();
+
         rateLimitRepository = new InMemoryRateLimitRepository();
-        ratingRepo = new InMemoryRatingAdapterRepo(rateLimitRepository);
     }
 
     @Test
@@ -78,12 +81,7 @@ public class UserRaterRateLimitedCollaborationTest {
                 .setRateLimit(null)
                 .build();
 
-        var rating = new PoliticiansRating.Builder()
-                .setRating(0.D)
-                .setPolitician(politician)
-                .setRepo(rateLimitRepository)
-                .setRater(rater)
-                .build();
+        var rating = createPolRating(0.0D, rater, politician);
 
         rater.rateLimitUser(new PoliticianNumber(politician.retrievePoliticianNumber()));
 
@@ -96,18 +94,12 @@ public class UserRaterRateLimitedCollaborationTest {
 
         var service = new RatingService(ratingRepo, polRepo, rateLimitRepository);
 
-        var rater = new UserRater.Builder()
-                .setAccountNumber(ACCOUNT_NUMBER)
-                .setName("Any Name Really")
-                .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimit(null)
-                .build();
+        var rater = BuilderFactory.createRater(ACCOUNT_NUMBER);
 
         var rating = new PoliticiansRating.Builder()
                 .setId("1")
                 .setRating(0.D)
                 .setPolitician(politician)
-                .setRepo(rateLimitRepository)
                 .setRater(rater)
                 .build();
 

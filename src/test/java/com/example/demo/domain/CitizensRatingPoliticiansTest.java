@@ -1,8 +1,6 @@
 package com.example.demo.domain;
 
-import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.Rating;
-import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.politicianNumber.PoliticianNumberCalculator;
 import com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory;
 import com.example.demo.domain.politicians.Name;

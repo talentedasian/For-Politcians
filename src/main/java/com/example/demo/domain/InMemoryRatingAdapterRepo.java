@@ -2,21 +2,15 @@ package com.example.demo.domain;
 
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.entities.PoliticiansRating;
-import com.example.demo.domain.entities.RateLimit;
-import com.example.demo.domain.politicians.PoliticianNumber;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class InMemoryRatingAdapterRepo implements RatingRepository {
 
     Map<String, PoliticiansRating> database = new HashMap<>();
-
-    final RateLimitRepository rateLimitRepo;
-
-    public InMemoryRatingAdapterRepo(RateLimitRepository rateLimitRepo) {
-        this.rateLimitRepo = rateLimitRepo;
-    }
 
     @Override
     public Optional<PoliticiansRating> findById(String id) {
@@ -25,9 +19,8 @@ public class InMemoryRatingAdapterRepo implements RatingRepository {
 
     @Override
     public PoliticiansRating save(PoliticiansRating rating) {
-        var entity = database.put(rating.getId().toString(), rating);
-        rateLimitRepo.save(new RateLimit(rating.getRater().returnUserAccountNumber(), new PoliticianNumber(rating.getPolitician().retrievePoliticianNumber()), LocalDate.now()));
-        return entity;
+        database.put(rating.getId().toString(), rating);
+        return database.get(rating.getId().toString());
     }
 
     @Override

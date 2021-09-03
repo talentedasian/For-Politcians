@@ -4,6 +4,7 @@ import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
@@ -39,8 +40,6 @@ public class RatingService {
 		Politicians politician = politicianService.findPoliticianByNumber(rating.getPolitician().retrievePoliticianNumber())
 				.orElseThrow(PoliticianNotFoundException::new);
 
-		String polNumber = politician.retrievePoliticianNumber();
-
 		rating.ratePolitician();
 
 		try {
@@ -49,6 +48,7 @@ public class RatingService {
 			Logger.getLogger("PoliticiansLogger").warning("Save method should have not thrown an exception");
 		}
 		PoliticiansRating savedRating = ratingRepo.save(rating);
+		rateLimitingService.rateLimitUser(savedRating.getRater().returnUserAccountNumber(), new PoliticianNumber(politician.retrievePoliticianNumber()));
 		
 		return savedRating;
 	}

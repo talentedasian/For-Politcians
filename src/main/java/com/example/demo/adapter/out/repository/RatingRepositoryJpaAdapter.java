@@ -1,7 +1,6 @@
 package com.example.demo.adapter.out.repository;
 
 import com.example.demo.adapter.out.jpa.PoliticiansRatingJpaEntity;
-import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.PoliticiansRating;
 import org.springframework.stereotype.Repository;
 
@@ -12,11 +11,9 @@ import java.util.Optional;
 public class RatingRepositoryJpaAdapter implements RatingRepository {
 
     private final RatingJpaRepository repo;
-    private final RateLimitRepository rateLimitRepo;
 
-    public RatingRepositoryJpaAdapter(RatingJpaRepository repo, RateLimitRepository rateLimitRepository) {
+    public RatingRepositoryJpaAdapter(RatingJpaRepository repo) {
         this.repo = repo;
-        rateLimitRepo = rateLimitRepository;
     }
 
     @Override
@@ -29,7 +26,6 @@ public class RatingRepositoryJpaAdapter implements RatingRepository {
     @Override
     public PoliticiansRating save(PoliticiansRating rating) {
         PoliticiansRatingJpaEntity entity = repo.save(PoliticiansRatingJpaEntity.from(rating));
-        rateLimitRepo.saveAll(entity.getRater().getRateLimits().stream().map(it -> it.toRateLimit()).toList());
 
         return entity.toRating();
     }
