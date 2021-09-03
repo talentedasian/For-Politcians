@@ -76,4 +76,38 @@ public class RatingPoliticiansTest {
                 .isEqualTo(EXPECTED_CALCULATED_AVERAGE_RATING);
     }
 
+    @Test
+    public void averageRatingOfPoliticianShouldBeWhatTheSoleRatingIsWhenPoliticianHasOnlyOneRater() throws Exception{
+        final double EXPECTED_CALCULATED_AVERAGE_RATING = 4.977D;
+
+        var politician = new PresidentialBuilder(politicianBuilder).build();
+
+        polRepo.save(politician);
+
+        var rater = createRater(ACC_NUMBER().accountNumber());
+
+        var rating = createPolRating(4.97654D, rater, politician);
+
+        ratingService.saveRatings(rating);
+
+        var politicianQueried = polRepo.findByPoliticianNumber(politician.retrievePoliticianNumber()).get();
+
+        assertThat(politicianQueried.averageRating())
+                .isEqualTo(EXPECTED_CALCULATED_AVERAGE_RATING);
+    }
+
+    @Test
+    public void averageRatingOfPoliticianShouldBeToWhatWasInitiallySetDuringInstanceCreationWhenItDoesNotHaveRaters() throws Exception{
+        final double EXPECTED_AVERAGE_RATING = politicianBuilder.build().averageRating();
+
+        var politician = new PresidentialBuilder(politicianBuilder).build();
+
+        polRepo.save(politician);
+
+        var politicianQueried = polRepo.findByPoliticianNumber(politician.retrievePoliticianNumber()).get();
+
+        assertThat(politicianQueried.averageRating())
+                .isEqualTo(EXPECTED_AVERAGE_RATING);
+    }
+
 }
