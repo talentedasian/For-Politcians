@@ -1,0 +1,36 @@
+package com.example.demo.adapter;
+
+import com.example.demo.adapter.dto.RateLimitJpaEntity;
+import com.example.demo.adapter.out.repository.RateLimitRepositoryJpa;
+import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
+import com.example.demo.domain.NumberTestFactory;
+import com.example.demo.domain.entities.RateLimit;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import testAnnotations.DatabaseTest;
+
+import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@DatabaseTest
+public class RateLimitJpaRepoTest extends BaseClassTestsThatUsesDatabase {
+
+    @Autowired RateLimitRepositoryJpa repo;
+
+    @Test
+    public void shouldReturn2WhenQueryingCountUsingIdAndPoliticianNumber() {
+        var rateLimit = new RateLimit("1", NumberTestFactory.POL_NUMBER(), LocalDate.now());
+
+        var entity = RateLimitJpaEntity.of(rateLimit);
+        var entity2 = RateLimitJpaEntity.of(rateLimit);
+
+        repo.save(entity);
+        repo.save(entity2);
+
+        long count = repo.countByAccountNumberAndPoliticianNumber("1", NumberTestFactory.POL_NUMBER().politicianNumber());
+        assertThat(count)
+                .isEqualTo(2);
+    }
+
+}

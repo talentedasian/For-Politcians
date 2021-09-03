@@ -68,7 +68,8 @@ public class RateLimitJpaEntity {
 	@Override
 	public String toString() {
 		return "RateLimitJpaEntity{" +
-				"accountNumber='" + accountNumber + '\'' +
+				"id=" + id +
+				", accountNumber='" + accountNumber + '\'' +
 				", politicianNumber='" + politicianNumber + '\'' +
 				", dateCreated=" + dateCreated +
 				'}';

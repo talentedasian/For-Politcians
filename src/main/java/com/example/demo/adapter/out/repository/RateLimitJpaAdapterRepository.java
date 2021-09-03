@@ -49,13 +49,7 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
 
     @Override
     public long countUsingIdAndPoliticianNumber(String id, PoliticianNumber polNumber) {
-        var rateLimit = new RateLimitJpaEntity(id, polNumber.politicianNumber());
-
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withMatcher("accountNumber", match -> match.exact())
-                .withMatcher("politicianNumber", match -> match.exact());
-
-        return rateRepo.count(Example.of(rateLimit, matcher));
+        return rateRepo.countByAccountNumberAndPoliticianNumber(id, polNumber.politicianNumber());
     }
 
     @Override

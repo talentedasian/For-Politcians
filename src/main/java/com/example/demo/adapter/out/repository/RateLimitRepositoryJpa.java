@@ -13,4 +13,6 @@ public interface RateLimitRepositoryJpa extends JpaRepository<RateLimitJpaEntity
     Optional<RateLimitJpaEntity> findByAccountNumberAndPoliticianNumber(String id, String polNumber);
 
     List<RateLimitJpaEntity> findByAccountNumber(String accountNumber);
+
+    long countByAccountNumberAndPoliticianNumber(String accountNumber, String polNumber);
 }
