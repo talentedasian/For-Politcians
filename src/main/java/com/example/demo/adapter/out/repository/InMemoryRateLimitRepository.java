@@ -15,7 +15,8 @@ public class InMemoryRateLimitRepository implements RateLimitRepository {
 
     @Override
     public RateLimit save(RateLimit rateLimit) {
-        return database.put(rateLimit.id(), rateLimit);
+        database.put(rateLimit.id(), rateLimit);
+        return database.get(rateLimit.id());
     }
 
     @Override
