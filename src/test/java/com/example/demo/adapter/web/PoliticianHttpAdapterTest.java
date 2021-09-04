@@ -2,12 +2,12 @@ package com.example.demo.adapter.web;
 
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
-import com.example.demo.baseClasses.MockMvcResult;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.Name;
 import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +16,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static com.example.demo.baseClasses.MockMvcAssertions.assertThat;
 import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
 import static com.example.demo.domain.politicians.Politicians.Type.PRESIDENTIAL;
 import static java.net.URI.create;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc(printOnlyOnFailure = false, print = MockMvcPrint.DEFAULT)
@@ -58,18 +61,23 @@ public class PoliticianHttpAdapterTest extends BaseClassTestsThatUsesDatabase {
                 .setRating(new Rating(0D, 0D));
     }
 
+    @AfterEach
+    public void teardown() {
+        polRepo.deleteByPoliticianNumber(POLITICIAN_NUMBER.politicianNumber());
+    }
+
     @Test
     public void shouldSaveToDatabaseGivenWithCorrectAuthorization() throws Exception{
         var politician = new PresidentialBuilder(politicianBuilder)
                 .setMostSignificantLawPassed("Random Law").build();
 
-        String response = mvc.perform(post(create("/api/politicians/politician"))
+        MvcResult response = mvc.perform(post(create("/api/politicians/politician"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Politician-Access", "password")
                 .content(requestContent))
-                .andReturn().getResponse().getContentAsString();
+                .andReturn();
 
-        assertThat(MockMvcResult.of(response))
+        assertThat(response)
                 .hasPath("id")
                     .isEqualTo(POLITICIAN_NUMBER.politicianNumber())
                 .hasPath("name")
@@ -78,11 +86,29 @@ public class PoliticianHttpAdapterTest extends BaseClassTestsThatUsesDatabase {
                     .isEqualTo(politician.averageRating())
                 .hasPath("most_significant_law_signed")
                     .isEqualTo(politician.getMostSignificantLawSigned());
+    }
 
-        /*
-            INFO : Don't forget to wipe out test fixture
-         */
-        polRepo.deleteByPoliticianNumber(politician.retrievePoliticianNumber());
+    @Test
+    public void shouldReturn200OKAndCorrectFieldsWhenFindingIndividualPoliticians() throws Exception{
+        var politician = new PresidentialBuilder(politicianBuilder)
+                .setMostSignificantLawPassed("Random Law").build();
+
+        polRepo.save(politician);
+
+        MvcResult response = mvc.perform(get(create("/api/politicians/politician/" + POLITICIAN_NUMBER.politicianNumber()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertThat(response)
+                .hasPath("id")
+                    .isEqualTo(POLITICIAN_NUMBER.politicianNumber())
+                .hasPath("name")
+                    .isEqualTo(politician.fullName())
+                .hasPath("rating")
+                    .isEqualTo(politician.averageRating())
+                .hasPath("most_significant_law_signed")
+                    .isEqualTo(politician.getMostSignificantLawSigned());
     }
 
 }
