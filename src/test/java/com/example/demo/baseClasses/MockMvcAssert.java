@@ -6,8 +6,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
 import static java.lang.String.format;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.*;
 
 public class MockMvcAssert {
 
@@ -26,26 +25,42 @@ public class MockMvcAssert {
     }
 
     public MockMvcAssertions isEqualTo(String expected) throws Exception {
-        JsonNode object = mapper.readTree(json.getJsonValue());
-        try {
-            String value = object.get(path).asText();
-
-            assertThat(value)
-                    .isEqualTo(expected);
-        } catch (NullPointerException e) {
-            fail(format("No \"%s\" path from json value provided", path));
-        }
-
-        return MockMvcAssertions.assertThat(json);
-    }
-
-    public MockMvcAssertions isEqualTo(double expected) throws IOException {
-        JsonNode object = mapper.readTree(json.getJsonValue());
-        double value = object.get(path).asDouble();
+        String value = getValueAsString();
 
         assertThat(value)
                 .isEqualTo(expected);
 
         return MockMvcAssertions.assertThat(json);
     }
+
+    public MockMvcAssertions isEqualTo(double expected) throws IOException {
+        double value = getValueAsDouble();
+
+        assertThat(value)
+                .isEqualTo(expected);
+
+        return MockMvcAssertions.assertThat(json);
+    }
+
+    private JsonNode getValue() throws IOException {
+        try {
+            return mapper.readTree(json.getJsonValue()).get(path);
+        } catch (NullPointerException e) {
+            fail(failMessage());
+        }
+        return null;
+    }
+
+    private String getValueAsString() throws IOException {
+        return getValue().asText();
+    }
+
+    private Double getValueAsDouble() throws IOException {
+        return getValue().asDouble();
+    }
+
+    private String failMessage() {
+        return format("No \"%s\" path from json value provided", path);
+    }
+
 }
