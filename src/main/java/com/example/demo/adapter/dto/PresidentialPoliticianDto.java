@@ -7,6 +7,8 @@ import com.example.demo.domain.politicians.Politicians;
 public final class PresidentialPoliticianDto extends PoliticianDto {
 
 	private final String mostSignificantLawSigned;
+
+	private final String type = "PRESIDENTIAL";
 	
 	public String getMostSignificantLawSigned() {
 		return mostSignificantLawSigned;

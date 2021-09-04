@@ -2,6 +2,7 @@ package com.example.demo.adapter.web;
 
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
+import com.example.demo.baseClasses.MockMvcResult;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.Name;
 import com.example.demo.domain.politicians.PoliticianNumber;
@@ -16,13 +17,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.example.demo.baseClasses.MockMvcAssertions.assertThat;
 import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
 import static com.example.demo.domain.politicians.Politicians.Type.PRESIDENTIAL;
 import static java.net.URI.create;
-import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc(printOnlyOnFailure = false, print = MockMvcPrint.DEFAULT)
@@ -61,15 +60,26 @@ public class PoliticianHttpAdapterTest extends BaseClassTestsThatUsesDatabase {
 
     @Test
     public void shouldSaveToDatabaseGivenWithCorrectAuthorization() throws Exception{
-        var politician = new PresidentialBuilder(politicianBuilder).build();
+        var politician = new PresidentialBuilder(politicianBuilder)
+                .setMostSignificantLawPassed("Random Law").build();
 
-        mvc.perform(post(create("/api/politicians/politician"))
+        String response = mvc.perform(post(create("/api/politicians/politician"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Politician-Access", "password")
                 .content(requestContent))
+                .andReturn().getResponse().getContentAsString();
 
-                    .andExpect(status().isCreated())
-                    .andExpect(jsonPath("id", equalTo(POLITICIAN_NUMBER.politicianNumber())));
+        assertThat(MockMvcResult.of(response))
+                .hasPath("id")
+                    .isEqualTo(POLITICIAN_NUMBER.politicianNumber())
+                .hasPath("name")
+                    .isEqualTo(politician.fullName())
+                .hasPath("rating")
+                    .isEqualTo(politician.averageRating())
+                .hasPath("most_significant_law_signed")
+                    .isEqualTo(politician.getMostSignificantLawSigned())
+                .hasPath("type")
+                    .isEqualTo(PRESIDENTIAL.toString());
 
         /*
             INFO : Don't forget to wipe out test fixture
