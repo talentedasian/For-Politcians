@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import testAnnotations.DatabaseTest;
 
+import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DatabaseTest
@@ -27,7 +28,7 @@ public class PolymorphicPoliticianPersistenceTest extends BaseClassTestsThatUses
 
     PoliticianJpaAdapterRepository repo;
 
-    Politicians politician = new Politicians.PoliticiansBuilder("FLPP-LFPP-0000")
+    Politicians politician = new Politicians.PoliticiansBuilder(POL_NUMBER())
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
             .setRating(new Rating(0D, 0D))

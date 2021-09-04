@@ -1,6 +1,7 @@
 package com.example.demo.adapter.out.jpa;
 
 import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician;
 import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician;
 import com.example.demo.domain.politicians.Politicians;
@@ -189,7 +190,7 @@ public class PoliticiansJpaEntity {
     }
 
     public Politicians toPoliticians() {
-        return new Politicians.PoliticiansBuilder(id)
+        return new Politicians.PoliticiansBuilder(new PoliticianNumber(id))
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setFullName()

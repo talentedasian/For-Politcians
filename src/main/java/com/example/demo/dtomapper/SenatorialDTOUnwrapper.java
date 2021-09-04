@@ -3,9 +3,14 @@ package com.example.demo.dtomapper;
 import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.adapter.in.dtoRequest.AddSenatorialPoliticianDtoRequest;
 import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.politicians.Name;
+import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
 import io.jsonwebtoken.lang.Assert;
+
+import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
+import static com.example.demo.domain.politicians.Politicians.Type.SENATORIAL;
 
 class SenatorialDTOUnwrapper extends PoliticianDTOUnwrapper{
 
@@ -18,7 +23,10 @@ class SenatorialDTOUnwrapper extends PoliticianDTOUnwrapper{
     }
 
     private Politicians dtoToEntity(AddSenatorialPoliticianDtoRequest dto) {
-        Politicians politician = new Politicians.PoliticiansBuilder("dummy")
+        final PoliticianNumber POLITICIAN_NUMBER = politicianCalculator(SENATORIAL)
+                .calculatePoliticianNumber(Name.of(dto.getFirstName(), dto.getLastName()));
+
+        Politicians politician = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
                 .setFirstName(dto.getFirstName())
                 .setLastName(dto.getLastName())
                 .setFullName()

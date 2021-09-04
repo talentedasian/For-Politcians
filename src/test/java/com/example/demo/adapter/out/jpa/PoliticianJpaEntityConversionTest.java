@@ -21,7 +21,7 @@ public class PoliticianJpaEntityConversionTest {
 
     @BeforeEach
     public void setup() {
-        politicianBuilder = new PoliticiansBuilder(POL_NUMBER().politicianNumber())
+        politicianBuilder = new PoliticiansBuilder(POL_NUMBER())
                 .setFirstName(FIRST_NAME)
                 .setLastName(LAST_NAME)
                 .setRating(new Rating(0D, 0D))

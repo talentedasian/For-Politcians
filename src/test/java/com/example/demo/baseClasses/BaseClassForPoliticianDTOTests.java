@@ -1,13 +1,14 @@
 package com.example.demo.baseClasses;
 
 import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
 import org.junit.jupiter.api.BeforeEach;
 
 public class BaseClassForPoliticianDTOTests {
 
-    protected final String POLITICIAN_NUMBER = NumberTestFactory.POL_NUMBER().politicianNumber();
+    protected final PoliticianNumber POLITICIAN_NUMBER = NumberTestFactory.POL_NUMBER();
 
     protected final String LAW_SIGNED = "Gas Taxification";
     protected final String LAW_MADE = "Very Important Law";

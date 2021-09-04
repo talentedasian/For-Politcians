@@ -1,6 +1,7 @@
 package com.example.demo.adapter.out.jpa;
 
 import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.Politicians;
 
 import javax.persistence.*;
@@ -86,7 +87,7 @@ public class PoliticiansRatingJpaEntity {
     }
 
     private static Politicians toPoliticians(PoliticiansJpaEntity jpaEntity) {
-        return new Politicians.PoliticiansBuilder(jpaEntity.getId())
+        return new Politicians.PoliticiansBuilder(PoliticianNumber.of(jpaEntity.getId()))
                 .setFirstName(jpaEntity.getFirstName())
                 .setLastName(jpaEntity.getLastName())
                 .setFullName()

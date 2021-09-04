@@ -237,7 +237,7 @@ public class Politicians {
 		 * method returns a new Builder with the politicianNumber
 		 */
 		public PoliticiansBuilder setPoliticianNumber(String politicianNumber) {
-			var builder = new PoliticiansBuilder(politicianNumber)
+			var builder = new PoliticiansBuilder(PoliticianNumber.of(politicianNumber))
 				.setId(id)
 				.setFirstName(firstName)
 				.setLastName(lastName)

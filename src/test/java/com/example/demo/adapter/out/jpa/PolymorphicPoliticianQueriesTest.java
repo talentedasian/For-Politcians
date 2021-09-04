@@ -3,6 +3,7 @@ package com.example.demo.adapter.out.jpa;
 import com.example.demo.adapter.out.repository.PoliticianJpaAdapterRepository;
 import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
+import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
@@ -28,7 +29,7 @@ public class PolymorphicPoliticianQueriesTest extends BaseClassTestsThatUsesData
 
     PoliticianJpaAdapterRepository repo;
 
-    Politicians politician = new Politicians.PoliticiansBuilder("FLPP-LFPP-0000")
+    Politicians politician = new Politicians.PoliticiansBuilder(NumberTestFactory.POL_NUMBER())
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
             .setRating(new Rating(0D, 0D))

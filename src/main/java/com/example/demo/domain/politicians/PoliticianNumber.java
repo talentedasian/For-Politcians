@@ -23,6 +23,10 @@ public record PoliticianNumber(String politicianNumber) {
         new PoliticianNumber(politicianNumber);
     }
 
+    public static PoliticianNumber of(String politicianNumber) {
+        return new PoliticianNumber(politicianNumber);
+    }
+
     private void isValid() {
         isNumberOfSeparatorsCorrect();
         isPlaceMentOfSeparatorsCorrect();
