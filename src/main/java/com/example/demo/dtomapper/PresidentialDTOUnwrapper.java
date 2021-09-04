@@ -3,9 +3,13 @@ package com.example.demo.dtomapper;
 import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.adapter.in.dtoRequest.AddPresidentialPoliticianDTORequest;
 import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.politicians.Name;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
 import io.jsonwebtoken.lang.Assert;
+
+import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
+import static com.example.demo.domain.politicians.Politicians.Type.PRESIDENTIAL;
 
 class PresidentialDTOUnwrapper extends PoliticianDTOUnwrapper {
 
@@ -18,11 +22,16 @@ class PresidentialDTOUnwrapper extends PoliticianDTOUnwrapper {
     }
 
     private Politicians dtoToEntity(AddPresidentialPoliticianDTORequest dto) {
-        Politicians politician = new Politicians.PoliticiansBuilder("dummy")
+        final String POLITICIAN_NUMBER = politicianCalculator(PRESIDENTIAL)
+                .calculatePoliticianNumber(new Name(dto.getFirstName(), dto.getLastName()))
+                .politicianNumber();
+
+        Politicians politician = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
                 .setFirstName(dto.getFirstName())
-                .setLastName(dto.lastName())
+                .setLastName(dto.getLastName())
                 .setFullName()
                 .setRating(new Rating(0.00D, 0.00D))
+                .setPoliticiansRating(null)
                 .build();
 
         return new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politician)

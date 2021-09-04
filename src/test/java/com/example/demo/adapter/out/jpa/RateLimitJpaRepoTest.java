@@ -1,4 +1,4 @@
-package com.example.demo.adapter;
+package com.example.demo.adapter.out.jpa;
 
 import com.example.demo.adapter.dto.RateLimitJpaEntity;
 import com.example.demo.adapter.out.repository.RateLimitRepositoryJpa;

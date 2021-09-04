@@ -98,7 +98,7 @@ public class PoliticiansJpaEntity {
 
     PoliticiansJpaEntity() {}
 
-    public PoliticiansJpaEntity(String id, String firstName, String lastName, String fullName,
+    PoliticiansJpaEntity(String id, String firstName, String lastName, String fullName,
                                 RatingJpaEntity ratingJpaEntity, int totalCountRating,
                                 List<PoliticiansRatingJpaEntity> politiciansRating) {
         this.id = id;
@@ -113,7 +113,11 @@ public class PoliticiansJpaEntity {
     public static PoliticiansJpaEntity from(Politicians politician) {
         var jpaEntity = new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
                 politician.lastName(), politician.fullName(),
-                RatingJpaEntity.from(politician.getRating()), politician.totalCountsOfRatings(), fromPoliticiansRating(politician.getPoliticiansRating()));
+                RatingJpaEntity.from(politician.getRating()), politician.totalCountsOfRatings(),
+                fromPoliticiansRating(politician.getPoliticiansRating()));
+        if (politician.getType() == null) {
+            return jpaEntity;
+        }
 
         switch (politician.getType()) {
             case PRESIDENTIAL -> {

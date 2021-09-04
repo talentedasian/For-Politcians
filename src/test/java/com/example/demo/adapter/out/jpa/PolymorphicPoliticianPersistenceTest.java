@@ -1,6 +1,5 @@
-package com.example.demo.adapter;
+package com.example.demo.adapter.out.jpa;
 
-import com.example.demo.adapter.out.jpa.PoliticiansJpaEntity;
 import com.example.demo.adapter.out.repository.PoliticianJpaAdapterRepository;
 import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;

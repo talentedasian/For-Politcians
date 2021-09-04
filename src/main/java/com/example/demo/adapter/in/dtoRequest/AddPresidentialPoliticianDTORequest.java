@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@JsonTypeName("Presidential")
+@JsonTypeName("PRESIDENTIAL")
 public class AddPresidentialPoliticianDTORequest extends AddPoliticianDTORequest{
 
     private String mostSignificantLawSigned;
@@ -25,5 +25,11 @@ public class AddPresidentialPoliticianDTORequest extends AddPoliticianDTORequest
         super(firstName, lastName, rating, "Presidential");
         this.mostSignificantLawSigned = mostSignificantLawSigned;
     }
-    
+
+    @Override
+    public String toString() {
+        return super.toString() + ", {" +
+                "mostSignificantLawSigned='" + mostSignificantLawSigned + '\'' +
+                '}';
+    }
 }

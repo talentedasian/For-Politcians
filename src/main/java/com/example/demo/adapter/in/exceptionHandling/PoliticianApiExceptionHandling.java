@@ -12,7 +12,7 @@ import com.example.demo.exceptions.PoliticianAlreadyExistsException;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 
 @RestControllerAdvice(assignableTypes = { PoliticianController.class })
-public class PoliticianExceptionHandling extends ResponseEntityExceptionHandler{
+public class PoliticianApiExceptionHandling extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(PoliticianAlreadyExistsException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)

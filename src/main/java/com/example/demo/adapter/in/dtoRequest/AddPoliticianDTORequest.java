@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
-		@JsonSubTypes.Type(value = AddSenatorialPoliticianDtoRequest.class, name = "Senatorial"),
-		@JsonSubTypes.Type(value = AddPresidentialPoliticianDTORequest.class, name = "Presidential")
+		@JsonSubTypes.Type(value = AddSenatorialPoliticianDtoRequest.class, name = "SENATORIAL"),
+		@JsonSubTypes.Type(value = AddPresidentialPoliticianDTORequest.class, name = "PRESIDENTIAL")
 })
 public class AddPoliticianDTORequest {
 
@@ -44,7 +44,7 @@ public class AddPoliticianDTORequest {
 		this.firstName = firstName;
 	}
 
-	public String lastName() {
+	public String getLastName() {
 		return lastName;
 	}
 
@@ -72,4 +72,13 @@ public class AddPoliticianDTORequest {
 		this.type = type;
 	}
 
+	@Override
+	public String toString() {
+		return "AddPoliticianDTORequest{" +
+				"firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", rating=" + rating +
+				", type='" + type + '\'' +
+				'}';
+	}
 }

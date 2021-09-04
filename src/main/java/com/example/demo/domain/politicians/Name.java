@@ -7,6 +7,10 @@ public record Name(String firstName, String lastName) {
         this.firstName = firstName;
     }
 
+    public static Name of(String firstName, String lastName) {
+        return new Name(firstName, lastName);
+    }
+
     public String fullName() {
         if (lastName == null || lastName.isBlank() || lastName.isEmpty()) {
             return firstName;

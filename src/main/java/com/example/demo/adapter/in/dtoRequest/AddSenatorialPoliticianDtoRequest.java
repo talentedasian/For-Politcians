@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.math.BigDecimal;
 
-@JsonTypeName("Senatorial")
+@JsonTypeName("SENATORIAL")
 public class AddSenatorialPoliticianDtoRequest extends AddPoliticianDTORequest {
 
     private int monthsOfService;

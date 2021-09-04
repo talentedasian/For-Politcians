@@ -22,7 +22,6 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
         if (politician.getType() == null) {
             throw new PoliticianNotPersistableException("Politician trying to persist does not have a type");
         }
-
         PoliticiansJpaEntity entitySaved = politicianRepository.save(PoliticiansJpaEntity.from(politician));
 
         return entitySaved.toPoliticians();

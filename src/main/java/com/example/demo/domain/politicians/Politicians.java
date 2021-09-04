@@ -33,7 +33,7 @@ public class Politicians {
 	}
 
 	public List<PoliticiansRating> getPoliticiansRating() {
-		return politiciansRating;
+		return this.politiciansRating;
 	}
 
 	public void setPoliticiansRating(List<PoliticiansRating> politiciansRating) {
@@ -41,7 +41,7 @@ public class Politicians {
 	}
 
 	public Rating getRating() {
-		return rating;
+		return this.rating;
 	}
 
 	public double averageRating() {
@@ -180,8 +180,13 @@ public class Politicians {
 		
 		private String politicianNumber;
 
+		@Deprecated(forRemoval = true) // GOAL : use constructor below instead
 		public PoliticiansBuilder(String politicianNumber) {
 			this.politicianNumber = politicianNumber;
+		}
+
+		public PoliticiansBuilder(PoliticianNumber politicianNumber) {
+			this.politicianNumber = politicianNumber.politicianNumber();
 		}
 
 		public PoliticiansBuilder setId(Integer id) {
