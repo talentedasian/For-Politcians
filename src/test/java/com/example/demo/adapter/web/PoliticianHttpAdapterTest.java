@@ -77,9 +77,7 @@ public class PoliticianHttpAdapterTest extends BaseClassTestsThatUsesDatabase {
                 .hasPath("rating")
                     .isEqualTo(politician.averageRating())
                 .hasPath("most_significant_law_signed")
-                    .isEqualTo(politician.getMostSignificantLawSigned())
-                .hasPath("type")
-                    .isEqualTo(PRESIDENTIAL.toString());
+                    .isEqualTo(politician.getMostSignificantLawSigned());
 
         /*
             INFO : Don't forget to wipe out test fixture

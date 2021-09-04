@@ -15,7 +15,7 @@ public class MockMvcAssertions extends AbstractAssert<MockMvcAssertions, MockMvc
         return new MockMvcAssertions(actual);
     }
 
-    public static MockMvcAssert hasPath(String path) {
+    public MockMvcAssert hasPath(String path) {
         return MockMvcAssert.of(path, actual);
     }
 
