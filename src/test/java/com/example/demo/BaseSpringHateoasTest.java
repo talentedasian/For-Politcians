@@ -1,9 +1,6 @@
 package com.example.demo;
 
-import com.example.demo.adapter.out.repository.PoliticiansRepository;
-import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
-import com.example.demo.domain.RateLimitRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +18,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 public class BaseSpringHateoasTest extends BaseClassTestsThatUsesDatabase {
-	
-	@Autowired PoliticiansRepository repo;
-	@Autowired RatingRepository ratingRepo;
-	@Autowired RateLimitRepository rateLimitRepo;
 
 	@RegisterExtension
 	final RestDocumentationExtension restDocumentation = new RestDocumentationExtension("rest-docs");

@@ -1,10 +1,10 @@
 package com.example.demo.hateoas;
 
+import com.example.demo.adapter.in.service.RateLimitingService;
+import com.example.demo.adapter.out.web.RateLimitProcessor;
 import com.example.demo.domain.RateLimitRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.example.demo.adapter.in.service.RateLimitingService;
 
 @Configuration
 public class ProcessorConfigurations {

@@ -1,10 +1,11 @@
-package com.example.demo.hateoas;
+package com.example.demo.adapter.out.web;
 
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.service.RateLimitingService;
 import com.example.demo.adapter.in.web.RatingsController;
 import com.example.demo.adapter.in.web.dto.RateLimitDto;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
+import com.example.demo.hateoas.RatingProcessor;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -21,7 +22,6 @@ public class RateLimitProcessor implements RepresentationModelProcessor<EntityMo
 	private final RateLimitingService rateLimitService;
 	
 	public RateLimitProcessor(RateLimitingService rateLimitService) {
-		super();
 		this.rateLimitService = rateLimitService;
 	}
 	
