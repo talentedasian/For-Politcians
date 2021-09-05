@@ -1,8 +1,10 @@
 package com.example.demo.adapter.out.repository;
 
 import com.example.demo.adapter.out.jpa.PoliticiansJpaEntity;
+import com.example.demo.domain.Page;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,10 +13,10 @@ import java.util.Optional;
 @Repository
 public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
 
-    private final PoliticiansJpaRepository politicianRepository;
+    private final PoliticiansJpaRepository repo;
 
-    public PoliticianJpaAdapterRepository(PoliticiansJpaRepository politicianRepository) {
-        this.politicianRepository = politicianRepository;
+    public PoliticianJpaAdapterRepository(PoliticiansJpaRepository repo) {
+        this.repo = repo;
     }
 
     @Override
@@ -22,7 +24,7 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
         if (politician.getType() == null) {
             throw new PoliticianNotPersistableException("Politician trying to persist does not have a type");
         }
-        PoliticiansJpaEntity entitySaved = politicianRepository.save(PoliticiansJpaEntity.from(politician));
+        PoliticiansJpaEntity entitySaved = repo.save(PoliticiansJpaEntity.from(politician));
 
         return entitySaved.toPoliticians();
     }
@@ -39,31 +41,38 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
 
     @Override
     public List<Politicians> findByLastNameAndFirstName(String lastName, String firstName) {
-        return politicianRepository.findByLastNameAndFirstName(lastName, firstName).stream()
+        return repo.findByLastNameAndFirstName(lastName, firstName).stream()
                 .map(entity -> entity.toPoliticians())
                 .toList();
     }
 
     @Override
     public Optional<Politicians> findByPoliticianNumber(String polNumber) {
-        Optional<PoliticiansJpaEntity> entity = politicianRepository.findById(polNumber);
+        Optional<PoliticiansJpaEntity> entity = repo.findById(polNumber);
 
         return entity.isEmpty() ? Optional.empty() : Optional.of(entity.get().toPoliticians());
     }
 
     @Override
     public boolean existsByPoliticianNumber(String polNumber) {
-        return politicianRepository.existsById(polNumber);
+        return repo.existsById(polNumber);
     }
 
     @Override
     public void deleteByPoliticianNumber(String polNumber) {
-        politicianRepository.deleteById(polNumber);
+        repo.deleteById(polNumber);
     }
 
     @Override
     public List<Politicians> findAll() {
-        return politicianRepository.findAll().stream()
+        return repo.findAll().stream()
+                .map(PoliticiansJpaEntity::toPoliticians)
+                .toList();
+    }
+
+    @Override
+    public List<Politicians> findAll(Page page) {
+        return repo.findAll(PageRequest.of(page.pageNumber(), Page.itemsPerPage)).stream()
                 .map(PoliticiansJpaEntity::toPoliticians)
                 .toList();
     }

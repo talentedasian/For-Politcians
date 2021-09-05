@@ -1,5 +1,6 @@
 package com.example.demo.adapter.out.repository;
 
+import com.example.demo.domain.Page;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 
@@ -21,4 +22,6 @@ public interface PoliticiansRepository{
 	void deleteByPoliticianNumber(String polNumber);
 
     List<Politicians> findAll();
+
+	List<Politicians> findAll(Page page);
 }
