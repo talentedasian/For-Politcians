@@ -99,6 +99,11 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
         MvcResult response = mvc.perform(get(create("/api/politicians/politician/" + POLITICIAN_NUMBER.politicianNumber()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+
+                .andDo(document("politician", links(halLinks(),
+                        linkWithRel("self").description("Link that points to politician resource"),
+                        linkWithRel("rate-politician").description("Link that rates politicians"))))
+
                 .andReturn();
 
         assertThat(response)
