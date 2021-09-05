@@ -33,7 +33,8 @@ public class Page {
         return of(this.pageNumber + pageNumber);
     }
 
-    public long currentOffset() {
-        return this.pageNumber * 10 + 1;
+    public int pageToSkip() {
+        return this.pageNumber * 10;
     }
+
 }

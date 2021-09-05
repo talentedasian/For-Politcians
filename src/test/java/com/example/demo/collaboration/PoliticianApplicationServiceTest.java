@@ -2,8 +2,10 @@ package com.example.demo.collaboration;
 
 import com.example.demo.adapter.in.service.PoliticiansService;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
-import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
 import com.example.demo.baseClasses.NumberTestFactory;
+import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
+import com.example.demo.domain.Page;
+import com.example.demo.domain.PagedObject;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
@@ -12,6 +14,8 @@ import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.example.demo.domain.politicians.PoliticianNumber.of;
+import static java.lang.String.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -24,7 +28,7 @@ public class PoliticianApplicationServiceTest {
 
     PoliticiansService polService;
 
-    Politicians.PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder(NumberTestFactory.POL_NUMBER().politicianNumber())
+    Politicians.PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder(NumberTestFactory.POL_NUMBER())
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
             .setPoliticiansRating(null)
@@ -68,6 +72,30 @@ public class PoliticianApplicationServiceTest {
 
         assertThat(politicianSaved)
                 .isEqualTo(polRepo.findByPoliticianNumber(senatorial.retrievePoliticianNumber()).get());
+    }
+
+    @Test
+    public void shouldReturn2ndPageOfPoliticiansWhenAskingForPagedPoliticiansWithPageOf2() throws Exception{
+        Politicians presidential = new PresidentialBuilder(politicianBuilder).build();
+
+        pagedPoliticianSetup();
+
+        PagedObject<Politicians> politicians = polRepo.findAll(Page.of(1));
+
+        assertThat(politicians.getValueIn(1))
+                .isNotEmpty()
+                .get()
+                .isEqualTo(presidential);
+    }
+
+    private void pagedPoliticianSetup() throws PoliticianNotPersistableException {
+        for (int i = 0; i < 17; i++) {
+            Politicians presidential = new PresidentialBuilder(politicianBuilder
+                    .setPoliticianNumber(of(NumberTestFactory.POL_NUMBER().politicianNumber().concat(valueOf(i))).politicianNumber()))
+                    .build();
+
+            polRepo.save(presidential);
+        }
     }
 
 
