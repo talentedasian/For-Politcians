@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.Assert.assertThrows;
 
 public class PaginatedObjectTest {
 
@@ -16,11 +16,11 @@ public class PaginatedObjectTest {
     }
 
     @Test
-    public void pagedObjectShouldAlwaysReturnSizeOfLessThanOrEqualTo10() throws Exception{
+    public void pagedObjectShouldReturnExpectedContentSize() throws Exception{
         int pagedObjectSize = PagedObject.<String>of(List.of()).pagedObjectSize();
 
         assertThat(pagedObjectSize)
-                .isEqualTo(0);
+                .isEqualTo(List.of().size());
     }
 
     @Test
@@ -30,27 +30,6 @@ public class PaginatedObjectTest {
                 "random", "random" , "random", "random");
 
         assertThrows(IllegalStateException.class, () -> PagedObject.<String>of(listSizeLargerThan10));
-    }
-
-    @Test
-    public void shouldReturn0AsCurrentPageNumberWhenUsingNewlyCreatedPagedObjectWithoutAnyPageSpecified() throws Exception{
-        int currentPageNumber = PagedObject.<String>of(List.of("random")).currentPage();
-
-        assertThat(currentPageNumber)
-                .isEqualTo(0);
-    }
-
-    @Test
-    public void shouldThrowIllegalStateExceptionWhenNextPageIsCalledWithNulParameter() throws Exception{
-        assertThrows(IllegalStateException.class, () -> PagedObject.of(List.of()).nextPage(null));
-    }
-
-    @Test
-    public void currentPageShouldBeIncrementedBy1WhenNextPageIsCalled() throws Exception{
-        int currentPageNumber = PagedObject.<String>of(List.of("random")).nextPage(List.of("random")).currentPage();
-
-        assertThat(currentPageNumber)
-                .isEqualTo(1);
     }
 
     @Test
@@ -97,6 +76,34 @@ public class PaginatedObjectTest {
                 .isNotEmpty()
                 .get()
                 .isEqualTo(object);
+    }
+
+    @Test
+    public void hasNextPageShouldReturnTrueIfPagedResultHasPageForRequestedPage() throws Exception{
+        List<String> contents = List.of("random1", "random2", "random3", "random4",
+                "random5", "random6", "random7", "random8", "random9", "random10", "random11", "random12",
+                "random13", "random14", "random15", "random16", "random17", "random18");
+
+        PagedResult<String> pagedResult = PagedResult.of(contents);
+
+        boolean hasNextPage = pagedResult.ofPage(Page.asZero()).hasNextPage();
+
+        assertThat(hasNextPage)
+                .isTrue();
+    }
+
+    @Test
+    public void hasNextPageShouldReturnFalseIfPagedResultHasRanOutOfPagesToGive() throws Exception{
+        List<String> contents = List.of("random1", "random2", "random3", "random4",
+                "random5", "random6", "random7", "random8", "random9", "random10", "random11", "random12",
+                "random13", "random14", "random15", "random16", "random17", "random18");
+
+        PagedResult<String> pagedResult = PagedResult.of(contents);
+
+        boolean hasNextPage = pagedResult.ofPage(Page.of(1)).hasNextPage();
+
+        assertThat(hasNextPage)
+                .isFalse();
     }
 
 }

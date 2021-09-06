@@ -17,7 +17,7 @@ public class Page {
         return new Page(pageNumber);
     }
 
-    public static Page asDefault() {
+    public static Page asZero() {
         return new Page(0);
     }
 
@@ -33,8 +33,31 @@ public class Page {
         return of(this.pageNumber + pageNumber);
     }
 
-    public int pageToSkip() {
-        return this.pageNumber * 10;
+    public Page previousPage() {
+        return of(this.pageNumber - 1);
     }
 
+    public int itemsToSkip(int multiple) {
+        return this.pageNumber * multiple;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Page page = (Page) o;
+
+        return pageNumber == page.pageNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        return pageNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Page{ " + pageNumber + " }";
+    }
 }

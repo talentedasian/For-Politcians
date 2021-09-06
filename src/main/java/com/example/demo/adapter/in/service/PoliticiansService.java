@@ -1,7 +1,6 @@
 package com.example.demo.adapter.in.service;
 
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
-import com.example.demo.domain.Page;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianAlreadyExistsException;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
@@ -64,8 +63,8 @@ public class PoliticiansService {
 		politiciansRepo.deleteByPoliticianNumber(polNumber);
 	}
 
-	@Transactional
-	public List<Politicians> findAllByPage(Page page) {
-		return politiciansRepo.findAll(page).values().toList();
-	}
+//	@Transactional
+//	public List<Politicians> findAllByPage(Page page) {
+//		return politiciansRepo.findAll(page).values().toList();
+//	}
 }

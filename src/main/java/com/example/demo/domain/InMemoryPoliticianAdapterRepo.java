@@ -61,11 +61,4 @@ public class InMemoryPoliticianAdapterRepo implements PoliticiansRepository {
         return List.copyOf(database.values());
     }
 
-    @Override
-    public PagedObject<Politicians> findAll(Page page) {
-        return PagedObject.ofPageSize(List.copyOf(database.values()).stream()
-                        .skip(page.pageToSkip())
-                        .limit(Page.itemsPerPage)
-                        .toList(), page);
-    }
 }

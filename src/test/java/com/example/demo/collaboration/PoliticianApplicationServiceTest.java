@@ -4,8 +4,6 @@ import com.example.demo.adapter.in.service.PoliticiansService;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
-import com.example.demo.domain.Page;
-import com.example.demo.domain.PagedObject;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
@@ -74,19 +72,19 @@ public class PoliticianApplicationServiceTest {
                 .isEqualTo(polRepo.findByPoliticianNumber(senatorial.retrievePoliticianNumber()).get());
     }
 
-    @Test
-    public void shouldReturn2ndPageOfPoliticiansWhenAskingForPagedPoliticiansWithPageOf2() throws Exception{
-        Politicians presidential = new PresidentialBuilder(politicianBuilder).build();
-
-        pagedPoliticianSetup();
-
-        PagedObject<Politicians> politicians = polRepo.findAll(Page.of(1));
-
-        assertThat(politicians.getValueIn(1))
-                .isNotEmpty()
-                .get()
-                .isEqualTo(presidential);
-    }
+//    @Test
+//    public void shouldReturn2ndPageOfPoliticiansWhenAskingForPagedPoliticiansWithPageOf2() throws Exception{
+//        Politicians presidential = new PresidentialBuilder(politicianBuilder).build();
+//
+//        pagedPoliticianSetup();
+//
+//        PagedObject<Politicians> politicians = polRepo.findAll(Page.of(1));
+//
+//        assertThat(politicians.getValueIn(1))
+//                .isNotEmpty()
+//                .get()
+//                .isEqualTo(presidential);
+//    }
 
     private void pagedPoliticianSetup() throws PoliticianNotPersistableException {
         for (int i = 0; i < 17; i++) {

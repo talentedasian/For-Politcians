@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class PaginationTest {
+public class PageTest {
 
     @Test
     public void shouldReturnPagedObjectWithPageNumberDefaultTo0() throws Exception{
-        int pageNumber = Page.asDefault().pageNumber();
+        int pageNumber = Page.asZero().pageNumber();
 
         assertThat(pageNumber)
                 .isEqualTo(0);
@@ -39,7 +39,7 @@ public class PaginationTest {
 
     @Test
     public void shouldReturn1WhenCurrentPageIsZeroAndNextPageIsCalled() throws Exception{
-        int pageNumber = Page.asDefault().nextPage().pageNumber();
+        int pageNumber = Page.asZero().nextPage().pageNumber();
 
         assertThat(pageNumber)
                 .isEqualTo(1);
@@ -49,7 +49,7 @@ public class PaginationTest {
     public void shouldReturnExpectedPageWhenNextPageIsCalledWithNumberOfPagesDesired() throws Exception{
         int EXPECTED_PAGE_NUMBER = 7;
 
-        Page firstPage = Page.asDefault().nextPage();
+        Page firstPage = Page.asZero().nextPage();
 
         assertThat(firstPage.nextPage(6).pageNumber())
                 .isEqualTo(EXPECTED_PAGE_NUMBER);
@@ -59,10 +59,28 @@ public class PaginationTest {
     public void shouldReturnExpectedPageNumberWhenNextPageIsCalledMultipleTimes() throws Exception{
         int EXPECTED_PAGE_NUMBER = 4;
 
-        int ACTUAL_PAGE_NUMBER = Page.asDefault().nextPage().nextPage().nextPage().nextPage().pageNumber();
+        int ACTUAL_PAGE_NUMBER = Page.asZero().nextPage().nextPage().nextPage().nextPage().pageNumber();
 
         assertThat(ACTUAL_PAGE_NUMBER)
                 .isEqualTo(EXPECTED_PAGE_NUMBER);
+    }
+
+    @Test
+    public void itemsToSkipShouldReturnPageNumberMultipliedToHowManyItemsToSkipIsSpecified() throws Exception{
+        int EXPECTED_ITEMS_TO_SKIP = 20;
+
+        Page page = Page.of(2);
+
+        assertThat(page.itemsToSkip(10))
+                .isEqualTo(EXPECTED_ITEMS_TO_SKIP);
+    }
+
+    @Test
+    public void itemsToSkipShouldReturn9WhenMultipleIs3AndPageNumberIs2() throws Exception{
+        Page page = Page.of(2);
+
+        assertThat(page.itemsToSkip(3))
+                .isEqualTo(6);
     }
 
 }
