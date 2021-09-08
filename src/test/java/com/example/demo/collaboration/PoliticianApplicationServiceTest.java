@@ -11,6 +11,7 @@ import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -76,20 +77,37 @@ public class PoliticianApplicationServiceTest {
                 .isEqualTo(polRepo.findByPoliticianNumber(senatorial.retrievePoliticianNumber()).get());
     }
 
+
+
     @Test
     public void shouldReturn2ndPageOfPoliticiansWhenAskingForPagedPoliticiansWithTotalPageOf2() throws Exception{
-        pagedPoliticianSetup();
+        pagedPoliticianSetup(30);
 
-        PagedResult<Politicians> politicians = polRepo.findAllByPage(Page.of(1), 20);
-
-        List<Politicians> valuesIn2ndPage = politicians.ofPage(Page.of(1)).values().toList();
+        List<Politicians> valuesIn2ndPage = polService.findAllWithPage(Page.of(1), 20)
+                .ofPage(Page.of(1)).values().toList();
 
         assertThat(valuesIn2ndPage)
                 .hasSameElementsAs(polRepo.findAll().stream().skip(20).limit(10).toList());
     }
 
-    private void pagedPoliticianSetup() throws PoliticianNotPersistableException {
-        for (int i = 0; i < 30; i++) {
+    @Test
+    public void shouldReturnPagedObjectsWithResultOf10PerPageWhenQueryingWithPagination() throws Exception{
+        pagedPoliticianSetup(24);
+
+        PagedResult<Politicians> politicians = polService.findAllWithPage(Page.of(0), 20);
+
+        Page firstPage = Page.asZero();
+
+        assertThat(politicians.ofPage(firstPage).pagedObjectSize())
+                .isEqualTo(10);
+        assertThat(politicians.ofPage(firstPage.nextPage()).pagedObjectSize())
+                .isEqualTo(10);
+        assertThat(politicians.ofPage(firstPage.nextPage(2)).pagedObjectSize())
+                .isLessThan(5);
+    }
+
+    private void pagedPoliticianSetup(int numberOfTimes) throws PoliticianNotPersistableException {
+        for (int i = 0; i < numberOfTimes; i++) {
             Politicians presidential = new PresidentialBuilder(politicianBuilder
                     .setPoliticianNumber(of(NumberTestFactory.POL_NUMBER().politicianNumber().concat(valueOf(i))).politicianNumber()))
                     .build();
