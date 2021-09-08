@@ -39,6 +39,27 @@ public class PagedResultTest {
     }
 
     @Test
+    public void hasPageForShouldReturnTrueForMultiplePages() throws Exception{
+        Page pageOf3 = Page.of(3);
+
+        List<String> contents = List.of
+                ("random1", "random2", "random3", "random4",
+                "random5", "random6", "random7", "random8", "random9", "random10", "random11", "random12",
+                "random13", "random14", "random15", "random16", "random17", "random18",
+                "random1", "random2", "random3", "random4",
+                "random5", "random6", "random7", "random8", "random9", "random10", "random11", "random12",
+                "random13", "random14", "random15", "random16", "random17", "random18",
+                "random1", "random2", "random3", "random4",
+                "random5", "random6", "random7", "random8", "random9", "random10", "random11", "random12",
+                "random13", "random14", "random15", "random16", "random17", "random18");
+
+        boolean hasPageForPageOf3 = PagedResult.of(contents).hasPageFor(pageOf3);
+
+        assertThat(hasPageForPageOf3)
+                .isTrue();
+    }
+
+    @Test
     public void firstPageReturnsPagedObjectContainingContentsFromFirst10() throws Exception{
         List<String> contents = List.of("random1", "random2", "random3", "random4",
                 "random5", "random6", "random7", "random8", "random9", "random10", "random11", "random12",

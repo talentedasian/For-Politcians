@@ -93,7 +93,7 @@ public class PaginatedObjectTest {
     }
 
     @Test
-    public void hasNextPageShouldReturnFalseIfPagedResultHasRanOutOfPagesToGive() throws Exception{
+    public void hasNextPageShouldReturnFalseIfPagedResultReferenceHasRanOutOfPagesToGive() throws Exception{
         List<String> contents = List.of("random1", "random2", "random3", "random4",
                 "random5", "random6", "random7", "random8", "random9", "random10", "random11", "random12",
                 "random13", "random14", "random15", "random16", "random17", "random18");

@@ -27,7 +27,7 @@ public class PagedResult<T> {
     }
 
     public boolean hasPageFor(Page page) {
-        return contents.size() > page.itemsToSkip(ITEMS_TO_SKIP);
+        return totalPages() > page.pageNumber();
     }
 
     // INFO : Current pagination works as zero based so first page technically is 0
