@@ -95,7 +95,7 @@ public class PoliticianJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase
     }
 
     @AfterEach
-    private void pagedPoliticianTeardown() throws PoliticianNotPersistableException {
+    public void pagedPoliticianTeardown() throws PoliticianNotPersistableException {
         for (int i = 0; i < 30; i++) {
             Politicians presidential = new PresidentialBuilder(politicianBuilder
                     .setPoliticianNumber(of(NumberTestFactory.POL_NUMBER().politicianNumber().concat(valueOf(i))).politicianNumber()))
