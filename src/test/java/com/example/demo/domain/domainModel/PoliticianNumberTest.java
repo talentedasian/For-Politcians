@@ -1,4 +1,4 @@
-package com.example.demo.unit.entities;
+package com.example.demo.domain.domainModel;
 
 import com.example.demo.domain.politicians.PoliticianNumber;
 import org.junit.jupiter.api.Test;

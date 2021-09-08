@@ -1,6 +1,6 @@
 package com.example.demo.adapter.out.jpa;
 
-import com.example.demo.adapter.dto.RateLimitJpaEntity;
+import com.example.demo.adapter.web.dto.RateLimitJpaEntity;
 import com.example.demo.adapter.out.repository.RateLimitRepositoryJpa;
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.baseClasses.NumberTestFactory;

@@ -1,4 +1,4 @@
-package com.example.demo.adapter.dto;
+package com.example.demo.adapter.web.dto;
 
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.enums.Rating;

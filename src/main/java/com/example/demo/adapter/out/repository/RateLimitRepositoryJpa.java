@@ -1,6 +1,6 @@
 package com.example.demo.adapter.out.repository;
 
-import com.example.demo.adapter.dto.RateLimitJpaEntity;
+import com.example.demo.adapter.web.dto.RateLimitJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,10 +1,8 @@
-package com.example.demo.unit.averageCalculator;
+package com.example.demo.domain.averageCalculator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-
-import com.example.demo.domain.averageCalculator.HighSatisfactionAverageCalculator;
 
 public class HighSatisfactionAverageCalculatorTest extends AbstractAverageCalculatorTest{
 

@@ -1,6 +1,6 @@
 package com.example.demo.adapter.in.web;
 
-import com.example.demo.adapter.dto.PoliticianDto;
+import com.example.demo.adapter.web.dto.PoliticianDto;
 import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.adapter.in.service.PoliticiansService;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;

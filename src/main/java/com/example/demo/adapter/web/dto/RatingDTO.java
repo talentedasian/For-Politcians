@@ -1,4 +1,4 @@
-package com.example.demo.adapter.dto;
+package com.example.demo.adapter.web.dto;
 
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;

@@ -1,6 +1,6 @@
 package com.example.demo.adapter.out.jpa;
 
-import com.example.demo.adapter.dto.RateLimitJpaEntity;
+import com.example.demo.adapter.web.dto.RateLimitJpaEntity;
 import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
 

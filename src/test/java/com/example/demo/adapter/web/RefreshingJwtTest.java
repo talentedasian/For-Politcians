@@ -1,20 +1,9 @@
-package com.example.demo.integration.jwt;
+package com.example.demo.adapter.web;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-
-import javax.servlet.FilterChain;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
+import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
+import com.example.demo.exceptions.RefreshTokenException;
+import com.example.demo.filter.RefreshJwtFilter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -23,10 +12,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.util.NestedServletException;
 
-import com.example.demo.exceptions.RefreshTokenException;
-import com.example.demo.filter.RefreshJwtFilter;
-import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
-import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
+import javax.servlet.FilterChain;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @ContextConfiguration(classes = { RefreshJwtFilter.class })

@@ -1,6 +1,6 @@
 package com.example.demo.hateoas;
 
-import com.example.demo.adapter.dto.PoliticianDto;
+import com.example.demo.adapter.web.dto.PoliticianDto;
 import com.example.demo.adapter.in.web.PoliticianController;
 import com.example.demo.adapter.in.web.RatingsController;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;

@@ -1,6 +1,6 @@
 package com.example.demo.dtomapper;
 
-import com.example.demo.adapter.dto.PoliticianDto;
+import com.example.demo.adapter.web.dto.PoliticianDto;
 import com.example.demo.domain.enums.Rating;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.dtomapper.interfaces.PoliticianDTOMapper;

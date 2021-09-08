@@ -1,4 +1,4 @@
-package com.example.demo.unit.entities;
+package com.example.demo.domain.domainModel;
 
 import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.domain.userRaterNumber.AbstractUserRaterNumber;

@@ -1,7 +1,5 @@
-package com.example.demo.unit.politicianNumber;
+package com.example.demo.domain.politicianNumber;
 
-import com.example.demo.domain.politicianNumber.PoliticianNumberCalculator;
-import com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory;
 import com.example.demo.domain.politicians.Name;
 import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.Politicians;

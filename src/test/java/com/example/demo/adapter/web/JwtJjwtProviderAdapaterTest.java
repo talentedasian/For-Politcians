@@ -1,17 +1,15 @@
-package com.example.demo.unit.jwt;
+package com.example.demo.adapter.web;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.Date;
-
-import org.junit.jupiter.api.Test;
-
-import com.example.demo.adapter.in.web.jwt.JwtKeys;
 import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
-
+import com.example.demo.adapter.in.web.jwt.JwtKeys;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JwtJjwtProviderAdapaterTest {
 

@@ -1,4 +1,4 @@
-package com.example.demo.unit;
+package com.example.demo.domain;
 
 import com.example.demo.domain.enums.PoliticalParty;
 import org.junit.jupiter.api.Test;

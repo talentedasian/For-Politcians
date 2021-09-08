@@ -1,6 +1,6 @@
 package com.example.demo.adapter.in.service;
 
-import com.example.demo.adapter.dto.RatingDTO;
+import com.example.demo.adapter.web.dto.RatingDTO;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;

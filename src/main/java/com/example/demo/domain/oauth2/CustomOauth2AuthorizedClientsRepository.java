@@ -1,6 +1,6 @@
 package com.example.demo.domain.oauth2;
 
-import com.example.demo.adapter.dto.FacebookUserInfo;
+import com.example.demo.adapter.web.dto.FacebookUserInfo;
 import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
 import com.example.demo.domain.userRaterNumber.facebook.FacebookAccountNumberCalculator;
 import org.slf4j.LoggerFactory;

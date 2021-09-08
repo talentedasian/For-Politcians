@@ -1,7 +1,7 @@
 package com.example.demo.adapter.in.web;
 
 import com.example.demo.adapter.in.service.RatingServiceAdapter;
-import com.example.demo.adapter.dto.RatingDTO;
+import com.example.demo.adapter.web.dto.RatingDTO;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.hateoas.RatingAssembler;

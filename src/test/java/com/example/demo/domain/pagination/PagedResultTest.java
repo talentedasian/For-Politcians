@@ -1,5 +1,8 @@
-package com.example.demo.domain;
+package com.example.demo.domain.pagination;
 
+import com.example.demo.domain.Page;
+import com.example.demo.domain.PagedObject;
+import com.example.demo.domain.PagedResult;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

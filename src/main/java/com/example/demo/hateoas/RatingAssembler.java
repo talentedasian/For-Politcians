@@ -1,6 +1,6 @@
 package com.example.demo.hateoas;
 
-import com.example.demo.adapter.dto.RatingDTO;
+import com.example.demo.adapter.web.dto.RatingDTO;
 import com.example.demo.adapter.in.web.RatingsController;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;

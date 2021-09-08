@@ -1,4 +1,4 @@
-package com.example.demo.unit.oauth2;
+package com.example.demo.adapter;
 
 import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
 import com.example.demo.adapter.web.dto.FacebookUserInfo;

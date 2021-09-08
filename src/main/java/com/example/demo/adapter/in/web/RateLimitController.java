@@ -1,6 +1,6 @@
 package com.example.demo.adapter.in.web;
 
-import com.example.demo.adapter.dto.RateLimitJpaEntity;
+import com.example.demo.adapter.web.dto.RateLimitJpaEntity;
 import com.example.demo.adapter.in.web.dto.RateLimitDto;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.adapter.out.repository.RateLimitAdapterService;

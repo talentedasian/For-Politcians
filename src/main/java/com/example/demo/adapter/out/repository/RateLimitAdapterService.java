@@ -1,6 +1,6 @@
 package com.example.demo.adapter.out.repository;
 
-import com.example.demo.adapter.dto.RateLimitJpaEntity;
+import com.example.demo.adapter.web.dto.RateLimitJpaEntity;
 import com.example.demo.adapter.in.service.RateLimitingService;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.exceptions.RateLimitNotFoundException;

@@ -1,4 +1,4 @@
-package com.example.demo.adapter.dto;
+package com.example.demo.adapter.web.dto;
 
 public class FacebookUserInfo {
 	

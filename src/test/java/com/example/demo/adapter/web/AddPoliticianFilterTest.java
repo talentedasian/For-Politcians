@@ -1,4 +1,4 @@
-package com.example.demo.integration.filters;
+package com.example.demo.adapter.web;
 
 import com.example.demo.adapter.in.web.PoliticianController;
 import com.example.demo.domain.entities.PoliticiansRating;

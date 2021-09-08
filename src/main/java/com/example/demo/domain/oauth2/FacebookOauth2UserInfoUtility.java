@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.client.ClientAuthorizationRequiredExc
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.demo.adapter.dto.FacebookUserInfo;
+import com.example.demo.adapter.web.dto.FacebookUserInfo;
 
 public class FacebookOauth2UserInfoUtility {
 	

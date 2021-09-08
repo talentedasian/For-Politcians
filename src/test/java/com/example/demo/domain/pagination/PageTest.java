@@ -1,5 +1,6 @@
-package com.example.demo.domain;
+package com.example.demo.domain.pagination;
 
+import com.example.demo.domain.Page;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

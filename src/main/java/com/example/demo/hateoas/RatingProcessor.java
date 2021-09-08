@@ -1,6 +1,6 @@
 package com.example.demo.hateoas;
 
-import com.example.demo.adapter.dto.RatingDTO;
+import com.example.demo.adapter.web.dto.RatingDTO;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.PoliticianController;
 import com.example.demo.adapter.in.web.RatingsController;

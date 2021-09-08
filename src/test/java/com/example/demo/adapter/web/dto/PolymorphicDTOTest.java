@@ -1,4 +1,4 @@
-package com.example.demo.unit.dto;
+package com.example.demo.adapter.web.dto;
 
 import com.example.demo.baseClasses.BaseClassForPoliticianDTOTests;
 import com.example.demo.domain.politicians.PoliticianTypes;

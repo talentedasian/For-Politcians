@@ -1,4 +1,4 @@
-package com.example.demo.unit.averageCalculator;
+package com.example.demo.domain.averageCalculator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -8,9 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import com.example.demo.domain.averageCalculator.AverageCalculator;
-import com.example.demo.domain.averageCalculator.LowSatisfactionAverageCalculator;
 
 public class AbstractAverageCalculatorTest {
 
