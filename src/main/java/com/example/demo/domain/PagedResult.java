@@ -49,6 +49,10 @@ public class PagedResult<T> {
         return contents.isEmpty() ? 0 : (contents.size() / 10) + 1;
     }
 
+    public int totalContentSize() {
+        return this.contents.size();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -62,6 +66,11 @@ public class PagedResult<T> {
     @Override
     public int hashCode() {
         return contents != null ? contents.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "PagedResult{ " + contents + ", totalPages" + totalPages() + " }";
     }
 
 }

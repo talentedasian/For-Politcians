@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(indexes = @Index(columnList = "id") )
+@Table(indexes = @Index(columnList = "id"), name = "politicians")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class PoliticiansJpaEntity {
 
