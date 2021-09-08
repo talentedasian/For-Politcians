@@ -1,15 +1,15 @@
 package com.example.demo.domain.averageCalculator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LowSatisfactionAverageCalculatorTest extends AbstractAverageCalculatorTest{
 
 	@Test
 	public void testLogicOfCalculator() {
-		calculator = new LowSatisfactionAverageCalculator(2.234D, 0D);
-		assertEquals(calculator.calculateAverage(), 2.24D);
+		calculator = new LowSatisfactionAverageCalculator(2.2342D, 1D);
+		assertEquals(calculator.calculateAverage(), 2.235D);
 	}
 
 }

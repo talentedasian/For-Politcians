@@ -1,5 +1,6 @@
 package com.example.demo.domain.domainModel;
 
+import com.example.demo.domain.politicians.PoliticianNumber;
 import org.junit.jupiter.api.Test;
 
 import com.example.demo.domain.politicians.Politicians;
@@ -10,27 +11,18 @@ import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPoliticia
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PresidentialPoliticianTest {
 
-	final String POLITICIAN_NUMBER = "123polNumber";
+	final PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
 	
 	PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
 			.setFirstName("Test")
 			.setLastName("Name");
 	
 	PresidentialBuilder presidentialBuilder = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder);
-	
-	@Test
-	public void shouldReturnTrueWithSamePoliticianNumber() {
-		var actualPolitician = presidentialBuilder.build();
-		
-		var samePoliticianNumber = presidentialBuilder.setBuilder(politicianBuilder.setPoliticianNumber(POLITICIAN_NUMBER))
-				.build();
-
-		assertTrue(actualPolitician.equals(samePoliticianNumber));
-	}
 
 	/*
 		basically testing the hashcode functionality
@@ -42,7 +34,7 @@ public class PresidentialPoliticianTest {
 		Map<Politicians,Politicians> map = new HashMap<>();
 		map.put(actualPolitician,actualPolitician);
 
-		var samePoliticianNumber = presidentialBuilder.setBuilder(politicianBuilder.setPoliticianNumber(POLITICIAN_NUMBER))
+		var samePoliticianNumber = presidentialBuilder.setBuilder(politicianBuilder.setPoliticianNumber(POLITICIAN_NUMBER.politicianNumber()))
 				.build();
 
 		assertEquals(actualPolitician, map.get(samePoliticianNumber));
@@ -60,16 +52,6 @@ public class PresidentialPoliticianTest {
 				.build();
 
 		assertFalse(map.containsKey(differentPoliticianType));
-	}
-
-	@Test
-	public void shouldReturnFalseWithDifferentPoliticianNumber() {
-		var actualPolitician = presidentialBuilder.build();
-
-		var polWrongNumber = presidentialBuilder.setBuilder(politicianBuilder.setPoliticianNumber("differentNumber"))
-				.build();
-
-		assertFalse(actualPolitician.equals(polWrongNumber));
 	}
 	
 	@Test

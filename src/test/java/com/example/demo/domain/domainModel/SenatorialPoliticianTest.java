@@ -1,5 +1,6 @@
 package com.example.demo.domain.domainModel;
 
+import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.politicians.Politicians;
@@ -11,11 +12,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SenatorialPoliticianTest {
 
-    final String POLITICIAN_NUMBER = "123polNumber";
+    final PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
 
     Politicians.PoliticiansBuilder politicianBuilder;
 
@@ -29,23 +31,12 @@ public class SenatorialPoliticianTest {
 
         senatorialBuilder = new SenatorialBuilder(politicianBuilder).setTotalMonthsOfService(12);
     }
-
-
-    @Test
-    public void shouldReturnTrueWithSamePoliticianNumber() {
-        var actualPolitician = senatorialBuilder.build();
-
-        var samePoliticianNumber = senatorialBuilder.setBuilder(politicianBuilder.setPoliticianNumber(POLITICIAN_NUMBER))
-                .build();
-
-        assertTrue(actualPolitician.equals(samePoliticianNumber));
-    }
     
     @Test
     public void shouldReturnFalseWithDifferentPoliticianNumber() {
         var actualPolitician = senatorialBuilder.build();
 
-        var polWrongNumber = senatorialBuilder.setBuilder(politicianBuilder.setPoliticianNumber("differentNumber"))
+        var polWrongNumber = senatorialBuilder.setBuilder(politicianBuilder.setPoliticianNumber(POLITICIAN_NUMBER.politicianNumber() + "1"))
                 .build();
 
         assertFalse(actualPolitician.equals(polWrongNumber));
@@ -66,8 +57,7 @@ public class SenatorialPoliticianTest {
         Map<Politicians,Politicians> map = new HashMap<>();
         map.put(actualPolitician,actualPolitician);
 
-        var samePoliticianNumber = senatorialBuilder.setBuilder(politicianBuilder.setPoliticianNumber(POLITICIAN_NUMBER))
-                .build();
+        var samePoliticianNumber = senatorialBuilder.build();
 
         assertEquals(actualPolitician, map.get(samePoliticianNumber));
     }

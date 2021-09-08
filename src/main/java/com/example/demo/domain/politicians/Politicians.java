@@ -11,6 +11,7 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Politicians {
@@ -88,7 +89,7 @@ public class Politicians {
 		Politicians that = (Politicians) o;
 
 		if (!politicianNumber.equals(that.politicianNumber)) return false;
-		return rating.equals(that.rating);
+		return Objects.equals(rating, that.rating);
 	}
 
 	@Override

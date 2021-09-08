@@ -1,16 +1,18 @@
 package com.example.demo.domain.domainModel;
 
+import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PoliticiansTest {
 
-	final String POLITICIAN_NUMBER = "123polNumber";
+	final PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
 	
 	PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
 			.setFirstName("Test")

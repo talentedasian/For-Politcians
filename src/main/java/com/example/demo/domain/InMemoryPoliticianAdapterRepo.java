@@ -9,7 +9,7 @@ import java.util.*;
 
 public class InMemoryPoliticianAdapterRepo implements PoliticiansRepository {
 
-    Map<String, Politicians> database = new HashMap<>();
+    Map<String, Politicians> database = new HashMap<String, Politicians>();
 
     @Override
     public Politicians save(Politicians politician) throws PoliticianNotPersistableException {

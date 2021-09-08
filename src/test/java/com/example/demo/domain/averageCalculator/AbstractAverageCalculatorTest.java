@@ -1,13 +1,13 @@
 package com.example.demo.domain.averageCalculator;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 public class AbstractAverageCalculatorTest {
 
@@ -15,7 +15,7 @@ public class AbstractAverageCalculatorTest {
 	
 	@Test
 	public void shouldReturnDouble() {
-		calculator = new LowSatisfactionAverageCalculator(0.0D, 0.0D);
+		calculator = new LowSatisfactionAverageCalculator(0.1D, 0.1D);
 		assertThat(Double.valueOf(calculator.calculateAverage()).getClass(),
 				is(Double.class));
 	}
