@@ -1,6 +1,8 @@
 package com.example.demo.adapter.out.repository;
 
 import com.example.demo.adapter.out.jpa.PoliticiansJpaEntity;
+import com.example.demo.domain.Page;
+import com.example.demo.domain.PagedResult;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.springframework.stereotype.Repository;
@@ -66,6 +68,12 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
         return repo.findAll().stream()
                 .map(PoliticiansJpaEntity::toPoliticians)
                 .toList();
+    }
+
+    // no implementation yet
+    @Override
+    public PagedResult<Politicians> findAllByPage(Page page, int itemsToFetch) {
+        return null;
     }
 
 }

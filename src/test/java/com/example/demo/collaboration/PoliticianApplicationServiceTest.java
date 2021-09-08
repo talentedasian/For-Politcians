@@ -4,6 +4,8 @@ import com.example.demo.adapter.in.service.PoliticiansService;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
+import com.example.demo.domain.Page;
+import com.example.demo.domain.PagedResult;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
@@ -11,6 +13,8 @@ import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static com.example.demo.domain.politicians.PoliticianNumber.of;
 import static java.lang.String.valueOf;
@@ -72,22 +76,20 @@ public class PoliticianApplicationServiceTest {
                 .isEqualTo(polRepo.findByPoliticianNumber(senatorial.retrievePoliticianNumber()).get());
     }
 
-//    @Test
-//    public void shouldReturn2ndPageOfPoliticiansWhenAskingForPagedPoliticiansWithPageOf2() throws Exception{
-//        Politicians presidential = new PresidentialBuilder(politicianBuilder).build();
-//
-//        pagedPoliticianSetup();
-//
-//        PagedObject<Politicians> politicians = polRepo.findAll(Page.of(1));
-//
-//        assertThat(politicians.getValueIn(1))
-//                .isNotEmpty()
-//                .get()
-//                .isEqualTo(presidential);
-//    }
+    @Test
+    public void shouldReturn2ndPageOfPoliticiansWhenAskingForPagedPoliticiansWithTotalPageOf2() throws Exception{
+        pagedPoliticianSetup();
+
+        PagedResult<Politicians> politicians = polRepo.findAllByPage(Page.of(1), 20);
+
+        List<Politicians> valuesIn2ndPage = politicians.ofPage(Page.of(1)).values().toList();
+
+        assertThat(valuesIn2ndPage)
+                .hasSameElementsAs(polRepo.findAll().stream().skip(20).limit(10).toList());
+    }
 
     private void pagedPoliticianSetup() throws PoliticianNotPersistableException {
-        for (int i = 0; i < 17; i++) {
+        for (int i = 0; i < 30; i++) {
             Politicians presidential = new PresidentialBuilder(politicianBuilder
                     .setPoliticianNumber(of(NumberTestFactory.POL_NUMBER().politicianNumber().concat(valueOf(i))).politicianNumber()))
                     .build();
