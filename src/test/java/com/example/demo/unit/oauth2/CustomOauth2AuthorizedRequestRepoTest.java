@@ -1,9 +1,10 @@
 package com.example.demo.unit.oauth2;
 
-import com.example.demo.adapter.dto.FacebookUserInfo;
 import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
+import com.example.demo.adapter.web.dto.FacebookUserInfo;
 import com.example.demo.domain.oauth2.CustomOauth2AuthorizedClientsRepository;
 import com.example.demo.domain.oauth2.FacebookOauth2UserInfoUtility;
+import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import java.net.URISyntaxException;
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -61,8 +62,16 @@ public class CustomOauth2AuthorizedRequestRepoTest {
 		OAuth2AuthorizedClient authorizedClient = new OAuth2AuthorizedClient(reg, "anonymous", accessToken);
 		
 		customRepo.saveAuthorizedClient(authorizedClient, principal, req, res);
-		
-		assertEquals(jwt, res.getCookie("accessJwt").getValue());
+
+		Claims decodedJwt = JwtJjwtProviderAdapater.decodeJwt(jwt).getBody();
+		Claims jwtFromSuccessfulOauthProcess = JwtJjwtProviderAdapater.decodeJwt(res.getCookie("accessJwt").getValue()).getBody();
+
+		assertThat(decodedJwt.getSubject())
+				.isEqualTo(jwtFromSuccessfulOauthProcess.getSubject());
+		assertThat(decodedJwt.get("name"))
+				.isEqualTo(jwtFromSuccessfulOauthProcess.get("name"));
+		assertThat(decodedJwt.getExpiration())
+				.isCloseTo(jwtFromSuccessfulOauthProcess.getExpiration(), 2000);
 	}
 
 }
