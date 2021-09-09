@@ -44,7 +44,7 @@ public class PoliticiansTest {
 				.build()
 				.hashCode();
 		Politicians politician = politicianBuilder.build();
-		politician.setType(Politicians.Type.SENATORIAL);
+		var senatorial = politician.setType(Politicians.Type.SENATORIAL);
 		int actualHashCode = politician.hashCode();
 
 		Assertions.assertEquals(expectedHashCode, actualHashCode);

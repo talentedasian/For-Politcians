@@ -57,8 +57,8 @@ public class Politicians {
 		return type;
 	}
 
-	public void setType(Politicians.Type type) {
-		this.type = type;
+	public Politicians setType(Politicians.Type type) {
+		return new Politicians(name, politiciansRating, rating, politicianNumber, type);
 	}
 
 	protected Politicians(Name name,List<PoliticiansRating> politiciansRating, Rating rating, PoliticianNumber politicianNumber, Type polType) {

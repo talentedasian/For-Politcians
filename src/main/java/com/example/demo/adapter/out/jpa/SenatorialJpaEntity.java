@@ -68,9 +68,9 @@ public class SenatorialJpaEntity extends PoliticiansJpaEntity {
     @Override
     public Politicians toPoliticians() {
         var politician = super.toPoliticians();
-        politician.setType(Politicians.Type.SENATORIAL);
+        var senatorial = politician.setType(Politicians.Type.SENATORIAL);
 
-        return new SenatorialBuilder(politician)
+        return new SenatorialBuilder(senatorial)
                 .setTotalMonthsOfService(totalMonthsOfServiceAsSenator)
                 .setMostSignificantLawMade(mostSignificantLawMade)
                 .build();
