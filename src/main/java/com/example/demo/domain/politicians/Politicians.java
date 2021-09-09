@@ -7,7 +7,6 @@ import com.example.demo.domain.averageCalculator.HighSatisfactionAverageCalculat
 import com.example.demo.domain.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.Rating;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -257,8 +256,6 @@ public class Politicians {
 		}
 		
 		public Politicians build() {
-			Assert.state(firstName != null | !firstName.isEmpty() | !firstName.isBlank(), "first name cannot be left unspecified");
-
 			var name = new Name(firstName, lastName);
 			return new Politicians(name, politiciansRating, rating, new PoliticianNumber(politicianNumber), null);
 		}

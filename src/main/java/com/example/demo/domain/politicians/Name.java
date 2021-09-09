@@ -1,5 +1,8 @@
 package com.example.demo.domain.politicians;
 
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+
 public record Name(String firstName, String lastName) {
 
     public Name(String firstName, String lastName) {
@@ -12,6 +15,7 @@ public record Name(String firstName, String lastName) {
     }
 
     public String fullName() {
+        Assert.state(firstName != null || StringUtils.hasText(firstName), "first name must not be null or empty");
         if (lastName == null || lastName.isBlank() || lastName.isEmpty()) {
             return firstName;
         }
