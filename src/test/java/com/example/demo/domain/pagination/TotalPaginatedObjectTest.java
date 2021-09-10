@@ -172,18 +172,4 @@ public class TotalPaginatedObjectTest {
                 .isEqualTo(EXPECTED_HAS_PAGE);
     }
 
-//    @Test
-//    public void hasNextPageShouldReturnFalseIfPagedResultReferenceHasRanOutOfPagesToGive() throws Exception{
-//        List<String> contents = List.of("random1", "random2", "random3", "random4",
-//                "random5", "random6", "random7", "random8", "random9", "random10", "random11", "random12",
-//                "random13", "random14", "random15", "random16", "random17", "random18");
-//
-//        PagedResult<String> pagedResult = PagedResult.of(contents);
-//
-//        boolean hasNextPage = pagedResult.ofPage(Page.of(1)).hasNextPage();
-//
-//        assertThat(hasNextPage)
-//                .isFalse();
-//    }
-
 }

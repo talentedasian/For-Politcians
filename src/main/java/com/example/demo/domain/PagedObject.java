@@ -86,6 +86,10 @@ public class PagedObject<T> {
         return query.find();
     }
 
+    public boolean hasPageFor(Page page, int itemsToFetch) {
+        return total > page.itemsToSkip(itemsToFetch);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -107,10 +111,6 @@ public class PagedObject<T> {
     @Override
     public String toString() {
         return "PagedObject{ " + content + " , " + currentPage.toString() + " }";
-    }
-
-    public boolean hasPageFor(Page page, int itemsToFetch) {
-        return total > page.itemsToSkip(itemsToFetch);
     }
 
 }
