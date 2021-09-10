@@ -93,7 +93,7 @@ public class TotalPaginatedObjectTest {
     }
 
     @Test
-    public void testLastPageWithExtraQuery() throws Exception{
+    public void testLastPage() throws Exception{
         List<String> pagedList = createList(30);
 
         PagedObject<String> pagedObject = PagedObject.of(pagedList, 30, 10);
@@ -103,10 +103,21 @@ public class TotalPaginatedObjectTest {
                 .hasSameElementsAs(createList(30).stream().skip(20).toList());
     }
 
+    @Test
+    public void testLastPageWithItemsToFetchHaveARemainderWhenDividedWithTotal() throws Exception{
+        List<String> pagedList = createList(20);
+
+        PagedObject<String> pagedObject = PagedObject.of(pagedList, 30, 7);
+        List<String> lastPagedObject = pagedObject.lastPage(() -> createList(30).stream().skip(28).toList());
+
+        assertThat(lastPagedObject)
+                .isEqualTo(List.of("random29", "random30"));
+    }
+
     private List<String> createList(int numberOfTimesToCreate) {
         List<String> result = new ArrayList<>();
         final String content = "random";
-        IntStream.range(0, numberOfTimesToCreate).forEach(it -> result.add(content.concat(String.valueOf(it))));
+        IntStream.range(0, numberOfTimesToCreate).forEach(it -> result.add(content.concat(String.valueOf(it + 1))));
 
         return result;
     }

@@ -111,6 +111,11 @@ public class PagedObject<T> {
         return "PagedObject{ " + content + " , " + currentPage.toString() + " }";
     }
 
+    /** Makes a query that fetches the last page of the table
+     *
+     * @param query the query that is needed to fetch that last page in the database
+     * @return a list that contains the very last page of the table
+     */
     public List<T> lastPage(PagedQuery<T> query) {
         return query.find();
     }
