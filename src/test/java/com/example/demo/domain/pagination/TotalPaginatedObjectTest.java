@@ -3,7 +3,9 @@ package com.example.demo.domain.pagination;
 import com.example.demo.domain.PagedObject;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
@@ -88,6 +90,25 @@ public class TotalPaginatedObjectTest {
         long total = -1;
 
         assertThrows(IllegalStateException.class, () -> PagedObject.of(List.of(), total));
+    }
+
+    @Test
+    public void testLastPageWithExtraQuery() throws Exception{
+        List<String> pagedList = createList(30);
+
+        PagedObject<String> pagedObject = PagedObject.of(pagedList, 30, 10);
+        List<String> lastPagedObject = pagedObject.lastPage(() -> pagedList.stream().skip(20).toList());
+
+        assertThat(lastPagedObject)
+                .hasSameElementsAs(createList(30).stream().skip(20).toList());
+    }
+
+    private List<String> createList(int numberOfTimesToCreate) {
+        List<String> result = new ArrayList<>();
+        final String content = "random";
+        IntStream.range(0, numberOfTimesToCreate).forEach(it -> result.add(content.concat(String.valueOf(it))));
+
+        return result;
     }
 
 //    @Test

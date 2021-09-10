@@ -111,4 +111,8 @@ public class PagedObject<T> {
         return "PagedObject{ " + content + " , " + currentPage.toString() + " }";
     }
 
+    public List<T> lastPage(PagedQuery<T> query) {
+        return query.find();
+    }
+
 }
