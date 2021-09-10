@@ -1,9 +1,12 @@
 package com.example.demo.adapter.in.web;
 
-import com.example.demo.adapter.web.dto.PoliticianDto;
 import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.adapter.in.service.PoliticiansService;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
+import com.example.demo.adapter.web.dto.PoliticianDto;
+import com.example.demo.domain.Page;
+import com.example.demo.domain.PagedObject;
+import com.example.demo.domain.PagedResult;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.dtomapper.PoliticianDTOUnwrapper;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
@@ -11,6 +14,8 @@ import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -56,6 +61,23 @@ public class PoliticianServiceAdapter {
 
         service.deletePolitician(polNumber);
         return true;
+    }
+
+    public List<PoliticianDto> allPoliticiansWithPage(Page page, int itemsToFetch, HttpServletRequest req) {
+        HttpSession session = req.getSession(true);
+        Integer pageNumber = (Integer) session.getAttribute("page-number");
+        if (pageNumber == null) {
+            PagedResult<Politicians> allWithPage = service.findAllWithPage(page, itemsToFetch);
+
+            session.setAttribute("paged-objects", allWithPage);
+            session.setAttribute("page-number", Integer.valueOf(page.pageNumber()));
+            return allWithPage.firstPage().values().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
+        }
+
+        PagedResult<Politicians> attribute = (PagedResult<Politicians>) session.getAttribute("paged-objects");
+        PagedObject<Politicians> currentPage = attribute.ofPage(Page.of(pageNumber));
+
+        return currentPage.values().toList().stream().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
     }
 
 }

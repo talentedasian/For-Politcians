@@ -69,4 +69,5 @@ public class PoliticiansService {
 	public PagedResult<Politicians> findAllWithPage(Page page, int numberOfItemsToFetch) {
 		return politiciansRepo.findAllByPage(page, numberOfItemsToFetch);
 	}
+
 }
