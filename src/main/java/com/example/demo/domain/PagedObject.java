@@ -5,7 +5,6 @@ import org.springframework.util.Assert;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -62,16 +61,6 @@ public class PagedObject<T> {
         return content.size();
     }
 
-    public boolean hasValueIn(int offset) {
-        isValuesLessThanOrEqual(offset, 10);
-        return content.size() < offset ? false : true;
-    }
-
-    public Optional<T> getValueIn(int offset) {
-        isValuesLessThanOrEqual(offset, 10);
-        return hasValueIn(offset) ? Optional.of(content.get(offset)) : Optional.empty();
-    }
-
     public boolean hasAnyValue() {
         return !content.isEmpty();
     }
@@ -86,6 +75,15 @@ public class PagedObject<T> {
             return 2;
         }
         return total % itemsToFetch == 0 ? total / itemsToFetch : total / itemsToFetch + 1;
+    }
+
+    /** Makes a query that fetches the last page of the table
+     *
+     * @param query the query that is needed to fetch that last page in the database
+     * @return a list that contains the very last page of the table
+     */
+    public List<T> lastPage(PagedQuery<T> query) {
+        return query.find();
     }
 
     @Override
@@ -111,13 +109,8 @@ public class PagedObject<T> {
         return "PagedObject{ " + content + " , " + currentPage.toString() + " }";
     }
 
-    /** Makes a query that fetches the last page of the table
-     *
-     * @param query the query that is needed to fetch that last page in the database
-     * @return a list that contains the very last page of the table
-     */
-    public List<T> lastPage(PagedQuery<T> query) {
-        return query.find();
+    public boolean hasPageFor(Page page, int itemsToFetch) {
+        return total > page.itemsToSkip(itemsToFetch);
     }
 
 }
