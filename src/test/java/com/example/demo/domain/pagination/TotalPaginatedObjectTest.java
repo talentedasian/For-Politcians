@@ -15,12 +15,12 @@ public class TotalPaginatedObjectTest {
 
     @Test
     public void shouldThrowIllegalStateExceptionWhenCreatingPagedObjectWithNullValues() throws Exception{
-        assertThrows(IllegalStateException.class, () -> PagedObject.of(null, 10));
+        assertThrows(IllegalStateException.class, () -> PagedObject.of(null, 10, 10));
     }
 
     @Test
     public void pagedObjectShouldReturnExpectedContentSize() throws Exception{
-        int pagedObjectSize = PagedObject.<String>of(List.of(), 10).pagedObjectSize();
+        int pagedObjectSize = PagedObject.<String>of(List.of(), 10, 10).pagedObjectSize();
 
         assertThat(pagedObjectSize)
                 .isEqualTo(List.of().size());
@@ -29,7 +29,7 @@ public class TotalPaginatedObjectTest {
     @Test
     public void shouldReturn1AsTotalPageWhenTotalIs0() throws Exception{
         long total = 0;
-        long actualTotal = PagedObject.of(List.of(), total).totalPages();
+        long actualTotal = PagedObject.of(List.of(), total, 1).totalPages();
 
         assertThat(actualTotal)
                 .isEqualTo(1);
@@ -40,7 +40,7 @@ public class TotalPaginatedObjectTest {
         long EXPECTED_TOTAL_NUMBER_OF_PAGE = 2;
 
         long total = 1;
-        long totalPages = PagedObject.of(List.of(), total).totalPages();
+        long totalPages = PagedObject.of(List.of(), total, 1).totalPages();
 
         assertThat(totalPages)
                 .isEqualTo(EXPECTED_TOTAL_NUMBER_OF_PAGE);
@@ -48,10 +48,10 @@ public class TotalPaginatedObjectTest {
 
     @Test
     public void testTotalPagesWhenTotalIsALargeValue() throws Exception{
-        long EXPECTED_TOTAL_NUMBER_OF_PAGE = 3;
+        long EXPECTED_TOTAL_NUMBER_OF_PAGE = 900;
 
-        long total = 30;
-        long totalPages = PagedObject.of(List.of("random"), total).totalPages();
+        long total = 900;
+        long totalPages = PagedObject.of(List.of("random"), total, 1).totalPages();
 
         assertThat(totalPages)
                 .isEqualTo(EXPECTED_TOTAL_NUMBER_OF_PAGE);
@@ -83,14 +83,14 @@ public class TotalPaginatedObjectTest {
                 "random", "random" , "random", "random" , "random", "random" , "random", "random" ,
                 "random", "random" , "random", "random");
 
-        assertThrows(IllegalStateException.class, () -> PagedObject.of(listSizeLargerThan10, 2));
+        assertThrows(IllegalStateException.class, () -> PagedObject.of(listSizeLargerThan10, 2, 1));
     }
 
     @Test
     public void shouldThrowIllegalStateExceptionWhenSettingATotalWithANegativeValue() throws Exception{
         long total = -1;
 
-        assertThrows(IllegalStateException.class, () -> PagedObject.of(List.of(), total));
+        assertThrows(IllegalStateException.class, () -> PagedObject.of(List.of(), total, 1));
     }
 
     @Test
@@ -98,10 +98,11 @@ public class TotalPaginatedObjectTest {
         List<String> pagedList = createList(30);
 
         PagedObject<String> pagedObject = PagedObject.of(pagedList, 30, 10);
-        List<String> lastPagedObject = pagedObject.lastPage(() -> pagedList.stream().skip(20).toList());
+        PagedObject<String> lastPagedObject = pagedObject.lastPage(() -> pagedList.stream().skip(20).toList());
 
         assertThat(lastPagedObject)
-                .hasSameElementsAs(createList(30).stream().skip(20).toList());
+                .isEqualTo(PagedObject.<String>of(List.of("random21", "random22", "random23", "random24", "random25", "random26",
+                        "random27", "random28", "random29", "random30"), 30, 10, Page.of(3)));
     }
 
     @Test
@@ -109,23 +110,34 @@ public class TotalPaginatedObjectTest {
         List<String> pagedList = createList(20);
 
         PagedObject<String> pagedObject = PagedObject.of(pagedList, 30, 7);
-        List<String> lastPagedObject = pagedObject.lastPage(() -> createList(30).stream().skip(28).toList());
+        PagedObject<String> lastPagedObject = pagedObject.lastPage(() -> createList(30).stream().skip(28).toList());
 
-        assertThat(lastPagedObject)
+        assertThat(lastPagedObject.valuesAsList())
                 .isEqualTo(List.of("random29", "random30"));
+
+        assertThat(lastPagedObject.currentPageNumber())
+                .isEqualTo(5);
     }
 
-    private List<String> createList(int numberOfTimesToCreate) {
-        List<String> result = new ArrayList<>();
-        final String content = "random";
-        IntStream.range(0, numberOfTimesToCreate).forEach(it -> result.add(content.concat(String.valueOf(it + 1))));
+    @Test
+    public void lastPageShouldReturnPagedObjectWithContentAndCorrectPage() throws Exception{
+        List<String> pagedList = createList(20);
 
-        return result;
+        PagedObject<String> pagedObject = PagedObject.of(pagedList, 30, 10);
+
+        PagedObject<String> lastPage = pagedObject.lastPage(() -> createList(30).stream().skip(20).toList());
+
+        assertThat(lastPage.valuesAsList())
+                .hasSameElementsAs(List.of("random21", "random22", "random23", "random24", "random25", "random26",
+                        "random27", "random28", "random29", "random30"));
+
+        assertThat(lastPage.currentPageNumber())
+                .isEqualTo(3);
     }
 
     @Test
     public void shouldReturnFalseWhenPagedObjectDoesNotReallyContainAnyValueAtAll() throws Exception{
-        boolean hasValueAtAll = PagedObject.of(List.of(), 1).hasAnyValue();
+        boolean hasValueAtAll = PagedObject.of(List.of(), 1, 1).hasAnyValue();
 
         assertThat(hasValueAtAll)
                 .isFalse();
@@ -133,7 +145,7 @@ public class TotalPaginatedObjectTest {
 
     @Test
     public void shouldReturnFalseWhenPagedObjectDoesContainValue() throws Exception{
-        boolean hasValueAtAll = PagedObject.of(List.of("any value"), 1).hasAnyValue();
+        boolean hasValueAtAll = PagedObject.of(List.of("any value"), 1, 1).hasAnyValue();
 
         assertThat(hasValueAtAll)
                 .isTrue();
@@ -170,6 +182,14 @@ public class TotalPaginatedObjectTest {
 
         assertThat(hasNextPage)
                 .isEqualTo(EXPECTED_HAS_PAGE);
+    }
+
+    private List<String> createList(int numberOfTimesToCreate) {
+        List<String> result = new ArrayList<>();
+        final String content = "random";
+        IntStream.range(0, numberOfTimesToCreate).forEach(it -> result.add(content.concat(String.valueOf(it + 1))));
+
+        return result;
     }
 
 }

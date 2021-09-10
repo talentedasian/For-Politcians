@@ -23,7 +23,7 @@ public class PagedResult<T> {
     }
 
     public PagedObject<T> ofPage(Page page) {
-        return PagedObject.<T>of(contents.stream().skip(page.itemsToSkip(ITEMS_TO_SKIP)).limit(10).toList(), page, this);
+        return PagedObject.<T>of(contents.stream().skip(page.itemsToSkip(ITEMS_TO_SKIP)).limit(10).toList(), 0);
     }
 
     public boolean hasPageFor(Page page) {
@@ -32,12 +32,12 @@ public class PagedResult<T> {
 
     // INFO : Current pagination works as zero based so first page technically is 0
     public PagedObject<T> firstPage() {
-        return PagedObject.<T>of(contents.stream().limit(ITEMS_TO_SKIP).toList(), Page.asZero(), this);
+        return PagedObject.<T>of(contents.stream().limit(ITEMS_TO_SKIP).toList(), 0);
     }
 
     public PagedObject<T> lastPage() {
         var lastPage = Page.of(getLastPageItemsNumber());
-        return PagedObject.of(contents.stream().skip(lastPage.itemsToSkip(ITEMS_TO_SKIP)).limit(ITEMS_TO_SKIP).toList(), lastPage, this);
+        return PagedObject.of(contents.stream().skip(lastPage.itemsToSkip(ITEMS_TO_SKIP)).limit(ITEMS_TO_SKIP).toList(), 0);
     }
 
     private int getLastPageItemsNumber() {

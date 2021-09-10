@@ -4,7 +4,6 @@ import org.springframework.util.Assert;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -32,16 +31,16 @@ public class PagedObject<T> {
         return new PagedObject<Z>(values, Page.asZero(), total, 10);
     }
 
+    public static <Z> PagedObject<Z> of(List<Z> values, long total, int itemsToFetch, Page page) {
+        isValuesNotNull(values);
+        isValuesLessThanOrEqual(values.size(), (int) total);
+        return new PagedObject<Z>(values, page, total, itemsToFetch);
+    }
+
     public static <Z> PagedObject<Z> of(List<Z> values, long total, int itemsToFetch) {
         isValuesNotNull(values);
         isValuesLessThanOrEqual(values.size(), (int) total);
         return new PagedObject<Z>(values, Page.asZero(), total, itemsToFetch);
-    }
-
-    public static <Z> PagedObject<Z> of(List<Z> values, Page page, PagedResult<Z> pagedResult) {
-        isValuesNotNull(values);
-        isValuesLessThanOrEqual(10, 10);
-        return new PagedObject<Z>(values, page, 10, 0);
     }
 
     private static <T> void isValuesLessThanOrEqual(int size, int total) {
@@ -82,8 +81,8 @@ public class PagedObject<T> {
      * @param query the query that is needed to fetch that last page in the database
      * @return a list that contains the very last page of the table
      */
-    public List<T> lastPage(PagedQuery<T> query) {
-        return query.find();
+    public PagedObject<T> lastPage(PagedQuery<T> query) {
+        return of(query.find(), total, itemsToFetch, Page.of((int) totalPages()));
     }
 
     public boolean hasPageFor(Page page, int itemsToFetch) {
@@ -97,14 +96,18 @@ public class PagedObject<T> {
 
         PagedObject<?> that = (PagedObject<?>) o;
 
-        if (!Objects.equals(content, that.content)) return false;
-        return Objects.equals(currentPage, that.currentPage);
+        if (total != that.total) return false;
+        if (itemsToFetch != that.itemsToFetch) return false;
+        if (!content.equals(that.content)) return false;
+        return currentPage.equals(that.currentPage);
     }
 
     @Override
     public int hashCode() {
-        int result = content != null ? content.hashCode() : 0;
-        result = 31 * result + (currentPage != null ? currentPage.hashCode() : 0);
+        int result = content.hashCode();
+        result = 31 * result + currentPage.hashCode();
+        result = 31 * result + (int) (total ^ (total >>> 32));
+        result = 31 * result + itemsToFetch;
         return result;
     }
 
@@ -113,4 +116,7 @@ public class PagedObject<T> {
         return "PagedObject{ " + content + " , " + currentPage.toString() + " }";
     }
 
+    public List<T> valuesAsList() {
+        return values().toList();
+    }
 }
