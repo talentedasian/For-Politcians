@@ -5,7 +5,6 @@ import org.springframework.util.Assert;
 public class Page {
 
     private final int pageNumber;
-    public static final int itemsPerPage = 10;
 
     private Page(int pageNumber) {
         this.pageNumber = pageNumber;

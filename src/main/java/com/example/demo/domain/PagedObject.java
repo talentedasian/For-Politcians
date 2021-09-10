@@ -18,27 +18,30 @@ public class PagedObject<T> {
     private final List<T> content;
     private final Page currentPage;
     private final PagedResult<T> pagedResult;
+    private final long total;
 
-    private PagedObject(List<T> content, Page page, PagedResult<T> pagedResult) {
+    private PagedObject(List<T> content, Page page, PagedResult<T> pagedResult, long total) {
         this.content = content;
         this.currentPage = page;
         this.pagedResult = pagedResult;
+        this.total = total;
     }
 
-    public static <Z> PagedObject<Z> of(List<Z> values) {
+    public static <Z> PagedObject<Z> of(List<Z> values, long total) {
         isValuesNotNull(values);
-        isValuesLessThan10(values.size());
-        return new PagedObject<Z>(values, Page.asZero(), null);
+        isValuesLessThan(values.size(), (int) total);
+        return new PagedObject<Z>(values, Page.asZero(), null, total);
     }
 
     public static <Z> PagedObject<Z> of(List<Z> values, Page page, PagedResult<Z> pagedResult) {
         isValuesNotNull(values);
-        isValuesLessThan10(values.size());
-        return new PagedObject<Z>(values, page, pagedResult);
+        isValuesLessThan(10, 10);
+        return new PagedObject<Z>(values, page, pagedResult, 10);
     }
 
-    private static void isValuesLessThan10(int size) {
-        Assert.state(size <= 10, "Value size must be within 10 only. Values' size == " + size);
+    private static <T> void isValuesLessThan(int size, int total) {
+        Assert.state(total > size,
+                "Content size must be less than total specified");
     }
 
     private static void isValuesNotNull(Object value) {
@@ -54,12 +57,12 @@ public class PagedObject<T> {
     }
 
     public boolean hasValueIn(int offset) {
-        isValuesLessThan10(offset);
+        isValuesLessThan(offset, 10);
         return content.size() < offset ? false : true;
     }
 
     public Optional<T> getValueIn(int offset) {
-        isValuesLessThan10(offset);
+        isValuesLessThan(offset, 10);
         return hasValueIn(offset) ? Optional.of(content.get(offset)) : Optional.empty();
     }
 
@@ -100,4 +103,9 @@ public class PagedObject<T> {
     public boolean hasNextPage() {
         return pagedResult == null ? false : pagedResult.hasPageFor(currentPage.nextPage());
     }
+
+    public long totalPages() {
+        return 0;
+    }
+
 }
