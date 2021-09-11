@@ -71,7 +71,7 @@ public class PagedObject<T> {
     public long totalPages() {
         if (total == 0) return 1;
         if (total > 0 && content.isEmpty()) return 2;
-        return total % itemsToFetch == 0 ? total / itemsToFetch : total / itemsToFetch + 1;
+        return totalModuloItemsToFetch() == 0 ? total / itemsToFetch : total / itemsToFetch + 1;
     }
 
     /** Makes a query that fetches the last page of the table. Does a minimal validation
@@ -86,12 +86,16 @@ public class PagedObject<T> {
         Page page = Page.of((int) totalPages());
 
         if (result == null || result.isEmpty()) throw new NotLastPageException();
-        else if (result.size() < (total % itemsToFetch)) throw new NotLastPageException();
+        else if (result.size() < (totalModuloItemsToFetch())) throw new NotLastPageException();
         return of(result, total, itemsToFetch, page);
     }
 
-    public boolean hasPageFor(Page page, int itemsToFetch) {
-        return total > page.itemsToSkip(itemsToFetch);
+    public boolean hasPageFor(Page page) {
+        return totalPages() > page.pageNumber();
+    }
+
+    private long totalModuloItemsToFetch() {
+        return total % itemsToFetch;
     }
 
     @Override

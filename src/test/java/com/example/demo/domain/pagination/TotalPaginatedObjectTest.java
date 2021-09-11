@@ -181,7 +181,7 @@ public class TotalPaginatedObjectTest {
     public void hasPageReturnsTrueWhenTotalIsLargerThanItemsToSkip() throws Exception{
         List<String> contents = createList(18);
 
-        boolean hasNextPage = PagedObject.of(contents, 20).hasPageFor(Page.of(4), 4);
+        boolean hasNextPage = PagedObject.of(contents, 20, 4).hasPageFor(Page.of(4));
 
         assertThat(hasNextPage)
                 .isTrue();
@@ -191,7 +191,7 @@ public class TotalPaginatedObjectTest {
     public void hasPageReturnsFalseWhenTotalIsLessThanItemsToSkip() throws Exception{
         List<String> contents = createList(18);
 
-        boolean hasNextPage = PagedObject.of(contents, 20).hasPageFor(Page.of(4), 6);
+        boolean hasNextPage = PagedObject.of(contents, 20, 6).hasPageFor(Page.of(4));
 
         assertThat(hasNextPage)
                 .isFalse();
@@ -203,7 +203,7 @@ public class TotalPaginatedObjectTest {
 
         List<String> contents = createList(0);
 
-        boolean hasNextPage = PagedObject.of(contents, 500).hasPageFor(Page.of(20), 40);
+        boolean hasNextPage = PagedObject.of(contents, 500, 40).hasPageFor(Page.of(20));
 
         assertThat(hasNextPage)
                 .isEqualTo(EXPECTED_HAS_PAGE);
