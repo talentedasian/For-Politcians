@@ -70,19 +70,24 @@ public class PagedObject<T> {
 
     public long totalPages() {
         if (total == 0) return 1;
-        if (total > 0 && content.isEmpty()) {
-            return 2;
-        }
+        if (total > 0 && content.isEmpty()) return 2;
         return total % itemsToFetch == 0 ? total / itemsToFetch : total / itemsToFetch + 1;
     }
 
-    /** Makes a query that fetches the last page of the table
+    /** Makes a query that fetches the last page of the table. Does a minimal validation
+     * whether the query actually returns the last page.
      *
      * @param query the query that is needed to fetch that last page in the database
      * @return a list that contains the very last page of the table
+     * @throws NotLastPageException when the result of the query does not return last page
      */
     public PagedObject<T> lastPage(PagedQuery<T> query) {
-        return of(query.find(), total, itemsToFetch, Page.of((int) totalPages()));
+        List<T> result = query.find();
+        Page page = Page.of((int) totalPages());
+
+        if (result == null || result.isEmpty()) throw new NotLastPageException();
+        else if (result.size() < (total % itemsToFetch)) throw new NotLastPageException();
+        return of(result, total, itemsToFetch, page);
     }
 
     public boolean hasPageFor(Page page, int itemsToFetch) {

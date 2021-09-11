@@ -1,5 +1,6 @@
 package com.example.demo.domain.pagination;
 
+import com.example.demo.domain.NotLastPageException;
 import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
 import org.junit.jupiter.api.Test;
@@ -133,6 +134,30 @@ public class TotalPaginatedObjectTest {
 
         assertThat(lastPage.currentPageNumber())
                 .isEqualTo(3);
+    }
+
+    @Test
+    public void throwsNotLastPageExceptionWhenQueryResultIsEmpty() throws Exception{
+        PagedObject<String> pagedObject = PagedObject.of(List.of("random"), 30, 1);
+
+        assertThrows(NotLastPageException.class,
+                () -> pagedObject.lastPage(() -> List.of()));
+    }
+
+    @Test
+    public void throwsNotLastPageExceptionWhenQueryResultIsNull() throws Exception{
+        PagedObject<String> pagedObject = PagedObject.of(List.of("random"), 30, 1);
+
+        assertThrows(NotLastPageException.class,
+                () -> pagedObject.lastPage(() -> null));
+    }
+
+    @Test
+    public void throwsNotLastPageExceptionWhenQueryResultSizeIsLessThanTotalModuloOfItemsToFetch() throws Exception{
+        PagedObject<String> pagedObject = PagedObject.of(List.of("random"), 30, 9);
+
+        assertThrows(NotLastPageException.class,
+                () -> pagedObject.lastPage(() -> List.of("random")));
     }
 
     @Test
