@@ -2,10 +2,8 @@ package com.example.demo.collaboration;
 
 import com.example.demo.adapter.in.service.PoliticiansService;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
-import com.example.demo.baseClasses.MultiplePoliticianSetup;
 import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
-import com.example.demo.domain.Page;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
@@ -13,8 +11,6 @@ import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static com.example.demo.domain.politicians.PoliticianNumber.of;
 import static java.lang.String.valueOf;

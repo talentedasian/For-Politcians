@@ -60,7 +60,7 @@ public class PagedObject<T> {
         return content.size();
     }
 
-    public boolean hasAnyValue() {
+    public boolean doesCurrentPageExist() {
         return !content.isEmpty();
     }
 

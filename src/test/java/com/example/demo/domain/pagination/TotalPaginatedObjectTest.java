@@ -172,7 +172,7 @@ public class TotalPaginatedObjectTest {
 
     @Test
     public void shouldReturnFalseWhenPagedObjectDoesNotReallyContainAnyValueAtAll() throws Exception{
-        boolean hasValueAtAll = PagedObject.of(List.of(), 1, 1).hasAnyValue();
+        boolean hasValueAtAll = PagedObject.of(List.of(), 1, 1).doesCurrentPageExist();
 
         assertThat(hasValueAtAll)
                 .isFalse();
@@ -180,7 +180,7 @@ public class TotalPaginatedObjectTest {
 
     @Test
     public void shouldReturnFalseWhenPagedObjectDoesContainValue() throws Exception{
-        boolean hasValueAtAll = PagedObject.of(List.of("any value"), 1, 1).hasAnyValue();
+        boolean hasValueAtAll = PagedObject.of(List.of("any value"), 1, 1).doesCurrentPageExist();
 
         assertThat(hasValueAtAll)
                 .isTrue();
