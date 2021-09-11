@@ -28,23 +28,38 @@ public class TotalPaginatedObjectTest {
     }
 
     @Test
-    public void shouldReturn1AsTotalPageWhenTotalIs0() throws Exception{
-        long total = 0;
-        long actualTotal = PagedObject.of(List.of(), total, 1).totalPages();
+    public void shouldReturn0AsTotalPageWhenTotalIs0() throws Exception{
+        long actualTotal = PagedObject.of(List.of(), 0, 1).totalPages();
 
         assertThat(actualTotal)
-                .isEqualTo(1);
+                .isEqualTo(0);
     }
 
     @Test
     public void shouldReturnExpectedTotalPagesWhenTotalIsSetLargerThan0() throws Exception{
-        long EXPECTED_TOTAL_NUMBER_OF_PAGE = 2;
+        long EXPECTED_TOTAL_NUMBER_OF_PAGE = 1;
 
         long total = 1;
         long totalPages = PagedObject.of(List.of(), total, 1).totalPages();
 
         assertThat(totalPages)
                 .isEqualTo(EXPECTED_TOTAL_NUMBER_OF_PAGE);
+    }
+
+    @Test
+    public void shouldReturnFalseWhenPageNumberIsLargerThanTotalPages() throws Exception{
+        boolean isNotOnPage = PagedObject.of(List.of(), 20, 40, Page.of(1)).doesPageContainContent();
+
+        assertThat(isNotOnPage)
+                .isFalse();
+    }
+
+    @Test
+    public void shouldNotContainContentForPageWithLargeTotal() throws Exception{
+        boolean hasContentOnPage = PagedObject.of(List.of(), 500, 20, Page.of(26)).doesPageContainContent();
+
+        assertThat(hasContentOnPage)
+                .isFalse();
     }
 
     @Test
@@ -198,15 +213,23 @@ public class TotalPaginatedObjectTest {
     }
 
     @Test
-    public void testHasPageForWithLargePage() throws Exception{
-        boolean EXPECTED_HAS_PAGE = false;
-
+    public void testHasPageForWithLargePageThatReturnsFalse() throws Exception{
         List<String> contents = createList(0);
 
         boolean hasNextPage = PagedObject.of(contents, 500, 40).hasPageFor(Page.of(20));
 
         assertThat(hasNextPage)
-                .isEqualTo(EXPECTED_HAS_PAGE);
+                .isFalse();
+    }
+
+    @Test
+    public void testHasPageForWithLargePageThatReturnsTrue() throws Exception{
+        List<String> contents = createList(1);
+
+        boolean hasNextPage = PagedObject.of(contents, 500, 20).hasPageFor(Page.of(20));
+
+        assertThat(hasNextPage)
+                .isTrue();
     }
 
     private List<String> createList(int numberOfTimesToCreate) {

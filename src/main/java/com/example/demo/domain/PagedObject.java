@@ -69,9 +69,10 @@ public class PagedObject<T> {
     }
 
     public long totalPages() {
-        if (total == 0) return 1;
-        if (total > 0 && content.isEmpty()) return 2;
-        return totalModuloItemsToFetch() == 0 ? total / itemsToFetch : total / itemsToFetch + 1;
+        if (total == 0) return 0;
+
+        long pages = total / itemsToFetch;
+        return totalModuloItemsToFetch() == 0 ? pages : pages + 1;
     }
 
     /** Makes a query that fetches the last page of the table. Does a minimal validation
@@ -92,6 +93,14 @@ public class PagedObject<T> {
 
     public boolean hasPageFor(Page page) {
         return totalPages() > page.pageNumber();
+    }
+
+    public List<T> valuesAsList() {
+        return values().toList();
+    }
+
+    public boolean doesPageContainContent() {
+        return false;
     }
 
     private long totalModuloItemsToFetch() {
@@ -125,7 +134,4 @@ public class PagedObject<T> {
         return "PagedObject{ " + content + " , " + currentPage.toString() + " }";
     }
 
-    public List<T> valuesAsList() {
-        return values().toList();
-    }
 }
