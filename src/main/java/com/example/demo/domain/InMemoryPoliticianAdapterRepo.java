@@ -9,7 +9,7 @@ import java.util.*;
 
 public class InMemoryPoliticianAdapterRepo implements PoliticiansRepository {
 
-    Map<String, Politicians> database = new HashMap<String, Politicians>();
+    Map<String, Politicians> database = new LinkedHashMap<>();
 
     @Override
     public Politicians save(Politicians politician) throws PoliticianNotPersistableException {
@@ -58,16 +58,12 @@ public class InMemoryPoliticianAdapterRepo implements PoliticiansRepository {
 
     @Override
     public List<Politicians> findAll() {
-        List<Politicians> result = List.copyOf(database.values());
-        List<Politicians> sortedResult = new ArrayList<>();
-        sortedResult.addAll(result);
-        sortedResult.sort(Comparator.comparingInt(it -> Integer.parseInt(it.retrievePoliticianNumber().replaceAll("\\D", ""))));
-        return sortedResult;
+        return List.copyOf(database.values());
     }
 
     @Override
     public PagedObject<Politicians> findAllByPage(Page page, int itemsToFetch) {
-        return PagedObject.of(findAll().stream().skip(page.itemsToSkip(itemsToFetch)).limit(itemsToFetch).toList(),
+        return PagedObject.of(database.values().stream().skip(page.itemsToSkip(itemsToFetch)).limit(itemsToFetch).toList(),
                 database.size(), itemsToFetch, page);
     }
 
