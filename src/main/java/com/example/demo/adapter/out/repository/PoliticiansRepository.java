@@ -1,7 +1,7 @@
 package com.example.demo.adapter.out.repository;
 
 import com.example.demo.domain.Page;
-import com.example.demo.domain.PagedResult;
+import com.example.demo.domain.PagedObject;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 
@@ -24,6 +24,6 @@ public interface PoliticiansRepository{
 
     List<Politicians> findAll();
 
-    PagedResult<Politicians> findAllByPage(Page page, int itemsToFetch);
+    PagedObject<Politicians> findAllByPage(Page page, int itemsToFetch);
 
 }

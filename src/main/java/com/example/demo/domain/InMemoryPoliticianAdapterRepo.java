@@ -58,12 +58,17 @@ public class InMemoryPoliticianAdapterRepo implements PoliticiansRepository {
 
     @Override
     public List<Politicians> findAll() {
-        return List.copyOf(database.values());
+        List<Politicians> result = List.copyOf(database.values());
+        List<Politicians> sortedResult = new ArrayList<>();
+        sortedResult.addAll(result);
+        sortedResult.sort(Comparator.comparingInt(it -> Integer.parseInt(it.retrievePoliticianNumber().replaceAll("\\D", ""))));
+        return sortedResult;
     }
 
     @Override
-    public PagedResult<Politicians> findAllByPage(Page page, int itemsToFetch) {
-        return PagedResult.of(database.values().stream().skip(page.itemsToSkip(10)).limit(itemsToFetch).toList());
+    public PagedObject<Politicians> findAllByPage(Page page, int itemsToFetch) {
+        return PagedObject.of(findAll().stream().skip(page.itemsToSkip(itemsToFetch)).limit(itemsToFetch).toList(),
+                database.size(), itemsToFetch, page);
     }
 
 }

@@ -4,6 +4,8 @@ import com.example.demo.adapter.in.service.PoliticiansService;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
+import com.example.demo.domain.Page;
+import com.example.demo.domain.PagedObject;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
@@ -12,8 +14,9 @@ import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.example.demo.domain.politicians.PoliticianNumber.of;
-import static java.lang.String.valueOf;
+import java.util.List;
+
+import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -72,20 +75,40 @@ public class PoliticianApplicationServiceTest {
                 .isEqualTo(polRepo.findByPoliticianNumber(senatorial.retrievePoliticianNumber()).get());
     }
 
-//    @Test
-//    public void should() throws Exception{
-//        MultiplePoliticianSetup.
-//    }
+    @Test
+    public void shouldReturnEmptyListWhenQueryingAndPageDoesNotExist() throws Exception{
+        pagedSetupForPoliticians(40);
 
-    private void pagedPoliticianSetup(int numberOfTimes) throws PoliticianNotPersistableException {
-        for (int i = 0; i < numberOfTimes; i++) {
-            Politicians presidential = new PresidentialBuilder(politicianBuilder
-                    .setPoliticianNumber(of(NumberTestFactory.POL_NUMBER().politicianNumber().concat(valueOf(i))).politicianNumber()))
-                    .build();
+        List<Politicians> emptyListOfPoliticians = polService.findAllWithPage(Page.of(41), 1).valuesAsList();
 
-            polRepo.save(presidential);
-        }
+        assertThat(emptyListOfPoliticians)
+                .isEmpty();
     }
 
+    @Test
+    public void shouldReturnCorrectPagedObject() throws Exception{
+        int databaseSize = 40;
+        pagedSetupForPoliticians(databaseSize);
+
+        Page page = Page.of(3);
+        int numberOfItemsToFetch = 10;
+        PagedObject<Politicians> pagedPoliticians = polService.findAllWithPage(page, numberOfItemsToFetch);
+
+        List<Politicians> expectedContent = pagedPoliticianSetupPresidential(databaseSize, politicianBuilder)
+                .stream().skip(30).toList();
+
+        assertThat(pagedPoliticians)
+                .isEqualTo(PagedObject.of(expectedContent, databaseSize, numberOfItemsToFetch, page));
+    }
+
+    private void pagedSetupForPoliticians(int numberOfTimes) {
+        pagedPoliticianSetupPresidential(numberOfTimes, politicianBuilder).forEach(it -> {
+            try {
+                polRepo.save(it);
+            } catch (PoliticianNotPersistableException e) {
+                e.printStackTrace();
+            }
+        });
+    }
 
 }

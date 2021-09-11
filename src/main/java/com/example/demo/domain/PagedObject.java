@@ -127,7 +127,11 @@ public class PagedObject<T> {
 
     @Override
     public String toString() {
-        return "PagedObject{ " + content + " , " + currentPage.toString() + " }";
+        return "PagedObject{" +
+                "Content { " + content +
+                " }, Page { " + currentPage +
+                " }, Total {" + total +
+                "} , { itemsToFetch=" + itemsToFetch +
+                " }";
     }
-
 }

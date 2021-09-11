@@ -12,7 +12,7 @@ import static java.lang.String.valueOf;
 
 public class MultiplePoliticianSetup {
 
-    public static List<Politicians> pagedPoliticianSetup(int numberOfTimes, PoliticiansBuilder politicianBuilder) {
+    public static List<Politicians> pagedPoliticianSetupPresidential(int numberOfTimes, PoliticiansBuilder politicianBuilder) {
         List<Politicians> result = new ArrayList<>();
 
         for (int i = 0; i < numberOfTimes; i++) {

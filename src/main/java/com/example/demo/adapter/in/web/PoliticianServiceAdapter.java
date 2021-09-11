@@ -67,11 +67,11 @@ public class PoliticianServiceAdapter {
         HttpSession session = req.getSession(true);
         Integer pageNumber = (Integer) session.getAttribute("page-number");
         if (pageNumber == null) {
-            PagedResult<Politicians> allWithPage = service.findAllWithPage(page, itemsToFetch);
+            PagedObject<Politicians> allWithPage = service.findAllWithPage(page, itemsToFetch);
 
             session.setAttribute("paged-objects", allWithPage);
             session.setAttribute("page-number", Integer.valueOf(page.pageNumber()));
-            return allWithPage.firstPage().values().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
+            return allWithPage.values().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
         }
 
         PagedResult<Politicians> attribute = (PagedResult<Politicians>) session.getAttribute("paged-objects");

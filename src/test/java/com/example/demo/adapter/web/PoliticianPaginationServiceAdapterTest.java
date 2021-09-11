@@ -18,7 +18,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.servlet.http.HttpSession;
 
-import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetup;
+import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
 import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
 import static com.example.demo.domain.politicians.Politicians.Type.PRESIDENTIAL;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -85,7 +85,7 @@ public class PoliticianPaginationServiceAdapterTest {
     }
 
     void pagedSetup(int numberOfTimes) {
-        pagedPoliticianSetup(numberOfTimes, politicianBuilder).stream().forEach(it -> {
+        pagedPoliticianSetupPresidential(numberOfTimes, politicianBuilder).stream().forEach(it -> {
             try {
                 polRepo.save(it);
             } catch (PoliticianNotPersistableException e) {

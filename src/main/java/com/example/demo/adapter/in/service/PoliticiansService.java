@@ -2,7 +2,7 @@ package com.example.demo.adapter.in.service;
 
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.domain.Page;
-import com.example.demo.domain.PagedResult;
+import com.example.demo.domain.PagedObject;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianAlreadyExistsException;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
@@ -66,7 +66,7 @@ public class PoliticiansService {
 	}
 
 	@Transactional
-	public PagedResult<Politicians> findAllWithPage(Page page, int numberOfItemsToFetch) {
+	public PagedObject<Politicians> findAllWithPage(Page page, int numberOfItemsToFetch) {
 		return politiciansRepo.findAllByPage(page, numberOfItemsToFetch);
 	}
 

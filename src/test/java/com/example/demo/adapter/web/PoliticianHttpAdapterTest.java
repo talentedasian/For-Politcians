@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.net.URI;
 
 import static com.example.demo.baseClasses.MockMvcAssertions.assertThat;
-import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetup;
+import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
 import static com.example.demo.domain.enums.Rating.HIGH;
 import static com.example.demo.domain.enums.Rating.LOW;
 import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
@@ -165,7 +165,7 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
     @Test
     public void shouldReturnSinglePagedObjectWhenQueryingForFirstPageWithLimitLessThan10() throws Exception{
-       jpaRepo.saveAll(pagedPoliticianSetup(30, politicianBuilder).stream().map(PoliticiansJpaEntity::from).toList());
+       jpaRepo.saveAll(pagedPoliticianSetupPresidential(30, politicianBuilder).stream().map(PoliticiansJpaEntity::from).toList());
 
        mvc.perform(get(URI.create("/api/politicians/politicians?page=0&items=20")))
                .andExpect(status().isOk())
