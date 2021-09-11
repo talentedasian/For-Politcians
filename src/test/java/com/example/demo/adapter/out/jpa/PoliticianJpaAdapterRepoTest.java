@@ -5,6 +5,8 @@ import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.baseClasses.NumberTestFactory;
+import com.example.demo.domain.Page;
+import com.example.demo.domain.PagedObject;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.politicians.Politicians;
@@ -69,18 +71,18 @@ public class PoliticianJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase
                 .isEmpty();
     }
 
-//    @Test
-//    public void shouldSkipPoliticiansByPageNumberMultipliedBy10ThenFetchesItemsSpecifiedInQuery() throws Exception{
-//        pagedPoliticianSetup();
-//
-//        PagedResult<Politicians> pagedPoliticians = polRepo.findAllByPage(Page.of(1), 20);
-//
-//        List<Politicians> EXPECTED_2ND_PAGE_OF_PAGEDPOLITICIANS = polRepo.findAll().stream()
-//                .skip(Page.of(2).itemsToSkip(10)).limit(10).toList();
-//
-//        assertThat(pagedPoliticians.ofPage(Page.of(1)).values().toList())
-//                .hasSameElementsAs(EXPECTED_2ND_PAGE_OF_PAGEDPOLITICIANS);
-//    }
+    @Test
+    public void shouldSkipPoliticiansByPageNumberMultipliedBy10ThenFetchesItemsSpecifiedInQuery() throws Exception{
+        pagedPoliticianSetup();
+
+        PagedObject<Politicians> pagedPoliticians = polRepo.findAllByPage(Page.of(1), 20);
+
+        List<Politicians> EXPECTED_2ND_PAGE_OF_PAGEDPOLITICIANS = polRepo.findAll().stream()
+                .skip(Page.of(1).itemsToSkip(20)).limit(10).toList();
+
+        assertThat(pagedPoliticians)
+                .isEqualTo(PagedObject.of(EXPECTED_2ND_PAGE_OF_PAGEDPOLITICIANS, polJpaRepo.count(), 20, Page.of(1)));
+    }
 
     private void pagedPoliticianSetup() throws PoliticianNotPersistableException {
         for (int i = 0; i < 30; i++) {
