@@ -72,7 +72,7 @@ public class PagedObject<T> {
         if (total == 0) return 0;
 
         long pages = total / itemsToFetch;
-        return totalModuloItemsToFetch() == 0 ? pages : pages + 1;
+        return getItemSizeOfLastPage() == 0 ? pages : pages + 1;
     }
 
     /** Makes a query that fetches the last page of the table. Does a minimal validation
@@ -87,7 +87,7 @@ public class PagedObject<T> {
         Page page = Page.of((int) totalPages());
 
         if (result == null || result.isEmpty()) throw new NotLastPageException();
-        else if (result.size() < (totalModuloItemsToFetch())) throw new NotLastPageException();
+        else if (result.size() < (getItemSizeOfLastPage())) throw new NotLastPageException();
         return of(result, total, itemsToFetch, page);
     }
 
@@ -99,11 +99,7 @@ public class PagedObject<T> {
         return values().toList();
     }
 
-    public boolean doesPageContainContent() {
-        return false;
-    }
-
-    private long totalModuloItemsToFetch() {
+    private long getItemSizeOfLastPage() {
         return total % itemsToFetch;
     }
 

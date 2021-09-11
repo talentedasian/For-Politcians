@@ -47,27 +47,22 @@ public class TotalPaginatedObjectTest {
     }
 
     @Test
-    public void shouldReturnFalseWhenPageNumberIsLargerThanTotalPages() throws Exception{
-        boolean isNotOnPage = PagedObject.of(List.of(), 20, 40, Page.of(1)).doesPageContainContent();
-
-        assertThat(isNotOnPage)
-                .isFalse();
-    }
-
-    @Test
-    public void shouldNotContainContentForPageWithLargeTotal() throws Exception{
-        boolean hasContentOnPage = PagedObject.of(List.of(), 500, 20, Page.of(26)).doesPageContainContent();
-
-        assertThat(hasContentOnPage)
-                .isFalse();
-    }
-
-    @Test
     public void testTotalPagesWhenTotalIsALargeValue() throws Exception{
         long EXPECTED_TOTAL_NUMBER_OF_PAGE = 900;
 
         long total = 900;
         long totalPages = PagedObject.of(List.of("random"), total, 1).totalPages();
+
+        assertThat(totalPages)
+                .isEqualTo(EXPECTED_TOTAL_NUMBER_OF_PAGE);
+    }
+
+    @Test
+    public void testTotalPagesWhenItemsToFetchIsALargeValue() throws Exception{
+        long EXPECTED_TOTAL_NUMBER_OF_PAGE = 9;
+
+        long total = 9000;
+        long totalPages = PagedObject.of(List.of("random"), total, 1090).totalPages();
 
         assertThat(totalPages)
                 .isEqualTo(EXPECTED_TOTAL_NUMBER_OF_PAGE);
