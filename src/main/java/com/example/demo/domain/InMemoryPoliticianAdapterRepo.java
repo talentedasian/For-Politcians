@@ -69,7 +69,7 @@ public class InMemoryPoliticianAdapterRepo implements PoliticiansRepository {
 
     @Override
     public PagedObject<Politicians> findAllByPage(Page page, int itemsToFetch) {
-        return PagedObject.of(database.values().stream().skip(page.itemsToSkip(itemsToFetch)).limit(itemsToFetch).toList(),
+        return PagedObject.of(findAll().stream().skip(page.itemsToSkip(itemsToFetch)).limit(itemsToFetch).toList(),
                 database.size(), itemsToFetch, page);
     }
 
