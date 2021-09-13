@@ -76,7 +76,7 @@ public class PoliticianApplicationServiceTest {
     }
 
     @Test
-    public void shouldReturnEmptyListWhenQueryingAndPageDoesNotExist() throws Exception{
+    public void shouldReturnEmptyListWhenQueryingAPageThatDoesNotExist() throws Exception{
         pagedSetupForPoliticians(40);
 
         List<Politicians> emptyListOfPoliticians = polService.findAllWithPage(Page.of(41), 1).valuesAsList();
