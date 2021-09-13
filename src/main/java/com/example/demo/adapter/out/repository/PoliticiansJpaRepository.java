@@ -10,7 +10,11 @@ public interface PoliticiansJpaRepository extends JpaRepository<PoliticiansJpaEn
 
     List<PoliticiansJpaEntity> findByLastNameAndFirstName(String lastName, String firstName);
 
-    @Query(value = "SELECT * FROM politicians LIMIT :numberOfItemsToFetch OFFSET :itemsToSkip", nativeQuery = true)
+    @Query(value = """
+            SELECT * FROM politicians ORDER BY SUBSTRING(id from 1 for 9) ASC , CAST (SUBSTRING(id from 11) as BIGINT) ASC
+            LIMIT :numberOfItemsToFetch OFFSET :itemsToSkip
+            """,
+            nativeQuery = true)
     List<PoliticiansJpaEntity> findAllWithPage(int itemsToSkip, int numberOfItemsToFetch);
 
 }

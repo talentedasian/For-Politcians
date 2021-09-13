@@ -5,10 +5,13 @@ import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
 import com.example.demo.baseClasses.NumberTestFactory;
+import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
 import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
 import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.politicians.Name;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.AfterEach;
@@ -20,6 +23,8 @@ import testAnnotations.DatabaseTest;
 
 import java.util.List;
 
+import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
+import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
 import static com.example.demo.domain.politicians.PoliticianNumber.of;
 import static java.lang.String.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,9 +36,13 @@ public class PoliticianJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase
 
     PoliticiansRepository polRepo;
 
+    InMemoryPoliticianAdapterRepo inMemoryPolRepo;
+
     @BeforeEach
     public void setup() {
         polRepo = new PoliticianJpaAdapterRepository(polJpaRepo);
+
+        inMemoryPolRepo = new InMemoryPoliticianAdapterRepo();
     }
 
 
@@ -84,6 +93,84 @@ public class PoliticianJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase
                 .isEqualTo(PagedObject.of(EXPECTED_2ND_PAGE_OF_PAGEDPOLITICIANS, polJpaRepo.count(), 20, Page.of(1)));
     }
 
+    @Test
+    public void testOrderByForIdInPostgresql() throws Exception{
+        pagedPoliticianSetup();
+
+        List<Politicians> pagedPoliticians = polJpaRepo.findAllWithPage(20, 10)
+                .stream().map(PoliticiansJpaEntity::toPoliticians).toList();
+
+        List<Politicians> EXPECTED_2ND_PAGE_OF_PAGEDPOLITICIANS = pagedPoliticianSetupPresidential(30, politicianBuilder).stream()
+                .skip(Page.of(1).itemsToSkip(20)).limit(10).toList();
+
+        assertThat(pagedPoliticians)
+                .isEqualTo(EXPECTED_2ND_PAGE_OF_PAGEDPOLITICIANS);
+    }
+
+    @Test
+    public void testIfSortOfInMemoryRepoIsParallelWithTheJpaRepoWithSameLettersInId() throws Exception{
+        pagedPoliticianSetup();
+
+        inMemorySetup();
+
+        List<Politicians> postgresSortImplementation = polJpaRepo.findAllWithPage(0, 30)
+                .stream().map(PoliticiansJpaEntity::toPoliticians).toList();
+
+        List<Politicians> inMemorySortImplementation = inMemoryPolRepo.findAll().stream().toList();
+
+        assertThat(postgresSortImplementation)
+                .isEqualTo(inMemorySortImplementation);
+    }
+
+    @Test
+    public void testIfSortOfInMemoryRepoIsParallelWithTheJpaRepoWithDifferentLettersAndDigits() throws Exception{
+        inMemorySetupWithNoOrder();
+        List<Politicians> postgresSortImplementation = polJpaRepo.findAllWithPage(0, 3)
+                .stream().map(PoliticiansJpaEntity::toPoliticians).toList();
+
+        List<Politicians> inMemorySortImplementation = inMemoryPolRepo.findAll().stream().toList();
+
+        assertThat(postgresSortImplementation)
+                .isEqualTo(inMemorySortImplementation);
+    }
+
+    private void inMemorySetupWithNoOrder() throws PoliticianNotPersistableException {
+        Name[] names = {Name.of("Name", "Any"), Name.of("Good", "One"), Name.of("Real", "Fake")};
+        Politicians.Type[] types = {Politicians.Type.SENATORIAL, Politicians.Type.PRESIDENTIAL, Politicians.Type.SENATORIAL};
+
+        String POL_NUMBER;
+
+        for (int i = 0; i < names.length; i++) {
+            var polNumberCalculator = politicianCalculator(types[i]);
+            POL_NUMBER = polNumberCalculator.calculatePoliticianNumber(names[i]).politicianNumber();
+            var builder = politicianBuilder.setPoliticianNumber(POL_NUMBER);
+
+
+            if (types[i].equals(Politicians.Type.PRESIDENTIAL)) {
+                var presidential = new PresidentialBuilder(builder).build();
+                polRepo.save(presidential);
+                inMemoryPolRepo.save(presidential);
+            } else {
+                var senatorial = new SenatorialBuilder(builder).setTotalMonthsOfService(12).build();
+                polRepo.save(senatorial);
+                inMemoryPolRepo.save(senatorial);
+            }
+
+        }
+
+    }
+
+    private void inMemorySetup() {
+        pagedPoliticianSetupPresidential(30 ,politicianBuilder)
+                .forEach(it -> {
+                    try {
+                        inMemoryPolRepo.save(it);
+                    } catch (PoliticianNotPersistableException e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
     private void pagedPoliticianSetup() throws PoliticianNotPersistableException {
         for (int i = 0; i < 30; i++) {
             Politicians presidential = new PresidentialBuilder(politicianBuilder
@@ -96,17 +183,16 @@ public class PoliticianJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase
 
     @AfterEach
     public void pagedPoliticianTeardown() throws PoliticianNotPersistableException {
-        for (int i = 0; i < 30; i++) {
-            Politicians presidential = new PresidentialBuilder(politicianBuilder
-                    .setPoliticianNumber(of(NumberTestFactory.POL_NUMBER().politicianNumber().concat(valueOf(i))).politicianNumber()))
-                    .build();
-
-            try {
-                polRepo.deleteByPoliticianNumber(presidential.retrievePoliticianNumber());
-            } catch(EmptyResultDataAccessException e) {
-                e.printStackTrace();
-            }
+            polRepo.findAll().stream()
+                    .map(it -> it.retrievePoliticianNumber())
+                    .forEach(it -> {
+                        try {
+                            polRepo.deleteByPoliticianNumber(it);
+                            inMemoryPolRepo.deleteByPoliticianNumber(it);
+                        } catch(EmptyResultDataAccessException e) {
+                            e.printStackTrace();
+                        }
+                    });
         }
-    }
 
 }

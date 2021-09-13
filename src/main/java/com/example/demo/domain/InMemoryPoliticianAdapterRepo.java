@@ -10,6 +10,16 @@ import java.util.*;
 public class InMemoryPoliticianAdapterRepo implements PoliticiansRepository {
 
     Map<String, Politicians> database = new TreeMap<>();
+    Comparator<Politicians> sortByPoliticianNumberLetters =
+            (it, it2) -> {
+                int stringComparison = Integer.valueOf(it.retrievePoliticianNumber().substring(0, 8)
+                        .compareTo(it2.retrievePoliticianNumber().substring(0, 8)));
+                if (stringComparison == 0) {
+                   return Integer.valueOf(it.retrievePoliticianNumber().substring(11))
+                                   .compareTo(Integer.valueOf(it2.retrievePoliticianNumber().substring(11)));
+                }
+                return stringComparison;
+            };
 
     @Override
     public Politicians save(Politicians politician) throws PoliticianNotPersistableException {
@@ -62,7 +72,7 @@ public class InMemoryPoliticianAdapterRepo implements PoliticiansRepository {
         List<Politicians> sortedResult = new ArrayList<>();
 
         sortedResult.addAll(result);
-        sortedResult.sort(((it, it2) -> it.retrievePoliticianNumber().compareTo(it2.retrievePoliticianNumber())));
+        sortedResult.sort(sortByPoliticianNumberLetters);
 
         return sortedResult;
     }
