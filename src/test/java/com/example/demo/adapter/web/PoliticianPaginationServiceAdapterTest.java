@@ -2,10 +2,8 @@ package com.example.demo.adapter.web;
 
 import com.example.demo.adapter.in.web.PoliticianServiceAdapter;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
-import com.example.demo.adapter.web.dto.PoliticianDto;
 import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
 import com.example.demo.domain.Page;
-import com.example.demo.domain.PagedResult;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicians.Name;
 import com.example.demo.domain.politicians.PoliticianNumber;
@@ -50,7 +48,7 @@ public class PoliticianPaginationServiceAdapterTest {
     }
 
     @Test
-    public void queryingServiceAdapterByAllWithPageShouldCreateSession() throws Exception{
+    public void shouldCreateSession() throws Exception{
         PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
@@ -80,8 +78,26 @@ public class PoliticianPaginationServiceAdapterTest {
 
         HttpSession session = mockRequest.getSession(false);
 
-        assertThat((PagedResult<PoliticianDto>) session.getAttribute("paged-objects"))
+        assertThat(session.getAttribute("paged-objects"))
                 .isEqualTo(polRepo.findAllByPage(pageZero, 20));
+    }
+
+    @Test
+    public void shouldCreateAttributeAndSessionWithTotalPageIfNotExist() throws Exception{
+        PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
+
+        MockHttpServletRequest mockRequest = new MockHttpServletRequest();
+
+        pagedSetup(30);
+
+        Page pageZero = Page.asZero();
+
+        service.allPoliticiansWithPage(pageZero, 20, mockRequest);
+
+        HttpSession session = mockRequest.getSession(false);
+
+        assertThat((long) session.getAttribute("total-page"))
+                .isEqualTo(2);
     }
 
     void pagedSetup(int numberOfTimes) {

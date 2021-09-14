@@ -6,7 +6,6 @@ import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.web.dto.PoliticianDto;
 import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
-import com.example.demo.domain.PagedResult;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.dtomapper.PoliticianDTOUnwrapper;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
@@ -65,19 +64,18 @@ public class PoliticianServiceAdapter {
 
     public List<PoliticianDto> allPoliticiansWithPage(Page page, int itemsToFetch, HttpServletRequest req) {
         HttpSession session = req.getSession(true);
-        Integer pageNumber = (Integer) session.getAttribute("page-number");
-        if (pageNumber == null) {
+        Integer totalPage = (Integer) session.getAttribute("total-page");
+        if (totalPage == null) {
             PagedObject<Politicians> allWithPage = service.findAllWithPage(page, itemsToFetch);
 
             session.setAttribute("paged-objects", allWithPage);
-            session.setAttribute("page-number", Integer.valueOf(page.pageNumber()));
+            session.setAttribute("total-page", allWithPage.totalPages());
             return allWithPage.values().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
         }
 
-        PagedResult<Politicians> attribute = (PagedResult<Politicians>) session.getAttribute("paged-objects");
-        PagedObject<Politicians> currentPage = attribute.ofPage(Page.of(pageNumber));
+        PagedObject<Politicians> result = (PagedObject<Politicians>) session.getAttribute("paged-objects");
 
-        return currentPage.values().toList().stream().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
+        return result.values().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
     }
 
 }
