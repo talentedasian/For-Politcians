@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,7 +34,7 @@ public class ExpirationDateTest {
     public void shouldReturn20AsDaysTillExpirationWhenExpirationDateIs20DaysAhead() {
         final long DAYS_TO_EXPIRE = 20;
 
-        var expirationDate = new ExpirationDate(LocalDate.now());
+        var expirationDate = new ExpirationDate(LocalDate.now(ZoneId.of("GMT+8")));
 
         assertThat(expirationDate.expirationDate(DAYS_TO_EXPIRE))
                 .isEqualTo(LocalDate.now().plusDays(DAYS_TO_EXPIRE));

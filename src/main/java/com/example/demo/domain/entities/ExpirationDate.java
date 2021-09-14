@@ -20,7 +20,7 @@ public record ExpirationDate(LocalDate dateCreated) {
     public String daysLeftTillExpiration(long daysLeftTillExpiration) {
         checkForNegativeNumber(daysLeftTillExpiration);
         Assert.state(!isExpired(daysLeftTillExpiration), "should be not be expired when getting days left till expiration");
-        return String.valueOf(expirationDate(daysLeftTillExpiration).getDayOfMonth() - dateCreated.getDayOfMonth());
+        return String.valueOf(expirationDate(daysLeftTillExpiration).getDayOfYear() - dateCreated.getDayOfYear());
     }
 
     private void checkForNegativeNumber(long number) {
