@@ -86,7 +86,7 @@ public class PoliticianApplicationServiceTest {
     }
 
     @Test
-    public void shouldReturnCorrectPagedObject() throws Exception{
+    public void shouldReturnCorrectPagedObjectWhenQueryingWithPage() throws Exception{
         int databaseSize = 40;
         pagedSetupForPoliticians(databaseSize);
 
@@ -107,6 +107,7 @@ public class PoliticianApplicationServiceTest {
                 polRepo.save(it);
             } catch (PoliticianNotPersistableException e) {
                 e.printStackTrace();
+                System.exit(1);
             }
         });
     }
