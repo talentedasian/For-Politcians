@@ -84,7 +84,7 @@ public class PoliticianJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase
     public void shouldSkipPoliticiansByPageNumberMultipliedBy10ThenFetchesItemsSpecifiedInQuery() throws Exception{
         pagedPoliticianSetup();
 
-        PagedObject<Politicians> pagedPoliticians = polRepo.findAllByPage(Page.of(1), 20);
+        PagedObject<Politicians> pagedPoliticians = polRepo.findAllByPage(Page.of(1), 20, null);
 
         List<Politicians> EXPECTED_2ND_PAGE_OF_PAGEDPOLITICIANS = polRepo.findAll().stream()
                 .skip(Page.of(1).itemsToSkip(20)).limit(10).toList();

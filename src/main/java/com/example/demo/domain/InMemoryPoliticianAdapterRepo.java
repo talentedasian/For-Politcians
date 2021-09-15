@@ -8,15 +8,18 @@ import com.example.demo.exceptions.PoliticianNotPersistableException;
 import java.util.*;
 
 public class InMemoryPoliticianAdapterRepo implements PoliticiansRepository {
+    private long timesOfCount = 0;
 
     Map<String, Politicians> database = new TreeMap<>();
     Comparator<Politicians> sortByPoliticianNumberLetters =
             (it, it2) -> {
-                int stringComparison = Integer.valueOf(it.retrievePoliticianNumber().substring(0, 8)
-                        .compareTo(it2.retrievePoliticianNumber().substring(0, 8)));
+                String politicianNumberToCompareTo = it.retrievePoliticianNumber();
+                String politicianNumberForComparison = it2.retrievePoliticianNumber();
+                int stringComparison = politicianNumberToCompareTo.substring(0, 8)
+                        .compareTo(politicianNumberForComparison.substring(0, 8));
                 if (stringComparison == 0) {
-                   return Integer.valueOf(it.retrievePoliticianNumber().substring(11))
-                                   .compareTo(Integer.valueOf(it2.retrievePoliticianNumber().substring(11)));
+                   return Integer.valueOf(politicianNumberToCompareTo.substring(11))
+                                   .compareTo(Integer.valueOf(politicianNumberForComparison.substring(11)));
                 }
                 return stringComparison;
             };
@@ -78,9 +81,19 @@ public class InMemoryPoliticianAdapterRepo implements PoliticiansRepository {
     }
 
     @Override
-    public PagedObject<Politicians> findAllByPage(Page page, int itemsToFetch) {
+    public PagedObject<Politicians> findAllByPage(Page page, int itemsToFetch, Long total) {
+        Long count = total;
+        if (count == null) count = count();
         return PagedObject.of(findAll().stream().skip(page.itemsToSkip(itemsToFetch)).limit(itemsToFetch).toList(),
-                database.size(), itemsToFetch, page);
+                count, itemsToFetch, page);
     }
 
+    public long countQueries() {
+        return timesOfCount;
+    }
+
+    private long count() {
+        timesOfCount++;
+        return database.size();
+    }
 }

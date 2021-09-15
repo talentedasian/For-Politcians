@@ -67,7 +67,7 @@ public class PoliticiansService {
 
 	@Transactional
 	public PagedObject<Politicians> findAllWithPage(Page page, int numberOfItemsToFetch) {
-		return politiciansRepo.findAllByPage(page, numberOfItemsToFetch);
+		return politiciansRepo.findAllByPage(page, numberOfItemsToFetch, null);
 	}
 
 }

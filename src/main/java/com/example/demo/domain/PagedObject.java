@@ -99,6 +99,10 @@ public class PagedObject<T> {
         return values().toList();
     }
 
+    public long totalElements() {
+        return this.total;
+    }
+
     private long getItemSizeOfLastPage() {
         return total % itemsToFetch;
     }

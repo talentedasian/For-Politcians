@@ -24,6 +24,6 @@ public interface PoliticiansRepository{
 
     List<Politicians> findAll();
 
-    PagedObject<Politicians> findAllByPage(Page page, int itemsToFetch);
+    PagedObject<Politicians> findAllByPage(Page page, int itemsToFetch, Long total);
 
 }

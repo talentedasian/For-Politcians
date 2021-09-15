@@ -67,34 +67,51 @@ public class PoliticianServiceAdapter {
 
     public List<PoliticianDto> allPoliticiansWithPage(Page page, int itemsToFetch, HttpServletRequest req) {
         HttpSession session = req.getSession(true);
-        Integer totalPage = (Integer) session.getAttribute("total-page");
-        if (totalPage == null) {
-            PagedObject<Politicians> allWithPage = service.findAllWithPage(page, itemsToFetch);
+        var totalPage = session.getAttribute("total-page");
 
-            session.setAttribute("paged-objects", allWithPage);
-            session.setAttribute("total-page", allWithPage.totalPages());
-            return allWithPage.values().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
-        }
+        if (doesRequestNotHaveExistingSession(totalPage)) return responseAndSession(session, page, itemsToFetch);
 
-        PagedObject<Politicians> result = (PagedObject<Politicians>) session.getAttribute("paged-objects");
+        if (checkIfRequestDoesNotHaveSameItemsToFetchAsLastRequest(itemsToFetch, session)) return responseAndSession(session, page, itemsToFetch);
+
+        long total = ((PagedObject<PoliticianDto>) session.getAttribute("paged-objects")).totalElements();
+        PagedObject<Politicians> result = repo.findAllByPage(page, itemsToFetch, total);
 
         return result.values().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
+    }
+
+    private List<PoliticianDto> responseAndSession(HttpSession session, Page page, int itemsToFetch) {
+        PagedObject<Politicians> allWithPage = service.findAllWithPage(page, itemsToFetch);
+
+        session.setAttribute("paged-objects", allWithPage);
+        session.setAttribute("total-page", allWithPage.totalPages());
+        session.setAttribute("items-to-fetch", itemsToFetch);
+
+        return allWithPage.values().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
+
+    }
+
+    private boolean doesRequestNotHaveExistingSession(Object totalPage) {
+        return totalPage == null;
+    }
+
+    private boolean checkIfRequestDoesNotHaveSameItemsToFetchAsLastRequest(int itemsToFetch, HttpSession session) {
+        return ((int) session.getAttribute("items-to-fetch") != itemsToFetch);
     }
 
     // Slowly change method above to look like this method
     public List<PoliticianDto> allPoliticiansWithPage(Page page, int itemsToFetch, HttpServletRequest req, boolean shouldFetchLastPage) {
         if (shouldFetchLastPage) {
-            if (req.getSession(false) == null) {
+            if (doesRequestNotHaveExistingSession(req.getSession(false))) {
                 throw new NoSessionFoundException("Session should be available when requesting last page specifically");
             }
             HttpSession session = req.getSession(true);
             Long totalPage = (Long) session.getAttribute("total-page");
-            return repo.findAllByPage(Page.of(Math.toIntExact(totalPage - 1)), itemsToFetch)
+            return repo.findAllByPage(Page.of(Math.toIntExact(totalPage - 1)), itemsToFetch, totalPage)
                     .values().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
         }
         HttpSession session = req.getSession(true);
         Long totalPage = (Long) session.getAttribute("total-page");
-        if (totalPage == null) {
+        if (doesRequestNotHaveExistingSession(totalPage)) {
             PagedObject<Politicians> allWithPage = service.findAllWithPage(page, itemsToFetch);
 
             session.setAttribute("paged-objects", allWithPage);
