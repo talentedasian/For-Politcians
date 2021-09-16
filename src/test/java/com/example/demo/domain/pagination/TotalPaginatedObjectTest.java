@@ -113,11 +113,11 @@ public class TotalPaginatedObjectTest {
 
         assertThat(lastPagedObject)
                 .isEqualTo(PagedObject.<String>of(List.of("random21", "random22", "random23", "random24", "random25", "random26",
-                        "random27", "random28", "random29", "random30"), 30, 10, Page.of(3)));
+                        "random27", "random28", "random29", "random30"), 30, 10, Page.of(2)));
     }
 
     @Test
-    public void testLastPageWithItemsToFetchHaveARemainderWhenDividedWithTotal() throws Exception{
+    public void testLastPagePageNumberWithItemsToFetchHaveARemainderWhenDividedWithTotal() throws Exception{
         List<String> pagedList = createList(20);
 
         PagedObject<String> pagedObject = PagedObject.of(pagedList, 30, 7);
@@ -127,7 +127,7 @@ public class TotalPaginatedObjectTest {
                 .isEqualTo(List.of("random29", "random30"));
 
         assertThat(lastPagedObject.currentPageNumber())
-                .isEqualTo(5);
+                .isEqualTo(4);
     }
 
     @Test
@@ -143,7 +143,7 @@ public class TotalPaginatedObjectTest {
                         "random27", "random28", "random29", "random30"));
 
         assertThat(lastPage.currentPageNumber())
-                .isEqualTo(3);
+                .isEqualTo(2);
     }
 
     @Test

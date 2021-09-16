@@ -70,6 +70,32 @@ public class PoliticianPaginationServiceAdapterTest {
                 .isEqualTo(300);
     }
 
+    @Test       // INFO : NEXT PAGE MEANS JUST QUERYING FOR A PAGE INCREMENTED FROM THE LAST EXISTING SESSION AND STILL HAVING THE
+                // SAME ITEMS TO FETCH
+    public void queryingForNextPageShouldReturnCorrectPagedObjectAndStillRetainSessionAttributesFromBefore() throws Exception{
+        PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
+
+        MockHttpServletRequest mockRequest = new MockHttpServletRequest();
+
+        int numberOfTimes = 30;
+        pagedSetup(numberOfTimes);
+
+        Page pageZero = Page.asZero();
+
+        int itemsToFetch = 20;
+        service.allPoliticiansWithPage(pageZero, itemsToFetch, mockRequest);
+        service.allPoliticiansWithPage(pageZero.nextPage(), itemsToFetch, mockRequest);
+
+        HttpSession session = mockRequest.getSession(false);
+
+        PagedObject pagedObjectFromSession = (PagedObject) session.getAttribute("paged-objects");
+        PagedObject expectedPagedObject = PagedObject.of(polRepo.findAllByPage(pageZero.nextPage(), itemsToFetch, numberOfTimes).valuesAsList(),
+                                                         numberOfTimes, itemsToFetch, pageZero.nextPage());
+
+        assertThat(pagedObjectFromSession)
+                .isEqualTo(expectedPagedObject);
+    }
+
     @Test
     public void shouldReturnSessionWithTotalPageAndItemsToFetchAndTotalAsAttributeOnFirstPaginationQuery() throws Exception{
         PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
@@ -186,7 +212,7 @@ public class PoliticianPaginationServiceAdapterTest {
     }
 
     @Test
-    public void shouldGiveSamePagedObjectButWithLastPageAsContent() throws Exception{
+    public void shouldGivePagedObjectButWithLastPageAsContent() throws Exception{
         PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
@@ -210,10 +236,7 @@ public class PoliticianPaginationServiceAdapterTest {
                 .isEqualTo(expectedContent);
 
         assertThat(pagedObject)
-                .isEqualTo(polRepo.findAllByPage(pageZero, 20, 100l));
-
-        assertThat((long) session.getAttribute("total-page"))
-                .isEqualTo(5);
+                .isEqualTo(polRepo.findAllByPage(lastPage, 20, 100l));
     }
 
     @Test

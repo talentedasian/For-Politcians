@@ -75,6 +75,10 @@ public class PagedObject<T> {
         return getItemSizeOfLastPage() == 0 ? pages : pages + 1;
     }
 
+    public PagedObject<T> nextPage(PagedQuery<T> query) {
+        return of(query.find(), total, itemsToFetch, currentPage.nextPage());
+    }
+
     /** Makes a query that fetches the last page of the table. Does a minimal validation
      * whether the query actually returns the last page.
      *
@@ -84,8 +88,7 @@ public class PagedObject<T> {
      */
     public PagedObject<T> lastPage(PagedQuery<T> query) {
         List<T> result = query.find();
-        Page page = Page.of((int) totalPages());
-
+        Page page = Page.of((int) totalPages() - 1);
         if (result == null || result.isEmpty()) throw new NotLastPageException();
         else if (result.size() < (getItemSizeOfLastPage())) throw new NotLastPageException();
         return of(result, total, itemsToFetch, page);

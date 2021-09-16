@@ -73,9 +73,22 @@ public class PoliticianServiceAdapter {
         if (checkIfRequestDoesNotHaveSameItemsToFetchAsLastRequest(itemsToFetch, session)) return responseAndSession(session, page, itemsToFetch);
 
         long total = (long) session.getAttribute("total");
-        PagedObject<Politicians> result = repo.findAllByPage(page, itemsToFetch, total);
 
-        return result.values().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
+        String pagedObjectAttribute = "paged-objects";
+        PagedObject pagedObjectFromSession = (PagedObject) session.getAttribute(pagedObjectAttribute);
+
+        PagedObject<Politicians> query = repo.findAllByPage(page, itemsToFetch, total);
+        if (doesRequestQueryForLastPage(session, page)) {
+            session.setAttribute(pagedObjectAttribute, pagedObjectFromSession.lastPage(() -> query.valuesAsList()));
+        } else {
+            session.setAttribute(pagedObjectAttribute, pagedObjectFromSession.nextPage(() -> query.valuesAsList()));
+        }
+
+        return query.values().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
+    }
+
+    private boolean doesRequestQueryForLastPage(HttpSession session, Page lastPage) {
+        return ((long)session.getAttribute("total-page")) == lastPage.pageNumber() + 1;
     }
 
     private List<PoliticianDto> responseAndSession(HttpSession session, Page page, int itemsToFetch) {
