@@ -76,6 +76,7 @@ public class PagedObject<T> {
     }
 
     public PagedObject<T> nextPage(PagedQuery<T> query) {
+        if (!hasPageFor(currentPage.nextPage())) throw new IllegalStateException("There has to be next page to call next page");
         return of(query.find(), total, itemsToFetch, currentPage.nextPage());
     }
 

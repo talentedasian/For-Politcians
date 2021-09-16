@@ -227,6 +227,30 @@ public class TotalPaginatedObjectTest {
                 .isTrue();
     }
 
+    @Test
+    public void testNextPage() throws Exception{
+        int numberOfTimesToCreate = 20;
+        List<String> contents = createList(numberOfTimesToCreate);
+        int itemsToFetch = 4;
+        List<String> firstPageContent = contents.stream().limit(itemsToFetch).toList();
+        List<String> nextPageContent = contents.stream().skip(itemsToFetch).limit(itemsToFetch).toList();
+
+
+        PagedObject<String> pagedObject = PagedObject.of(firstPageContent, numberOfTimesToCreate, itemsToFetch);
+
+        assertThat(pagedObject.nextPage(() -> nextPageContent))
+                .isEqualTo(PagedObject.of(nextPageContent, numberOfTimesToCreate, itemsToFetch, Page.of(1)));
+    }
+
+    @Test
+    public void shouldThrowIllegalStateExceptionWhenCallingNextPageAndThereIsNoNextPage() throws Exception{
+        List<String> contents = createList(500);
+
+        PagedObject<String> pagedObject = PagedObject.of(contents, 1000, 200, Page.of(4));
+
+        assertThrows(IllegalStateException.class, () -> pagedObject.nextPage(() -> List.of()));
+    }
+
     private List<String> createList(int numberOfTimesToCreate) {
         List<String> result = new ArrayList<>();
         final String content = "random";
