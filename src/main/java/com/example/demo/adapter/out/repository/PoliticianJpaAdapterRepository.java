@@ -71,9 +71,14 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
     }
 
     @Override
-    public PagedObject<Politicians> findAllByPage(Page page, int itemsToFetch, Long total) {
+    public PagedObject<Politicians> findAllByPage(Page page, int itemsToFetch, long total) {
         return PagedObject.of(repo.findAllWithPage(page.itemsToSkip(itemsToFetch), itemsToFetch).stream()
-                .map(PoliticiansJpaEntity::toPoliticians).toList(), repo.count(), itemsToFetch, page);
+                .map(PoliticiansJpaEntity::toPoliticians).toList(), total, itemsToFetch, page);
+    }
+
+    @Override
+    public long count() {
+        return repo.count();
     }
 
 }

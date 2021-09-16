@@ -81,18 +81,17 @@ public class InMemoryPoliticianAdapterRepo implements PoliticiansRepository {
     }
 
     @Override
-    public PagedObject<Politicians> findAllByPage(Page page, int itemsToFetch, Long total) {
-        Long count = total;
-        if (count == null) count = count();
+    public PagedObject<Politicians> findAllByPage(Page page, int itemsToFetch, long total) {
         return PagedObject.of(findAll().stream().skip(page.itemsToSkip(itemsToFetch)).limit(itemsToFetch).toList(),
-                count, itemsToFetch, page);
+                total, itemsToFetch, page);
     }
 
     public long countQueries() {
         return timesOfCount;
     }
 
-    private long count() {
+    @Override
+    public long count() {
         timesOfCount++;
         return database.size();
     }
