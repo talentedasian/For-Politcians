@@ -26,4 +26,21 @@ public class MultiplePoliticianSetup {
         return result;
     }
 
+    public static List<Politicians> pagedPoliticianSetupSenatorial(int numberOfTimes, PoliticiansBuilder politicianBuilder) {
+        List<Politicians> result = new ArrayList<>();
+
+        int number = numberOfTimes + 100;
+        for (int i = 100; i < number; i++) {
+            Politicians senatorial = new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politicianBuilder
+                    .setPoliticianNumber(of(NumberTestFactory.POL_NUMBER().politicianNumber().concat(valueOf(i))).politicianNumber()))
+                    .setTotalMonthsOfService(32)
+                    .setMostSignificantLawMade("I don't know")
+                    .build();
+
+            result.add(senatorial);
+        }
+
+        return result;
+    }
+
 }

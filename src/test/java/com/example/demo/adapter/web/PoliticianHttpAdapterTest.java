@@ -18,12 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.net.URI;
 
 import static com.example.demo.baseClasses.MockMvcAssertions.assertThat;
 import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
+import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupSenatorial;
 import static com.example.demo.domain.enums.Rating.HIGH;
 import static com.example.demo.domain.enums.Rating.LOW;
 import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
@@ -37,6 +39,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
     final String presidentialBasePath = "_embedded.presidentialPoliticianDtoList";
@@ -175,6 +178,21 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
                .andDo(document("politician", links(halLinks(),
                        linkWithRel("self").description("Link that points to all politicians with pagination"))));
+    }
+
+    @Test
+    public void shouldReturnExpectedItemSizeForPolymorphicPaginatedQuery() throws Exception{
+        jpaRepo.saveAll(pagedPoliticianSetupPresidential(10, politicianBuilder).stream().map(PoliticiansJpaEntity::from).toList());
+        jpaRepo.saveAll(pagedPoliticianSetupSenatorial(19, politicianBuilder).stream().map(PoliticiansJpaEntity::from).toList());
+
+        mvc.perform(get(URI.create("/api/politicians/politicians?page=0&items=40")))
+                .andExpect(status().isOk())
+
+                .andExpect(jsonPath(presidentialBasePath, Matchers.hasSize(10)))
+                .andExpect(jsonPath(senatorialBasePath, Matchers.hasSize(19)))
+
+                .andDo(document("politician", links(halLinks(),
+                        linkWithRel("self").description("Link that points to all politicians with pagination"))));
     }
 
 }

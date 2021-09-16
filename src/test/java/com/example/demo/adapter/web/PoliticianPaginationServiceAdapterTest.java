@@ -30,7 +30,7 @@ public class PoliticianPaginationServiceAdapterTest {
     final String FIRST_NAME = "Mirriam";
     final String LAST_NAME = "Defensor";
 
-    PoliticiansRepository polRepo = new InMemoryPoliticianAdapterRepo();
+    PoliticiansRepository polRepo;
 
     Politicians.PoliticiansBuilder politicianBuilder;
 
@@ -44,6 +44,8 @@ public class PoliticianPaginationServiceAdapterTest {
                 .setLastName(LAST_NAME)
                 .setFullName()
                 .setRating(new Rating(0D, 0D));
+
+        polRepo = new InMemoryPoliticianAdapterRepo();
     }
 
     @AfterEach
@@ -111,7 +113,6 @@ public class PoliticianPaginationServiceAdapterTest {
         service.allPoliticiansWithPage(pageZero, itemsToFetch, mockRequest);
 
         HttpSession session = mockRequest.getSession(false);
-
         assertThat((long)session.getAttribute("total-page"))
                 .isEqualTo(2);
 
