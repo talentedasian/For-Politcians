@@ -52,7 +52,7 @@ public class PoliticianPaginationServiceAdapterTest {
     }
 
     @Test
-    public void shouldCreateSession() throws Exception{
+    public void shouldCreateSessionWith300SecondsAsTimeout() throws Exception{
         PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
@@ -66,6 +66,8 @@ public class PoliticianPaginationServiceAdapterTest {
 
         assertThat(session)
                 .isNotNull();
+        assertThat(session.getMaxInactiveInterval())
+                .isEqualTo(300);
     }
 
     @Test
@@ -109,7 +111,6 @@ public class PoliticianPaginationServiceAdapterTest {
         service.allPoliticiansWithPage(pageZero, 10, mockRequest);
 
         HttpSession session = mockRequest.getSession(false);
-
         assertThat((long) session.getAttribute("total-page"))
                 .isEqualTo(5);
 

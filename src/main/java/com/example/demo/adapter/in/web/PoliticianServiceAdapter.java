@@ -87,6 +87,7 @@ public class PoliticianServiceAdapter {
         session.setAttribute("total", allWithPage.totalElements());
         session.setAttribute("total-page", allWithPage.totalPages());
         session.setAttribute("items-to-fetch", itemsToFetch);
+        session.setMaxInactiveInterval(300);
 
         return allWithPage.values().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
 
