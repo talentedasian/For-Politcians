@@ -85,7 +85,7 @@ public class PoliticianController {
 	}
 
 	@GetMapping("/politicians")
-	public ResponseEntity<CollectionModel<EntityModel<PoliticianDto>>> allPoliticiansWithPage(@RequestParam(name = "items") int pageNumber,
+	public ResponseEntity<CollectionModel<EntityModel<PoliticianDto>>> allPoliticiansWithPage(@RequestParam(name = "page") int pageNumber,
 																							  @RequestParam(required = false, defaultValue = "10", name = "items") int itemsToFetch,
 																							  HttpServletRequest req) {
 		List<PoliticianDto> allPoliticians = politiciansService.allPoliticiansWithPage(Page.of(pageNumber), itemsToFetch, req);

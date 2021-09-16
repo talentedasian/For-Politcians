@@ -10,6 +10,7 @@ import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
+
+    final String presidentialBasePath = "_embedded.presidentialPoliticianDtoList";
+    final String senatorialBasePath = "_embedded.senatorialPoliticianDtoList";
 
     final String FIRST_NAME = "Mirriam";
     final String LAST_NAME = "Defensor";
@@ -141,9 +145,6 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
         polRepo.save(presidential);
         polRepo.save(senatorial);
 
-        String presidentialBasePath = "_embedded.presidentialPoliticianDtoList";
-        String senatorialBasePath = "_embedded.senatorialPoliticianDtoList";
-
         mvc.perform(get("/api/politicians")
                         .contentType(MediaTypes.HAL_FORMS_JSON))
                 .andExpect(status().isOk())
@@ -164,11 +165,13 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
     }
 
     @Test
-    public void shouldReturnSinglePagedObjectWhenQueryingForFirstPageWithLimitLessThan10() throws Exception{
+    public void shouldReturnExpectedItemSizeWhenItemSizeIsLessThanTheCountOfAllInTheDatabase() throws Exception{
        jpaRepo.saveAll(pagedPoliticianSetupPresidential(30, politicianBuilder).stream().map(PoliticiansJpaEntity::from).toList());
 
        mvc.perform(get(URI.create("/api/politicians/politicians?page=0&items=20")))
                .andExpect(status().isOk())
+
+                    .andExpect(jsonPath(presidentialBasePath, Matchers.hasSize(20)))
 
                .andDo(document("politician", links(halLinks(),
                        linkWithRel("self").description("Link that points to all politicians with pagination"))));
