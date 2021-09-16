@@ -24,7 +24,6 @@ import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPolitici
 import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
 import static com.example.demo.domain.politicians.Politicians.Type.PRESIDENTIAL;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PoliticianPaginationServiceAdapterTest {
 
@@ -70,44 +69,59 @@ public class PoliticianPaginationServiceAdapterTest {
     }
 
     @Test
-    public void shouldReturnSessionWithPagedObjectAttribute() throws Exception{
+    public void shouldReturnSessionWithTotalPageAndItemsToFetchAndTotalAsAttributeOnFirstPaginationQuery() throws Exception{
         PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-        pagedSetup(30);
+        int numberOfTimes = 30;
+        pagedSetup(numberOfTimes);
 
         Page pageZero = Page.asZero();
 
-        service.allPoliticiansWithPage(pageZero, 20, mockRequest);
+        int itemsToFetch = 20;
+        service.allPoliticiansWithPage(pageZero, itemsToFetch, mockRequest);
 
         HttpSession session = mockRequest.getSession(false);
 
-        PagedObject<Politicians> pagedObject = (PagedObject<Politicians>) session.getAttribute("paged-objects");
-        assertThat(pagedObject)
-                .isEqualTo(polRepo.findAllByPage(pageZero, 20, 30l));
+        assertThat((long)session.getAttribute("total-page"))
+                .isEqualTo(2);
+
+        assertThat((int)session.getAttribute("items-to-fetch"))
+                .isEqualTo(itemsToFetch);
+
+        assertThat((long)session.getAttribute("total"))
+                .isEqualTo(numberOfTimes);
     }
 
     @Test
-    public void shouldCreateAttributeAndSessionWithTotalPageIfNotExist() throws Exception{
+    public void shouldOverwriteItemsToFetchAndTotalPageWhenSessionExistsButItemsToFetchIsDifferentFromExistingSession() throws Exception{
         PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-        pagedSetup(30);
+        int numberOfTimes = 50;
+        pagedSetup(numberOfTimes);
 
         Page pageZero = Page.asZero();
 
         service.allPoliticiansWithPage(pageZero, 20, mockRequest);
+        service.allPoliticiansWithPage(pageZero, 10, mockRequest);
 
         HttpSession session = mockRequest.getSession(false);
 
         assertThat((long) session.getAttribute("total-page"))
-                .isEqualTo(2);
+                .isEqualTo(5);
+
+        assertThat((int) session.getAttribute("items-to-fetch"))
+                .isEqualTo(10);
+
+        assertThat((long) session.getAttribute("total"))
+                .isEqualTo(numberOfTimes);
     }
 
     @Test
-    public void shouldReturnEmptyListIfWhenPageRequestDoesNotExistButStillSetTotalPageInSession() throws Exception{
+    public void shouldReturnEmptyListWhenPageRequestedDoesNotExistButStillSetTotalPageInSession() throws Exception{
         PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
@@ -129,17 +143,45 @@ public class PoliticianPaginationServiceAdapterTest {
     }
 
     @Test
-    public void shouldThrowNextPageNotAvailableWhenNoSessionAttributeOfPagedObjectIsFound() throws Exception{
+    public void shouldOnlyQueryOnceForCountAndSubsequentRequestsForPaginationShouldNotDoSoAgain() throws Exception{
         PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-        pagedSetup(100);
+        int numberOfTimes = 100;
+        pagedSetup(numberOfTimes);
 
         Page pageZero = Page.of(0);
 
-        assertThrows(NoSessionFoundException.class,
-                () -> service.allPoliticiansWithPage(pageZero, 20, mockRequest, true));
+        service.allPoliticiansWithPage(pageZero, 20, mockRequest);
+        service.allPoliticiansWithPage(pageZero.nextPage(), 20, mockRequest);
+
+        HttpSession session = mockRequest.getSession(false);
+
+        assertThat((long) session.getAttribute("total"))
+                .isEqualTo(numberOfTimes);
+    }
+
+    @Test
+    public void totalAttributeInSessionShouldStayTheSameForAllSubsequentRequestsThatHaveExistingSessions() throws Exception{
+        PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
+
+        MockHttpServletRequest mockRequest = new MockHttpServletRequest();
+
+        int numberOfTimes = 214214;
+        pagedSetup(numberOfTimes);
+
+        Page pageZero = Page.of(0);
+
+        service.allPoliticiansWithPage(pageZero, 20, mockRequest);
+        service.allPoliticiansWithPage(pageZero.nextPage(), 20, mockRequest);
+        service.allPoliticiansWithPage(pageZero.nextPage(3), 20, mockRequest);
+        service.allPoliticiansWithPage(pageZero.nextPage(321), 20, mockRequest);
+
+        HttpSession session = mockRequest.getSession(false);
+
+        assertThat((long) session.getAttribute("total"))
+                .isEqualTo(numberOfTimes);
     }
 
     @Test
@@ -174,42 +216,6 @@ public class PoliticianPaginationServiceAdapterTest {
     }
 
     @Test
-    public void shouldNotQueryForCountWhenRequestHasSessionAndRequestsSameItemsToFetchAsLastRequest() throws Exception{
-        var inMemoryRepo = new InMemoryPoliticianAdapterRepo();
-        PoliticianServiceAdapter service = new PoliticianServiceAdapter(inMemoryRepo);
-
-        MockHttpServletRequest mockRequest = new MockHttpServletRequest();
-
-        pagedSetupForExistingSession(100, inMemoryRepo);
-
-        Page lastPage = Page.of(4);
-
-        int itemsToFetch = 20;
-        service.allPoliticiansWithPage(Page.asZero(), itemsToFetch, mockRequest);
-        service.allPoliticiansWithPage(lastPage, itemsToFetch, mockRequest);
-
-        assertThat(inMemoryRepo.countQueries())
-                .isEqualTo(1);
-    }
-
-    @Test
-    public void shouldCreateItemsToFetchInNewlyCreatedSession() throws Exception{
-        PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
-
-        MockHttpServletRequest mockRequest = new MockHttpServletRequest();
-
-        pagedSetupForExistingSession(100, polRepo);
-
-        int itemsToFetch = 20;
-        service.allPoliticiansWithPage(Page.asZero(), itemsToFetch, mockRequest);
-
-        HttpSession session = mockRequest.getSession(false);
-
-        assertThat((int)session.getAttribute("items-to-fetch"))
-                .isEqualTo(itemsToFetch);
-    }
-
-    @Test
     public void shouldOverwriteAttributesForItemsToFetchWhenAnExistingSessionExistWithDifferentItemsToFetch() throws Exception{
         PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
 
@@ -233,7 +239,7 @@ public class PoliticianPaginationServiceAdapterTest {
     }
 
     @Test
-    public void shouldQueryForCountEvenIfSessionExistsWhenItemsToFetchDidNotMatchLastQuery() throws Exception{
+    public void countQueryShouldOnlyBeExecutedForTheFirstPaginationRequest() throws Exception{
         var inMemoryRepo = new InMemoryPoliticianAdapterRepo();
         PoliticianServiceAdapter service = new PoliticianServiceAdapter(inMemoryRepo);
 
@@ -246,9 +252,10 @@ public class PoliticianPaginationServiceAdapterTest {
         int itemsToFetch = 20;
         service.allPoliticiansWithPage(Page.asZero(), itemsToFetch, mockRequest);
         service.allPoliticiansWithPage(lastPage, 10, mockRequest);
+        service.allPoliticiansWithPage(Page.asZero().nextPage(), itemsToFetch, mockRequest);
 
         assertThat(inMemoryRepo.countQueries())
-                .isEqualTo(2);
+                .isEqualTo(1);
     }
 
     @Test

@@ -79,7 +79,7 @@ public class PoliticianApplicationServiceTest {
     public void shouldReturnEmptyListWhenQueryingAPageThatDoesNotExist() throws Exception{
         pagedSetupForPoliticians(40);
 
-        List<Politicians> emptyListOfPoliticians = polService.findAllWithPage(Page.of(41), 1).valuesAsList();
+        List<Politicians> emptyListOfPoliticians = polService.findAllWithPage(Page.of(41), 1, null).valuesAsList();
 
         assertThat(emptyListOfPoliticians)
                 .isEmpty();
@@ -92,7 +92,7 @@ public class PoliticianApplicationServiceTest {
 
         Page page = Page.of(3);
         int numberOfItemsToFetch = 10;
-        PagedObject<Politicians> pagedPoliticians = polService.findAllWithPage(page, numberOfItemsToFetch);
+        PagedObject<Politicians> pagedPoliticians = polService.findAllWithPage(page, numberOfItemsToFetch, null);
 
         List<Politicians> expectedContent = pagedPoliticianSetupPresidential(databaseSize, politicianBuilder)
                 .stream().skip(30).toList();
