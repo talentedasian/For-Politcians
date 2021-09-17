@@ -1,9 +1,7 @@
 package com.example.demo.domain.domainModel;
 
-import com.example.demo.baseClasses.FakeDomainService;
 import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.entities.Rating;
-import com.example.demo.domain.entities.UserRateLimitService;
 import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.politicians.Politicians;
@@ -29,8 +27,6 @@ public class PoliticiansTest {
 			.setFirstName("Test")
 			.setLastName("Name")
 			.setRating(new Rating(0D, 0D));
-
-	UserRateLimitService fakeDomainService = FakeDomainService.unliRateService();
 
 	@Test
 	public void testNullLastNameInBuilder() {
@@ -77,16 +73,13 @@ public class PoliticiansTest {
 	public void countsOfRatingsShouldDecreaseWhenADeleteOfRatingHappens() throws UserRateLimitedOnPoliticianException {
 		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
-		var raterThatsNotRateLimited = createRater("FLPOM-00003123");
-
 		Politicians politician = politicianBuilder.build();
-		var firstRating = createPolRating(2.243, rater, politician);
-		var secondRating = createPolRating(3.2232, raterThatsNotRateLimited, politician);
+		var rating = createPolRating(2.243, rater, politician);
 
-		firstRating.ratePolitician(fakeDomainService);
-		secondRating.ratePolitician(fakeDomainService);
+		politician.rate(rating);
+		politician.rate(rating);
 
-		secondRating.deleteRating();
+		politician.deleteRate(rating);
 
 		assertThat(politician.countsOfRatings())
 				.isEqualTo(1);
@@ -98,19 +91,14 @@ public class PoliticiansTest {
 
 		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
-		var raterThatsNotRateLimited = createRater("FLPOM-00003123");
-
 		Politicians politician = politicianBuilder.build();
-		var firstRating = createPolRating(2.243, rater, politician);
-		var secondRating = createPolRating(3.2232, raterThatsNotRateLimited, politician);
+		var rating = createPolRating(2.243, rater, politician);
 
-		firstRating.ratePolitician(fakeDomainService);
-		secondRating.ratePolitician(fakeDomainService);
+		politician.rate(rating);
+		politician.rate(rating);
 
-		secondRating.deleteRating();
+		politician.deleteRate(rating);
 
-		assertThat(politician.countsOfRatings())
-				.isEqualTo(1);
 		assertThat(politician.totalCountsOfRatings())
 				.isEqualTo(EXPECTED_NUMBER_OF_RATINGS);
 	}
