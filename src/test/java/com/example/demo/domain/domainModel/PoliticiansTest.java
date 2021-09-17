@@ -12,6 +12,8 @@ import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
 import static com.example.demo.baseClasses.BuilderFactory.createRater;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
@@ -26,8 +28,7 @@ public class PoliticiansTest {
 	PoliticiansBuilder politicianBuilder = new PoliticiansBuilder(POLITICIAN_NUMBER)
 			.setFirstName("Test")
 			.setLastName("Name")
-			.setRating(new Rating(0D, 0D))
-			.setPoliticiansRating(null);
+			.setRating(new Rating(0D, 0D));
 
 	UserRateLimitService fakeDomainService = FakeDomainService.unliRateService();
 
@@ -112,6 +113,26 @@ public class PoliticiansTest {
 				.isEqualTo(1);
 		assertThat(politician.totalCountsOfRatings())
 				.isEqualTo(EXPECTED_NUMBER_OF_RATINGS);
+	}
+
+	@Test
+	public void testAverageRating() throws Exception{
+		double EXPECTED_AVERAGE_RATING = 1.556;
+
+		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
+
+		var justHereToPutIncreaseSize = createPolRating(1D, rater, politicianBuilder.build());
+
+		Politicians politician = politicianBuilder
+				.setRating(new Rating(3D, 2.231D))
+				.setPoliticiansRating(List.of(justHereToPutIncreaseSize, justHereToPutIncreaseSize, justHereToPutIncreaseSize)).build();
+
+		var actualRating = createPolRating(3.2232, rater, politician);
+
+		politician.rate(actualRating);
+
+		assertThat(politician.averageRating())
+				.isEqualTo(EXPECTED_AVERAGE_RATING);
 	}
 
 }

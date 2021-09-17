@@ -17,7 +17,7 @@ public class Politicians {
 
 	private Name name;
 
-	private List<PoliticiansRating> politiciansRating;
+	private List<PoliticiansRating> politiciansRating = new ArrayList<>();;
 
 	private Rating rating;
 
@@ -63,7 +63,8 @@ public class Politicians {
 	protected Politicians(Name name,List<PoliticiansRating> politiciansRating, Rating rating, PoliticianNumber politicianNumber, Type polType) {
 		super();
 		this.name = name;
-		this.politiciansRating = politiciansRating;
+		this.politiciansRating.addAll(politiciansRating);
+		this.totalCountsOfRating = politiciansRating.size();
 		this.rating = rating;
 		this.politicianNumber = politicianNumber;
 		this.type = polType;
@@ -257,6 +258,7 @@ public class Politicians {
 		
 		public Politicians build() {
 			var name = new Name(firstName, lastName);
+			if (politiciansRating == null) politiciansRating = List.of();
 			return new Politicians(name, politiciansRating, rating, new PoliticianNumber(politicianNumber), null);
 		}
 
