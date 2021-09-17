@@ -113,7 +113,7 @@ public class PoliticiansRating {
 	}
 
 	public void ratePolitician(UserRateLimitService rateLimitService) throws UserRateLimitedOnPoliticianException {
-		if (rater.canRate(rateLimitService)) {
+		if (rater.canRate(rateLimitService, PoliticianNumber.of(politician.retrievePoliticianNumber()))) {
 			politician.rate(this);
 			rater.rateLimitUser(new PoliticianNumber(politician.retrievePoliticianNumber()));
 			return;

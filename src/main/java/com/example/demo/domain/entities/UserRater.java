@@ -81,8 +81,8 @@ public class UserRater {
 		return !isRateLimited(new PoliticianNumber(polNumber));
 	}
 
-	public boolean canRate(UserRateLimitService service) {
-		return service.isUserNotRateLimited(userAccountNumber);
+	public boolean canRate(UserRateLimitService service, PoliticianNumber politicianNumber) {
+		return service.isUserNotRateLimited(userAccountNumber, politicianNumber);
 	}
 
 	public void rateLimitUser(PoliticianNumber polNumber) {

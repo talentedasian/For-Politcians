@@ -59,8 +59,8 @@ public class CitizensRatingPoliticiansTest {
         var firstRating = createPolRating(2.243, rater, politicians);
         var fourScaledRatingForHalfDownRoundingMode = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
 
-        firstRating.ratePolitician((accountNumber) -> true);
-        fourScaledRatingForHalfDownRoundingMode.ratePolitician((accountNumber) -> true);
+        firstRating.ratePolitician((accountNumber, politicianNumber) -> true);
+        fourScaledRatingForHalfDownRoundingMode.ratePolitician((accountNumber, politicianNumber) -> true);
 
         assertThat(politicians.getRating().getAverageRating())
                 .isEqualTo(EXPECTED_CALCULATED_AVERAGE_RATING);
@@ -78,9 +78,9 @@ public class CitizensRatingPoliticiansTest {
         var fourScaledRating = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
         var threeScaledRating = createPolRating(6.223, secondRaterThatsNotRateLimited, politicians);
 
-        firstRating.ratePolitician((accountNumber) -> true);
-        fourScaledRating.ratePolitician((accountNumber) -> true);
-        threeScaledRating.ratePolitician((accountNumber) -> true);
+        firstRating.ratePolitician((accountNumber, politicianNumber) -> true);
+        fourScaledRating.ratePolitician((accountNumber, politicianNumber) -> true);
+        threeScaledRating.ratePolitician((accountNumber, politicianNumber) -> true);
 
         assertThat(politicians.getRating().getAverageRating())
                 .isEqualTo(EXPECTED_CALCULATED_AVERAGE_RATING);
@@ -97,8 +97,8 @@ public class CitizensRatingPoliticiansTest {
         var firstRating = createPolRating(2.243, rater, politicians);
         var secondRating = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
 
-        firstRating.ratePolitician((accountNumber) -> true);
-        secondRating.ratePolitician((accountNumber) -> true);
+        firstRating.ratePolitician((accountNumber, politicianNumber) -> true);
+        secondRating.ratePolitician((accountNumber, politicianNumber) -> true);
 
         assertThat(politicians.countsOfRatings())
                 .isEqualTo(EXPECTED_NUMBER_OF_RATINGS);
@@ -115,8 +115,8 @@ public class CitizensRatingPoliticiansTest {
         var firstRating = createPolRating(2.243, rater, politicians);
         var secondRating = createPolRating(3.2232, raterThatsNotRateLimited, politicians);
 
-        firstRating.ratePolitician((accountNumber) -> true);
-        secondRating.ratePolitician((accountNumber) -> true);
+        firstRating.ratePolitician((accountNumber, politicianNumber) -> true);
+        secondRating.ratePolitician((accountNumber, politicianNumber) -> true);
 
         secondRating.deleteRating();
 
