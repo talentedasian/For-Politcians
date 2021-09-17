@@ -2,6 +2,7 @@ package com.example.demo.adapter.in.service;
 
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.domain.DefaultRateLimitDomainService;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.politicians.PoliticianNumber;
@@ -40,7 +41,7 @@ public class RatingService {
 		Politicians politician = politicianService.findPoliticianByNumber(rating.getPolitician().retrievePoliticianNumber())
 				.orElseThrow(PoliticianNotFoundException::new);
 
-		rating.ratePolitician();
+		rating.ratePolitician(new DefaultRateLimitDomainService(rateLimitRepository));
 
 		try {
 			politicianService.updatePolitician(politician);

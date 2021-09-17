@@ -5,6 +5,7 @@ import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.baseClasses.BuilderFactory;
+import com.example.demo.domain.DefaultRateLimitDomainService;
 import com.example.demo.domain.InMemoryRatingAdapterRepo;
 import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.RateLimitRepository;
@@ -38,7 +39,7 @@ public class UserRaterRateLimitedCollaborationTest {
 
     RateLimitRepository rateLimitRepository;
 
-    PoliticiansBuilder politicianBuilder = new PoliticiansBuilder(NumberTestFactory.POL_NUMBER().politicianNumber())
+    PoliticiansBuilder politicianBuilder = new PoliticiansBuilder(NumberTestFactory.POL_NUMBER())
             .setFirstName("Random")
             .setLastName("Name")
             .setPoliticiansRating(null)
@@ -81,7 +82,7 @@ public class UserRaterRateLimitedCollaborationTest {
 
         var rating = createPolRating(0.0D, rater, politician);
 
-        rater.rateLimitUser(new PoliticianNumber(politician.retrievePoliticianNumber()));
+        rater.rateLimitUser(new DefaultRateLimitDomainService(rateLimitRepository), PoliticianNumber.of(politician.retrievePoliticianNumber()));
 
         assertThrows(UserRateLimitedOnPoliticianException.class, () -> service.saveRatings(rating));
     }

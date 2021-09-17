@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
@@ -12,6 +13,7 @@ public class UserRaterTest {
 
     final PoliticianNumber POLITICIAN_NUMBER = NumberTestFactory.POL_NUMBER();
     final String ACCOUNT_NUMBER = NumberTestFactory.ACC_NUMBER().accountNumber();
+    RateLimitRepository rateLimitRepo;
 
     @Test
     public void shouldReturnFalseIfUserCurrentlyHasRateLimitOnPolitician() {
@@ -23,26 +25,12 @@ public class UserRaterTest {
                 .setRateLimit(null)
                 .build();
 
-        rater.rateLimitUser(POLITICIAN_NUMBER);
+        rateLimitRepo = new InMemoryRateLimitRepository();
 
-        assertThat(rater.canRate(POLITICIAN_NUMBER.politicianNumber()))
+        rater.rateLimitUser(new DefaultRateLimitDomainService(rateLimitRepo), POLITICIAN_NUMBER);
+
+        assertThat(rater.canRate(new DefaultRateLimitDomainService(rateLimitRepo), POLITICIAN_NUMBER))
                 .isEqualTo(false);
-    }
-
-    @Test
-    public void shouldReturnNonEmptyOptionalWhenFindingExistentRateLimitOnUser() {
-        var rater = new UserRater.Builder()
-                .setAccountNumber(ACCOUNT_NUMBER)
-                .setName("Random Name")
-                .setEmail("test@gmail.com")
-                .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimit(null)
-                .build();
-
-        rater.rateLimitUser(POLITICIAN_NUMBER);
-
-        assertThat(rater.findRateLimit(POLITICIAN_NUMBER))
-                .isNotEmpty();
     }
 
     @Test
@@ -55,7 +43,9 @@ public class UserRaterTest {
                 .setRateLimit(null)
                 .build();
 
-        assertThat(rater.daysLeftToRate(POLITICIAN_NUMBER.politicianNumber()))
+        rateLimitRepo = new InMemoryRateLimitRepository();
+
+        assertThat(rater.daysLeftToRate(new DefaultRateLimitDomainService(rateLimitRepo), POLITICIAN_NUMBER))
                 .isEqualTo(0);
     }
 
@@ -69,9 +59,11 @@ public class UserRaterTest {
                 .setRateLimit(null)
                 .build();
 
-        rater.rateLimitUser(POLITICIAN_NUMBER);
+        rateLimitRepo = new InMemoryRateLimitRepository();
 
-        assertThat(rater.daysLeftToRate(POLITICIAN_NUMBER.politicianNumber()))
+        rater.rateLimitUser(new DefaultRateLimitDomainService(rateLimitRepo), POLITICIAN_NUMBER);
+
+        assertThat(rater.daysLeftToRate(new DefaultRateLimitDomainService(rateLimitRepo), POLITICIAN_NUMBER))
                 .isEqualTo(7);
     }
 

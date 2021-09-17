@@ -103,23 +103,14 @@ public class PoliticiansRating {
 		this.rateLimitRepo = rateLimitRepository;
 	}
 
-	public void ratePolitician() throws UserRateLimitedOnPoliticianException {
-		if (!rater.canRate(politician.retrievePoliticianNumber())) {
-			throw new UserRateLimitedOnPoliticianException(rater.daysLeftToRate(politician.retrievePoliticianNumber()));
-		}
-		politician.rate(this);
-
-		rater.rateLimitUser(new PoliticianNumber(politician.retrievePoliticianNumber()));
-	}
-
 	public void ratePolitician(UserRateLimitService rateLimitService) throws UserRateLimitedOnPoliticianException {
 		if (rater.canRate(rateLimitService, PoliticianNumber.of(politician.retrievePoliticianNumber()))) {
 			politician.rate(this);
-			rater.rateLimitUser(new PoliticianNumber(politician.retrievePoliticianNumber()));
+			rater.rateLimitUser(rateLimitService, new PoliticianNumber(politician.retrievePoliticianNumber()));
 			return;
 		}
 
-		throw new UserRateLimitedOnPoliticianException(rater.daysLeftToRate(politician.retrievePoliticianNumber()));
+		throw new UserRateLimitedOnPoliticianException(rater.daysLeftToRate(rateLimitService, PoliticianNumber.of(politician.retrievePoliticianNumber())));
 	}
 
 	public void deleteRating() {

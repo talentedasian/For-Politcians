@@ -4,7 +4,6 @@ import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.enums.PoliticalParty;
 import com.example.demo.domain.politicians.PoliticianNumber;
 
-import java.time.LocalDate;
 import java.util.*;
 
 public class UserRater {
@@ -76,25 +75,12 @@ public class UserRater {
 		return true;
 	}
 
-	@Deprecated
-	public boolean canRate(String polNumber) {
-		return !isRateLimited(new PoliticianNumber(polNumber));
-	}
-
 	public boolean canRate(UserRateLimitService service, PoliticianNumber politicianNumber) {
 		return service.isUserNotRateLimited(userAccountNumber, politicianNumber);
 	}
 
-	public void rateLimitUser(PoliticianNumber polNumber) {
-		rateLimit.put(polNumber, new RateLimit(userAccountNumber.accountNumber(), polNumber, LocalDate.now()));
-	}
-
-	public Optional<RateLimit> findRateLimit(PoliticianNumber politicianNumber) {
-		return Optional.ofNullable(rateLimit.get(politicianNumber));
-	}
-
-	private boolean isRateLimited(PoliticianNumber politicianNumber) {
-		return rateLimit.containsKey(politicianNumber) ? !rateLimit.get(politicianNumber).isNotRateLimited() : false;
+	public void rateLimitUser(UserRateLimitService rateLimitService, PoliticianNumber polNumber) {
+		rateLimitService.rateLimitUser(userAccountNumber, polNumber);
 	}
 
     public long daysLeftToRate(String polNumber) {
@@ -109,6 +95,10 @@ public class UserRater {
 			return 0l;
 		}
     }
+
+	public long daysLeftToRate(UserRateLimitService service, PoliticianNumber politicianNumber) {
+		return service.daysLeftToRateForUser(userAccountNumber, politicianNumber);
+	}
 
     public static class Builder {
 

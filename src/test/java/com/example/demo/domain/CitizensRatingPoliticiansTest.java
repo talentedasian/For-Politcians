@@ -1,8 +1,9 @@
 package com.example.demo.domain;
 
-import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.baseClasses.NumberTestFactory;
+import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.entities.UserRateLimitService;
 import com.example.demo.domain.politicianNumber.PoliticianNumberCalculator;
 import com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory;
 import com.example.demo.domain.politicians.Name;
@@ -33,7 +34,20 @@ public class CitizensRatingPoliticiansTest {
 
     Politicians politicians;
 
-    RateLimitRepository rateLimitRepo;
+    UserRateLimitService fakeDomainService = new UserRateLimitService() {
+        @Override
+        public boolean isUserNotRateLimited(AccountNumber accountNumber, PoliticianNumber politicianNumber) {
+            return true;
+        }
+
+        @Override
+        public void rateLimitUser(AccountNumber userAccountNumber, PoliticianNumber polNumber) {}
+
+        @Override
+        public long daysLeftToRateForUser(AccountNumber accountNumber, PoliticianNumber politicianNumber) {
+            return 0;
+        }
+    };
 
     @BeforeEach
     public void setup() {
@@ -45,8 +59,6 @@ public class CitizensRatingPoliticiansTest {
                 .setRating(new Rating(0D, 0D));
 
         politicians = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder).build();
-
-        rateLimitRepo = new InMemoryRateLimitRepository();
     }
 
     @Test
@@ -59,8 +71,8 @@ public class CitizensRatingPoliticiansTest {
         var firstRating = createPolRating(2.243, rater, politicians);
         var fourScaledRatingForHalfDownRoundingMode = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
 
-        firstRating.ratePolitician((accountNumber, politicianNumber) -> true);
-        fourScaledRatingForHalfDownRoundingMode.ratePolitician((accountNumber, politicianNumber) -> true);
+        firstRating.ratePolitician(fakeDomainService);
+        fourScaledRatingForHalfDownRoundingMode.ratePolitician(fakeDomainService);
 
         assertThat(politicians.getRating().getAverageRating())
                 .isEqualTo(EXPECTED_CALCULATED_AVERAGE_RATING);
@@ -78,9 +90,9 @@ public class CitizensRatingPoliticiansTest {
         var fourScaledRating = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
         var threeScaledRating = createPolRating(6.223, secondRaterThatsNotRateLimited, politicians);
 
-        firstRating.ratePolitician((accountNumber, politicianNumber) -> true);
-        fourScaledRating.ratePolitician((accountNumber, politicianNumber) -> true);
-        threeScaledRating.ratePolitician((accountNumber, politicianNumber) -> true);
+        firstRating.ratePolitician(fakeDomainService);
+        fourScaledRating.ratePolitician(fakeDomainService);
+        threeScaledRating.ratePolitician(fakeDomainService);
 
         assertThat(politicians.getRating().getAverageRating())
                 .isEqualTo(EXPECTED_CALCULATED_AVERAGE_RATING);
@@ -97,8 +109,8 @@ public class CitizensRatingPoliticiansTest {
         var firstRating = createPolRating(2.243, rater, politicians);
         var secondRating = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
 
-        firstRating.ratePolitician((accountNumber, politicianNumber) -> true);
-        secondRating.ratePolitician((accountNumber, politicianNumber) -> true);
+        firstRating.ratePolitician(fakeDomainService);
+        secondRating.ratePolitician(fakeDomainService);
 
         assertThat(politicians.countsOfRatings())
                 .isEqualTo(EXPECTED_NUMBER_OF_RATINGS);
@@ -115,8 +127,8 @@ public class CitizensRatingPoliticiansTest {
         var firstRating = createPolRating(2.243, rater, politicians);
         var secondRating = createPolRating(3.2232, raterThatsNotRateLimited, politicians);
 
-        firstRating.ratePolitician((accountNumber, politicianNumber) -> true);
-        secondRating.ratePolitician((accountNumber, politicianNumber) -> true);
+        firstRating.ratePolitician(fakeDomainService);
+        secondRating.ratePolitician(fakeDomainService);
 
         secondRating.deleteRating();
 

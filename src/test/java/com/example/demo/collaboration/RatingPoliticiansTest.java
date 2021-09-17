@@ -30,7 +30,7 @@ public class RatingPoliticiansTest {
 
     RatingService ratingService;
 
-    Politicians.PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder(NumberTestFactory.POL_NUMBER().politicianNumber())
+    Politicians.PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder(NumberTestFactory.POL_NUMBER())
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
             .setPoliticiansRating(null)
