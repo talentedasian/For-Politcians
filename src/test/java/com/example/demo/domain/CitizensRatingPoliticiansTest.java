@@ -1,7 +1,7 @@
 package com.example.demo.domain;
 
+import com.example.demo.baseClasses.FakeDomainService;
 import com.example.demo.baseClasses.NumberTestFactory;
-import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.entities.UserRateLimitService;
 import com.example.demo.domain.politicianNumber.PoliticianNumberCalculator;
@@ -34,20 +34,7 @@ public class CitizensRatingPoliticiansTest {
 
     Politicians politicians;
 
-    UserRateLimitService fakeDomainService = new UserRateLimitService() {
-        @Override
-        public boolean isUserNotRateLimited(AccountNumber accountNumber, PoliticianNumber politicianNumber) {
-            return true;
-        }
-
-        @Override
-        public void rateLimitUser(AccountNumber userAccountNumber, PoliticianNumber polNumber) {}
-
-        @Override
-        public long daysLeftToRateForUser(AccountNumber accountNumber, PoliticianNumber politicianNumber) {
-            return 0;
-        }
-    };
+    UserRateLimitService fakeDomainService = FakeDomainService.unliRateService();
 
     @BeforeEach
     public void setup() {
