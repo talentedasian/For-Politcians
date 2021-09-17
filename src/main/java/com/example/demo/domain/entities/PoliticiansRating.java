@@ -112,6 +112,16 @@ public class PoliticiansRating {
 		rater.rateLimitUser(new PoliticianNumber(politician.retrievePoliticianNumber()));
 	}
 
+	public void ratePolitician(UserRateLimitService rateLimitService) throws UserRateLimitedOnPoliticianException {
+		if (rater.canRate(rateLimitService)) {
+			politician.rate(this);
+			rater.rateLimitUser(new PoliticianNumber(politician.retrievePoliticianNumber()));
+			return;
+		}
+
+		throw new UserRateLimitedOnPoliticianException(rater.daysLeftToRate(politician.retrievePoliticianNumber()));
+	}
+
 	public void deleteRating() {
 		politician.deleteRate(this);
 	}

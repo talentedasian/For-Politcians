@@ -1,10 +1,12 @@
 package com.example.demo.domain;
 
+import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.politicianNumber.PoliticianNumberCalculator;
 import com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory;
 import com.example.demo.domain.politicians.Name;
+import com.example.demo.domain.politicians.PoliticianNumber;
 import com.example.demo.domain.politicians.PoliticianTypes;
 import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
@@ -12,7 +14,6 @@ import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
@@ -26,13 +27,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CitizensRatingPoliticiansTest {
 
     PoliticianNumberCalculator polNumberCalculator = PoliticianNumberCalculatorFactory.politicianCalculator(Politicians.Type.PRESIDENTIAL);
-    final String POLITICIAN_NUMBER  = polNumberCalculator.calculatePoliticianNumber(new Name("random", "name")).politicianNumber();
+    final PoliticianNumber POLITICIAN_NUMBER  = polNumberCalculator.calculatePoliticianNumber(new Name("random", "name"));
 
     PoliticiansBuilder politicianBuilder;
 
     Politicians politicians;
 
-    @Mock RateLimitRepository rateLimitRepo;
+    RateLimitRepository rateLimitRepo;
 
     @BeforeEach
     public void setup() {
@@ -44,6 +45,8 @@ public class CitizensRatingPoliticiansTest {
                 .setRating(new Rating(0D, 0D));
 
         politicians = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder).build();
+
+        rateLimitRepo = new InMemoryRateLimitRepository();
     }
 
     @Test
@@ -56,8 +59,8 @@ public class CitizensRatingPoliticiansTest {
         var firstRating = createPolRating(2.243, rater, politicians);
         var fourScaledRatingForHalfDownRoundingMode = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
 
-        firstRating.ratePolitician();
-        fourScaledRatingForHalfDownRoundingMode.ratePolitician();
+        firstRating.ratePolitician((accountNumber) -> true);
+        fourScaledRatingForHalfDownRoundingMode.ratePolitician((accountNumber) -> true);
 
         assertThat(politicians.getRating().getAverageRating())
                 .isEqualTo(EXPECTED_CALCULATED_AVERAGE_RATING);
@@ -75,9 +78,9 @@ public class CitizensRatingPoliticiansTest {
         var fourScaledRating = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
         var threeScaledRating = createPolRating(6.223, secondRaterThatsNotRateLimited, politicians);
 
-        firstRating.ratePolitician();
-        fourScaledRating.ratePolitician();
-        threeScaledRating.ratePolitician();
+        firstRating.ratePolitician((accountNumber) -> true);
+        fourScaledRating.ratePolitician((accountNumber) -> true);
+        threeScaledRating.ratePolitician((accountNumber) -> true);
 
         assertThat(politicians.getRating().getAverageRating())
                 .isEqualTo(EXPECTED_CALCULATED_AVERAGE_RATING);
@@ -94,8 +97,8 @@ public class CitizensRatingPoliticiansTest {
         var firstRating = createPolRating(2.243, rater, politicians);
         var secondRating = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
 
-        firstRating.ratePolitician();
-        secondRating.ratePolitician();
+        firstRating.ratePolitician((accountNumber) -> true);
+        secondRating.ratePolitician((accountNumber) -> true);
 
         assertThat(politicians.countsOfRatings())
                 .isEqualTo(EXPECTED_NUMBER_OF_RATINGS);
@@ -105,15 +108,15 @@ public class CitizensRatingPoliticiansTest {
     public void totalCountsOfRatingsShouldStillBe2WhenRaterDeletesPolitician() throws UserRateLimitedOnPoliticianException {
         int EXPECTED_NUMBER_OF_RATINGS = 2;
 
-        var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber().toString());
+        var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
 
         var firstRating = createPolRating(2.243, rater, politicians);
         var secondRating = createPolRating(3.2232, raterThatsNotRateLimited, politicians);
 
-        firstRating.ratePolitician();
-        secondRating.ratePolitician();
+        firstRating.ratePolitician((accountNumber) -> true);
+        secondRating.ratePolitician((accountNumber) -> true);
 
         secondRating.deleteRating();
 

@@ -76,8 +76,13 @@ public class UserRater {
 		return true;
 	}
 
+	@Deprecated
 	public boolean canRate(String polNumber) {
 		return !isRateLimited(new PoliticianNumber(polNumber));
+	}
+
+	public boolean canRate(UserRateLimitService service) {
+		return service.isUserNotRateLimited(userAccountNumber);
 	}
 
 	public void rateLimitUser(PoliticianNumber polNumber) {
