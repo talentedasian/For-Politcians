@@ -2,7 +2,7 @@ package com.example.demo.adapter.web.dto;
 
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.enums.Rating;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.Politicians;
 
 public final class PresidentialPoliticianDto extends PoliticianDto {
 

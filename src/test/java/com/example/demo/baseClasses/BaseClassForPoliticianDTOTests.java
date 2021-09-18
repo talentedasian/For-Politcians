@@ -1,9 +1,9 @@
 package com.example.demo.baseClasses;
 
 import com.example.demo.domain.entities.Rating;
-import com.example.demo.domain.politicians.PoliticianNumber;
-import com.example.demo.domain.politicians.PoliticianTypes;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.PoliticianNumber;
+import com.example.demo.domain.entities.PoliticianTypes;
+import com.example.demo.domain.entities.Politicians;
 import org.junit.jupiter.api.BeforeEach;
 
 public class BaseClassForPoliticianDTOTests {

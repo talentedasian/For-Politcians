@@ -6,7 +6,7 @@ import com.example.demo.adapter.in.web.PoliticianController;
 import com.example.demo.adapter.in.web.RatingsController;
 import com.example.demo.domain.DefaultRateLimitDomainService;
 import com.example.demo.domain.RateLimitRepository;
-import com.example.demo.domain.politicians.PoliticianNumber;
+import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.EntityModel;

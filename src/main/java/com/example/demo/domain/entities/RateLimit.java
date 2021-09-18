@@ -1,7 +1,5 @@
 package com.example.demo.domain.entities;
 
-import com.example.demo.domain.politicians.PoliticianNumber;
-
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;

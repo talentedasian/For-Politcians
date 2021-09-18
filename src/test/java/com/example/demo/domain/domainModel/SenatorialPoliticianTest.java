@@ -1,9 +1,9 @@
 package com.example.demo.domain.domainModel;
 
-import com.example.demo.domain.politicians.PoliticianNumber;
-import com.example.demo.domain.politicians.PoliticianTypes;
-import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.PoliticianNumber;
+import com.example.demo.domain.entities.PoliticianTypes;
+import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.domain.entities.Politicians;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -1,6 +1,6 @@
 package com.example.demo.domain.politicianNumber;
 
-import com.example.demo.domain.politicians.PoliticianNumber;
+import com.example.demo.domain.entities.PoliticianNumber;
 
 public abstract class AbstractPoliticianNumberCalculator implements PoliticianNumberCalculator{
 

@@ -9,10 +9,10 @@ import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
 import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
 import com.example.demo.domain.entities.Rating;
-import com.example.demo.domain.politicians.Name;
-import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
-import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.Name;
+import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.domain.entities.Politicians;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +25,7 @@ import java.util.List;
 
 import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
 import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
-import static com.example.demo.domain.politicians.PoliticianNumber.of;
+import static com.example.demo.domain.entities.PoliticianNumber.of;
 import static java.lang.String.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 

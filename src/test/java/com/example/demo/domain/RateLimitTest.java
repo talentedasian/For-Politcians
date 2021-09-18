@@ -2,7 +2,7 @@ package com.example.demo.domain;
 
 import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.entities.RateLimit;
-import com.example.demo.domain.politicians.PoliticianNumber;
+import com.example.demo.domain.entities.PoliticianNumber;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

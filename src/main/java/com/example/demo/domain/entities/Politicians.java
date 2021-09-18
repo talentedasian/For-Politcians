@@ -1,12 +1,10 @@
-package com.example.demo.domain.politicians;
+package com.example.demo.domain.entities;
 
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.averageCalculator.AverageCalculator;
 import com.example.demo.domain.averageCalculator.DecentSatisfactionAverageCalculator;
 import com.example.demo.domain.averageCalculator.HighSatisfactionAverageCalculator;
 import com.example.demo.domain.averageCalculator.LowSatisfactionAverageCalculator;
-import com.example.demo.domain.entities.PoliticiansRating;
-import com.example.demo.domain.entities.Rating;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,7 +119,7 @@ public class Politicians {
 		return null;
 	}
 
-	public void rate(PoliticiansRating rating) {
+	void rate(PoliticiansRating rating) {
 		totalCountsOfRating++;
 		calculateAverageRating(rating.getRating());
 		politiciansRating.add(rating);

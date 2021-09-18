@@ -1,7 +1,7 @@
 package com.example.demo.dtomapper;
 
 import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.Politicians;
 
 public class PoliticianDTOUnwrapper {
 

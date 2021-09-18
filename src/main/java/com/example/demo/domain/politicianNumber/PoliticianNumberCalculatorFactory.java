@@ -1,6 +1,6 @@
 package com.example.demo.domain.politicianNumber;
 
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.Politicians;
 
 public class PoliticianNumberCalculatorFactory {
 

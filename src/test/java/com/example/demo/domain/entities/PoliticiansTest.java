@@ -1,11 +1,8 @@
-package com.example.demo.domain.domainModel;
+package com.example.demo.domain.entities;
 
 import com.example.demo.baseClasses.NumberTestFactory;
-import com.example.demo.domain.entities.Rating;
-import com.example.demo.domain.politicians.PoliticianNumber;
-import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
-import com.example.demo.domain.politicians.Politicians;
-import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
+import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

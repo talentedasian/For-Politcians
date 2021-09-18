@@ -1,4 +1,4 @@
-package com.example.demo.domain.politicians;
+package com.example.demo.domain.entities;
 
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 

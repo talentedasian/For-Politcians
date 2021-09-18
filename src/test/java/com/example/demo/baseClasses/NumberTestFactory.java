@@ -1,7 +1,7 @@
 package com.example.demo.baseClasses;
 
 import com.example.demo.domain.entities.AccountNumber;
-import com.example.demo.domain.politicians.PoliticianNumber;
+import com.example.demo.domain.entities.PoliticianNumber;
 
 public final class NumberTestFactory {
 

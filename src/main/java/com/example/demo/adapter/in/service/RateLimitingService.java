@@ -2,7 +2,7 @@ package com.example.demo.adapter.in.service;
 
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.RateLimit;
-import com.example.demo.domain.politicians.PoliticianNumber;
+import com.example.demo.domain.entities.PoliticianNumber;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;

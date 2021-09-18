@@ -1,8 +1,8 @@
 package com.example.demo.adapter.web.dto;
 
 import com.example.demo.baseClasses.BaseClassForPoliticianDTOTests;
-import com.example.demo.domain.politicians.PoliticianTypes;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.PoliticianTypes;
+import com.example.demo.domain.entities.Politicians;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

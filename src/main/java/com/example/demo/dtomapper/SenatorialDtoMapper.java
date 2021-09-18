@@ -2,8 +2,8 @@ package com.example.demo.dtomapper;
 
 import com.example.demo.adapter.web.dto.PoliticianDto;
 import com.example.demo.adapter.web.dto.SenatorialPoliticianDto;
-import com.example.demo.domain.politicians.Politicians;
-import com.example.demo.domain.politicians.PoliticianTypes;
+import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.entities.PoliticianTypes;
 import com.example.demo.domain.enums.Rating;
 import org.springframework.util.Assert;
 

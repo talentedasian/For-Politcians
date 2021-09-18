@@ -1,7 +1,7 @@
 package com.example.demo.adapter.out.jpa;
 
-import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
+import com.example.demo.domain.entities.Politicians;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;

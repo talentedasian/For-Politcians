@@ -1,7 +1,7 @@
 package com.example.demo.domain.politicianNumber;
 
 import com.example.demo.domain.entityNumber.EntityNumberInterface;
-import com.example.demo.domain.politicians.Name;
+import com.example.demo.domain.entities.Name;
 
 public abstract class AbstractPoliticianNumber implements EntityNumberInterface {
 

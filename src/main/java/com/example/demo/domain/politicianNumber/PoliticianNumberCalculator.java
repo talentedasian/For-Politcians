@@ -1,7 +1,7 @@
 package com.example.demo.domain.politicianNumber;
 
-import com.example.demo.domain.politicians.Name;
-import com.example.demo.domain.politicians.PoliticianNumber;
+import com.example.demo.domain.entities.Name;
+import com.example.demo.domain.entities.PoliticianNumber;
 
 public interface PoliticianNumberCalculator {
 

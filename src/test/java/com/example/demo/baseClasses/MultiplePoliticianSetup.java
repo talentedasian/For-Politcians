@@ -1,13 +1,13 @@
 package com.example.demo.baseClasses;
 
-import com.example.demo.domain.politicians.PoliticianTypes;
-import com.example.demo.domain.politicians.Politicians;
-import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
+import com.example.demo.domain.entities.PoliticianTypes;
+import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.demo.domain.politicians.PoliticianNumber.of;
+import static com.example.demo.domain.entities.PoliticianNumber.of;
 import static java.lang.String.valueOf;
 
 public class MultiplePoliticianSetup {

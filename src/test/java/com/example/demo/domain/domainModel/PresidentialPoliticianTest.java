@@ -1,12 +1,12 @@
 package com.example.demo.domain.domainModel;
 
-import com.example.demo.domain.politicians.PoliticianNumber;
+import com.example.demo.domain.entities.PoliticianNumber;
 import org.junit.jupiter.api.Test;
 
-import com.example.demo.domain.politicians.Politicians;
-import com.example.demo.domain.politicians.Politicians.PoliticiansBuilder;
-import com.example.demo.domain.politicians.PoliticianTypes;
-import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
+import com.example.demo.domain.entities.PoliticianTypes;
+import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 
 import java.util.HashMap;
 import java.util.Map;

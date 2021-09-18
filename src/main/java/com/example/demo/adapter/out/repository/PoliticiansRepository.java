@@ -2,7 +2,7 @@ package com.example.demo.adapter.out.repository;
 
 import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.Politicians;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 
 import java.util.List;

@@ -3,14 +3,14 @@ package com.example.demo.dtomapper;
 import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.adapter.in.dtoRequest.AddPresidentialPoliticianDTORequest;
 import com.example.demo.domain.entities.Rating;
-import com.example.demo.domain.politicians.Name;
-import com.example.demo.domain.politicians.PoliticianNumber;
-import com.example.demo.domain.politicians.PoliticianTypes;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.Name;
+import com.example.demo.domain.entities.PoliticianNumber;
+import com.example.demo.domain.entities.PoliticianTypes;
+import com.example.demo.domain.entities.Politicians;
 import io.jsonwebtoken.lang.Assert;
 
 import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
-import static com.example.demo.domain.politicians.Politicians.Type.PRESIDENTIAL;
+import static com.example.demo.domain.entities.Politicians.Type.PRESIDENTIAL;
 
 class PresidentialDTOUnwrapper extends PoliticianDTOUnwrapper {
 

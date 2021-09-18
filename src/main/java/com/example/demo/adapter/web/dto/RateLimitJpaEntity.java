@@ -1,7 +1,7 @@
 package com.example.demo.adapter.web.dto;
 
 import com.example.demo.domain.entities.RateLimit;
-import com.example.demo.domain.politicians.PoliticianNumber;
+import com.example.demo.domain.entities.PoliticianNumber;
 
 import javax.persistence.*;
 import java.time.LocalDate;

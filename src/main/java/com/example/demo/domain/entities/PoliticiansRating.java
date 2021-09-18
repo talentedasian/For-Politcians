@@ -1,8 +1,6 @@
 package com.example.demo.domain.entities;
 
 import com.example.demo.domain.RateLimitRepository;
-import com.example.demo.domain.politicians.PoliticianNumber;
-import com.example.demo.domain.politicians.Politicians;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.springframework.util.Assert;
 

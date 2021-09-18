@@ -2,7 +2,6 @@ package com.example.demo.domain.entities;
 
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.enums.PoliticalParty;
-import com.example.demo.domain.politicians.PoliticianNumber;
 
 import java.util.*;
 

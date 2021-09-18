@@ -1,10 +1,10 @@
 package com.example.demo.adapter.out.jpa;
 
 import com.example.demo.domain.entities.PoliticiansRating;
-import com.example.demo.domain.politicians.PoliticianNumber;
-import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician;
-import com.example.demo.domain.politicians.PoliticianTypes.SenatorialPolitician;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.PoliticianNumber;
+import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
+import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician;
+import com.example.demo.domain.entities.Politicians;
 
 import javax.persistence.*;
 import java.util.List;

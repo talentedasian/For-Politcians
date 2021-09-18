@@ -1,9 +1,9 @@
 package com.example.demo.domain.politicianNumber;
 
-import com.example.demo.domain.politicians.Name;
-import com.example.demo.domain.politicians.PoliticianNumber;
+import com.example.demo.domain.entities.Name;
+import com.example.demo.domain.entities.PoliticianNumber;
 
-import static com.example.demo.domain.politicians.Politicians.Type.SENATORIAL;
+import static com.example.demo.domain.entities.Politicians.Type.SENATORIAL;
 
 final class SenatorialNumberCalculator extends AbstractPoliticianNumberCalculator{
 

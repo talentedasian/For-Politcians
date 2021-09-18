@@ -3,7 +3,7 @@ package com.example.demo.domain;
 import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.domain.entities.RateLimit;
 import com.example.demo.domain.entities.UserRateLimitService;
-import com.example.demo.domain.politicians.PoliticianNumber;
+import com.example.demo.domain.entities.PoliticianNumber;
 
 import java.time.LocalDate;
 import java.util.Optional;

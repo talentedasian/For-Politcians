@@ -7,9 +7,9 @@ import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
 import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
 import com.example.demo.domain.entities.Rating;
-import com.example.demo.domain.politicians.Name;
-import com.example.demo.domain.politicians.PoliticianNumber;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.Name;
+import com.example.demo.domain.entities.PoliticianNumber;
+import com.example.demo.domain.entities.Politicians;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.AfterEach;
@@ -22,7 +22,7 @@ import java.util.List;
 
 import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
 import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
-import static com.example.demo.domain.politicians.Politicians.Type.PRESIDENTIAL;
+import static com.example.demo.domain.entities.Politicians.Type.PRESIDENTIAL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PoliticianPaginationServiceAdapterTest {

@@ -6,7 +6,7 @@ import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.web.dto.PoliticianDto;
 import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.Politicians;
 import com.example.demo.dtomapper.PoliticianDTOUnwrapper;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.exceptions.PoliticianNotFoundException;

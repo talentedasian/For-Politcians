@@ -1,13 +1,13 @@
 package com.example.demo.domain.politicianNumber;
 
-import com.example.demo.domain.politicians.Name;
-import com.example.demo.domain.politicians.PoliticianNumber;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.Name;
+import com.example.demo.domain.entities.PoliticianNumber;
+import com.example.demo.domain.entities.Politicians;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.example.demo.domain.politicians.Politicians.Type.PRESIDENTIAL;
-import static com.example.demo.domain.politicians.Politicians.Type.SENATORIAL;
+import static com.example.demo.domain.entities.Politicians.Type.PRESIDENTIAL;
+import static com.example.demo.domain.entities.Politicians.Type.SENATORIAL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PoliticianNumberCalculatorTest {

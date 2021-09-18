@@ -3,7 +3,7 @@ package com.example.demo.baseClasses;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.Politicians;
 
 public class BuilderFactory {
 

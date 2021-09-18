@@ -9,8 +9,8 @@ import com.example.demo.domain.InMemoryRatingAdapterRepo;
 import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.Rating;
-import com.example.demo.domain.politicians.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
-import com.example.demo.domain.politicians.Politicians;
+import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.entities.Politicians;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
