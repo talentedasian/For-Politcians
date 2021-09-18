@@ -71,7 +71,7 @@ public class UserRaterRateLimitedCollaborationTest {
     public void shouldThrowAnExceptionBecauseUserIsRateLimited() {
         when(polRepo.findByPoliticianNumber(anyString())).thenReturn(Optional.of(politician));
 
-        var service = new RatingService(ratingRepo, polRepo, rateLimitRepository);
+        var service = new RatingService(ratingRepo, polRepo, new DefaultRateLimitDomainService(rateLimitRepository));
 
         var rater = new UserRater.Builder()
                 .setAccountNumber(ACCOUNT_NUMBER)
@@ -91,7 +91,7 @@ public class UserRaterRateLimitedCollaborationTest {
     public void shouldSaveRateLimitWithUsersAccountNumberAndPoliticianNumberThatIsRated() throws UserRateLimitedOnPoliticianException {
         when(polRepo.findByPoliticianNumber(anyString())).thenReturn(Optional.of(politician));
 
-        var service = new RatingService(ratingRepo, polRepo, rateLimitRepository);
+        var service = new RatingService(ratingRepo, polRepo, new DefaultRateLimitDomainService(rateLimitRepository));
 
         var rater = BuilderFactory.createRater(ACCOUNT_NUMBER);
 

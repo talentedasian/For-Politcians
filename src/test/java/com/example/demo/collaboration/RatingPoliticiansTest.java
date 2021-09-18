@@ -4,6 +4,7 @@ import com.example.demo.adapter.in.service.RatingService;
 import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.domain.DefaultRateLimitDomainService;
 import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
 import com.example.demo.domain.InMemoryRatingAdapterRepo;
 import com.example.demo.baseClasses.NumberTestFactory;
@@ -44,7 +45,7 @@ public class RatingPoliticiansTest {
 
         ratingRepo = new InMemoryRatingAdapterRepo();
 
-        ratingService = new RatingService(ratingRepo, polRepo, rateLimitRepo);
+        ratingService = new RatingService(ratingRepo, polRepo, new DefaultRateLimitDomainService(rateLimitRepo));
     }
 
     @Test

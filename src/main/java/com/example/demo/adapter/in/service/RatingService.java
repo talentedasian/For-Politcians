@@ -2,11 +2,9 @@ package com.example.demo.adapter.in.service;
 
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
-import com.example.demo.domain.DefaultRateLimitDomainService;
-import com.example.demo.domain.RateLimitRepository;
-import com.example.demo.domain.entities.PoliticiansRating;
-import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.entities.UserRateLimitService;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
@@ -20,15 +18,13 @@ public class RatingService {
 
 	private final RatingRepository ratingRepo;
 	private final PoliticiansService politicianService;
-	private final RateLimitingService rateLimitingService;
-	private final RateLimitRepository rateLimitRepository;
+	private final UserRateLimitService userRateLimitService;
 
 	public RatingService(RatingRepository ratingRepo, PoliticiansRepository politicianRepo,
-						 RateLimitRepository rateLimitRepo) {
+						 UserRateLimitService service) {
 		this.ratingRepo = ratingRepo;
 		this.politicianService = new PoliticiansService(politicianRepo);
-		this.rateLimitingService = new RateLimitingService(rateLimitRepo);
-		this.rateLimitRepository = rateLimitRepo;
+		this.userRateLimitService = service;
 	}
 	
 	@Transactional(readOnly = true)
@@ -41,7 +37,7 @@ public class RatingService {
 		Politicians politician = politicianService.findPoliticianByNumber(rating.getPolitician().retrievePoliticianNumber())
 				.orElseThrow(PoliticianNotFoundException::new);
 
-		rating.ratePolitician(new DefaultRateLimitDomainService(rateLimitRepository));
+		rating.ratePolitician(userRateLimitService);
 
 		try {
 			politicianService.updatePolitician(politician);
@@ -49,7 +45,6 @@ public class RatingService {
 			Logger.getLogger("PoliticiansLogger").warning("Save method should have not thrown an exception");
 		}
 		PoliticiansRating savedRating = ratingRepo.save(rating);
-		rateLimitingService.rateLimitUser(savedRating.getRater().returnUserAccountNumber(), new PoliticianNumber(politician.retrievePoliticianNumber()));
 		
 		return savedRating;
 	}

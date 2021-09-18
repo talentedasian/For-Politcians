@@ -5,6 +5,7 @@ import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.domain.DefaultRateLimitDomainService;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.UserRater;
@@ -24,7 +25,7 @@ public class RatingServiceAdapter {
     private final RateLimitRepository rateLimitRepo;
 
     public RatingServiceAdapter(RatingRepository ratingRepo, RateLimitRepository rateLimitRepo, PoliticiansRepository polRepo) {
-        this.service = new RatingService(ratingRepo, polRepo, rateLimitRepo);
+        this.service = new RatingService(ratingRepo, polRepo, new DefaultRateLimitDomainService(rateLimitRepo));
         this.rateLimitRepo = rateLimitRepo;
     }
 
