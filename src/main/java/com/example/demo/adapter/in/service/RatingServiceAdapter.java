@@ -22,11 +22,9 @@ import java.util.List;
 public class RatingServiceAdapter {
 
     private final RatingService service;
-    private final RateLimitRepository rateLimitRepo;
 
     public RatingServiceAdapter(RatingRepository ratingRepo, RateLimitRepository rateLimitRepo, PoliticiansRepository polRepo) {
         this.service = new RatingService(ratingRepo, polRepo, new DefaultRateLimitDomainService(rateLimitRepo));
-        this.rateLimitRepo = rateLimitRepo;
     }
 
     public RatingDTO findUsingId(String id) {
@@ -42,11 +40,9 @@ public class RatingServiceAdapter {
                 .setAccountNumber(jwts.getId())
                 .setEmail(jwts.getSubject())
                 .setPoliticalParty(PoliticalParty.valueOf(dtoRequest.getPoliticalParty()))
-                .setRateLimit(rateLimitRepo.findUsingId(jwts.getId()))
                 .build();
 
         PoliticiansRating rating = new PoliticiansRating.Builder()
-                .setRepo(rateLimitRepo)
                 .setRater(rater)
                 .build();
 
