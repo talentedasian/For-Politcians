@@ -1,17 +1,14 @@
 package com.example.demo.collaboration;
 
-import com.example.demo.adapter.in.service.RatingService;
 import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
-import com.example.demo.adapter.out.repository.PoliticiansRepository;
-import com.example.demo.adapter.out.repository.RatingRepository;
-import com.example.demo.domain.DefaultRateLimitDomainService;
-import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
-import com.example.demo.domain.InMemoryRatingAdapterRepo;
 import com.example.demo.baseClasses.NumberTestFactory;
+import com.example.demo.domain.DefaultRateLimitDomainService;
 import com.example.demo.domain.RateLimitRepository;
-import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.entities.Rating;
+import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,17 +16,16 @@ import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
 import static com.example.demo.baseClasses.BuilderFactory.createRater;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class RatingPoliticiansTest {
 
     final String FIRST_NAME = "Rodrigo";
     final String LAST_NAME = "Duterte";
 
-    PoliticiansRepository polRepo;
     RateLimitRepository rateLimitRepo;
-    RatingRepository ratingRepo;
 
-    RatingService ratingService;
+    DefaultRateLimitDomainService defaultRateLimitDomainService;
 
     Politicians.PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder(NumberTestFactory.POL_NUMBER())
             .setFirstName(FIRST_NAME)
@@ -39,76 +35,38 @@ public class RatingPoliticiansTest {
 
     @BeforeEach
     public void setup() {
-        polRepo = new InMemoryPoliticianAdapterRepo();
-
         rateLimitRepo = new InMemoryRateLimitRepository();
 
-        ratingRepo = new InMemoryRatingAdapterRepo();
-
-        ratingService = new RatingService(ratingRepo, polRepo, new DefaultRateLimitDomainService(rateLimitRepo));
+        defaultRateLimitDomainService = new DefaultRateLimitDomainService(rateLimitRepo);
     }
 
     @Test
-    public void shouldReturnExpectedCalculatedRatingAverageWhenMultipleRatersRateASinglePolitician() throws Exception {
-        final double EXPECTED_CALCULATED_AVERAGE_RATING = 4.965D;
-
+    public void throwsUserRateLimitedExceptionWhenUserAlreadyRatedPoliticianWithin7Days() throws Exception{
         var politician = new PresidentialBuilder(politicianBuilder).build();
-
-        polRepo.save(politician);
-
-        var rater = createRater(ACC_NUMBER().accountNumber());
-        var secondRater = createRater(ACC_NUMBER().accountNumber() + "1");
-        var thirdRater = createRater(ACC_NUMBER().accountNumber() + "2");
-        var fourthRater = createRater(ACC_NUMBER().accountNumber() + "3");
-
-        var firstRatingMadeByFirstRater = createPolRating(5D, rater, politician);
-        var firstRatingMadeBySecondRater = createPolRating(2.31223D, secondRater, politician);
-        var firstRatingMadeByThirdRater = createPolRating(4.32D, thirdRater, politician);
-        var firstRatingMadeByFourthRater = createPolRating(8.22433D, fourthRater, politician);
-
-        ratingService.saveRatings(firstRatingMadeByFirstRater);
-        ratingService.saveRatings(firstRatingMadeBySecondRater);
-        ratingService.saveRatings(firstRatingMadeByThirdRater);
-        ratingService.saveRatings(firstRatingMadeByFourthRater);
-
-        var politicianQueried = polRepo.findByPoliticianNumber(politician.retrievePoliticianNumber()).get();
-
-        assertThat(politicianQueried.averageRating())
-                .isEqualTo(EXPECTED_CALCULATED_AVERAGE_RATING);
-    }
-
-    @Test
-    public void averageRatingOfPoliticianShouldBeWhatTheSoleRatingIsWhenPoliticianHasOnlyOneRater() throws Exception{
-        final double EXPECTED_CALCULATED_AVERAGE_RATING = 4.977D;
-
-        var politician = new PresidentialBuilder(politicianBuilder).build();
-
-        polRepo.save(politician);
 
         var rater = createRater(ACC_NUMBER().accountNumber());
 
         var rating = createPolRating(4.97654D, rater, politician);
 
-        ratingService.saveRatings(rating);
+        rating.ratePolitician(defaultRateLimitDomainService);
 
-        var politicianQueried = polRepo.findByPoliticianNumber(politician.retrievePoliticianNumber()).get();
-
-        assertThat(politicianQueried.averageRating())
-                .isEqualTo(EXPECTED_CALCULATED_AVERAGE_RATING);
+        assertThatThrownBy(() -> rating.ratePolitician(defaultRateLimitDomainService))
+                .isInstanceOf(UserRateLimitedOnPoliticianException.class)
+                .hasMessageContaining("can rate again after 7 days");
     }
 
     @Test
-    public void averageRatingOfPoliticianShouldBeToWhatWasInitiallySetDuringInstanceCreationWhenItDoesNotHaveRaters() throws Exception{
-        final double EXPECTED_AVERAGE_RATING = politicianBuilder.build().averageRating();
-
+    public void raterCantRateAfterRatingPolitician() throws Exception{
         var politician = new PresidentialBuilder(politicianBuilder).build();
 
-        polRepo.save(politician);
+        var rater = createRater(ACC_NUMBER().accountNumber());
 
-        var politicianQueried = polRepo.findByPoliticianNumber(politician.retrievePoliticianNumber()).get();
+        var rating = createPolRating(4.97654D, rater, politician);
 
-        assertThat(politicianQueried.averageRating())
-                .isEqualTo(EXPECTED_AVERAGE_RATING);
+        rating.ratePolitician(defaultRateLimitDomainService);
+
+        assertThat(rater.canRate(defaultRateLimitDomainService, PoliticianNumber.of(politician.retrievePoliticianNumber())))
+                .isFalse();
     }
 
 }

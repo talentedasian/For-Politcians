@@ -14,34 +14,9 @@ public class UserRateLimitedOnPoliticianException extends Exception {
 	}
 
 	public UserRateLimitedOnPoliticianException(Long daysLeft) {
-		super();
+		super(String.format("User is rate limited and can rate again after %s days", daysLeft));
 		this.daysLeft = daysLeft;
 		// TODO Auto-generated constructor stub
 	}
-
-	public UserRateLimitedOnPoliticianException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace, Long daysLeft) {
-		super(message, cause, enableSuppression, writableStackTrace);
-		this.daysLeft = daysLeft;
-		// TODO Auto-generated constructor stub
-	}
-
-	public UserRateLimitedOnPoliticianException(String message, Throwable cause, Long daysLeft) {
-		super(message, cause);
-		this.daysLeft = daysLeft;
-		// TODO Auto-generated constructor stub
-	}
-
-	public UserRateLimitedOnPoliticianException(String message, Long daysLeft) {
-		super(message);
-		this.daysLeft = daysLeft;
-		// TODO Auto-generated constructor stub
-	}
-
-	public UserRateLimitedOnPoliticianException(Throwable cause) {
-		super(cause);
-		this.daysLeft = null;
-		// TODO Auto-generated constructor stub
-	}
-
+	
 }

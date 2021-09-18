@@ -82,19 +82,6 @@ public class UserRater {
 		rateLimitService.rateLimitUser(userAccountNumber, polNumber);
 	}
 
-    public long daysLeftToRate(String polNumber) {
-		var rl = rateLimit.get(new PoliticianNumber(polNumber));
-		if (rl == null) {
-			return 0;
-		}
-
-		try {
-			return	rl.daysLeftOfBeingRateLimited();
-		} catch (IllegalStateException e) {
-			return 0l;
-		}
-    }
-
 	public long daysLeftToRate(UserRateLimitService service, PoliticianNumber politicianNumber) {
 		return service.daysLeftToRateForUser(userAccountNumber, politicianNumber);
 	}
