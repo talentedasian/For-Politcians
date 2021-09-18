@@ -107,7 +107,6 @@ public class Politicians {
 		return rating;
 	}
 
-
 	public AverageCalculator returnAverageCalculator(double averageRating, double totalRating) {
 		if (averageRating < 5D) {
 			return new LowSatisfactionAverageCalculator(totalRating, totalCountsOfRatings());

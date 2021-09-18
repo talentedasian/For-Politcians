@@ -11,6 +11,7 @@ import java.util.List;
 
 import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
 import static com.example.demo.baseClasses.BuilderFactory.createRater;
+import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -98,6 +99,24 @@ public class PoliticiansTest {
 
 		assertThat(politician.totalCountsOfRatings())
 				.isEqualTo(EXPECTED_NUMBER_OF_RATINGS);
+	}
+
+	@Test
+	public void testCalculateAverageRatingMethod() throws Exception{
+		double EXPECTED_AVERAGE_RATING = 2;
+
+		var rater = createRater(ACC_NUMBER().accountNumber());
+
+		var justHereToPutIncreaseSize = createPolRating(1D, rater, politicianBuilder.build());
+
+		Politicians politician = politicianBuilder
+				.setRating(new Rating(3D, 2.231D))
+				.setPoliticiansRating(List.of(justHereToPutIncreaseSize, justHereToPutIncreaseSize)).build();
+
+		politician.calculateAverageRating(1D);
+
+		assertThat(politician.averageRating())
+				.isEqualTo(EXPECTED_AVERAGE_RATING);
 	}
 
 	@Test

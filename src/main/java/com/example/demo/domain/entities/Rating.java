@@ -38,16 +38,7 @@ public class Rating {
 	}
 
 	private void calculateTotalRating(Double ratingToAdd) {
-		if (totalRating == null || totalRating == 0D) {
-			double rating = BigDecimal.valueOf(ratingToAdd)
-					.setScale(4, RoundingMode.HALF_DOWN).doubleValue();
-			this.totalRating = rating;
-			return;
-		}
-
-		double rating = BigDecimal.valueOf(totalRating + ratingToAdd)
-				.setScale(4, RoundingMode.UP).doubleValue();
-		this.totalRating = rating;
+		this.totalRating = calculateTotalAmountOfRating(ratingToAdd);
 	}
 	public double calculateTotalAmountOfRating(Double ratingToAdd) {
 		if (totalRating == null || totalRating == 0D) {
