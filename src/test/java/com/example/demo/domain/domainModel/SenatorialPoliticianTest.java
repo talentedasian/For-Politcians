@@ -4,6 +4,7 @@ import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.entities.Rating;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,6 +27,7 @@ public class SenatorialPoliticianTest {
     @BeforeEach
     public void setup() {
         politicianBuilder = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
+                .setRating(new Rating(0D, 0D))
                 .setFirstName("Test")
                 .setLastName("Name");
 

@@ -13,6 +13,7 @@ import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
+import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.Rating;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,6 +70,44 @@ public class RatingApplicationServiceTest {
                 .isPresent();
         assertThat(politicianQueried.get())
                 .isEqualTo(politician);
+    }
+
+    @Test
+    public void shouldReturnOptionalOfEmptyWhenRatingIsNotFoundInDatabase() throws Exception{
+        var service = new RatingService(ratingRepo, polRepo, new DefaultRateLimitDomainService(rateLimitRepo));
+
+        assertThat(service.findById(ACC_NUMBER()))
+                .isEmpty();
+    }
+
+    @Test
+    public void ratingShouldBeInDatabaseAfterRatingAPolitician() throws Exception{
+        //GIVEN
+        var rater = createRater(ACC_NUMBER().accountNumber());
+
+        var justToIncreaseSize = BuilderFactory.createPolRating(1D, rater, null);
+
+        PresidentialPolitician politician = new PresidentialBuilder(new PoliticiansBuilder(POL_NUMBER())
+                .setFirstName("Fake")
+                .setPoliticiansRating(List.of(justToIncreaseSize))
+                .setRating(new Rating(1D, 1D)))
+                .build();
+
+        var actualRatingForPolitician = BuilderFactory.createPolRating(5.99323D, rater, politician);
+
+        var service = new RatingService(ratingRepo, polRepo, new DefaultRateLimitDomainService(rateLimitRepo));
+
+        //WHEN
+        polRepo.save(politician);
+        service.saveRatings(actualRatingForPolitician);
+
+        Optional<PoliticiansRating> ratingQueried = service.findById(String.valueOf(actualRatingForPolitician.getId()));
+
+        //THEN
+        assertThat(ratingQueried)
+                .isPresent();
+        assertThat(ratingQueried.get())
+                .isEqualTo(actualRatingForPolitician);
     }
 
 }

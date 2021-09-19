@@ -1,6 +1,7 @@
 package com.example.demo.domain.domainModel;
 
 import com.example.demo.domain.entities.PoliticianNumber;
+import com.example.demo.domain.entities.Rating;
 import org.junit.jupiter.api.Test;
 
 import com.example.demo.domain.entities.Politicians;
@@ -19,6 +20,7 @@ public class PresidentialPoliticianTest {
 	final PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
 	
 	PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
+			.setRating(new Rating(0D, 0D))
 			.setFirstName("Test")
 			.setLastName("Name");
 	

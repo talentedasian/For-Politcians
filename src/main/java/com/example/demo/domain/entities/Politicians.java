@@ -74,6 +74,7 @@ public class Politicians {
 				"name=" + name +
 				", politiciansRating=" + politiciansRating +
 				", rating=" + rating +
+				", totalCountsOfRating=" + totalCountsOfRating +
 				", politicianNumber=" + politicianNumber +
 				", type=" + type +
 				'}';
@@ -87,7 +88,7 @@ public class Politicians {
 		Politicians that = (Politicians) o;
 
 		if (!politicianNumber.equals(that.politicianNumber)) return false;
-		return Objects.equals(rating, that.rating);
+		return Objects.equals(rating.averageRating, that.rating.averageRating);
 	}
 
 	@Override

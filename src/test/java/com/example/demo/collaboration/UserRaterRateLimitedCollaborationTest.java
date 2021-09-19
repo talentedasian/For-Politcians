@@ -4,35 +4,26 @@ import com.example.demo.adapter.in.service.RatingService;
 import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
-import com.example.demo.baseClasses.BuilderFactory;
-import com.example.demo.domain.DefaultRateLimitDomainService;
-import com.example.demo.domain.InMemoryRatingAdapterRepo;
 import com.example.demo.baseClasses.NumberTestFactory;
+import com.example.demo.domain.DefaultRateLimitDomainService;
+import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
+import com.example.demo.domain.InMemoryRatingAdapterRepo;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.*;
-import com.example.demo.domain.enums.PoliticalParty;
-import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
-import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
+import com.example.demo.domain.enums.PoliticalParty;
 import com.example.demo.domain.userRaterNumber.AbstractUserRaterNumber;
 import com.example.demo.domain.userRaterNumber.facebook.FacebookAccountNumberCalculator;
+import com.example.demo.exceptions.PoliticianNotPersistableException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
-import java.util.Optional;
-
 import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 public class UserRaterRateLimitedCollaborationTest {
@@ -51,25 +42,26 @@ public class UserRaterRateLimitedCollaborationTest {
     final String NAME = "Any Name Really";
 
     final String FACEBOOK_ID = "123456";
-    final String POLITICIAN_NUMBER = politician.retrievePoliticianNumber();
 
     AbstractUserRaterNumber accNumberCalc = FacebookAccountNumberCalculator.with(NAME, FACEBOOK_ID);
 
     final String ACCOUNT_NUMBER = new AccountNumber(accNumberCalc.calculateEntityNumber().getAccountNumber()).accountNumber();
 
     RatingRepository ratingRepo;
-    @Mock PoliticiansRepository polRepo;
+    PoliticiansRepository polRepo;
 
     @BeforeEach
     public void setup() {
+        polRepo = new InMemoryPoliticianAdapterRepo();
+
         ratingRepo = new InMemoryRatingAdapterRepo();
 
         rateLimitRepository = new InMemoryRateLimitRepository();
     }
 
     @Test
-    public void shouldThrowAnExceptionBecauseUserIsRateLimited() {
-        when(polRepo.findByPoliticianNumber(anyString())).thenReturn(Optional.of(politician));
+    public void shouldThrowAnExceptionBecauseUserIsRateLimited() throws PoliticianNotPersistableException {
+        polRepo.save(politician);
 
         var service = new RatingService(ratingRepo, polRepo, new DefaultRateLimitDomainService(rateLimitRepository));
 

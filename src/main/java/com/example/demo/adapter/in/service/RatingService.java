@@ -2,6 +2,7 @@ package com.example.demo.adapter.in.service;
 
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.UserRateLimitService;
@@ -30,6 +31,11 @@ public class RatingService {
 	@Transactional(readOnly = true)
 	public Optional<PoliticiansRating> findById(String id) {
 		return ratingRepo.findById(id);
+	}
+
+	@Transactional(readOnly = true)
+	public Optional<PoliticiansRating> findById(AccountNumber accountNumber) {
+		return ratingRepo.findById(accountNumber.accountNumber());
 	}
 	
 	@Transactional
