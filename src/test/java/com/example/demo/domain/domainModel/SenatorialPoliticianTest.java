@@ -27,7 +27,6 @@ public class SenatorialPoliticianTest {
     @BeforeEach
     public void setup() {
         politicianBuilder = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
-                .setRating(new Rating(0D, 0D))
                 .setFirstName("Test")
                 .setLastName("Name");
 

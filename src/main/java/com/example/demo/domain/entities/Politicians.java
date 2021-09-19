@@ -88,6 +88,7 @@ public class Politicians {
 		Politicians that = (Politicians) o;
 
 		if (!politicianNumber.equals(that.politicianNumber)) return false;
+		if (rating == null) return that.rating == null;
 		return Objects.equals(rating.averageRating, that.rating.averageRating);
 	}
 
