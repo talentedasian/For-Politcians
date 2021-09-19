@@ -1,54 +1,74 @@
 package com.example.demo.collaboration;
 
-import com.example.demo.adapter.in.service.RateLimitingService;
+import com.example.demo.adapter.in.service.RatingService;
 import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
-import com.example.demo.baseClasses.NumberTestFactory;
+import com.example.demo.adapter.out.repository.PoliticiansRepository;
+import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.baseClasses.BuilderFactory;
+import com.example.demo.domain.DefaultRateLimitDomainService;
+import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
+import com.example.demo.domain.InMemoryRatingAdapterRepo;
 import com.example.demo.domain.RateLimitRepository;
-import com.example.demo.domain.entities.RateLimit;
+import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
+import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
+import com.example.demo.domain.entities.Rating;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
+import static com.example.demo.baseClasses.BuilderFactory.createRater;
+import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
+import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RatingApplicationServiceTest {
 
-    RateLimitRepository repo;
-
-    RateLimitingService service;
+    RatingRepository ratingRepo;
+    PoliticiansRepository polRepo;
+    RateLimitRepository rateLimitRepo;
 
     @BeforeEach
     public void setup() {
-        repo = new InMemoryRateLimitRepository();
+        ratingRepo = new InMemoryRatingAdapterRepo();
 
-        service = new RateLimitingService(repo);
+        polRepo = new InMemoryPoliticianAdapterRepo();
+
+        rateLimitRepo = new InMemoryRateLimitRepository();
     }
 
     @Test
-    public void shouldOverwritePreviousRateLimitWhenSavingRateLimit() {
-        final String ID = "1";
+    public void ratingPoliticianShouldSaveToDatabase() throws Exception{
+        //GIVEN
+        var fakeRater = createRater(ACC_NUMBER().accountNumber());
 
-        var outdatedRateLimit = service.rateLimitUser(ID, NumberTestFactory.POL_NUMBER());
+        var justToIncreaseSize = BuilderFactory.createPolRating(2.2132131D, fakeRater, null);
 
-        Optional<RateLimit> shouldBeDeletedRateLimit = repo.findUsingIdAndPoliticianNumber("1", NumberTestFactory.POL_NUMBER());
+        PresidentialPolitician politician = new PresidentialBuilder(new PoliticiansBuilder(POL_NUMBER())
+                        .setPoliticiansRating(List.of(justToIncreaseSize, justToIncreaseSize, justToIncreaseSize, justToIncreaseSize))
+                        .setRating(new Rating(4D, 4.989D)))
+                .build();
 
-        assertThat(shouldBeDeletedRateLimit)
-                .isNotEmpty()
-                .get()
-                .isEqualTo(outdatedRateLimit);
+        var raterWhoRates = createRater(ACC_NUMBER().accountNumber().concat("1"));
 
-        var overwritingRateLimit = service.rateLimitUser(ID, NumberTestFactory.POL_NUMBER());
+        var actualRatingForPolitician = BuilderFactory.createPolRating(5.99323D, raterWhoRates, politician);
 
-        Optional<RateLimit> shouldOverwriteRateLimit = repo.findUsingIdAndPoliticianNumber("1", NumberTestFactory.POL_NUMBER());
+        var service = new RatingService(ratingRepo, polRepo, new DefaultRateLimitDomainService(rateLimitRepo));
 
-        assertThat(shouldOverwriteRateLimit)
-                .isNotEmpty()
-                .get()
-                .isEqualTo(overwritingRateLimit);
+        //WHEN
+        polRepo.save(politician);
+        service.saveRatings(actualRatingForPolitician);
 
-        assertThat(repo.countUsingIdAndPoliticianNumber(ID, NumberTestFactory.POL_NUMBER()))
-                .isEqualTo(1);
+        Optional<Politicians> politicianQueried = polRepo.findByPoliticianNumber(POL_NUMBER().politicianNumber());
+
+        //THEN
+        assertThat(politicianQueried)
+                .isPresent();
+        assertThat(politicianQueried.get())
+                .isEqualTo(politician);
     }
 
 }

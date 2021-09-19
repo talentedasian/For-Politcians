@@ -1,4 +1,4 @@
-package com.example.demo.collaboration;
+package com.example.demo.domain;
 
 import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.baseClasses.NumberTestFactory;

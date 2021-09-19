@@ -87,30 +87,4 @@ public class UserRaterRateLimitedCollaborationTest {
         assertThrows(UserRateLimitedOnPoliticianException.class, () -> service.saveRatings(rating));
     }
 
-    @Test
-    public void shouldSaveRateLimitWithUsersAccountNumberAndPoliticianNumberThatIsRated() throws UserRateLimitedOnPoliticianException {
-        when(polRepo.findByPoliticianNumber(anyString())).thenReturn(Optional.of(politician));
-
-        var service = new RatingService(ratingRepo, polRepo, new DefaultRateLimitDomainService(rateLimitRepository));
-
-        var rater = BuilderFactory.createRater(ACCOUNT_NUMBER);
-
-        var rating = new PoliticiansRating.Builder()
-                .setId("1")
-                .setRating(0.D)
-                .setPolitician(politician)
-                .setRater(rater)
-                .build();
-
-        service.saveRatings(rating);
-
-        var rateLimit = rateLimitRepository.findUsingIdAndPoliticianNumber(ACCOUNT_NUMBER, new PoliticianNumber(POLITICIAN_NUMBER));
-
-        assertAll(
-                () -> assertThat(rateLimit)
-                        .isNotEmpty(),
-                () -> assertThat(rateLimit.get())
-                        .isEqualTo(new RateLimit(ACCOUNT_NUMBER, new PoliticianNumber(POLITICIAN_NUMBER), LocalDate.now())));
-    }
-
 }
