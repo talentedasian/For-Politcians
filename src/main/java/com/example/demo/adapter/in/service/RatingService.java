@@ -42,7 +42,10 @@ public class RatingService {
 		try {
 			politicianService.updatePolitician(politician);
 		} catch (PoliticianNotPersistableException e) {
-			Logger.getLogger("PoliticiansLogger").warning("Save method should have not thrown an exception");
+			Logger.getLogger("PoliticiansLogger").warning("""
+					Save method should have not thrown an exception because politician should already be in the database before
+					being updated.
+					""");
 		}
 		PoliticiansRating savedRating = ratingRepo.save(rating);
 		
