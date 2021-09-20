@@ -16,11 +16,15 @@ public class RatingAssembler implements SimpleRepresentationModelAssembler<Ratin
 
 	@Override
 	public void addLinks(EntityModel<RatingDTO> resource) {
+		RatingDTO content = resource.getContent();
+		if (content == null) return;
+
 		resource.add(linkTo(methodOn(RatingsController.class)
-				.getRatingById(resource.getContent().getId()))
+				.getRatingById(content.getId()))
 			.withSelfRel());
-		
-		resource.add(Link.of("http://localhost:8080/rate-limit/{politicianNumber}")
+
+		resource.add(Link.of(String.format("http://localhost:8080/rate-limit/accNumber?=%s&politician=%s",
+						content.getId(), content.getPolitician().getId()))
 			.withRel("rate-limit"));
 	}
 

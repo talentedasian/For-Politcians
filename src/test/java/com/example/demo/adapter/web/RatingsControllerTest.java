@@ -96,7 +96,9 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
                 .andExpect(content().contentType(MediaTypes.HAL_FORMS_JSON))
 
                     .andDo(document("rating", links(halLinks(),
-                            linkWithRel("self").description("Link that points to the rating entity"))));
+                            linkWithRel("self").description("Link that points to the rating entity"),
+                            linkWithRel("rate-limit").description("Link that gives you information about the rate limit imposed on the rater"),
+                            linkWithRel("politician").description("Link that points to a politician that the rating rates to"))));
     }
 
 }
