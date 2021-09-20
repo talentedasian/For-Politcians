@@ -58,9 +58,8 @@ public class PresidentialJpaEntity extends PoliticiansJpaEntity{
     @Override
     public Politicians toPoliticians() {
         var politician = super.toPoliticians();
-        var presidential = politician.setType(Politicians.Type.PRESIDENTIAL);
 
-        return new PresidentialBuilder(presidential)
+        return new PresidentialBuilder(politician)
                 .setMostSignificantLawPassed(mostSignificantLawSigned)
                 .build();
     }

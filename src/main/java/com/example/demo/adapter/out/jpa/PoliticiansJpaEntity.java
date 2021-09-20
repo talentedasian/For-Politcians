@@ -205,7 +205,6 @@ public class PoliticiansJpaEntity {
                 .map(entity -> new PoliticiansRating.Builder()
                         .setId(id)
                         .setRating(entity.getRating())
-                        .setRepo(entity.toRating().getRateLimitRepo())
                         .setRater(entity.getRater().toUserRater())
                         .setPolitician(null)
                         .build())
