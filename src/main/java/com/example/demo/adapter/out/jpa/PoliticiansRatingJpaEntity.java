@@ -78,7 +78,6 @@ public class PoliticiansRatingJpaEntity {
         return new PoliticiansRating(id, rating, rater.toUserRater(), toPoliticians(politician));
     }
 
-
     private static PoliticiansJpaEntity fromPoliticians(Politicians politician) {
         return new PoliticiansJpaEntity
                 (politician.retrievePoliticianNumber(), politician.firstName(),

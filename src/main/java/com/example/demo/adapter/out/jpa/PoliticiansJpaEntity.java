@@ -22,7 +22,7 @@ public class PoliticiansJpaEntity {
     @Column(nullable = false, name = "politician_first_name")
     private String firstName;
 
-    @Column(nullable = false, name = "politician_last_name")
+    @Column(nullable = true, name = "politician_last_name")
     private String lastName;
 
     @Column(nullable = false, name = "politician_full_name")

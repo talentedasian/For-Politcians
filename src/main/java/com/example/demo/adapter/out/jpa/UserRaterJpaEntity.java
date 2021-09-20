@@ -31,6 +31,8 @@ public class UserRaterJpaEntity {
         return rateLimits;
     }
 
+    private UserRaterJpaEntity() {}
+
     UserRaterJpaEntity(String name, PoliticalParty politicalParties, String email, String userAccountNumber,
                        List<RateLimitJpaEntity> rateLimits) {
         this.name = name;
@@ -55,7 +57,7 @@ public class UserRaterJpaEntity {
                 .setName(name)
                 .setPoliticalParty(politicalParties)
                 .setEmail(email)
-                .setRateLimit(rateLimits.stream().map(RateLimitJpaEntity::toRateLimit).toList())
+                .setRateLimit(List.of())
                 .build();
     }
 

@@ -31,7 +31,12 @@ public record AccountNumber(String accountNumber) {
     }
 
     public static boolean isValid(String accountNumber) {
-        return new AccountNumber(accountNumber).isValid(accountNumber);
+        try {
+            new AccountNumber(accountNumber);
+            return true;
+        } catch(Exception e) {
+            return false;
+        }
     }
 
 }
