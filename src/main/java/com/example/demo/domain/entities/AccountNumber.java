@@ -22,6 +22,10 @@ public record AccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 
+    public static AccountNumber of(String accountNumber) {
+        return new AccountNumber(accountNumber);
+    }
+
     private void doesAccountNumberHaveSufficientLengthOnFirstSection(String accountNumber) {
         Assert.state(!(accountNumber.split("-")[0].length() < 5), "account number does not have sufficient length for the first section");
     }

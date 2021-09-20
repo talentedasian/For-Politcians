@@ -1,26 +1,33 @@
 package com.example.demo.adapter.web;
 
 import com.example.demo.BaseSpringHateoasTest;
+import com.example.demo.adapter.in.web.RatingsController;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.domain.DefaultRateLimitDomainService;
+import com.example.demo.domain.RateLimitRepository;
+import com.example.demo.domain.entities.*;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
-import com.example.demo.domain.entities.Politicians;
-import com.example.demo.domain.entities.PoliticiansRating;
-import com.example.demo.domain.entities.Rating;
-import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.hateoas.MediaTypes;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MvcResult;
 
+import javax.transaction.Transactional;
+
+import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate;
 import static com.example.demo.baseClasses.MockMvcAssertions.assertThat;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static java.net.URI.create;
+import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,6 +37,8 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
 
     @Autowired RatingRepository ratingRepo;
     @Autowired PoliticiansRepository polRepo;
+    @Autowired RateLimitRepository rateLimitRepo;
+    @Autowired UserRateLimitService rateLimitService;
 
     PresidentialPolitician politician = new PresidentialBuilder(new Politicians.PoliticiansBuilder(POL_NUMBER())
             .setFirstName("Fake")
@@ -48,7 +57,6 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
             .build();
 
     @Test
-    @Rollback
     public void shouldThrowBadRequestWithInappropriateRaterAccountNumber() throws Exception{
         polRepo.save(politician);
         PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
@@ -59,7 +67,6 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
     }
 
     @Test
-    @Rollback
     public void shouldReturnInappropriateAccountNumberAsBody() throws Exception{
         polRepo.save(politician);
         PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
@@ -82,13 +89,13 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
         mvc.perform(get(create("/api/ratings/rating/" + savedRating.getId())))
                 .andExpect(status().isOk())
 
-                .andExpect(jsonPath("rating", equalTo(savedRating.getRating())))
-                .andExpect(jsonPath("id", equalTo(savedRating.getId().toString())))
-                .andExpect(jsonPath("politician.id", equalTo(politician.retrievePoliticianNumber())));
+                    .andExpect(jsonPath("rating", equalTo(savedRating.getRating())))
+                    .andExpect(jsonPath("id", equalTo(savedRating.getId().toString())))
+                    .andExpect(jsonPath("politician.id", equalTo(politician.retrievePoliticianNumber())));
     }
 
     @Test
-    public void shouldHaveSelfLink() throws Exception{
+    public void shouldHaveSelfLink_RateLimitLink_And_PoliticianLink() throws Exception{
         polRepo.save(politician);
         PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
 
@@ -99,6 +106,50 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
                             linkWithRel("self").description("Link that points to the rating entity"),
                             linkWithRel("rate-limit").description("Link that gives you information about the rate limit imposed on the rater"),
                             linkWithRel("politician").description("Link that points to a politician that the rating rates to"))));
+    }
+
+    @Test
+    @Transactional
+    public void shouldHaveHalTemplateToRatePoliticianAgainWhenJwtIsPresentAndUserIsNotRateLimited() throws Exception{
+        polRepo.save(politician);
+        PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
+        //make sure user is not rate limited
+        rateLimitRepo.deleteUsingIdAndPoliticianNumber(ACC_NUMBER().accountNumber(), PoliticianNumber.of(politician.retrievePoliticianNumber()));
+
+        String jwt = createJwtWithFixedExpirationDate("t@gmail.com", ACC_NUMBER().accountNumber(), "Jake");
+
+        String targetLink = linkTo(methodOn(RatingsController.class).saveRating(null, null)).withSelfRel().getHref();
+
+        mvc.perform(get(create("/api/ratings/rating/" + savedRating.getId()))
+                        .header("Authorization", "Bearer " + jwt))
+                .andExpect(content().contentType(MediaTypes.HAL_FORMS_JSON))
+
+                    .andExpect(jsonPath("_templates.default.target", containsStringIgnoringCase(targetLink)));
+    }
+
+    @Test
+    public void shouldNotHaveHalTemplatesWhenSentJwtInRequestAndIsRateLimited() throws Exception{
+        polRepo.save(politician);
+        PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
+
+        rateLimitService.rateLimitUser(AccountNumber.of(rater.returnUserAccountNumber()),
+                PoliticianNumber.of(politician.retrievePoliticianNumber()));
+
+        String jwt = createJwtWithFixedExpirationDate("t@gmail.com", ACC_NUMBER().accountNumber(), "Jake");
+
+        mvc.perform(get(create("/api/ratings/rating/" + savedRating.getId()))
+                        .header("Authorization", "Bearer " + jwt))
+                .andExpect(content().contentType(MediaTypes.HAL_FORMS_JSON))
+
+                    .andExpect(jsonPath("_templates.default").doesNotExist());
+    }
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        UserRateLimitService rateLimitService(RateLimitRepository rateLimitRepo) {
+            return new DefaultRateLimitDomainService(rateLimitRepo);
+        }
     }
 
 }
