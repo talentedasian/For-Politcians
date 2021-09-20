@@ -62,7 +62,7 @@ public class RatingsController {
 	
 	@GetMapping("/ratings/{accNumber}")
 	public ResponseEntity<CollectionModel<EntityModel<RatingDTO>>> getRatingByRaterAccountNumber(@PathVariable String accNumber) {
-		if (!AccountNumber.isValid(accNumber)) return ResponseEntity.badRequest().body(null);
+		if (!AccountNumber.isValid(accNumber)) throw new InappropriateAccountNumberException(accNumber);
 		List<RatingDTO> politicianRatingQueried = ratingService.findRatingsUsingAccountNumber(accNumber);
 
 		CollectionModel<EntityModel<RatingDTO>> response = assembler.toCollectionModel(politicianRatingQueried);

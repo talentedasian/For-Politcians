@@ -34,7 +34,7 @@ public class PoliticiansJpaEntity {
     @Column(nullable = false, name = "total_count_of_rating")
     private int totalCountRating;
 
-    @OneToMany(mappedBy = "politician")
+    @OneToMany(mappedBy = "politician", fetch = FetchType.EAGER)
     private List<PoliticiansRatingJpaEntity> politiciansRating;
 
     public String getId() {
@@ -133,6 +133,28 @@ public class PoliticiansJpaEntity {
         }
     }
 
+    public static PoliticiansJpaEntity fromWithNullRating(Politicians politician) {
+        var jpaEntity = new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
+                politician.lastName(), politician.fullName(),
+                RatingJpaEntity.from(politician.getRating()), politician.totalCountsOfRatings(),
+                null);
+        if (politician.getType() == null) {
+            return jpaEntity;
+        }
+
+        switch (politician.getType()) {
+            case PRESIDENTIAL -> {
+                var presidential = (PresidentialPolitician) politician;
+                return new PresidentialJpaEntity(jpaEntity, presidential.getMostSignificantLawSigned());
+            }
+            case SENATORIAL -> {
+                var senatorial = (SenatorialPolitician) politician;
+                return new SenatorialJpaEntity(jpaEntity, senatorial.getMostSignificantLawMade(), senatorial.getTotalMonthsOfServiceAsSenator());
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + politician.getType());
+        }
+    }
+
     @Override
     public String toString() {
         return "PoliticiansJpaEntity{" +
@@ -178,7 +200,8 @@ public class PoliticiansJpaEntity {
     }
 
     private List<PoliticiansRating> toPoliticiansRating(List<PoliticiansRatingJpaEntity> entities) {
-        return entities.stream()
+        List<PoliticiansRatingJpaEntity> ratings = entities == null ? List.of() : entities;
+        return ratings.stream()
                 .map(entity -> new PoliticiansRating.Builder()
                         .setId(id)
                         .setRating(entity.getRating())

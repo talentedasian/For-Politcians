@@ -12,7 +12,10 @@ import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.web.servlet.MvcResult;
 
+import static com.example.demo.baseClasses.MockMvcAssertions.assertThat;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static java.net.URI.create;
@@ -42,6 +45,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
             .build();
 
     @Test
+    @Rollback
     public void shouldThrowBadRequestWithInappropriateRaterAccountNumber() throws Exception{
         polRepo.save(politician);
         PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
@@ -49,6 +53,22 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
         final String inappropriateAccountNumber = String.valueOf(savedRating.getId());
         mvc.perform(get(create("/api/ratings/ratings/" + inappropriateAccountNumber)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @Rollback
+    public void shouldReturnInappropriateAccountNumberAsBody() throws Exception{
+        polRepo.save(politician);
+        PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
+
+        final String inappropriateAccountNumber = String.valueOf(savedRating.getId());
+        MvcResult response = mvc.perform(get(create("/api/ratings/ratings/" + inappropriateAccountNumber))).andReturn();
+
+        assertThat(response)
+                .hasPath("reason")
+                .isEqualTo("Inappropriate account number given")
+                .hasPath("action")
+                .isEqualTo("Check appropriate account numbers for valid account numbers");
     }
 
 }

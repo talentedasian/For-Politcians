@@ -1,5 +1,8 @@
 package com.example.demo.adapter.in.exceptionHandling;
 
+import com.example.demo.adapter.in.web.InappropriateAccountNumberException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +15,9 @@ import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.RateLimitNotFoundException;
 import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice(assignableTypes = { RatingsController.class })
 public class RatingApiExceptionHandling {
@@ -57,6 +63,18 @@ public class RatingApiExceptionHandling {
 		exceptionModel.setErr(e.getMessage());
 		
 		return new ResponseEntity<ExceptionModel>(exceptionModel, HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(InappropriateAccountNumberException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<String> handleInvalidAccountNumber(InappropriateAccountNumberException e) throws JsonProcessingException {
+		Map<String, String> body = new HashMap<>();
+		body.put("reason", "Inappropriate account number given");
+		body.put("action", "Check appropriate account numbers for valid account numbers");
+
+		String response = new ObjectMapper().writeValueAsString(body);
+
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 	
 }
