@@ -1,10 +1,10 @@
 package com.example.demo.adapter.out.jpa;
 
-import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician;
 import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.entities.PoliticiansRating;
 
 import javax.persistence.*;
 import java.util.List;
@@ -194,21 +194,16 @@ public class PoliticiansJpaEntity {
 
     private static List<PoliticiansRatingJpaEntity> fromPoliticiansRating(List<PoliticiansRating> entities) {
     return entities.stream()
-                .map(entity -> new PoliticiansRatingJpaEntity(entity.getId(), entity.getRating(),
-                        UserRaterJpaEntity.from(entity.getRater()), null))
+                .map(PoliticiansRatingJpaEntity::from)
                 .toList();
     }
 
     private List<PoliticiansRating> toPoliticiansRating(List<PoliticiansRatingJpaEntity> entities) {
-        List<PoliticiansRatingJpaEntity> ratings = entities == null ? List.of() : entities;
-        return ratings.stream()
-                .map(entity -> new PoliticiansRating.Builder()
-                        .setId(id)
-                        .setRating(entity.getRating())
-                        .setRater(entity.getRater().toUserRater())
-                        .setPolitician(null)
-                        .build())
+        if(entities == null) return List.of();
+        List<PoliticiansRating> result = entities.stream()
+                .map(entity -> entity.toRatingNullPolitician())
                 .toList();
+        return result.contains(null) ? List.of() : result;
     }
 
     public Politicians toPoliticians() {

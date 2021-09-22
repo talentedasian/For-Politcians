@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.test.web.servlet.MvcResult;
+import testAnnotations.TestBean;
 
 import javax.transaction.Transactional;
 
@@ -146,7 +147,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
 
     @TestConfiguration
     static class TestConfig {
-        @Bean
+        @TestBean
         UserRateLimitService rateLimitService(RateLimitRepository rateLimitRepo) {
             return new DefaultRateLimitDomainService(rateLimitRepo);
         }

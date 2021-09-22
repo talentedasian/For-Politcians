@@ -31,7 +31,7 @@ public class Politicians {
 	}
 
 	public List<PoliticiansRating> getPoliticiansRating() {
-		return this.politiciansRating;
+		return List.copyOf(politiciansRating);
 	}
 
 	public void setPoliticiansRating(List<PoliticiansRating> politiciansRating) {
@@ -61,7 +61,8 @@ public class Politicians {
 	protected Politicians(Name name,List<PoliticiansRating> politiciansRating, Rating rating, PoliticianNumber politicianNumber, Type polType) {
 		super();
 		this.name = name;
-		this.politiciansRating.addAll(politiciansRating);
+		this.politiciansRating.addAll(politiciansRating == null ? List.of() : politiciansRating);
+
 		this.totalCountsOfRating = politiciansRating.size();
 		this.rating = rating;
 		this.politicianNumber = politicianNumber;

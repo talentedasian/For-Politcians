@@ -1,14 +1,13 @@
 package com.example.demo.adapter.in.web;
 
+import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.service.RatingServiceAdapter;
 import com.example.demo.adapter.web.dto.RatingDTO;
-import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import com.example.demo.hateoas.RatingAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -25,8 +24,7 @@ public class RatingsController {
 	
 	private final RatingServiceAdapter ratingService;
 	private final RatingAssembler assembler;
-	
-	@Autowired(required = false)
+
 	public RatingsController(RatingServiceAdapter ratingService, RatingAssembler assembler) {
 		this.ratingService = ratingService;
 		this.assembler = assembler;

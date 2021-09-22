@@ -45,6 +45,7 @@ public class RatingService {
 
 		rating.ratePolitician(userRateLimitService);
 
+		PoliticiansRating savedRating = ratingRepo.save(rating);
 		try {
 			politicianService.updatePolitician(politician);
 		} catch (PoliticianNotPersistableException e) {
@@ -53,8 +54,7 @@ public class RatingService {
 					being updated.
 					""");
 		}
-		PoliticiansRating savedRating = ratingRepo.save(rating);
-		
+
 		return savedRating;
 	}
 

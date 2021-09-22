@@ -1,5 +1,6 @@
 package com.example.demo.adapter.out.jpa;
 
+import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.adapter.out.repository.PoliticianJpaAdapterRepository;
 import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
@@ -8,24 +9,27 @@ import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
 import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
-import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.Name;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.entities.Rating;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import testAnnotations.DatabaseTest;
 
 import java.util.List;
 
 import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
-import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
 import static com.example.demo.domain.entities.PoliticianNumber.of;
+import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
 import static java.lang.String.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,8 +48,6 @@ public class PoliticianJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase
 
         inMemoryPolRepo = new InMemoryPoliticianAdapterRepo();
     }
-
-
 
     final String FIRST_NAME = "Rodrigo";
     final String LAST_NAME = "Duterte";
@@ -194,5 +196,14 @@ public class PoliticianJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase
                         }
                     });
         }
+
+    @org.springframework.boot.test.context.TestConfiguration
+    static class TestConfiguration {
+        @Bean
+        @Primary
+        public RateLimitRepository inMemory() {
+            return new InMemoryRateLimitRepository();
+        }
+    }
 
 }

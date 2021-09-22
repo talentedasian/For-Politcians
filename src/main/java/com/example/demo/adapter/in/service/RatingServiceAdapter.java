@@ -1,15 +1,16 @@
 package com.example.demo.adapter.in.service;
 
-import com.example.demo.adapter.web.dto.RatingDTO;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
-import com.example.demo.domain.DefaultRateLimitDomainService;
-import com.example.demo.domain.RateLimitRepository;
+import com.example.demo.adapter.web.dto.RatingDTO;
+import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.entities.UserRateLimitService;
 import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
+import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import io.jsonwebtoken.Claims;
@@ -22,9 +23,11 @@ import java.util.List;
 public class RatingServiceAdapter {
 
     private final RatingService service;
+    private final PoliticiansRepository polRepo;
 
-    public RatingServiceAdapter(RatingRepository ratingRepo, RateLimitRepository rateLimitRepo, PoliticiansRepository polRepo) {
-        this.service = new RatingService(ratingRepo, polRepo, new DefaultRateLimitDomainService(rateLimitRepo));
+    public RatingServiceAdapter(RatingRepository ratingRepo, UserRateLimitService rateLimitService, PoliticiansRepository polRepo) {
+        this.service = new RatingService(ratingRepo, polRepo, rateLimitService);
+        this.polRepo = polRepo;
     }
 
     public RatingDTO findUsingId(String id) {
@@ -33,6 +36,9 @@ public class RatingServiceAdapter {
     }
 
     public RatingDTO saveRatings(AddRatingDTORequest dtoRequest, HttpServletRequest req) throws UserRateLimitedOnPoliticianException {
+        Politicians politician = polRepo.findByPoliticianNumber(dtoRequest.getId())
+                .orElseThrow(PoliticianNotFoundException::new);
+
         Claims jwts = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
 
         var rater = new UserRater.Builder()
@@ -43,6 +49,7 @@ public class RatingServiceAdapter {
                 .build();
 
         PoliticiansRating rating = new PoliticiansRating.Builder()
+                .setPolitician(politician)
                 .setRater(rater)
                 .build();
 

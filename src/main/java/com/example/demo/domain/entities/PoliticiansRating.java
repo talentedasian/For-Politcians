@@ -24,11 +24,11 @@ public class PoliticiansRating {
 		this.id = id;
 	}
 
-	public Double getRating() {
+	public double getRating() {
 		return rating;
 	}
 
-	public void setRating(Double rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 
@@ -56,7 +56,7 @@ public class PoliticiansRating {
 		super();
 	}
 
-	public PoliticiansRating(Integer id, Double rating, UserRater rater, Politicians politician) {
+	public PoliticiansRating(Integer id, double rating, UserRater rater, Politicians politician) {
 		super();
 		this.id = id;
 		this.rating = rating;
@@ -92,7 +92,7 @@ public class PoliticiansRating {
 		return other.id.equals(id) && other.rater.equals(rater);
 	}
 
-	public PoliticiansRating(Integer id, Double rating, UserRater rater, Politicians politician, RateLimitRepository rateLimitRepository) {
+	public PoliticiansRating(Integer id, double rating, UserRater rater, Politicians politician, RateLimitRepository rateLimitRepository) {
 		super();
 		this.id = id;
 		this.rating = rating;

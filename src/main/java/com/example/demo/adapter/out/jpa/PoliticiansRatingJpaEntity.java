@@ -14,7 +14,7 @@ public class PoliticiansRatingJpaEntity {
     private Integer id;
 
     @Column(nullable = false, precision = 3, scale = 2)
-    private Double rating;
+    private double rating;
 
     @Column(nullable = false)
     private UserRaterJpaEntity rater;
@@ -31,11 +31,11 @@ public class PoliticiansRatingJpaEntity {
         this.id = id;
     }
 
-    public Double getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(Double rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 
@@ -65,13 +65,19 @@ public class PoliticiansRatingJpaEntity {
     public PoliticiansRatingJpaEntity() {}
 
     public static PoliticiansRatingJpaEntity from(PoliticiansRating politicianRating) {
+        Politicians politicianFromRating = politicianRating.getPolitician();
+        var politician = politicianFromRating == null ? null : fromPoliticians(politicianFromRating);
         var entity = new PoliticiansRatingJpaEntity();
         entity.setId(politicianRating.getId());
         entity.setRating(politicianRating.getRating());
-        entity.setPolitician(fromPoliticians(politicianRating.getPolitician()));
+        entity.setPolitician(politician);
         entity.setRater(UserRaterJpaEntity.from(politicianRating.getRater()));
 
         return entity;
+    }
+
+    public PoliticiansRating toRatingNullPolitician() {
+        return rater == null ? null : new PoliticiansRating(id, rating, rater.toUserRater(), null);
     }
 
     public PoliticiansRating toRating() {

@@ -23,14 +23,6 @@ public class UserRaterJpaEntity {
     @Column(nullable = false, name = "account_number")
     private String userAccountNumber;
 
-    @Column(nullable = false)
-    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private List<RateLimitJpaEntity> rateLimits;
-
-    public List<RateLimitJpaEntity> getRateLimits() {
-        return rateLimits;
-    }
-
     private UserRaterJpaEntity() {}
 
     UserRaterJpaEntity(String name, PoliticalParty politicalParties, String email, String userAccountNumber,
@@ -39,7 +31,6 @@ public class UserRaterJpaEntity {
         this.politicalParties = politicalParties;
         this.email = email;
         this.userAccountNumber = userAccountNumber;
-        this.rateLimits = rateLimits;
     }
 
     public static UserRaterJpaEntity from(UserRater rater) {
@@ -131,7 +122,7 @@ public class UserRaterJpaEntity {
         }
 
         public UserRaterJpaEntity build() {
-            return new UserRaterJpaEntity(facebookName, politicalParties, email, userAccountNumber, rateLimits);
+            return new UserRaterJpaEntity(facebookName, politicalParties, email, userAccountNumber, null);
         }
     }
 

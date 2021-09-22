@@ -4,6 +4,7 @@ import com.example.demo.adapter.web.dto.RateLimitJpaEntity;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.RateLimit;
 import com.example.demo.domain.entities.PoliticianNumber;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,7 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
 
     private final RateLimitRepositoryJpa rateRepo;
 
+    @Autowired
     public RateLimitJpaAdapterRepository(RateLimitRepositoryJpa rateRepo) {
         this.rateRepo = rateRepo;
     }
