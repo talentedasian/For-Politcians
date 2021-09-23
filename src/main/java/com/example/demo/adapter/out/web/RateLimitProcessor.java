@@ -5,7 +5,6 @@ import com.example.demo.adapter.in.service.RateLimitingService;
 import com.example.demo.adapter.in.web.RatingsController;
 import com.example.demo.adapter.in.web.dto.RateLimitDto;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
-import com.example.demo.hateoas.RatingProcessor;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -46,7 +45,7 @@ public class RateLimitProcessor implements RepresentationModelProcessor<EntityMo
 				.build()
 				.toLink();
 		} catch (UserRateLimitedOnPoliticianException e) {
-			LoggerFactory.getLogger(RatingProcessor.class).info("""
+			LoggerFactory.getLogger("Rating Politician").info("""
 					Exception not supposed to throw. Either a problem with our 
 					code or in the Spring Hateoas Framework
 					""", e);

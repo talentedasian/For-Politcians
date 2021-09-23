@@ -13,11 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 public class ProcessorConfigurations {
 
 	@Bean
-	public RatingProcessor ratingProcessor(RateLimitRepository repository) {
-		return new RatingProcessor(repository);
-	}
-
-	@Bean
 	@RequestScope
 	public HttpServletRequestRatingProcessor httpServletRequestRatingProcessor(RateLimitRepository rateLimitRepository,
 																			   HttpServletRequest request) {
