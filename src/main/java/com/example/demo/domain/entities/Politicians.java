@@ -152,7 +152,7 @@ public class Politicians {
 		return name.lastName();
 	}
 
-    protected PoliticianNumber getPoliticianNumber() {
+    protected PoliticianNumber politicianNumber() {
 		return this.politicianNumber;
     }
 

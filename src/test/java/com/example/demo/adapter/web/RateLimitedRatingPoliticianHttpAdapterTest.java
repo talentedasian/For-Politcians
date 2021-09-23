@@ -25,6 +25,8 @@ import static java.math.BigDecimal.valueOf;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,7 +48,7 @@ public class RateLimitedRatingPoliticianHttpAdapterTest extends BaseSpringHateoa
     UserRateLimitService service;
 
     @Test
-    public void shouldReturn429WhenJwtIsValidAndIsCurrentlyRateLimited() throws Exception{
+    public void shouldHaveReturnTooManyRequestsAndLinkToRateLimit() throws Exception{
         polRepo.save(politician);
 
         var requestObject = new AddRatingDTORequest(valueOf(9.21D), politician.retrievePoliticianNumber(), GREY_ZONE.toString());
@@ -59,6 +61,27 @@ public class RateLimitedRatingPoliticianHttpAdapterTest extends BaseSpringHateoa
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + jwt))
                 .andExpect(status().isTooManyRequests())
+
+                    .andDo(document("rate-limited", links(halLinks(),
+                            linkWithRel("rate-limit").description("""
+                                    Link that points to comprehensive information about the current rate limit
+                                    imposed on the user/rater.
+                                    """))));
+    }
+
+    @Test
+    public void shouldReturn429WhenJwtIsValidAndIsCurrentlyRateLimited() throws Exception{
+        polRepo.save(politician);
+
+        var requestObject = new AddRatingDTORequest(valueOf(9.21D), politician.retrievePoliticianNumber(), GREY_ZONE.toString());
+        String requestJsonString = new ObjectMapper().writeValueAsString(requestObject);
+
+        String jwt = createJwtWithFixedExpirationDate("t@gmail.com", ACC_NUMBER().accountNumber(), "Jake");
+
+        mvc.perform(post(create("/api/ratings/rating"))
+                        .content(requestJsonString)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwt))
 
                     .andExpect(jsonPath("err", containsStringIgnoringCase("can rate again after 7 days")))
                     .andExpect(jsonPath("code", equalTo("429")));
