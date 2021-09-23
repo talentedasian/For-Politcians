@@ -21,15 +21,18 @@ import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static com.example.demo.domain.enums.PoliticalParty.GREY_ZONE;
 import static java.math.BigDecimal.valueOf;
 import static java.net.URI.create;
+import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class RatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
+public class RateLimitedRatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
-    @Autowired RatingRepository ratingRepo;
-    @Autowired PoliticiansRepository polRepo;
+    @Autowired
+    RatingRepository ratingRepo;
+    @Autowired
+    PoliticiansRepository polRepo;
     @Autowired UserRateLimitService rateLimitService;
 
     PoliticianTypes.PresidentialPolitician politician = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(new Politicians.PoliticiansBuilder(POL_NUMBER())
@@ -48,17 +51,11 @@ public class RatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
             .setRating(2d)
             .build();
 
-    @Test
-    public void whenRatingPolitician_RatingShouldImmediatelyReflectOnPolitician() throws Exception{
-        double EXPECTED_AVERAGE_RATING_AFTER_RATE = 3.803D;
+    @Autowired
+    UserRateLimitService service;
 
-        polRepo.save(politician);
-        politiciansRating.ratePolitician(rateLimitService);
-        politiciansRating.ratePolitician(rateLimitService);
-        politiciansRating.ratePolitician(rateLimitService);
-        ratingRepo.save(politiciansRating);
-        ratingRepo.save(politiciansRating);
-        ratingRepo.save(politiciansRating);
+    @Test
+    public void shouldReturn429WhenJwtIsValidAndIsCurrentlyRateLimited() throws Exception{
         polRepo.save(politician);
 
         var requestObject = new AddRatingDTORequest(valueOf(9.21D), politician.retrievePoliticianNumber(), GREY_ZONE.toString());
@@ -67,21 +64,23 @@ public class RatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
         String jwt = createJwtWithFixedExpirationDate("t@gmail.com", ACC_NUMBER().accountNumber(), "Jake");
 
         mvc.perform(post(create("/api/ratings/rating"))
-                    .content(requestJsonString)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("Authorization", "Bearer " + jwt))
-                .andExpect(status().isCreated())
+                        .content(requestJsonString)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwt))
+                .andExpect(status().isTooManyRequests())
 
-                    .andExpect(jsonPath("politician.rating", equalTo(EXPECTED_AVERAGE_RATING_AFTER_RATE)));
+                    .andExpect(jsonPath("err", containsStringIgnoringCase("can rate again after 7 days")))
+                    .andExpect(jsonPath("code", equalTo("429")));
     }
 
     @TestConfiguration
-    static class TestConfig {
+    static class Config{
         @Bean
         @Primary
-        UserRateLimitService unliRateService() {
-            return FakeDomainService.unliRateService();
+        UserRateLimitService noRateService() {
+            return FakeDomainService.noRateService();
         }
     }
 
 }
+
