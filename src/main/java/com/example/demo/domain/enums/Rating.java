@@ -1,34 +1,33 @@
 package com.example.demo.domain.enums;
 
+import com.example.demo.domain.averageCalculator.DecentSatisfactionAverageCalculator;
+import com.example.demo.domain.averageCalculator.HighSatisfactionAverageCalculator;
+import com.example.demo.domain.averageCalculator.LowSatisfactionAverageCalculator;
+
+import java.math.BigDecimal;
+
 public enum Rating {
-	
-	LOW("Disastisifed"), DECENT("Satisfied"), HIGH("Highly Satisfied");
 
-	private String satisfaction;
-	private int satisfactionRate;
-	
-	public String getSatisfaction() {
-		return satisfaction;
-	}
+	LOW {
+		public double calculate(BigDecimal totalRating, int count) {
+			return new LowSatisfactionAverageCalculator(totalRating.doubleValue(), count).calculateAverage();
+		}
+	},
 
-	public void setSatisfaction(String satisfaction) {
-		this.satisfaction = satisfaction;
-	}
+	DECENT {
+		public double calculate(BigDecimal totalRating, int count) {
+			return new DecentSatisfactionAverageCalculator(totalRating.doubleValue(), count).calculateAverage();
+		}
+	},
 
-	public int getSatisfactionRate() {
-		return satisfactionRate;
-	}
+	HIGH {
+		public double calculate(BigDecimal totalRating, int count) {
+			return new HighSatisfactionAverageCalculator(totalRating.doubleValue(), count).calculateAverage();
+		}
+	};
 
+	public abstract double calculate(BigDecimal totalRating, int count);
 
-	public void setSatisfactionRate(int satisfactionRate) {
-		this.satisfactionRate = satisfactionRate;
-	}
-
-
-	Rating(String satisfaction) {
-		this.satisfaction = satisfaction;
-	}
-	
 	public static Rating mapToSatisfactionRate(Double rating) {
 		if (rating < 5D) {
 			Rating satisfaction = Rating.LOW;
@@ -40,7 +39,7 @@ public enum Rating {
 			Rating satisfaction = Rating.HIGH;
 			return satisfaction;
 		}
-		
+
 		return null;
 	}
 	

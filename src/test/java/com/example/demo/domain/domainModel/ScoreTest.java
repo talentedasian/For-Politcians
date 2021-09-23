@@ -9,12 +9,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class ScoreTest {
 
     @Test
-    public void returnRatingSet() throws Exception{
-        double RATING_LESS_THAN_10 = 9d;
-        double rating = Score.of(RATING_LESS_THAN_10).rating();
+    public void returnScoreSet() throws Exception{
+        double VALID_SCORE = 9d;
+        double score = com.example.demo.domain.Score.of(VALID_SCORE).rating();
 
-        assertThat(rating)
-                .isEqualTo(RATING_LESS_THAN_10);
+        assertThat(score)
+                .isEqualTo(VALID_SCORE);
     }
 
     @Test
