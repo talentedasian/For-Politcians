@@ -40,6 +40,7 @@ public class Rating {
 	private void calculateTotalRating(Double ratingToAdd) {
 		this.totalRating = calculateTotalAmountOfRating(ratingToAdd);
 	}
+
 	public double calculateTotalAmountOfRating(Double ratingToAdd) {
 		if (totalRating == null || totalRating == 0D) {
 			return BigDecimal.valueOf(ratingToAdd)

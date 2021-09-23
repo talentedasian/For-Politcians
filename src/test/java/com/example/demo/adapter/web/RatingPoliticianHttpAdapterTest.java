@@ -21,7 +21,9 @@ import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static com.example.demo.domain.enums.PoliticalParty.GREY_ZONE;
 import static java.math.BigDecimal.valueOf;
 import static java.net.URI.create;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class RatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
@@ -32,7 +34,7 @@ public class RatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
     PoliticianTypes.PresidentialPolitician politician = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(new Politicians.PoliticiansBuilder(POL_NUMBER())
             .setFirstName("Fake")
-            .setRating(new Rating(4D, 4.989D)))
+            .setRating(new Rating(0D, 0D)))
             .build();
 
     UserRater rater = new UserRater.Builder()
@@ -48,7 +50,7 @@ public class RatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
     @Test
     public void whenRatingPolitician_RatingShouldImmediatelyReflectOnPolitician() throws Exception{
-//        double EXPECTED_AVERAGE_RATING_AFTER_RATE =
+        double EXPECTED_AVERAGE_RATING_AFTER_RATE = 3.803D;
 
         polRepo.save(politician);
         politiciansRating.ratePolitician(rateLimitService);
@@ -68,7 +70,9 @@ public class RatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
                     .content(requestJsonString)
                     .contentType(MediaType.APPLICATION_JSON)
                     .header("Authorization", "Bearer " + jwt))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+
+                .andExpect(jsonPath("politician.rating", equalTo(EXPECTED_AVERAGE_RATING_AFTER_RATE)));
 
     }
 

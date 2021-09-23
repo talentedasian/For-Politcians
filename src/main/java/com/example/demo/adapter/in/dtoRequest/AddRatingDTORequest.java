@@ -54,10 +54,6 @@ public class AddRatingDTORequest {
 		this.politicalParty = politicalParty;
 	}
 
-	public AddRatingDTORequest() {
-		super();
-	}
-
 	@ExcludeFromJacocoGeneratedCoverage
 	@Override
 	public String toString() {

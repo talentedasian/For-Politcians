@@ -3,10 +3,8 @@ package com.example.demo.adapter.in.service;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.entities.AccountNumber;
-import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.UserRateLimitService;
-import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,14 +38,11 @@ public class RatingService {
 	
 	@Transactional
 	public PoliticiansRating saveRatings(PoliticiansRating rating) throws UserRateLimitedOnPoliticianException {
-		Politicians politician = politicianService.findPoliticianByNumber(rating.getPolitician().retrievePoliticianNumber())
-				.orElseThrow(PoliticianNotFoundException::new);
-
 		rating.ratePolitician(userRateLimitService);
 
 		PoliticiansRating savedRating = ratingRepo.save(rating);
 		try {
-			politicianService.updatePolitician(politician);
+			politicianService.updatePolitician(rating.getPolitician());
 		} catch (PoliticianNotPersistableException e) {
 			Logger.getLogger("PoliticiansLogger").warning("""
 					Save method should have not thrown an exception because politician should already be in the database before
