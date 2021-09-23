@@ -1,6 +1,7 @@
 package com.example.demo.adapter.web;
 
 import com.example.demo.BaseSpringHateoasTest;
+import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.RatingsController;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
@@ -13,9 +14,10 @@ import com.example.demo.domain.enums.PoliticalParty;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import testAnnotations.TestBean;
 
 import javax.transaction.Transactional;
@@ -24,6 +26,8 @@ import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.create
 import static com.example.demo.baseClasses.MockMvcAssertions.assertThat;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
+import static com.example.demo.domain.enums.PoliticalParty.GREY_ZONE;
+import static java.math.BigDecimal.valueOf;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -32,6 +36,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class RatingsControllerTest extends BaseSpringHateoasTest {
@@ -80,6 +85,33 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
                 .isEqualTo("Inappropriate account number given")
                 .hasPath("action")
                 .isEqualTo("Check appropriate account numbers for valid account numbers");
+    }
+
+    @Test
+    @Transactional
+    public void shouldSaveToDatabaseAndReturn201Created() throws Exception{
+        polRepo.save(politician);
+        //make sure user is not rate limited
+        rateLimitRepo.deleteUsingIdAndPoliticianNumber(ACC_NUMBER().accountNumber(), PoliticianNumber.of(politician.retrievePoliticianNumber()));
+
+        double RATING = 9.21D;
+        var requestObject = new AddRatingDTORequest(valueOf(RATING), politician.retrievePoliticianNumber(), GREY_ZONE.toString());
+        String requestJsonString = new ObjectMapper().writeValueAsString(requestObject);
+
+        String NAME = "Jake";
+        String ID = ACC_NUMBER().accountNumber();
+        String EMAIL = "t@gmail.com";
+        String jwt = createJwtWithFixedExpirationDate(EMAIL, ID, NAME);
+
+        mvc.perform(post(create("/api/ratings/rating/"))
+                        .content(requestJsonString)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwt))
+                .andExpect(content().contentType(MediaTypes.HAL_FORMS_JSON))
+
+                .andExpect(jsonPath("rater.account_number", equalTo(ID)))
+                .andExpect(jsonPath("rater.name", equalTo(NAME)))
+                .andExpect(jsonPath("rating", equalTo(RATING)));
     }
 
     @Test

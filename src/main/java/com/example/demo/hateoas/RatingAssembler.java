@@ -1,5 +1,6 @@
 package com.example.demo.hateoas;
 
+import com.example.demo.adapter.in.web.PoliticianController;
 import com.example.demo.adapter.web.dto.RatingDTO;
 import com.example.demo.adapter.in.web.RatingsController;
 import org.springframework.hateoas.CollectionModel;
@@ -22,6 +23,10 @@ public class RatingAssembler implements SimpleRepresentationModelAssembler<Ratin
 		resource.add(linkTo(methodOn(RatingsController.class)
 				.getRatingById(content.getId()))
 			.withSelfRel());
+
+		resource.add(linkTo(methodOn(PoliticianController.class)
+				.politicianById(content.getPolitician().getId()))
+				.withRel("politician"));
 
 		resource.add(Link.of(String.format("http://localhost:8080/rate-limit/accNumber?=%s&politician=%s",
 						content.getId(), content.getPolitician().getId()))
