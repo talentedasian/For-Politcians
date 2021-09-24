@@ -1,5 +1,6 @@
 package com.example.demo.domain.entities;
 
+import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.averageCalculator.Calculator;
 
 import java.math.BigDecimal;
@@ -27,6 +28,11 @@ public class Rating {
 	public Rating(Double totalRating, Double averageRating) {
 		this.totalRating = totalRating;
 		this.averageRating = averageRating;
+	}
+
+	public Rating(Double totalRating, AverageRating averageRating) {
+		this.totalRating = totalRating;
+		this.averageRating = averageRating.rating();
 	}
 	
 	public double calculateAverage(double ratingToAdd, Calculator calculator){

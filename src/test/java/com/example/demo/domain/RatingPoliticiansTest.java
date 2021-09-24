@@ -10,6 +10,8 @@ import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
 import static com.example.demo.baseClasses.BuilderFactory.createRater;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
@@ -29,7 +31,7 @@ public class RatingPoliticiansTest {
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
             .setPoliticiansRating(null)
-            .setRating(new Rating(0D, 0D));
+            .setRating(new Rating(0D, AverageRating.of(BigDecimal.valueOf(0.1D))));
 
     @BeforeEach
     public void setup() {
