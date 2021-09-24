@@ -4,12 +4,23 @@ import org.springframework.util.Assert;
 
 public class Score {
 
+    static final int MINIMUM = 0;
+    static final int MAXIMUM = 10;
+
     private final double rating;
 
     Score(double rating) {
-        Assert.state(rating > 0, "must be greater than 0");
-        Assert.state(rating < 10, "must be less than 10");
+        Assert.state(isRatingGreaterThanMinimum(rating), "must be greater than 0");
+        if (!isRatingLessThanMaximum(rating)) throw new ScoreHasExceededMaximumValueException();
         this.rating = rating;
+    }
+
+    private boolean isRatingLessThanMaximum(double rating) {
+        return rating < MAXIMUM;
+    }
+
+    private boolean isRatingGreaterThanMinimum(double rating) {
+        return rating > MINIMUM;
     }
 
     public static Score of(double rating) {

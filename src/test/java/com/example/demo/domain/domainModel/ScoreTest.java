@@ -1,6 +1,7 @@
 package com.example.demo.domain.domainModel;
 
 import com.example.demo.domain.Score;
+import com.example.demo.domain.ScoreHasExceededMaximumValueException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,13 +29,13 @@ public class ScoreTest {
     }
 
     @Test
-    public void throwIllegalStateExceptionIfScoreIsGreaterThan10() throws Exception{
-        assertThatThrownBy(() -> Score.of(11)).isInstanceOf(IllegalStateException.class);
+    public void throwScoreHasExceededMaximumValueExceptionIfScoreIsGreaterThan10() throws Exception{
+        assertThatThrownBy(() -> Score.of(11)).isInstanceOf(ScoreHasExceededMaximumValueException.class);
     }
 
     @Test
-    public void throwIllegalStateExceptionIfScoreIsGreaterThan10RegardlessOfHowLargeItIs() throws Exception{
-        assertThatThrownBy(() -> Score.of(3217321)).isInstanceOf(IllegalStateException.class);
+    public void throwScoreHasExceededMaximumValueExceptionIfScoreIsGreaterThan10RegardlessOfHowLargeItIs() throws Exception{
+        assertThatThrownBy(() -> Score.of(3217321)).isInstanceOf(ScoreHasExceededMaximumValueException.class);
     }
 
 }
