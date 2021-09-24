@@ -1,5 +1,6 @@
 package com.example.demo.baseClasses;
 
+import com.example.demo.domain.Score;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
@@ -22,6 +23,15 @@ public class BuilderFactory {
         return new PoliticiansRating.Builder()
                 .setId("1")
                 .setRating(rating)
+                .setRater(rater)
+                .setPolitician(politicians)
+                .build();
+    }
+
+    public static PoliticiansRating createPolRating(Score score, UserRater rater, Politicians politicians) {
+        return new PoliticiansRating.Builder()
+                .setId("1")
+                .setRating(score.rating())
                 .setRater(rater)
                 .setPolitician(politicians)
                 .build();

@@ -2,8 +2,6 @@ package com.example.demo.domain;
 
 import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.baseClasses.NumberTestFactory;
-import com.example.demo.domain.DefaultRateLimitDomainService;
-import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.Politicians;
@@ -46,7 +44,7 @@ public class RatingPoliticiansTest {
 
         var rater = createRater(ACC_NUMBER().accountNumber());
 
-        var rating = createPolRating(4.97654D, rater, politician);
+        var rating = createPolRating(Score.of(4.97654d), rater, politician);
 
         rating.ratePolitician(defaultRateLimitDomainService);
 
@@ -61,7 +59,7 @@ public class RatingPoliticiansTest {
 
         var rater = createRater(ACC_NUMBER().accountNumber());
 
-        var rating = createPolRating(4.97654D, rater, politician);
+        var rating = createPolRating(Score.of(4.97654d), rater, politician);
 
         rating.ratePolitician(defaultRateLimitDomainService);
 
