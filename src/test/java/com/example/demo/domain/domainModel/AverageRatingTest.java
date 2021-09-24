@@ -1,6 +1,7 @@
 package com.example.demo.domain.domainModel;
 
 import com.example.demo.domain.AverageRating;
+import com.example.demo.domain.AverageRatingMaximumValueException;
 import com.example.demo.domain.ScoreHasExceededMaximumValueException;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,14 @@ public class AverageRatingTest {
 
         assertThat(averageRating)
                 .isEqualTo(VALID_AVERAGE_RATING.doubleValue());
+    }
+
+    @Test
+    public void shouldScoreHasExceededMaximumValueException() throws Exception{
+        ThrowableAssert.ThrowingCallable shouldThrowAverageRating = () -> AverageRating.of(valueOf(2131));
+
+        assertThatThrownBy(shouldThrowAverageRating)
+                .hasCauseInstanceOf(AverageRatingMaximumValueException.class);
     }
 
     @Test
@@ -78,8 +87,6 @@ public class AverageRatingTest {
 
     @Test
     public void shouldThrowScoreHasExceededMaximumValueExceptionIfAverageRatingExceeds10() throws Exception{
-        double EXPECTED_AVERAGE_RATING = 4.827;
-
         BigDecimal TOTAL_RATING_ACCUMULATED = valueOf(2891.23123);
 
         ThrowableAssert.ThrowingCallable shouldThrowAverageRating =
