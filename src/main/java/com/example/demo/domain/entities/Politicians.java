@@ -1,6 +1,7 @@
 package com.example.demo.domain.entities;
 
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.domain.Score;
 import com.example.demo.domain.averageCalculator.AverageCalculator;
 import com.example.demo.domain.averageCalculator.DecentSatisfactionAverageCalculator;
 import com.example.demo.domain.averageCalculator.HighSatisfactionAverageCalculator;
@@ -107,6 +108,12 @@ public class Politicians {
 	public double calculateAverageRating(double ratingToAdd) {
 		double rating = getRating().calculateAverage(ratingToAdd,
 				returnAverageCalculator(getRating().getAverageRating(), getRating().calculateTotalAmountOfRating(ratingToAdd)));
+		return rating;
+	}
+
+	public double calculateAverageRating(Score ratingToAdd) {
+		double rating = getRating().calculateAverage(ratingToAdd.rating(),
+				returnAverageCalculator(getRating().getAverageRating(), getRating().calculateTotalAmountOfRating(ratingToAdd.rating())));
 		return rating;
 	}
 

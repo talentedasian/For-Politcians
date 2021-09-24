@@ -1,6 +1,8 @@
 package com.example.demo.domain.entities;
 
 import com.example.demo.baseClasses.NumberTestFactory;
+import com.example.demo.domain.AverageRating;
+import com.example.demo.domain.Score;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
@@ -13,6 +15,7 @@ import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
 import static com.example.demo.baseClasses.BuilderFactory.createRater;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
+import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -24,7 +27,7 @@ public class PoliticiansTest {
 	PoliticiansBuilder politicianBuilder = new PoliticiansBuilder(POLITICIAN_NUMBER)
 			.setFirstName("Test")
 			.setLastName("Name")
-			.setRating(new Rating(0D, 0D));
+			.setRating(new Rating(0D, AverageRating.of(valueOf(1d))));
 
 	@Test
 	public void testNullLastNameInBuilder() {
@@ -72,7 +75,7 @@ public class PoliticiansTest {
 		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
 		Politicians politician = politicianBuilder.build();
-		var rating = createPolRating(2.243, rater, politician);
+		var rating = createPolRating(Score.of(2.243), rater, politician);
 
 		politician.rate(rating);
 		politician.rate(rating);
@@ -90,7 +93,7 @@ public class PoliticiansTest {
 		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
 		Politicians politician = politicianBuilder.build();
-		var rating = createPolRating(2.243, rater, politician);
+		var rating = createPolRating(Score.of(2.243), rater, politician);
 
 		politician.rate(rating);
 		politician.rate(rating);
@@ -107,13 +110,13 @@ public class PoliticiansTest {
 
 		var rater = createRater(ACC_NUMBER().accountNumber());
 
-		var justHereToPutIncreaseSize = createPolRating(1D, rater, politicianBuilder.build());
+		var justHereToPutIncreaseSize = createPolRating(Score.of(1), rater, politicianBuilder.build());
 
 		Politicians politician = politicianBuilder
-				.setRating(new Rating(3D, 2.231D))
+				.setRating(new Rating(3D, AverageRating.of(valueOf(2.231))))
 				.setPoliticiansRating(List.of(justHereToPutIncreaseSize, justHereToPutIncreaseSize)).build();
 
-		politician.calculateAverageRating(1D);
+		politician.calculateAverageRating(Score.of(1d));
 
 		assertThat(politician.averageRating())
 				.isEqualTo(EXPECTED_AVERAGE_RATING);
@@ -128,10 +131,10 @@ public class PoliticiansTest {
 		var justHereToPutIncreaseSize = createPolRating(1D, rater, politicianBuilder.build());
 
 		Politicians politician = politicianBuilder
-				.setRating(new Rating(3D, 2.231D))
+				.setRating(new Rating(3D, AverageRating.of(valueOf(2.231))))
 				.setPoliticiansRating(List.of(justHereToPutIncreaseSize, justHereToPutIncreaseSize, justHereToPutIncreaseSize)).build();
 
-		var actualRating = createPolRating(3.2232, rater, politician);
+		var actualRating = createPolRating(Score.of(3.2232), rater, politician);
 
 		politician.rate(actualRating);
 
