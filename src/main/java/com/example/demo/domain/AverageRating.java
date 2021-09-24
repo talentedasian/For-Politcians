@@ -4,6 +4,12 @@ import com.example.demo.domain.enums.Rating;
 
 import java.math.BigDecimal;
 
+/**
+ * An Average Rating does not equal to a Score. That is there
+ * to since an average rating behaves exactly like a score
+ * and can also be used as a score of a politician. But
+ * average rating is a much better name.
+ */
 public class AverageRating extends Score{
 
     private AverageRating(double rating) {

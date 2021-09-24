@@ -2,6 +2,10 @@ package com.example.demo.domain;
 
 import org.springframework.util.Assert;
 
+/**
+ * A score is the rating that a user has for a politician e.g. 2.131
+ *
+ */
 public class Score {
 
     static final int MINIMUM = 0;
