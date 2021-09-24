@@ -19,10 +19,23 @@ public class AverageRating extends Score{
                 total rating accumulated must be greater than 0
                 """);
         if (isCountZero(count)) throw new IllegalStateException("count must be greater than 0");
+
         double averageRatingCalculated = Rating.mapToSatisfactionRate(previousAverageRating.rating())
                 .calculate(totalRatingAccumulated, count);
 
+        if (averageRatingGreaterThanTen(averageRatingCalculated))
+            throw new ScoreHasExceededMaximumValueException("""
+                    Average rating to be calculated will be larger than 10. Average ratings must only be
+                    greater than 0 and less than 10. This often happens when a rating has exceeded the max
+                    Score applied which is 10. 
+                    """);
+
         return new AverageRating(averageRatingCalculated);
+    }
+
+    private static boolean averageRatingGreaterThanTen(double averageRating) {
+        BigDecimal LIMIT = BigDecimal.TEN;
+        return BigDecimal.valueOf(averageRating).compareTo(LIMIT) >= 1;
     }
 
     private static boolean isCountZero(int count) {
