@@ -3,6 +3,7 @@ package com.example.demo.adapter.out.jpa;
 import com.example.demo.adapter.out.repository.PoliticianJpaAdapterRepository;
 import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
+import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import testAnnotations.DatabaseTest;
+
+import java.math.BigDecimal;
 
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +34,7 @@ public class PolymorphicPoliticianPersistenceTest extends BaseClassTestsThatUses
     Politicians politician = new Politicians.PoliticiansBuilder(POL_NUMBER())
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
-            .setRating(new Rating(0D, 0D))
+            .setRating(new Rating(0D, AverageRating.of(BigDecimal.valueOf(1))))
             .setPoliticiansRating(null)
             .build();
 

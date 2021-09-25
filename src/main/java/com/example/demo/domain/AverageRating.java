@@ -7,11 +7,11 @@ import java.math.BigDecimal;
 
 public record AverageRating(double rating) {
 
-    private static final double MINIMUM = 0.01;
+    private static final double MINIMUM = 0;
     private static final int MAXIMUM = 10;
 
     public AverageRating {
-        Assert.state(isRatingGreaterThanMinimum(rating), "must be greater than 0");
+        Assert.state(isRatingGreaterThanMinimum(rating), "rating must not be less than 0");
         maximumRatingValidation(rating);
     }
 
@@ -24,7 +24,7 @@ public record AverageRating(double rating) {
     }
 
     private boolean isRatingGreaterThanMinimum(double rating) {
-        return rating > MINIMUM;
+        return rating >= MINIMUM;
     }
 
     public static AverageRating of(BigDecimal averageRating) {

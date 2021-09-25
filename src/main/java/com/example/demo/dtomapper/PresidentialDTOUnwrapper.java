@@ -2,15 +2,13 @@ package com.example.demo.dtomapper;
 
 import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.adapter.in.dtoRequest.AddPresidentialPoliticianDTORequest;
-import com.example.demo.domain.entities.Rating;
-import com.example.demo.domain.entities.Name;
-import com.example.demo.domain.entities.PoliticianNumber;
-import com.example.demo.domain.entities.PoliticianTypes;
-import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.AverageRating;
+import com.example.demo.domain.entities.*;
 import io.jsonwebtoken.lang.Assert;
 
-import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
 import static com.example.demo.domain.entities.Politicians.Type.PRESIDENTIAL;
+import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
+import static java.math.BigDecimal.valueOf;
 
 class PresidentialDTOUnwrapper extends PoliticianDTOUnwrapper {
 
@@ -30,7 +28,7 @@ class PresidentialDTOUnwrapper extends PoliticianDTOUnwrapper {
                 .setFirstName(dto.getFirstName())
                 .setLastName(dto.getLastName())
                 .setFullName()
-                .setRating(new Rating(0.00D, 0.00D))
+                .setRating(new Rating(0.00D, AverageRating.of(valueOf(0))))
                 .setPoliticiansRating(null)
                 .build();
 
