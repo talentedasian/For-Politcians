@@ -3,13 +3,14 @@ package com.example.demo.collaboration;
 import com.example.demo.adapter.in.service.PoliticiansService;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.baseClasses.NumberTestFactory;
+import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
 import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
-import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.entities.PoliticianTypes;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.entities.Rating;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
+import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -33,7 +35,7 @@ public class PoliticianApplicationServiceTest {
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
             .setPoliticiansRating(null)
-            .setRating(new Rating(0D, 0D));
+            .setRating(new Rating(0D, AverageRating.of(valueOf(0))));
 
     @BeforeEach
     public void setup() {

@@ -3,13 +3,14 @@ package com.example.demo.adapter.web;
 import com.example.demo.adapter.in.web.PoliticianServiceAdapter;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.web.dto.PoliticianDto;
+import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
 import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
-import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.entities.Name;
 import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.entities.Rating;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.AfterEach;
@@ -21,8 +22,9 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
-import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
 import static com.example.demo.domain.entities.Politicians.Type.PRESIDENTIAL;
+import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
+import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PoliticianPaginationServiceAdapterTest {
@@ -43,7 +45,7 @@ public class PoliticianPaginationServiceAdapterTest {
                 .setFirstName(FIRST_NAME)
                 .setLastName(LAST_NAME)
                 .setFullName()
-                .setRating(new Rating(0D, 0D));
+                .setRating(new Rating(0D, AverageRating.of(valueOf(0))));
 
         polRepo = new InMemoryPoliticianAdapterRepo();
     }

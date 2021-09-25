@@ -5,6 +5,8 @@ import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.baseClasses.FakeDomainService;
+import com.example.demo.domain.AverageRating;
+import com.example.demo.domain.Score;
 import com.example.demo.domain.entities.*;
 import com.example.demo.domain.enums.PoliticalParty;
 import org.junit.jupiter.api.Test;
@@ -34,7 +36,7 @@ public class RatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
     PoliticianTypes.PresidentialPolitician politician = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(new Politicians.PoliticiansBuilder(POL_NUMBER())
             .setFirstName("Fake")
-            .setRating(new Rating(0D, 0D)))
+            .setRating(new Rating(0D, AverageRating.of(valueOf(0)))))
             .build();
 
     UserRater rater = new UserRater.Builder()
@@ -45,7 +47,7 @@ public class RatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
             .build();
     PoliticiansRating politiciansRating = new PoliticiansRating.Builder(politician)
             .setRater(rater)
-            .setRating(2d)
+            .setRating(Score.of(2))
             .build();
 
     @Test

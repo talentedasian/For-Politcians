@@ -128,7 +128,7 @@ public class PoliticiansTest {
 
 		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
-		var justHereToPutIncreaseSize = createPolRating(1D, rater, politicianBuilder.build());
+		var justHereToPutIncreaseSize = createPolRating(Score.of(1), rater, politicianBuilder.build());
 
 		Politicians politician = politicianBuilder
 				.setRating(new Rating(3D, AverageRating.of(valueOf(2.231))))

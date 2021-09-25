@@ -6,7 +6,6 @@ import com.example.demo.adapter.in.web.RatingsController;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.AverageRating;
-import com.example.demo.domain.DefaultRateLimitDomainService;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.Score;
 import com.example.demo.domain.entities.*;
@@ -15,12 +14,10 @@ import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.P
 import com.example.demo.domain.enums.PoliticalParty;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
-import testAnnotations.TestBean;
 
 import javax.transaction.Transactional;
 

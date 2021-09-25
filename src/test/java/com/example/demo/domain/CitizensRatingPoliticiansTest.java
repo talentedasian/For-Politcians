@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
 import static com.example.demo.baseClasses.BuilderFactory.createRater;
+import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /*
@@ -43,7 +44,7 @@ public class CitizensRatingPoliticiansTest {
                 .setFirstName("Random")
                 .setLastName("Name")
                 .setFullName()
-                .setRating(new Rating(0D, 0D));
+                .setRating(new Rating(0D, AverageRating.of(valueOf(0))));
 
         politicians = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder).build();
     }
@@ -55,8 +56,8 @@ public class CitizensRatingPoliticiansTest {
         var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
 
-        var firstRating = createPolRating(2.243, rater, politicians);
-        var fourScaledRatingForHalfDownRoundingMode = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
+        var firstRating = createPolRating(Score.of(2.243), rater, politicians);
+        var fourScaledRatingForHalfDownRoundingMode = createPolRating(Score.of(3.22326), raterThatsNotRateLimited, politicians);
 
         firstRating.ratePolitician(fakeDomainService);
         fourScaledRatingForHalfDownRoundingMode.ratePolitician(fakeDomainService);
@@ -73,9 +74,9 @@ public class CitizensRatingPoliticiansTest {
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
         var secondRaterThatsNotRateLimited = createRater("FLPOM-000120312");
 
-        var firstRating = createPolRating(2.243, rater, politicians);
-        var fourScaledRating = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
-        var threeScaledRating = createPolRating(6.223, secondRaterThatsNotRateLimited, politicians);
+        var firstRating = createPolRating(Score.of(2.243), rater, politicians);
+        var fourScaledRating = createPolRating(Score.of(3.22326), raterThatsNotRateLimited, politicians);
+        var threeScaledRating = createPolRating(Score.of(6.223), secondRaterThatsNotRateLimited, politicians);
 
         firstRating.ratePolitician(fakeDomainService);
         fourScaledRating.ratePolitician(fakeDomainService);
@@ -93,8 +94,8 @@ public class CitizensRatingPoliticiansTest {
 
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
 
-        var firstRating = createPolRating(2.243, rater, politicians);
-        var secondRating = createPolRating(3.22326, raterThatsNotRateLimited, politicians);
+        var firstRating = createPolRating(Score.of(2.243), rater, politicians);
+        var secondRating = createPolRating(Score.of(3.22326), raterThatsNotRateLimited, politicians);
 
         firstRating.ratePolitician(fakeDomainService);
         secondRating.ratePolitician(fakeDomainService);
@@ -111,8 +112,8 @@ public class CitizensRatingPoliticiansTest {
 
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
 
-        var firstRating = createPolRating(2.243, rater, politicians);
-        var secondRating = createPolRating(3.2232, raterThatsNotRateLimited, politicians);
+        var firstRating = createPolRating(Score.of(2.243), rater, politicians);
+        var secondRating = createPolRating(Score.of(3.2232), raterThatsNotRateLimited, politicians);
 
         firstRating.ratePolitician(fakeDomainService);
         secondRating.ratePolitician(fakeDomainService);

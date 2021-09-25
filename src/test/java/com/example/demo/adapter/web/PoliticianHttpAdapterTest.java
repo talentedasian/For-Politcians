@@ -4,18 +4,18 @@ import com.example.demo.BaseSpringHateoasTest;
 import com.example.demo.adapter.out.jpa.PoliticiansJpaEntity;
 import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
-import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.entities.Name;
 import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
+import com.example.demo.domain.entities.Rating;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
@@ -26,10 +26,11 @@ import java.net.URI;
 import static com.example.demo.baseClasses.MockMvcAssertions.assertThat;
 import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
 import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupSenatorial;
+import static com.example.demo.domain.entities.Politicians.Type.PRESIDENTIAL;
 import static com.example.demo.domain.enums.Rating.HIGH;
 import static com.example.demo.domain.enums.Rating.LOW;
 import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
-import static com.example.demo.domain.entities.Politicians.Type.PRESIDENTIAL;
+import static java.math.BigDecimal.valueOf;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
@@ -72,7 +73,7 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
                 .setFirstName(FIRST_NAME)
                 .setLastName(LAST_NAME)
                 .setFullName()
-                .setRating(new Rating(0D, 0D));
+                .setRating(new Rating(0D, AverageRating.of(valueOf(0))));
     }
 
     @AfterEach
@@ -141,7 +142,7 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
                 .setMostSignificantLawPassed("Random Law").build();
         var senatorial = new SenatorialBuilder(politicianBuilder
                             .setPoliticianNumber(POLITICIAN_NUMBER.politicianNumber() + "1")
-                            .setRating(new Rating(2D, 9D)))
+                            .setRating(new Rating(2D, AverageRating.of(valueOf(9)))))
                 .setTotalMonthsOfService(44).build();
 
         polRepo.save(presidential);

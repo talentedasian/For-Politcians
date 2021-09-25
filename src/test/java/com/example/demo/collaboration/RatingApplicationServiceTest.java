@@ -5,10 +5,7 @@ import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.baseClasses.BuilderFactory;
-import com.example.demo.domain.DefaultRateLimitDomainService;
-import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
-import com.example.demo.domain.InMemoryRatingAdapterRepo;
-import com.example.demo.domain.RateLimitRepository;
+import com.example.demo.domain.*;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.Politicians;
@@ -24,6 +21,7 @@ import java.util.Optional;
 import static com.example.demo.baseClasses.BuilderFactory.createRater;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
+import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RatingApplicationServiceTest {
@@ -46,16 +44,16 @@ public class RatingApplicationServiceTest {
         //GIVEN
         var fakeRater = createRater(ACC_NUMBER().accountNumber());
 
-        var justToIncreaseSize = BuilderFactory.createPolRating(2.2132131D, fakeRater, null);
+        var justToIncreaseSize = BuilderFactory.createPolRating(Score.of(2.2132131), fakeRater, null);
 
         PresidentialPolitician politician = new PresidentialBuilder(new PoliticiansBuilder(POL_NUMBER())
                         .setPoliticiansRating(List.of(justToIncreaseSize, justToIncreaseSize, justToIncreaseSize, justToIncreaseSize))
-                        .setRating(new Rating(4D, 4.989D)))
+                        .setRating(new Rating(4D, AverageRating.of(valueOf(4.989D)))))
                 .build();
 
         var raterWhoRates = createRater(ACC_NUMBER().accountNumber().concat("1"));
 
-        var actualRatingForPolitician = BuilderFactory.createPolRating(5.99323D, raterWhoRates, politician);
+        var actualRatingForPolitician = BuilderFactory.createPolRating(Score.of(5.99323), raterWhoRates, politician);
 
         var service = new RatingService(ratingRepo, polRepo, new DefaultRateLimitDomainService(rateLimitRepo));
 
@@ -85,15 +83,15 @@ public class RatingApplicationServiceTest {
         //GIVEN
         var rater = createRater(ACC_NUMBER().accountNumber());
 
-        var justToIncreaseSize = BuilderFactory.createPolRating(1D, rater, null);
+        var justToIncreaseSize = BuilderFactory.createPolRating(Score.of(1), rater, null);
 
         PresidentialPolitician politician = new PresidentialBuilder(new PoliticiansBuilder(POL_NUMBER())
                 .setFirstName("Fake")
                 .setPoliticiansRating(List.of(justToIncreaseSize))
-                .setRating(new Rating(1D, 1D)))
+                .setRating(new Rating(1D, AverageRating.of(valueOf(1)))))
                 .build();
 
-        var actualRatingForPolitician = BuilderFactory.createPolRating(5.99323D, rater, politician);
+        var actualRatingForPolitician = BuilderFactory.createPolRating(Score.of(5.99323), rater, politician);
 
         var service = new RatingService(ratingRepo, polRepo, new DefaultRateLimitDomainService(rateLimitRepo));
 

@@ -5,6 +5,7 @@ import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.baseClasses.FakeDomainService;
+import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.entities.PoliticianTypes;
 import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.Rating;
@@ -41,7 +42,7 @@ public class RateLimitedRatingPoliticianHttpAdapterTest extends BaseSpringHateoa
 
     PoliticianTypes.PresidentialPolitician politician = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(new Politicians.PoliticiansBuilder(POL_NUMBER())
             .setFirstName("Fake")
-            .setRating(new Rating(0D, 0D)))
+            .setRating(new Rating(0D, AverageRating.of(valueOf(0)))))
             .build();
 
     @Autowired
