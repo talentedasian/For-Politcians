@@ -3,7 +3,6 @@ package com.example.demo.domain.entities;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.Score;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
-import org.springframework.util.Assert;
 
 public class PoliticiansRating {
 
@@ -140,13 +139,6 @@ public class PoliticiansRating {
 
 		public Builder setId(String id) {
 			this.id = id;
-			return this;
-		}
-
-		public Builder setRating(double rating) {
-			Assert.state(Math.signum(rating) != -1.0
-					, "rating must not be null");
-			this.rating = rating;
 			return this;
 		}
 

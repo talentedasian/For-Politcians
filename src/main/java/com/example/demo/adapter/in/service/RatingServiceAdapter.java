@@ -5,6 +5,7 @@ import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.adapter.web.dto.RatingDTO;
+import com.example.demo.domain.Score;
 import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.UserRateLimitService;
@@ -50,7 +51,7 @@ public class RatingServiceAdapter {
 
         PoliticiansRating rating = new PoliticiansRating.Builder()
                 .setPolitician(politician)
-                .setRating(dtoRequest.getRating().doubleValue())
+                .setRating(Score.of(dtoRequest.getRating().doubleValue()))
                 .setRater(rater)
                 .build();
 

@@ -21,7 +21,7 @@ public class BuilderFactory {
     public static PoliticiansRating createPolRating(Score score, UserRater rater, Politicians politicians) {
         return new PoliticiansRating.Builder()
                 .setId("1")
-                .setRating(score.rating())
+                .setRating(score)
                 .setRater(rater)
                 .setPolitician(politicians)
                 .build();
