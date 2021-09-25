@@ -1,37 +1,44 @@
 package com.example.demo.domain;
 
 import com.example.demo.domain.enums.Rating;
+import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 
-/**
- * An Average Rating does not equal to a Score. That is there
- * to since an average rating behaves exactly like a score
- * and can also be used as a score of a politician. But
- * average rating is a much better name.
- */
-public class AverageRating extends Score{
+public record AverageRating(double rating) {
 
-    private AverageRating(double rating) {
-        super(rating);
+    private static final double MINIMUM = 0.01;
+    private static final int MAXIMUM = 10;
+
+    public AverageRating {
+        Assert.state(isRatingGreaterThanMinimum(rating), "must be greater than 0");
+        maximumRatingValidation(rating);
+    }
+
+    private void maximumRatingValidation(double rating) {
+        if (!isRatingLessThanMaximum(rating)) throw new AverageRatingHasExceededMaximumValueException(rating);
+    }
+
+    private boolean isRatingLessThanMaximum(double rating) {
+        return rating < MAXIMUM;
+    }
+
+    private boolean isRatingGreaterThanMinimum(double rating) {
+        return rating > MINIMUM;
     }
 
     public static AverageRating of(BigDecimal averageRating) {
-        try {
-            return new AverageRating(averageRating.doubleValue());
-        } catch (ScoreHasExceededMaximumValueException e) {
-            throw new ScoreHasExceededMaximumValueException(new AverageRatingMaximumValueException());
-        }
+        return new AverageRating(averageRating.doubleValue());
     }
 
-    public static AverageRating of(BigDecimal totalRatingAccumulated, int count, AverageRating previousAverageRating) {
-        if (isTotalRatingAccumulatedZero(totalRatingAccumulated)) throw new IllegalStateException("""
+    public static AverageRating of(BigDecimal totalScoreAccumulated, int count, AverageRating previousAverageRating) {
+        if (isTotalScoreAccumulatedZero(totalScoreAccumulated)) throw new IllegalStateException("""
                 total rating accumulated must be greater than 0
                 """);
         if (isCountZero(count)) throw new IllegalStateException("count must be greater than 0");
 
-        double averageRatingCalculated = Rating.mapToSatisfactionRate(previousAverageRating.rating())
-                .calculate(totalRatingAccumulated, count);
+        double averageRatingCalculated = Rating.mapToSatisfactionRate(previousAverageRating.averageRating())
+                .calculate(totalScoreAccumulated, count);
 
         return of(BigDecimal.valueOf(averageRatingCalculated));
     }
@@ -40,8 +47,12 @@ public class AverageRating extends Score{
         return count == 0;
     }
 
-    private static boolean isTotalRatingAccumulatedZero(BigDecimal totalRatingAccumulated) {
-        return totalRatingAccumulated.compareTo(BigDecimal.ZERO) == 0;
+    private static boolean isTotalScoreAccumulatedZero(BigDecimal totalScoreAccumulated) {
+        return totalScoreAccumulated.compareTo(BigDecimal.ZERO) == 0;
+    }
+
+    public double averageRating() {
+        return this.rating;
     }
 
 }

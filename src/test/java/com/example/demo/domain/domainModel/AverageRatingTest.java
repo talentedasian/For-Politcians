@@ -1,9 +1,7 @@
 package com.example.demo.domain.domainModel;
 
 import com.example.demo.domain.AverageRating;
-import com.example.demo.domain.AverageRatingMaximumValueException;
-import com.example.demo.domain.Score;
-import com.example.demo.domain.ScoreHasExceededMaximumValueException;
+import com.example.demo.domain.AverageRatingHasExceededMaximumValueException;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +27,7 @@ public class AverageRatingTest {
         ThrowableAssert.ThrowingCallable shouldThrowAverageRating = () -> AverageRating.of(valueOf(2131));
 
         assertThatThrownBy(shouldThrowAverageRating)
-                .hasCauseInstanceOf(AverageRatingMaximumValueException.class);
+                .isInstanceOf(AverageRatingHasExceededMaximumValueException.class);
     }
 
     @Test
@@ -95,17 +93,7 @@ public class AverageRatingTest {
 
 
         assertThatThrownBy(shouldThrowAverageRating)
-                .isInstanceOf(ScoreHasExceededMaximumValueException.class);
-    }
-
-    @Test
-    public void averageRatingShouldNotBeEqualToScore() throws Exception{
-        int rating = 4;
-        var score = Score.of(rating);
-        var averageRating = AverageRating.of(BigDecimal.valueOf(rating));
-
-        assertThat(score)
-                .isNotEqualTo(averageRating);
+                .isInstanceOf(AverageRatingHasExceededMaximumValueException.class);
     }
 
 }

@@ -4,19 +4,15 @@ import org.springframework.util.Assert;
 
 /**
  * A score is the rating that a user has for a politician e.g. 2.131
- *
  */
-public class Score {
+public record Score(double rating) {
 
-    static final int MINIMUM = 0;
+    static final double MINIMUM = 0.1;
     static final int MAXIMUM = 10;
 
-    private final double rating;
-
-    Score(double rating) {
+    public Score {
         Assert.state(isRatingGreaterThanMinimum(rating), "must be greater than 0");
         if (!isRatingLessThanMaximum(rating)) throw new ScoreHasExceededMaximumValueException();
-        this.rating = rating;
     }
 
     private boolean isRatingLessThanMaximum(double rating) {
@@ -29,30 +25,5 @@ public class Score {
 
     public static Score of(double rating) {
         return new Score(rating);
-    }
-
-    public double rating() {
-        return this.rating;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Score score = (Score) o;
-
-        return Double.compare(score.rating, rating) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        long temp = Double.doubleToLongBits(rating);
-        return (int) (temp ^ (temp >>> 32));
-    }
-
-    @Override
-    public String toString() {
-        return "Score = " + rating;
     }
 }
