@@ -11,7 +11,7 @@ public record Score(double rating) {
     static final int MAXIMUM = 10;
 
     public Score {
-        Assert.state(isRatingGreaterThanMinimum(rating), "must be greater than 0");
+        Assert.state(isRatingGreaterThanMinimum(rating), "score must be greater than 0");
         if (!isRatingLessThanMaximum(rating)) throw new ScoreHasExceededMaximumValueException();
     }
 
