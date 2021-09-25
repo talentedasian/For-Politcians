@@ -1,10 +1,11 @@
 package com.example.demo.adapter.web;
 
 import com.example.demo.adapter.in.web.PoliticianController;
-import com.example.demo.domain.entities.PoliticiansRating;
-import com.example.demo.domain.entities.Rating;
+import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.entities.Rating;
 import com.example.demo.filter.AddPoliticianFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
+import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -57,7 +59,7 @@ public class AddPoliticianFilterTest {
 				.setFirstName("Test")
 				.setLastName("Name")
 				.setFullName()
-				.setRating(new Rating(0.01D, 0.01D))
+				.setRating(new Rating(0.01D, AverageRating.of(valueOf(0.01D))))
 				.setPoliticiansRating(List.of(new PoliticiansRating()))
 				.build())
 				.setTotalMonthsOfService(12)

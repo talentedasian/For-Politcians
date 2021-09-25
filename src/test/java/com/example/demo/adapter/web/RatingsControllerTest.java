@@ -5,8 +5,10 @@ import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.RatingsController;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.DefaultRateLimitDomainService;
 import com.example.demo.domain.RateLimitRepository;
+import com.example.demo.domain.Score;
 import com.example.demo.domain.entities.*;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
@@ -48,7 +50,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
 
     PresidentialPolitician politician = new PresidentialBuilder(new Politicians.PoliticiansBuilder(POL_NUMBER())
             .setFirstName("Fake")
-            .setRating(new Rating(4D, 4.989D)))
+            .setRating(new Rating(4D, AverageRating.of(valueOf(4.989D)))))
             .build();
 
     UserRater rater = new UserRater.Builder()
@@ -59,7 +61,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
             .build();
     PoliticiansRating politiciansRating = new PoliticiansRating.Builder(politician)
             .setRater(rater)
-            .setRating(1D)
+            .setRating(Score.of(1))
             .build();
 
     @Test
