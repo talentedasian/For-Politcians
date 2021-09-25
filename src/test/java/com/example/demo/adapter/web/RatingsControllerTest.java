@@ -179,12 +179,4 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
                     .andExpect(jsonPath("_templates.default").doesNotExist());
     }
 
-    @TestConfiguration
-    static class TestConfig {
-        @TestBean
-        UserRateLimitService rateLimitService(RateLimitRepository rateLimitRepo) {
-            return new DefaultRateLimitDomainService(rateLimitRepo);
-        }
-    }
-
 }
