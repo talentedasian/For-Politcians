@@ -1,5 +1,7 @@
 package com.example.demo.adapter.out.jpa;
 
+import com.example.demo.domain.AverageRating;
+import com.example.demo.domain.TotalRatingAccumulated;
 import com.example.demo.domain.entities.Rating;
 
 import javax.persistence.Column;
@@ -15,8 +17,8 @@ public class RatingJpaEntity {
     @Column(nullable = false, precision = 3, scale = 4)
     protected Double averageRating;
 
-    public static RatingJpaEntity from(Rating rating) {
-        return new RatingJpaEntity(rating.getTotalRating(), rating.getAverageRating());
+    public static RatingJpaEntity from(TotalRatingAccumulated totalRatingAccumulated, AverageRating averageRating) {
+        return new RatingJpaEntity(totalRatingAccumulated.totalRatingAsDouble(), averageRating.rating());
     }
 
     public Double getTotalRating() {

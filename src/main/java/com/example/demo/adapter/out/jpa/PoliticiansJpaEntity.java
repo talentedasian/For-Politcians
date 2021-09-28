@@ -7,6 +7,7 @@ import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.PoliticiansRating;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -114,8 +115,8 @@ public class PoliticiansJpaEntity {
     public static PoliticiansJpaEntity from(Politicians politician) {
         var jpaEntity = new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
                 politician.lastName(), politician.fullName(),
-                RatingJpaEntity.from(politician.getRating()), politician.totalCountsOfRatings(),
-                fromPoliticiansRating(politician.getPoliticiansRating()));
+                RatingJpaEntity.from(politician.totalRatingAccumulated(), politician.average()),
+                politician.totalCountsOfRatings(), fromPoliticiansRating(politician.getPoliticiansRating()));
         if (politician.getType() == null) {
             return jpaEntity;
         }
@@ -136,7 +137,7 @@ public class PoliticiansJpaEntity {
     public static PoliticiansJpaEntity fromWithNullRating(Politicians politician) {
         var jpaEntity = new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
                 politician.lastName(), politician.fullName(),
-                RatingJpaEntity.from(politician.getRating()), politician.totalCountsOfRatings(),
+                RatingJpaEntity.from(politician.totalRatingAccumulated(), politician.average()), politician.totalCountsOfRatings(),
                 null);
         if (politician.getType() == null) {
             return jpaEntity;
@@ -212,7 +213,8 @@ public class PoliticiansJpaEntity {
                 .setLastName(lastName)
                 .setFullName()
                 .setPoliticiansRating(toPoliticiansRating(politiciansRating))
-                .setRating(ratingJpaEntity.toRating())
+                .setTotalRating(BigDecimal.valueOf(ratingJpaEntity.totalRating))
+                .setAverageRating(ratingJpaEntity.averageRating)
                 .build();
     }
 }

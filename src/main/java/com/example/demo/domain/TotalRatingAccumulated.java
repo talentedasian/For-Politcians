@@ -61,4 +61,8 @@ public class TotalRatingAccumulated {
         return "TotalRatingAccumulated { " + totalRating + " }";
     }
 
+    public double totalRatingAsDouble() {
+        return this.totalRating.doubleValue();
+    }
+
 }
