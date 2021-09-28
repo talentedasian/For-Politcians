@@ -64,35 +64,9 @@ public class Politicians {
 		return type;
 	}
 
-	public Politicians setType(Politicians.Type type) {
-		return new Politicians(name, politiciansRating, rating, politicianNumber, type);
-	}
-
-	Politicians(Name name,List<PoliticiansRating> politiciansRating, Rating rating, PoliticianNumber politicianNumber, Type polType) {
-		super();
-		this.averageRating = NO_RATING_YET;
-		this.name = name;
-		this.politiciansRating.addAll(politiciansRating == null ? List.of() : politiciansRating);
-		this.totalCountsOfRating = politiciansRating.size();
-		this.rating = rating;
-		this.politicianNumber = politicianNumber;
-		this.type = polType;
-	}
-
-	Politicians(Name name,List<PoliticiansRating> politiciansRating, Rating rating, AverageRating averageRating, PoliticianNumber politicianNumber, Type polType) {
-		super();
-		this.name = name;
-		this.politiciansRating.addAll(politiciansRating == null ? List.of() : politiciansRating);
-		this.totalCountsOfRating = politiciansRating.size();
-		this.rating = rating;
-		this.averageRating = averageRating;
-		this.politicianNumber = politicianNumber;
-		this.type = polType;
-	}
 
 	Politicians(Name name,List<PoliticiansRating> politiciansRating, Rating rating, AverageRating averageRating,
 						  TotalRatingAccumulated totalRatingAccumulated, PoliticianNumber politicianNumber, Type polType) {
-		super();
 		this.name = name;
 		this.politiciansRating.addAll(politiciansRating == null ? List.of() : politiciansRating);
 		this.totalCountsOfRating = politiciansRating.size();
@@ -100,8 +74,8 @@ public class Politicians {
 		this.averageRating = averageRating;
 		this.politicianNumber = politicianNumber;
 		this.type = polType;
-		this.totalRatingAccumulated = totalRatingAccumulated == null
-				? TotalRatingAccumulated.ZERO : TotalRatingAccumulated.of(totalRatingAccumulated.totalRating(), averageRating);
+		this.totalRatingAccumulated = (totalRatingAccumulated == null)
+				? TotalRatingAccumulated.ZERO : totalRatingAccumulated;
 	}
 
 	@Override
@@ -234,12 +208,9 @@ public class Politicians {
 
 		private TotalRatingAccumulated totalRatingAccumulated;
 
-		private AverageRating averageRating;
+		private BigDecimal totalRating;
 
-		@Deprecated(forRemoval = true) // GOAL : use constructor below instead
-		public PoliticiansBuilder(String politicianNumber) {
-			this.politicianNumber = politicianNumber;
-		}
+		private AverageRating averageRating;
 
 		public PoliticiansBuilder(PoliticianNumber politicianNumber) {
 			this.politicianNumber = politicianNumber.politicianNumber();
@@ -305,13 +276,19 @@ public class Politicians {
 			}
 			return builder.setFullName();
 		}
-		public PoliticiansBuilder setTotalRating(TotalRatingAccumulated totalRatingAccumulated) {
-			this.totalRatingAccumulated = totalRatingAccumulated;
+
+		public PoliticiansBuilder setTotalRating(BigDecimal totalRatingAccumulated) {
+			this.totalRating = totalRatingAccumulated;
 			return this;
 		}
 
 		public PoliticiansBuilder setAverageRating(AverageRating averageRating) {
 			this.averageRating = averageRating;
+			return this;
+		}
+
+		public PoliticiansBuilder setAverageRating(double averageRating) {
+			this.averageRating = AverageRating.of(BigDecimal.valueOf(averageRating));
 			return this;
 		}
 
@@ -323,6 +300,9 @@ public class Politicians {
 		public Politicians build() {
 			var name = new Name(firstName, lastName);
 			if (politiciansRating == null) politiciansRating = List.of();
+			if (totalRating != null)
+				this.totalRatingAccumulated = TotalRatingAccumulated.of(totalRating, averageRating);
+
 			return new Politicians(name, politiciansRating, rating, averageRating, totalRatingAccumulated, new PoliticianNumber(politicianNumber), null);
 		}
 	}

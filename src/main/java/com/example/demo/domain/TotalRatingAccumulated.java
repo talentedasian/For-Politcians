@@ -10,33 +10,30 @@ import static com.example.demo.domain.AverageRating.NO_RATING_YET;
 
 public class TotalRatingAccumulated {
 
-    public static final TotalRatingAccumulated ZERO = TotalRatingAccumulated.of(BigDecimal.valueOf(0));
+    public static final TotalRatingAccumulated ZERO = new TotalRatingAccumulated(BigDecimal.ZERO, AverageRating.NO_RATING_YET);
     private static final int MAXIMUM_DECIMAL_DIGITS = 3;
 
     private final BigDecimal totalRating;
     private final AverageRating averageRating;
 
     private TotalRatingAccumulated(BigDecimal totalRating, AverageRating averageRating) {
-        Assert.state(totalRating != null, "Total rating accumulated cannot be null");
-        if (isTotalRatingNegative(totalRating)) throw new IllegalStateException("Total rating accumulated cannot contain a negative value");
-
         this.totalRating = totalRating;
         this.averageRating = averageRating;
     }
 
-    private boolean isTotalRatingNegative(BigDecimal totalRating) {
-        return totalRating.signum() == -1;
-    }
-
-    public static TotalRatingAccumulated of(BigDecimal totalRating) {
-        return new TotalRatingAccumulated(totalRating, NO_RATING_YET);
-    }
-
     public static TotalRatingAccumulated of(final BigDecimal totalRating, AverageRating averageRating) {
+        Assert.notNull(totalRating, "Total rating accumulated cannot be null");
+        if (isTotalRatingNegative(totalRating)) throw new IllegalStateException("Total rating accumulated cannot contain a negative value");
+
         BigDecimal rating = (hasRating(averageRating) && averageRating.isAverageRatingLow())
                 ? alwaysRoundIfRatingIsLow(totalRating)
                 : cutOffDecimalDigitsWithNoRounding(totalRating);
+
         return new TotalRatingAccumulated(rating, averageRating);
+    }
+
+    private static boolean isTotalRatingNegative(BigDecimal totalRating) {
+        return totalRating.signum() == -1;
     }
 
     private static BigDecimal cutOffDecimalDigitsWithNoRounding(BigDecimal totalRating) {
@@ -58,4 +55,10 @@ public class TotalRatingAccumulated {
     public BigDecimal totalRating() {
         return this.totalRating;
     }
+
+    @Override
+    public String toString() {
+        return "TotalRatingAccumulated { " + totalRating + " }";
+    }
+
 }
