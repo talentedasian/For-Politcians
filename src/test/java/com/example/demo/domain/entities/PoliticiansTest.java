@@ -3,6 +3,7 @@ package com.example.demo.domain.entities;
 import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.Score;
+import com.example.demo.domain.TotalRatingAccumulated;
 import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.junit.jupiter.api.BeforeEach;
@@ -210,6 +211,25 @@ public class PoliticiansTest {
 
 		assertThat(politician.totalCountsOfRatings())
 				.isEqualTo(EXPECTED_NUMBER_OF_TOTAL_RATINGS);
+	}
+
+	@Test
+	public void calculateTotalRatingsAccumulatedShouldReturnExpectedTotalRatingGivenALowAverageRating() throws Exception{
+		double EXPECTED_AVERAGE_RATING = 4.229;
+
+		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
+
+		var justHereToPutIncreaseSize = createPolRating(Score.of(1), rater, politicianBuilder.build());
+
+		Politicians politician = politicianBuilder
+				.setAverageRating(AverageRating.of(valueOf(2.231)))
+				.setTotalRating(valueOf(3))
+				.setPoliticiansRating(List.of(justHereToPutIncreaseSize, justHereToPutIncreaseSize, justHereToPutIncreaseSize)).build();
+
+		TotalRatingAccumulated totalRatingAccumulated = politician.calculateTotalRatingsAccumulated(Score.of(1.2289));
+
+		assertThat(totalRatingAccumulated.totalRating().doubleValue())
+				.isEqualTo(EXPECTED_AVERAGE_RATING);
 	}
 
 }

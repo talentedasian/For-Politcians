@@ -114,11 +114,15 @@ public class Politicians {
 
 	public AverageRating calculateAverageRating(Score ratingToAdd) {
 		if (isAverageRatingPresent()) {
-			BigDecimal totalScoreAccumulated = totalRatingAccumulated.addTotalRating(ratingToAdd).totalRating();
+			BigDecimal totalScoreAccumulated = calculateTotalRatingsAccumulated(ratingToAdd).totalRating();
 			return AverageRating.of(totalScoreAccumulated,totalCountsOfRating, averageRating);
 		}
 
 		return AverageRating.of(BigDecimal.valueOf(ratingToAdd.rating()));
+	}
+
+	public TotalRatingAccumulated calculateTotalRatingsAccumulated(Score ratingToAdd) {
+		return totalRatingAccumulated.addTotalRating(ratingToAdd);
 	}
 
 	public boolean isAverageRatingPresent() {
