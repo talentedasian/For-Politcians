@@ -5,7 +5,6 @@ import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.Politicians;
-import com.example.demo.domain.entities.Rating;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -33,7 +32,8 @@ public class RatingPoliticiansTest {
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
             .setPoliticiansRating(null)
-            .setRating(new Rating(0D, AverageRating.of(BigDecimal.valueOf(0.1D))));
+            .setTotalRating(BigDecimal.ZERO)
+            .setAverageRating(AverageRating.ONE);
 
     @BeforeEach
     public void setup() {

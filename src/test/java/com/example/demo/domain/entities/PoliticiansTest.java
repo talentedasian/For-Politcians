@@ -122,7 +122,7 @@ public class PoliticiansTest {
 	public void countsOfRatingsShouldDecreaseWhenADeleteOfRatingHappens() throws UserRateLimitedOnPoliticianException {
 		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
-		Politicians politician = politicianBuilder.setRating(new Rating(0D, AverageRating.of(valueOf(1d)))).build();
+		Politicians politician = politicianBuilder.build();
 		var rating = createPolRating(Score.of(2.243), rater, politician);
 
 		politician.rate(rating);

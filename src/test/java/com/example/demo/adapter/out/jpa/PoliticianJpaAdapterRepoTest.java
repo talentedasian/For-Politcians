@@ -11,7 +11,6 @@ import com.example.demo.domain.entities.Name;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.entities.Politicians;
-import com.example.demo.domain.entities.Rating;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +53,8 @@ public class PoliticianJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
             .setPoliticiansRating(null)
-            .setRating(new Rating(0D, AverageRating.of(BigDecimal.valueOf(1))));
+            .setTotalRating(BigDecimal.ZERO)
+            .setAverageRating(AverageRating.ONE);
 
     @Test
     public void testCustomNativeQueryForFindingPoliticiansWithOffsetAndLimitForPostgresql() throws Exception{

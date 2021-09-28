@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 public record AverageRating(double rating) {
 
     public static final AverageRating NO_RATING_YET = null;
+    public static final AverageRating ONE = new AverageRating(1);
 
     private static final double MINIMUM = 0;
     private static final int MAXIMUM = 10;
