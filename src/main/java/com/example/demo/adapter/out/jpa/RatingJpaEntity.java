@@ -17,15 +17,16 @@ public class RatingJpaEntity {
     @Column(nullable = false, precision = 3, scale = 4)
     protected Double averageRating;
 
-    public static RatingJpaEntity from(TotalRatingAccumulated totalRatingAccumulated, AverageRating averageRating) {
-        return new RatingJpaEntity(totalRatingAccumulated.totalRatingAsDouble(), averageRating.rating());
+    public static RatingJpaEntity from(TotalRatingAccumulated totalRatingAccumulated, final AverageRating averageRating) {
+        double rating = AverageRating.hasRating(averageRating) ? 0 : averageRating.averageRating();
+        return new RatingJpaEntity(totalRatingAccumulated.totalRatingAsDouble(), rating);
     }
 
-    public Double getTotalRating() {
+    public double getTotalRating() {
         return totalRating;
     }
 
-    public Double getAverageRating() {
+    public double getAverageRating() {
         return averageRating;
     }
 
@@ -63,8 +64,7 @@ public class RatingJpaEntity {
         RatingJpaEntity that = (RatingJpaEntity) o;
 
         if (!Objects.equals(totalRating, that.totalRating)) return false;
-        if (!Objects.equals(averageRating, that.averageRating)) return false;
-        return true;
+        return Objects.equals(averageRating, that.averageRating);
     }
 
     @Override

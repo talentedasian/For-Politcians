@@ -31,12 +31,9 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
 
     @Override
     public Politicians update(Politicians politician) {
-        try {
-            return save(politician);
-        } catch (PoliticianNotPersistableException e) {
-            e.printStackTrace(); // GOAL : ADD LOG MESSAGE
-        }
-        return politician;
+        PoliticiansJpaEntity entitySaved = repo.save(PoliticiansJpaEntity.fromWithNullRating(politician));
+
+        return entitySaved.toPoliticians();
     }
 
     @Override

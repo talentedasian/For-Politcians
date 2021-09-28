@@ -8,6 +8,7 @@ import io.jsonwebtoken.lang.Assert;
 
 import static com.example.demo.domain.entities.Politicians.Type.PRESIDENTIAL;
 import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
+import static java.math.BigDecimal.ZERO;
 import static java.math.BigDecimal.valueOf;
 
 class PresidentialDTOUnwrapper extends PoliticianDTOUnwrapper {
@@ -28,7 +29,8 @@ class PresidentialDTOUnwrapper extends PoliticianDTOUnwrapper {
                 .setFirstName(dto.getFirstName())
                 .setLastName(dto.getLastName())
                 .setFullName()
-                .setRating(new Rating(0.00D, AverageRating.of(valueOf(0))))
+                .setTotalRating(ZERO)
+                .setAverageRating(AverageRating.NO_RATING_YET)
                 .setPoliticiansRating(null)
                 .build();
 

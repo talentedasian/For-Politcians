@@ -19,7 +19,7 @@ public class SenatorialPoliticianDto extends PoliticianDto {
     }
 
     public SenatorialPoliticianDto(Politicians entity, Rating satisfactionRate, int monthsOfService, String lawMade) {
-        super(entity.fullName(), entity.retrievePoliticianNumber(), entity.getRating().getAverageRating(), satisfactionRate, "senatorial");
+        super(entity.fullName(), entity.retrievePoliticianNumber(), entity.averageRating(), satisfactionRate, "senatorial");
         this.monthsOfService = monthsOfService;
         this.mostSignificantLawMade = lawMade;
     }
@@ -80,10 +80,7 @@ public class SenatorialPoliticianDto extends PoliticianDto {
         } else if (!mostSignificantLawMade.equals(other.mostSignificantLawMade)) {
             return false;
         }
-        if (!other.monthsOfService.equals(monthsOfService)) {
-            return false;
-        }
-        return true;
+        return other.monthsOfService.equals(monthsOfService);
     }
 
 }

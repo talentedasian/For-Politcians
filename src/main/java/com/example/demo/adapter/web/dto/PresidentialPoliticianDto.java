@@ -8,14 +8,14 @@ public final class PresidentialPoliticianDto extends PoliticianDto {
 
 	private final String mostSignificantLawSigned;
 
-	private final String type = "PRESIDENTIAL";
+	private static final String type = "PRESIDENTIAL";
 	
 	public String getMostSignificantLawSigned() {
 		return mostSignificantLawSigned;
 	}
 
 	public PresidentialPoliticianDto(Politicians entity, Rating satisfactionRate, String lawSigned) {
-		super(entity.fullName(), entity.retrievePoliticianNumber(), entity.getRating().getAverageRating(), satisfactionRate, "presidential");
+		super(entity.fullName(), entity.retrievePoliticianNumber(), entity.averageRating(), satisfactionRate, type);
 		this.mostSignificantLawSigned = lawSigned;
 	}
 
@@ -67,12 +67,8 @@ public final class PresidentialPoliticianDto extends PoliticianDto {
 		if (this.getSatisfactionRate() != other.getSatisfactionRate())
 			return false;
 		if (mostSignificantLawSigned == null) {
-			if (other.mostSignificantLawSigned != null)
-				return false;
-		} else if (!mostSignificantLawSigned.equals(other.mostSignificantLawSigned)) {
-			return false;
-		}
-		return true;
+			return other.mostSignificantLawSigned == null;
+		} else return mostSignificantLawSigned.equals(other.mostSignificantLawSigned);
 	}
 
 }

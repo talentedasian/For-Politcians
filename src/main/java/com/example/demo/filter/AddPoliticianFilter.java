@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Profile({ "localDevelopment,test" })
 public class AddPoliticianFilter implements Filter{
 	
-	private String password = "password";
+	private final String password = "password";
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -49,7 +49,7 @@ public class AddPoliticianFilter implements Filter{
 		chain.doFilter(req, res);
 	}
 
-	private void handleAddPoliticianAccessDenied(HttpServletRequest req, HttpServletResponse res) throws JsonProcessingException, IOException {
+	private void handleAddPoliticianAccessDenied(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		logAccessDenied(req);
 		
 		ExceptionModel exceptionModel = new ExceptionModel();
@@ -81,8 +81,7 @@ public class AddPoliticianFilter implements Filter{
 	private String formUriEndpoint() {
 		return MvcUriComponentsBuilder.fromController(PoliticianController.class).path("/politician")
 				.build()
-				.getPath()
-				.toString();
+				.getPath();
 	}
 	
 }

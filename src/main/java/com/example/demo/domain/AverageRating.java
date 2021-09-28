@@ -4,6 +4,7 @@ import com.example.demo.domain.enums.Rating;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public record AverageRating(double rating) {
 
@@ -67,5 +68,9 @@ public record AverageRating(double rating) {
 
     public boolean isAverageRatingLow() {
         return Rating.mapToSatisfactionRate(rating).equals(Rating.LOW);
+    }
+
+    public static boolean hasRating(AverageRating averageRating) {
+        return Objects.equals(averageRating, NO_RATING_YET);
     }
 }

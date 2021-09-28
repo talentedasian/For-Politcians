@@ -1,5 +1,6 @@
 package com.example.demo.adapter.out.jpa;
 
+import com.example.demo.domain.entities.Name;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.Politicians;
 
@@ -16,8 +17,9 @@ public class PresidentialJpaEntity extends PoliticiansJpaEntity{
     private String mostSignificantLawSigned;
 
     protected PresidentialJpaEntity(PoliticiansJpaEntity politician, String mostSignificantLawSigned) {
-        super(politician.getId(), politician.getFirstName(), politician.getLastName(),
-                politician.toPoliticians().fullName(), politician.getRatingJpaEntity(), politician.getTotalCountRating(), politician.getPoliticiansRating());
+        super(  politician.getId(), politician.getFirstName(), politician.getLastName(),
+                Name.of(politician.getFirstName(), politician.getLastName()).fullName(), politician.getRatingJpaEntity(),
+                politician.getTotalCountRating(), politician.getPoliticiansRating() );
         this.mostSignificantLawSigned = mostSignificantLawSigned;
     }
 

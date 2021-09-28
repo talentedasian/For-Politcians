@@ -1,11 +1,9 @@
 package com.example.demo.adapter.web;
 
 import com.example.demo.adapter.in.web.PoliticianController;
-import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.PoliticiansRating;
-import com.example.demo.domain.entities.Rating;
 import com.example.demo.filter.AddPoliticianFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +21,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
-import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -56,12 +53,10 @@ public class AddPoliticianFilterTest {
 	@BeforeEach
 	public void setup() {
 		politician = new SenatorialBuilder(new Politicians.PoliticiansBuilder(POL_NUMBER())
-				.setFirstName("Test")
-				.setLastName("Name")
-				.setFullName()
-				.setRating(new Rating(0.01D, AverageRating.of(valueOf(0.01D))))
-				.setPoliticiansRating(List.of(new PoliticiansRating()))
-				.build())
+					.setFirstName("Test")
+					.setLastName("Name")
+					.setFullName()
+					.build())
 				.setTotalMonthsOfService(12)
 				.build();
 				
@@ -84,7 +79,7 @@ public class AddPoliticianFilterTest {
 	}
 	
 	@Test 
-	public void shouldReturn401AuthorizationRequiredMessageIfHeaderRequiredIsNull() throws URISyntaxException, Exception {
+	public void shouldReturn401AuthorizationRequiredMessageIfHeaderRequiredIsNull() throws Exception {
 		mvc.perform(post(URI.create("/api/politicians/politician"))
 				.content(content)
 				.contentType(MediaType.APPLICATION_JSON))
@@ -96,7 +91,7 @@ public class AddPoliticianFilterTest {
 	}
 	
 	@Test 
-	public void shouldThrowAnyKindOfExceptionMeaningRequestHasSuccessfullyPassedAuthorization() throws URISyntaxException, Exception {
+	public void shouldThrowAnyKindOfExceptionMeaningRequestHasSuccessfullyPassedAuthorization() throws Exception {
 		NestedServletException exception = assertThrows(NestedServletException.class, () -> mvc.perform(post(URI.create("/api/politicians/politician"))
 				.header("Politician-Access", "password")
 				.content(content)

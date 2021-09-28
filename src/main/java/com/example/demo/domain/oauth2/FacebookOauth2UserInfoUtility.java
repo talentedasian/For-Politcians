@@ -16,7 +16,7 @@ import com.example.demo.adapter.web.dto.FacebookUserInfo;
 
 public class FacebookOauth2UserInfoUtility {
 	
-	private RestTemplate restTemplate = new RestTemplate();
+	private final RestTemplate restTemplate = new RestTemplate();
 	
 	public FacebookUserInfo fetchUserInfo(OAuth2AuthorizedClient client) throws URISyntaxException {
 		HttpHeaders headers = new HttpHeaders();

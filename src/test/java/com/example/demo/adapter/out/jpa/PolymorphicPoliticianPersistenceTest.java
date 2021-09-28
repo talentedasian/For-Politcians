@@ -17,6 +17,7 @@ import testAnnotations.DatabaseTest;
 import java.math.BigDecimal;
 
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
+import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DatabaseTest
@@ -34,7 +35,8 @@ public class PolymorphicPoliticianPersistenceTest extends BaseClassTestsThatUses
     Politicians politician = new Politicians.PoliticiansBuilder(POL_NUMBER())
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
-            .setRating(new Rating(0D, AverageRating.of(BigDecimal.valueOf(1))))
+            .setTotalRating(BigDecimal.ZERO)
+            .setAverageRating(AverageRating.of(valueOf(1)))
             .setPoliticiansRating(null)
             .build();
 

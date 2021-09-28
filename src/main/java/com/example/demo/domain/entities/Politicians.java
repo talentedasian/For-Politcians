@@ -12,20 +12,19 @@ import java.util.Objects;
 
 import static com.example.demo.domain.AverageRating.NO_RATING_YET;
 
-
 public class Politicians {
 
-	private Name name;
+	private final Name name;
 
-	private List<PoliticiansRating> politiciansRating = new ArrayList<>();;
+	private List<PoliticiansRating> politiciansRating = new ArrayList<>();
 
 	private Rating rating;
 
 	private AverageRating averageRating;
 
-	private PoliticianNumber politicianNumber;
+	private final PoliticianNumber politicianNumber;
 
-	private Politicians.Type type;
+	private final Politicians.Type type;
 
 	private TotalRatingAccumulated totalRatingAccumulated;
 
@@ -49,7 +48,11 @@ public class Politicians {
 	}
 
 	public double averageRating() {
-		return Objects.equals(averageRating, NO_RATING_YET) ? 0 : averageRating.averageRating();
+		return doesPoliticianHaveRating() ? 0 : averageRating.averageRating();
+	}
+
+	private boolean doesPoliticianHaveRating() {
+		return AverageRating.hasRating(averageRating);
 	}
 
 	public AverageRating average() {
@@ -208,7 +211,7 @@ public class Politicians {
 
 		private Rating rating;
 		
-		private String politicianNumber;
+		private final String politicianNumber;
 
 		private TotalRatingAccumulated totalRatingAccumulated;
 
@@ -258,23 +261,19 @@ public class Politicians {
 			return this;
 		}
 
-		public PoliticiansBuilder setRating(Rating rating) {
-			this.rating = rating;
-			return this;
-		}
-
 		/*
 		 * Politician number should not change in an object so this
 		 * method returns a new Builder with the politicianNumber
 		 */
 		public PoliticiansBuilder setPoliticianNumber(String politicianNumber) {
 			var builder = new PoliticiansBuilder(PoliticianNumber.of(politicianNumber))
-				.setId(id)
-				.setFirstName(firstName)
-				.setLastName(lastName)
-				.setRating(rating)
-				.setPoliticiansRating(politiciansRating)
-				.setRatingRepository(ratingRepo);
+					.setId(id)
+					.setFirstName(firstName)
+					.setLastName(lastName)
+					.setAverageRating(averageRating)
+					.setTotalRating(totalRating)
+					.setPoliticiansRating(politiciansRating)
+					.setRatingRepository(ratingRepo);
 			if (firstName.isEmpty() || firstName == null) {
 				return builder;
 			}

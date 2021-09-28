@@ -27,7 +27,7 @@ public class PoliticianController {
 	
 	private final PoliticianServiceAdapter politiciansService;
 	private final PoliticianAssembler assembler;
-	private PoliticianDTOMapper mapper = new PoliticiansDtoMapper();
+	private final PoliticianDTOMapper mapper = new PoliticiansDtoMapper();
 	
 	@Autowired
 	public PoliticianController(PoliticianServiceAdapter politiciansService, PoliticianAssembler assembler) {

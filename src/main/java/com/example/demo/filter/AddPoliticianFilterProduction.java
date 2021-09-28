@@ -51,7 +51,7 @@ public class AddPoliticianFilterProduction implements Filter{
 		chain.doFilter(req, res);
 	}
 
-	private void handleAddPoliticianAccessDenied(HttpServletRequest req, HttpServletResponse res) throws JsonProcessingException, IOException {
+	private void handleAddPoliticianAccessDenied(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		logAccessDenied(req);
 		
 		ExceptionModel exceptionModel = new ExceptionModel();
@@ -83,8 +83,7 @@ public class AddPoliticianFilterProduction implements Filter{
 	private String formUriEndpoint() {
 		return MvcUriComponentsBuilder.fromController(PoliticianController.class).path("/politician")
 				.build()
-				.getPath()
-				.toString();
+				.getPath();
 	}
 
 }

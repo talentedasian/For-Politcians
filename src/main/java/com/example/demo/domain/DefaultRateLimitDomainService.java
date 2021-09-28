@@ -19,7 +19,7 @@ public class DefaultRateLimitDomainService implements UserRateLimitService {
     @Override
     public boolean isUserNotRateLimited(AccountNumber accountNumber, PoliticianNumber politicianNumber) {
         Optional<RateLimit> rateLimit = rateLimitRepository.findUsingIdAndPoliticianNumber(accountNumber.accountNumber(), politicianNumber);
-        return rateLimit.isPresent() ? rateLimit.get().isNotRateLimited() : true;
+        return rateLimit.isEmpty() || rateLimit.get().isNotRateLimited();
     }
 
     @Override

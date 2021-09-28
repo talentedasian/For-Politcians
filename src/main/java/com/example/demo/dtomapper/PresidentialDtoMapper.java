@@ -18,7 +18,7 @@ class PresidentialDtoMapper extends PoliticiansDtoMapper {
 
 	@Override
 	public PresidentialPoliticianDto mapToDTO(Politicians entity) {
-		org.springframework.util.Assert.state(PresidentialPolitician.class.isInstance(entity),
+		org.springframework.util.Assert.state(entity instanceof PresidentialPolitician,
 				"entity must be of type presidential");
 		return mapToDto((PresidentialPolitician) entity);
 	}
@@ -31,14 +31,14 @@ class PresidentialDtoMapper extends PoliticiansDtoMapper {
 
 		return entity.stream()
 				.peek(politicians -> {
-						Assert.state(PresidentialPolitician.class.isInstance(politicians), "entity must be presidential");
+						Assert.state(politicians instanceof PresidentialPolitician, "entity must be presidential");
 				})
 				.map(politicians -> mapToDto((PresidentialPolitician) politicians))
 				.collect(toList());
 	}
 
 	private PresidentialPoliticianDto mapToDto(PresidentialPolitician entity) {
-		Double rating = entity.getRating().getAverageRating();
+		Double rating = entity.averageRating();
 		Rating satisfactionRate = Rating.mapToSatisfactionRate(rating);
 		
 		return new PresidentialPoliticianDto(entity, satisfactionRate, entity.getMostSignificantLawSigned());

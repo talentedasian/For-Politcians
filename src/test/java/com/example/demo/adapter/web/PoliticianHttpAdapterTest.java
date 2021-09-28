@@ -10,7 +10,6 @@ import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
-import com.example.demo.domain.entities.Rating;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -72,8 +71,7 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
                 .setPoliticiansRating(null)
                 .setFirstName(FIRST_NAME)
                 .setLastName(LAST_NAME)
-                .setFullName()
-                .setRating(new Rating(0D, AverageRating.of(valueOf(0))));
+                .setFullName();
     }
 
     @AfterEach
@@ -142,7 +140,8 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
                 .setMostSignificantLawPassed("Random Law").build();
         var senatorial = new SenatorialBuilder(politicianBuilder
                             .setPoliticianNumber(POLITICIAN_NUMBER.politicianNumber() + "1")
-                            .setRating(new Rating(2D, AverageRating.of(valueOf(9)))))
+                            .setAverageRating(AverageRating.of(valueOf(9)))
+                            .setTotalRating(valueOf(2)))
                 .setTotalMonthsOfService(44).build();
 
         polRepo.save(presidential);

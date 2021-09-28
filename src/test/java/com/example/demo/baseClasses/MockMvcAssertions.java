@@ -18,7 +18,7 @@ public class MockMvcAssertions extends AbstractAssert<MockMvcAssertions, MockMvc
 
     protected MockMvcAssertions(MvcResult mockMvcResult) throws UnsupportedEncodingException {
         super(MockMvcResult.of(mockMvcResult.getResponse().getContentAsString()), MockMvcAssertions.class);
-        this.actual = MockMvcResult.of(mockMvcResult.getResponse().getContentAsString());
+        actual = MockMvcResult.of(mockMvcResult.getResponse().getContentAsString());
     }
 
     public static MockMvcAssertions assertThat(MvcResult actual) throws UnsupportedEncodingException {

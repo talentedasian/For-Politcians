@@ -5,7 +5,6 @@ import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.RatingsController;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
-import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.Score;
 import com.example.demo.domain.entities.*;
@@ -46,8 +45,8 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
     @Autowired UserRateLimitService rateLimitService;
 
     PresidentialPolitician politician = new PresidentialBuilder(new Politicians.PoliticiansBuilder(POL_NUMBER())
-            .setFirstName("Fake")
-            .setRating(new Rating(4D, AverageRating.of(valueOf(4.989D)))))
+                .setFirstName("Fake")
+                .setTotalRating(valueOf(4)))
             .build();
 
     UserRater rater = new UserRater.Builder()

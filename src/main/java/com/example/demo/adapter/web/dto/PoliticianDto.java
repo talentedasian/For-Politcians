@@ -16,7 +16,7 @@ public class PoliticianDto {
 	@JsonProperty(value = "satisfaction_rate")
 	private Rating satisfactionRate;
 
-	private String type;
+	private final String type;
 	
 	public Rating getSatisfactionRate() {
 		return satisfactionRate;

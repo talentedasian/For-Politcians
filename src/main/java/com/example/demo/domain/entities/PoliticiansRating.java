@@ -28,10 +28,6 @@ public class PoliticiansRating {
 		return rating;
 	}
 
-	public void setRating(double rating) {
-		this.rating = rating;
-	}
-
 	public UserRater getRater() {
 		return rater;
 	}

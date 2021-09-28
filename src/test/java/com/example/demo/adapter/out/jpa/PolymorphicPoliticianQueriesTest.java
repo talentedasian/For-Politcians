@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import testAnnotations.DatabaseTest;
 
+import static java.math.BigDecimal.ZERO;
 import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,7 +35,8 @@ public class PolymorphicPoliticianQueriesTest extends BaseClassTestsThatUsesData
     Politicians politician = new Politicians.PoliticiansBuilder(NumberTestFactory.POL_NUMBER())
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
-            .setRating(new Rating(0D, AverageRating.of(valueOf(0))))
+            .setTotalRating(ZERO)
+            .setAverageRating(AverageRating.NO_RATING_YET)
             .setPoliticiansRating(null)
             .build();
 

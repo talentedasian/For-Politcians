@@ -5,10 +5,8 @@ import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.baseClasses.FakeDomainService;
-import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.entities.PoliticianTypes;
 import com.example.demo.domain.entities.Politicians;
-import com.example.demo.domain.entities.Rating;
 import com.example.demo.domain.entities.UserRateLimitService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +39,7 @@ public class RateLimitedRatingPoliticianHttpAdapterTest extends BaseSpringHateoa
     @Autowired UserRateLimitService rateLimitService;
 
     PoliticianTypes.PresidentialPolitician politician = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(new Politicians.PoliticiansBuilder(POL_NUMBER())
-            .setFirstName("Fake")
-            .setRating(new Rating(0D, AverageRating.of(valueOf(0)))))
+                .setFirstName("Fake"))
             .build();
 
     @Autowired

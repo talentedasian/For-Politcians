@@ -114,7 +114,7 @@ public class TotalPaginatedObjectTest {
         PagedObject<String> lastPagedObject = pagedObject.lastPage(() -> pagedList.stream().skip(20).toList());
 
         assertThat(lastPagedObject)
-                .isEqualTo(PagedObject.<String>of(List.of("random21", "random22", "random23", "random24", "random25", "random26",
+                .isEqualTo(PagedObject.of(List.of("random21", "random22", "random23", "random24", "random25", "random26",
                         "random27", "random28", "random29", "random30"), 30, 10, Page.of(2)));
     }
 

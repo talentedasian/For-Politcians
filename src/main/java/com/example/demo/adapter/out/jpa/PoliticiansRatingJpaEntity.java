@@ -1,8 +1,7 @@
 package com.example.demo.adapter.out.jpa;
 
-import com.example.demo.domain.entities.PoliticiansRating;
-import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.entities.PoliticiansRating;
 
 import javax.persistence.*;
 
@@ -55,14 +54,14 @@ public class PoliticiansRatingJpaEntity {
         this.politician = politician;
     }
 
-    public PoliticiansRatingJpaEntity(Integer id, Double rating, UserRaterJpaEntity rater, PoliticiansJpaEntity politician) {
+    PoliticiansRatingJpaEntity(Integer id, Double rating, UserRaterJpaEntity rater, PoliticiansJpaEntity politician) {
         this.id = id;
         this.rating = rating;
         this.rater = rater;
         this.politician = politician;
     }
 
-    public PoliticiansRatingJpaEntity() {}
+    PoliticiansRatingJpaEntity() {}
 
     public static PoliticiansRatingJpaEntity from(PoliticiansRating politicianRating) {
         Politicians politicianFromRating = politicianRating.getPolitician();
@@ -87,15 +86,15 @@ public class PoliticiansRatingJpaEntity {
     private static PoliticiansJpaEntity fromPoliticians(Politicians politician) {
         return PoliticiansJpaEntity.fromWithNullRating(politician);
     }
-
-    private static Politicians toPoliticians(PoliticiansJpaEntity jpaEntity) {
-        return new Politicians.PoliticiansBuilder(PoliticianNumber.of(jpaEntity.getId()))
-                .setFirstName(jpaEntity.getFirstName())
-                .setLastName(jpaEntity.getLastName())
-                .setFullName()
-                .setRating(jpaEntity.getRatingJpaEntity().toRating())
-                .setPoliticiansRating(null)
-                .build();
-    }
+//
+//    private static Politicians toPoliticians(PoliticiansJpaEntity jpaEntity) {
+//        return new Politicians.PoliticiansBuilder(PoliticianNumber.of(jpaEntity.getId()))
+//                .setFirstName(jpaEntity.getFirstName())
+//                .setLastName(jpaEntity.getLastName())
+//                .setFullName()
+//                .setRating(jpaEntity.getRatingJpaEntity().toRating())
+//                .setPoliticiansRating(null)
+//                .build();
+//    }
 
 }

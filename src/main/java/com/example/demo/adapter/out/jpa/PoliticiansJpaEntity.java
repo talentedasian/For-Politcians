@@ -1,5 +1,6 @@
 package com.example.demo.adapter.out.jpa;
 
+import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician;
@@ -86,10 +87,6 @@ public class PoliticiansJpaEntity {
         return ratingJpaEntity;
     }
 
-    public void setRatingJpaEntity(RatingJpaEntity ratingJpaEntity) {
-        this.ratingJpaEntity = ratingJpaEntity;
-    }
-
     public int getTotalCountRating() {
         return totalCountRating;
     }
@@ -113,13 +110,11 @@ public class PoliticiansJpaEntity {
     }
 
     public static PoliticiansJpaEntity from(Politicians politician) {
+        AverageRating averageRating = politician.average();
         var jpaEntity = new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
                 politician.lastName(), politician.fullName(),
-                RatingJpaEntity.from(politician.totalRatingAccumulated(), politician.average()),
+                RatingJpaEntity.from(politician.totalRatingAccumulated(), averageRating),
                 politician.totalCountsOfRatings(), fromPoliticiansRating(politician.getPoliticiansRating()));
-        if (politician.getType() == null) {
-            return jpaEntity;
-        }
 
         switch (politician.getType()) {
             case PRESIDENTIAL -> {
@@ -130,15 +125,17 @@ public class PoliticiansJpaEntity {
                 var senatorial = (SenatorialPolitician) politician;
                 return new SenatorialJpaEntity(jpaEntity, senatorial.getMostSignificantLawMade(), senatorial.getTotalMonthsOfServiceAsSenator());
             }
-            default -> throw new IllegalStateException("Unexpected value: " + politician.getType());
+            default -> {return jpaEntity;}
+//            default -> throw new IllegalStateException("Unexpected value: " + politician.getType());
         }
     }
 
     public static PoliticiansJpaEntity fromWithNullRating(Politicians politician) {
+        AverageRating averageRating = politician.average();
         var jpaEntity = new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
                 politician.lastName(), politician.fullName(),
-                RatingJpaEntity.from(politician.totalRatingAccumulated(), politician.average()), politician.totalCountsOfRatings(),
-                null);
+                RatingJpaEntity.from(politician.totalRatingAccumulated(), averageRating),
+                politician.totalCountsOfRatings(), null);
         if (politician.getType() == null) {
             return jpaEntity;
         }
@@ -214,7 +211,8 @@ public class PoliticiansJpaEntity {
                 .setFullName()
                 .setPoliticiansRating(toPoliticiansRating(politiciansRating))
                 .setTotalRating(BigDecimal.valueOf(ratingJpaEntity.totalRating))
-                .setAverageRating(ratingJpaEntity.averageRating)
+                .setAverageRating(ratingJpaEntity.getAverageRating() == 0 ? AverageRating.NO_RATING_YET
+                        : AverageRating.of(BigDecimal.valueOf(ratingJpaEntity.getAverageRating())))
                 .build();
     }
 }

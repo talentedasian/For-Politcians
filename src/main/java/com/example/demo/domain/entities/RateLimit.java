@@ -79,7 +79,7 @@ public class RateLimit {
 	}
 
 	public boolean isNotRateLimited() {
-		return expirationDate == null ? true : expirationDate.isExpired(RATE_LIMIT);
+		return expirationDate == null || expirationDate.isExpired(RATE_LIMIT);
 	}
 
 	public Integer daysLeftOfBeingRateLimited() {

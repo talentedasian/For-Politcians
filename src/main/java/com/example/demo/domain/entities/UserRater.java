@@ -7,15 +7,15 @@ import java.util.*;
 
 public class UserRater {
 
-	private String facebookName;
+	private final String facebookName;
 
-	private PoliticalParty politicalParties;
+	private final PoliticalParty politicalParties;
 	
-	private String email;
+	private final String email;
 
-	private AccountNumber userAccountNumber;
+	private final AccountNumber userAccountNumber;
 
-	private Map<PoliticianNumber, RateLimit> rateLimit;
+	private final Map<PoliticianNumber, RateLimit> rateLimit;
 
 	public String returnUserAccountNumber() {
 		return userAccountNumber.accountNumber();
@@ -70,8 +70,7 @@ public class UserRater {
 			return false;
 		UserRater other = (UserRater) obj;
 		if (!Objects.equals(new AccountNumber(other.returnUserAccountNumber()), userAccountNumber)) return false;
-		if (!Objects.equals(other.rateLimit, rateLimit)) return false;
-		return true;
+		return Objects.equals(other.rateLimit, rateLimit);
 	}
 
 	public boolean canRate(UserRateLimitService service, PoliticianNumber politicianNumber) {

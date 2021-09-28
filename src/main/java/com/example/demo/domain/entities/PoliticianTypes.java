@@ -6,7 +6,7 @@ public class PoliticianTypes {
 
 	public static class PresidentialPolitician extends Politicians{
 
-		private String mostSignificantLawSigned;
+		private final String mostSignificantLawSigned;
 
 		protected PresidentialPolitician(Politicians politician, String lawSigned) {
 			super(	politician.recordName(), politician.getPoliticiansRating(), null, politician.average(),
@@ -23,12 +23,12 @@ public class PoliticianTypes {
 		@ExcludeFromJacocoGeneratedCoverage
 		public String toString() {
 			return "Politicians [name=" + fullName() + ", rating=" + averageRating() + ", politicianNumber=" + retrievePoliticianNumber()
-					+ ", mostSignificantLawMSigned=" + mostSignificantLawSigned + ", type=" + Type.PRESIDENTIAL.toString() +  "]";
+					+ ", mostSignificantLawMSigned=" + mostSignificantLawSigned + ", type=" + Type.PRESIDENTIAL +  "]";
 		}
 
 		public static class PresidentialBuilder{
 			
-			private Politicians politician;
+			private final Politicians politician;
 			
 			private String mostSignificantLawSigned;
 
@@ -59,9 +59,9 @@ public class PoliticianTypes {
 
 	public static class SenatorialPolitician extends Politicians{
 
-		private int totalMonthsOfServiceAsSenator;
+		private final int totalMonthsOfServiceAsSenator;
 
-		private String mostSignificantLawMade;
+		private final String mostSignificantLawMade;
 
 		public int getTotalMonthsOfServiceAsSenator() {
 			return totalMonthsOfServiceAsSenator;
@@ -84,12 +84,12 @@ public class PoliticianTypes {
 		public String toString() {
 			return "Politicians [name=" + fullName() + ", rating=" + averageRating() + ", politicianNumber=" + retrievePoliticianNumber()
 					+ ", totalMonthsOfServiceAsSenator=" + totalMonthsOfServiceAsSenator + ", mostSignificantLawMade=" + mostSignificantLawMade
-					+ ", type=" + Type.SENATORIAL.toString() +  "]";
+					+ ", type=" + Type.SENATORIAL +  "]";
 		}
 
 		public static class SenatorialBuilder {
 			
-			private Politicians politician;
+			private final Politicians politician;
 			
 			private Integer totalMonthsOfServiceAsSenator;
 			

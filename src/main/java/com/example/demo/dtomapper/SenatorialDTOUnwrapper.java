@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 
 import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
 import static com.example.demo.domain.entities.Politicians.Type.SENATORIAL;
+import static java.math.BigDecimal.ZERO;
 
 class SenatorialDTOUnwrapper extends PoliticianDTOUnwrapper{
 
@@ -33,7 +34,8 @@ class SenatorialDTOUnwrapper extends PoliticianDTOUnwrapper{
                 .setFirstName(dto.getFirstName())
                 .setLastName(dto.getLastName())
                 .setFullName()
-                .setRating(new Rating(0.00D, AverageRating.of(BigDecimal.valueOf(0))))
+                .setTotalRating(ZERO)
+                .setAverageRating(AverageRating.NO_RATING_YET)
                 .build();
 
         return new PoliticianTypes.SenatorialPolitician.SenatorialBuilder(politician)
