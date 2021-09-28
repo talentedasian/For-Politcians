@@ -1,15 +1,16 @@
 package com.example.demo.domain.entities;
 
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.Score;
-import com.example.demo.domain.averageCalculator.AverageCalculator;
-import com.example.demo.domain.averageCalculator.DecentSatisfactionAverageCalculator;
-import com.example.demo.domain.averageCalculator.HighSatisfactionAverageCalculator;
-import com.example.demo.domain.averageCalculator.LowSatisfactionAverageCalculator;
+import com.example.demo.domain.TotalRatingAccumulated;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.example.demo.domain.AverageRating.NO_RATING_YET;
 
 
 public class Politicians {
@@ -20,9 +21,13 @@ public class Politicians {
 
 	private Rating rating;
 
+	private AverageRating averageRating;
+
 	private PoliticianNumber politicianNumber;
 
 	private Politicians.Type type;
+
+	private TotalRatingAccumulated totalRatingAccumulated;
 
 	// count of ratings regardless of deletion of ratings.
 	private int totalCountsOfRating;
@@ -44,7 +49,11 @@ public class Politicians {
 	}
 
 	public double averageRating() {
-		return rating.getAverageRating();
+		return Objects.equals(averageRating, NO_RATING_YET) ? 0 : averageRating.averageRating();
+	}
+
+	public AverageRating average() {
+		return this.averageRating;
 	}
 
 	public void setRating(Rating rating) {
@@ -59,27 +68,51 @@ public class Politicians {
 		return new Politicians(name, politiciansRating, rating, politicianNumber, type);
 	}
 
-	protected Politicians(Name name,List<PoliticiansRating> politiciansRating, Rating rating, PoliticianNumber politicianNumber, Type polType) {
+	Politicians(Name name,List<PoliticiansRating> politiciansRating, Rating rating, PoliticianNumber politicianNumber, Type polType) {
 		super();
+		this.averageRating = NO_RATING_YET;
 		this.name = name;
 		this.politiciansRating.addAll(politiciansRating == null ? List.of() : politiciansRating);
-
 		this.totalCountsOfRating = politiciansRating.size();
 		this.rating = rating;
 		this.politicianNumber = politicianNumber;
 		this.type = polType;
 	}
 
+	Politicians(Name name,List<PoliticiansRating> politiciansRating, Rating rating, AverageRating averageRating, PoliticianNumber politicianNumber, Type polType) {
+		super();
+		this.name = name;
+		this.politiciansRating.addAll(politiciansRating == null ? List.of() : politiciansRating);
+		this.totalCountsOfRating = politiciansRating.size();
+		this.rating = rating;
+		this.averageRating = averageRating;
+		this.politicianNumber = politicianNumber;
+		this.type = polType;
+	}
+
+	Politicians(Name name,List<PoliticiansRating> politiciansRating, Rating rating, AverageRating averageRating,
+						  TotalRatingAccumulated totalRatingAccumulated, PoliticianNumber politicianNumber, Type polType) {
+		super();
+		this.name = name;
+		this.politiciansRating.addAll(politiciansRating == null ? List.of() : politiciansRating);
+		this.totalCountsOfRating = politiciansRating.size();
+		this.rating = rating;
+		this.averageRating = averageRating;
+		this.politicianNumber = politicianNumber;
+		this.type = polType;
+		this.totalRatingAccumulated = totalRatingAccumulated == null
+				? TotalRatingAccumulated.ZERO : TotalRatingAccumulated.of(totalRatingAccumulated.totalRating(), averageRating);
+	}
+
 	@Override
 	public String toString() {
-		return "Politicians{" +
-				"name=" + name +
-				", politiciansRating=" + politiciansRating +
-				", rating=" + rating +
-				", totalCountsOfRating=" + totalCountsOfRating +
-				", politicianNumber=" + politicianNumber +
-				", type=" + type +
-				'}';
+		return "Politicians{ " +
+				"name= " + name +
+				", rating= " + rating +
+				", totalCountsOfRating= " + totalCountsOfRating +
+				", politicianNumber= " + politicianNumber +
+				", totalRatingAccumulated= "  + totalRatingAccumulated +
+				", type=" + type + " }";
 	}
 
 	@Override
@@ -105,33 +138,40 @@ public class Politicians {
 		return this.totalCountsOfRating;
 	}
 
-	public double calculateAverageRating(double ratingToAdd) {
-		double rating = getRating().calculateAverage(ratingToAdd,
-				returnAverageCalculator(getRating().getAverageRating(), getRating().calculateTotalAmountOfRating(ratingToAdd)));
-		return rating;
-	}
-
-	public double calculateAverageRating(Score ratingToAdd) {
-		double rating = getRating().calculateAverage(ratingToAdd.rating(),
-				returnAverageCalculator(getRating().getAverageRating(), getRating().calculateTotalAmountOfRating(ratingToAdd.rating())));
-		return rating;
-	}
-
-	public AverageCalculator returnAverageCalculator(double averageRating, double totalRating) {
-		if (averageRating < 5D) {
-			return new LowSatisfactionAverageCalculator(totalRating, totalCountsOfRatings());
-		} else if (averageRating < 8.89D) {
-			return new DecentSatisfactionAverageCalculator(totalRating, totalCountsOfRatings());
-		} else if (averageRating >= 8.89D) {
-			return new HighSatisfactionAverageCalculator(totalRating, totalCountsOfRatings());
+	public AverageRating calculateAverageRating(Score ratingToAdd) {
+		if (isAverageRatingPresent()) {
+			BigDecimal totalScoreAccumulated = totalRatingAccumulated.addTotalRating(ratingToAdd).totalRating();
+			return AverageRating.of(totalScoreAccumulated,totalCountsOfRating, averageRating);
 		}
-		return null;
+
+		return AverageRating.of(BigDecimal.valueOf(ratingToAdd.rating()));
+	}
+
+	public boolean isAverageRatingPresent() {
+		return averageRating != NO_RATING_YET;
 	}
 
 	void rate(PoliticiansRating rating) {
-		totalCountsOfRating++;
-		calculateAverageRating(rating.getRating());
+		addCountsOfTotalRating();
+
+		double calculatedAverageRating = calculateAverageRating(Score.of(rating.getRating())).averageRating();
+		changeAverageRating(AverageRating.of(BigDecimal.valueOf(calculatedAverageRating)));
+
+		changeTotalRatingAccumulated(Score.of(rating.getRating()));
+
 		politiciansRating.add(rating);
+	}
+
+	private void addCountsOfTotalRating() {
+		totalCountsOfRating++;
+	}
+
+	private void changeTotalRatingAccumulated(Score score) {
+		this.totalRatingAccumulated = totalRatingAccumulated.addTotalRating(score);
+	}
+
+	private void changeAverageRating(AverageRating averageRating) {
+		this.averageRating = averageRating;
 	}
 
 	// INFO : DOES NOT CHANGE OVERALL BEHAVIOUR OF POLITICIAN. DELETING A RATING DOES NOT CHANGE THE TOTAL RATING AND THE AVERAGE RATING
@@ -163,7 +203,11 @@ public class Politicians {
 		return this.politicianNumber;
     }
 
-    public enum Type {
+	public TotalRatingAccumulated totalRatingAccumulated() {
+		return totalRatingAccumulated;
+	}
+
+	public enum Type {
 		PRESIDENTIAL("presidential, PRESIDENTIAL"), SENATORIAL("senatorial, SENATORIAL"),
 		MAYOR("mayorial, MAYORIAL");
 
@@ -187,6 +231,10 @@ public class Politicians {
 		private Rating rating;
 		
 		private String politicianNumber;
+
+		private TotalRatingAccumulated totalRatingAccumulated;
+
+		private AverageRating averageRating;
 
 		@Deprecated(forRemoval = true) // GOAL : use constructor below instead
 		public PoliticiansBuilder(String politicianNumber) {
@@ -257,18 +305,26 @@ public class Politicians {
 			}
 			return builder.setFullName();
 		}
-		
+		public PoliticiansBuilder setTotalRating(TotalRatingAccumulated totalRatingAccumulated) {
+			this.totalRatingAccumulated = totalRatingAccumulated;
+			return this;
+		}
+
+		public PoliticiansBuilder setAverageRating(AverageRating averageRating) {
+			this.averageRating = averageRating;
+			return this;
+		}
+
 		public PoliticiansBuilder setRatingRepository(RatingRepository ratingRepo) {
 			this.ratingRepo = ratingRepo;
 			return this;
 		}
-		
+
 		public Politicians build() {
 			var name = new Name(firstName, lastName);
 			if (politiciansRating == null) politiciansRating = List.of();
-			return new Politicians(name, politiciansRating, rating, new PoliticianNumber(politicianNumber), null);
+			return new Politicians(name, politiciansRating, rating, averageRating, totalRatingAccumulated, new PoliticianNumber(politicianNumber), null);
 		}
-
 	}
 	
 }

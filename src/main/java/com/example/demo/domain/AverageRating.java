@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 
 public record AverageRating(double rating) {
 
+    public static final AverageRating NO_RATING_YET = null;
+
     private static final double MINIMUM = 0;
     private static final int MAXIMUM = 10;
 
@@ -28,19 +30,26 @@ public record AverageRating(double rating) {
     }
 
     public static AverageRating of(BigDecimal averageRating) {
-        return new AverageRating(averageRating.doubleValue());
+        return of(averageRating, 1, new AverageRating(averageRating.doubleValue()));
     }
 
     public static AverageRating of(BigDecimal totalScoreAccumulated, int count, AverageRating previousAverageRating) {
-        if (isTotalScoreAccumulatedZero(totalScoreAccumulated)) throw new IllegalStateException("""
-                total rating accumulated must be greater than 0
-                """);
-        if (isCountZero(count)) throw new IllegalStateException("count must be greater than 0");
+        if (isTotalScoreAccumulatedZero(totalScoreAccumulated))
+            throw new IllegalStateException("total rating accumulated must be greater than 0");
+        if (isCountZero(count))
+            throw new IllegalStateException("count must be greater than 0");
 
-        double averageRatingCalculated = Rating.mapToSatisfactionRate(previousAverageRating.averageRating())
-                .calculate(totalScoreAccumulated, count);
+        double averageRatingCalculated = calculateAverageRating(totalScoreAccumulated, count, previousAverageRating);
 
-        return of(BigDecimal.valueOf(averageRatingCalculated));
+        return new AverageRating(averageRatingCalculated);
+    }
+
+    private static double calculateAverageRating(BigDecimal totalScoreAccumulated, int count, AverageRating previousAverageRating) {
+        return determineRatingClassification(previousAverageRating).calculate(totalScoreAccumulated, count);
+    }
+
+    private static Rating determineRatingClassification(AverageRating previousAverageRating) {
+        return Rating.mapToSatisfactionRate(previousAverageRating.averageRating());
     }
 
     private static boolean isCountZero(int count) {
@@ -55,4 +64,7 @@ public record AverageRating(double rating) {
         return this.rating;
     }
 
+    public boolean isAverageRatingLow() {
+        return Rating.mapToSatisfactionRate(rating).equals(Rating.LOW);
+    }
 }
