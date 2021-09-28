@@ -9,6 +9,7 @@ import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -24,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Tag("Domain")
 public class PoliticiansTest {
 
 	final PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
@@ -102,7 +104,7 @@ public class PoliticiansTest {
 	public void totalRatingAccumulatedDefaultsToZeroIfConstructingPoliticianWithNoTotalRatingAccumulated() throws Exception{
 		Politicians politician = politicianBuilder.build();
 
-		BigDecimal totalRatingAccumulated = politician.totalRatingAccumulated();
+		BigDecimal totalRatingAccumulated = politician.totalRatingAccumulated().totalRating();
 
 		assertThat(totalRatingAccumulated)
 				.isEqualTo(valueOf(0));
@@ -113,7 +115,7 @@ public class PoliticiansTest {
 		TotalRatingAccumulated totalRatingAccumulated = TotalRatingAccumulated.of(BigDecimal.TEN);
 		Politicians politician = politicianBuilder.setTotalRating(totalRatingAccumulated).build();
 
-		assertThat(politician.totalRatingAccumulated())
+		assertThat(politician.totalRatingAccumulated().totalRating())
 				.isEqualByComparingTo(totalRatingAccumulated.totalRating());
 	}
 
@@ -125,7 +127,7 @@ public class PoliticiansTest {
 		Politicians politician = politicianBuilder.setTotalRating(totalRatingAccumulated)
 				.setAverageRating(AverageRating.of(valueOf(2.344))).build();
 
-		assertThat(politician.totalRatingAccumulated().doubleValue())
+		assertThat(politician.totalRatingAccumulated().totalRating().doubleValue())
 				.isEqualTo(EXPECTED_TOTAL_RATING_CALCULATED_FOR_LOW_RATING);
 	}
 
@@ -151,7 +153,9 @@ public class PoliticiansTest {
 
 		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
-		Politicians politician = politicianBuilder.setRating(new Rating(0D, AverageRating.of(valueOf(1d)))).build();
+		Politicians politician = politicianBuilder
+				.setTotalRating(TotalRatingAccumulated.ZERO)
+				.setAverageRating(NO_RATING_YET).build();
 		var rating = createPolRating(Score.of(2.243), rater, politician);
 
 		politician.rate(rating);
@@ -169,13 +173,12 @@ public class PoliticiansTest {
 
 		var rater = createRater(ACC_NUMBER().accountNumber());
 
-		var justHereToPutIncreaseSize = createPolRating(Score.of(1), rater, politicianBuilder.build());
+		var justHereToIncreaseSize = createPolRating(Score.of(1), rater, politicianBuilder.build());
 
 		Politicians politician = politicianBuilder
 				.setTotalRating(TotalRatingAccumulated.of(valueOf(3)))
 				.setAverageRating(AverageRating.of(valueOf(2.231)))
-				.setRating(new Rating(3D, AverageRating.of(valueOf(2.231))))
-				.setPoliticiansRating(List.of(justHereToPutIncreaseSize, justHereToPutIncreaseSize))
+				.setPoliticiansRating(List.of(justHereToIncreaseSize, justHereToIncreaseSize))
 				.build();
 
 		assertThat(politician.calculateAverageRating(Score.of(1)))
@@ -191,14 +194,15 @@ public class PoliticiansTest {
 		var justHereToPutIncreaseSize = createPolRating(Score.of(1), rater, politicianBuilder.build());
 
 		Politicians politician = politicianBuilder
-				.setRating(new Rating(3D, AverageRating.of(valueOf(2.231))))
+				.setAverageRating(AverageRating.of(valueOf(2.231)))
+				.setTotalRating(TotalRatingAccumulated.of(valueOf(3)))
 				.setPoliticiansRating(List.of(justHereToPutIncreaseSize, justHereToPutIncreaseSize, justHereToPutIncreaseSize)).build();
 
 		var actualRating = createPolRating(Score.of(3.2232), rater, politician);
 
 		politician.rate(actualRating);
 
-		assertThat(politician.averageRating())
+		assertThat(politician.average().averageRating())
 				.isEqualTo(EXPECTED_AVERAGE_RATING);
 	}
 

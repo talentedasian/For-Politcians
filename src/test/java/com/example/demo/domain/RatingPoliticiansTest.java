@@ -8,6 +8,7 @@ import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.Rating;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -18,6 +19,7 @@ import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Tag("Domain")
 public class RatingPoliticiansTest {
 
     final String FIRST_NAME = "Rodrigo";

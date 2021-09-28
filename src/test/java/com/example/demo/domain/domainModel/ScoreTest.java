@@ -2,11 +2,13 @@ package com.example.demo.domain.domainModel;
 
 import com.example.demo.domain.Score;
 import com.example.demo.domain.ScoreHasExceededMaximumValueException;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Tag("Domain")
 public class ScoreTest {
 
     @Test

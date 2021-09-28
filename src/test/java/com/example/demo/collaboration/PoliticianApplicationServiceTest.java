@@ -3,25 +3,24 @@ package com.example.demo.collaboration;
 import com.example.demo.adapter.in.service.PoliticiansService;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.baseClasses.NumberTestFactory;
-import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
 import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
 import com.example.demo.domain.entities.PoliticianTypes;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.Politicians;
-import com.example.demo.domain.entities.Rating;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
-import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Tag("Domain")
 public class PoliticianApplicationServiceTest {
 
     final String FIRST_NAME = "Rodrigo";
@@ -34,8 +33,7 @@ public class PoliticianApplicationServiceTest {
     Politicians.PoliticiansBuilder politicianBuilder = new Politicians.PoliticiansBuilder(NumberTestFactory.POL_NUMBER())
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
-            .setPoliticiansRating(null)
-            .setRating(new Rating(0D, AverageRating.of(valueOf(0))));
+            .setPoliticiansRating(null);
 
     @BeforeEach
     public void setup() {

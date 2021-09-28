@@ -5,6 +5,7 @@ import com.example.demo.domain.entities.PoliticianTypes;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+@Tag("Domain")
 public class PresidentialPoliticianTest {
 
 	final PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();

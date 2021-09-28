@@ -3,10 +3,12 @@ package com.example.demo.domain.userRaterNumber.facebook;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+@Tag("Domain")
 public class FacebookAccountNumberImplementorTest {
 	
 	final String ACCOUNT_NUMBER = "TNFLM-00039812732123";

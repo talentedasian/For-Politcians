@@ -13,6 +13,7 @@ import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.Rating;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Tag("Domain")
 public class RatingApplicationServiceTest {
 
     RatingRepository ratingRepo;

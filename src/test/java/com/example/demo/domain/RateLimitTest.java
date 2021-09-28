@@ -3,6 +3,7 @@ package com.example.demo.domain;
 import com.example.demo.baseClasses.NumberTestFactory;
 import com.example.demo.domain.entities.RateLimit;
 import com.example.demo.domain.entities.PoliticianNumber;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("Domain")
 public class RateLimitTest {
 
 	final PoliticianNumber POLITICIAN_NUMBER = NumberTestFactory.POL_NUMBER();

@@ -6,6 +6,7 @@ import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.Sen
 import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.Rating;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -16,6 +17,7 @@ import java.util.Map;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Tag("Domain")
 public class SenatorialPoliticianTest {
 
     final PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();

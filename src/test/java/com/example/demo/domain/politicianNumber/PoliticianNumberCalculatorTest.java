@@ -4,12 +4,14 @@ import com.example.demo.domain.entities.Name;
 import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.Politicians;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static com.example.demo.domain.entities.Politicians.Type.PRESIDENTIAL;
 import static com.example.demo.domain.entities.Politicians.Type.SENATORIAL;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Tag("Domain")
 public class PoliticianNumberCalculatorTest {
 
 	final String FIRST_NAME = "firstName";

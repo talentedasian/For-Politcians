@@ -3,6 +3,7 @@ package com.example.demo.domain.domainModel;
 import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.AverageRatingHasExceededMaximumValueException;
 import org.assertj.core.api.ThrowableAssert;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -11,15 +12,27 @@ import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Tag("Domain")
 public class AverageRatingTest {
 
     @Test
     public void shouldReturnAverageRatingSet() throws Exception{
-        BigDecimal VALID_AVERAGE_RATING = valueOf(2.3214);
+        BigDecimal VALID_AVERAGE_RATING = valueOf(2.321);
         double averageRating = AverageRating.of(VALID_AVERAGE_RATING).rating();
 
         assertThat(averageRating)
                 .isEqualTo(VALID_AVERAGE_RATING.doubleValue());
+    }
+
+    @Test
+    public void shouldRoundOffTo3Digits() throws Exception{
+        double EXPECTED_AVERAGE_RATING = 9.32;
+
+        BigDecimal AVERAGE_RATING_WITH_MORE_THAN_3_DIGITS = valueOf(9.3245);
+        double averageRating = AverageRating.of(AVERAGE_RATING_WITH_MORE_THAN_3_DIGITS).rating();
+
+        assertThat(averageRating)
+                .isEqualTo(EXPECTED_AVERAGE_RATING);
     }
 
     @Test

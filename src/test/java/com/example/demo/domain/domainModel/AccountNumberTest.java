@@ -3,11 +3,13 @@ package com.example.demo.domain.domainModel;
 import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.domain.userRaterNumber.AbstractUserRaterNumber;
 import com.example.demo.domain.userRaterNumber.facebook.FacebookAccountNumberCalculator;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Tag("Domain")
 public class AccountNumberTest {
 
     final String NAME = "Jitter Ted";

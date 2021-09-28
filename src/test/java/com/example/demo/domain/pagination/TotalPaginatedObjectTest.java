@@ -3,6 +3,7 @@ package com.example.demo.domain.pagination;
 import com.example.demo.domain.NotLastPageException;
 import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 
+@Tag("Domain")
 public class TotalPaginatedObjectTest {
 
     @Test
