@@ -145,7 +145,7 @@ public class Politicians {
 	}
 
 	private void changeTotalRatingAccumulated(Score score) {
-		this.totalRatingAccumulated = totalRatingAccumulated.addTotalRating(score);
+		this.totalRatingAccumulated = calculateTotalRatingsAccumulated(score);
 	}
 
 	private void changeAverageRating(AverageRating averageRating) {
