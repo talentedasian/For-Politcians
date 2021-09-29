@@ -35,7 +35,7 @@ public class DefaultRateLimitServiceTest {
         LocalDate expiredDate = LocalDate.now(ZoneId.of("GMT+8")).minusDays(8);
         String ACCOUNT_NUMBER = ACC_NUMBER().accountNumber();
         PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
-        
+
         rateLimitRepo.save(new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, expiredDate));
 
         var domainService = new DefaultRateLimitDomainService(rateLimitRepo);
