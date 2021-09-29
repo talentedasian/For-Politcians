@@ -24,7 +24,6 @@ public class UserRaterTest {
                 .setName("Random Name")
                 .setEmail("test@gmail.com")
                 .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimit(null)
                 .build();
 
         rateLimitRepo = new InMemoryRateLimitRepository();
@@ -42,7 +41,6 @@ public class UserRaterTest {
                 .setName("Random Name")
                 .setEmail("test@gmail.com")
                 .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimit(null)
                 .build();
 
         rateLimitRepo = new InMemoryRateLimitRepository();
@@ -58,7 +56,6 @@ public class UserRaterTest {
                 .setName("Random Name")
                 .setEmail("test@gmail.com")
                 .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimit(null)
                 .build();
 
         rateLimitRepo = new InMemoryRateLimitRepository();

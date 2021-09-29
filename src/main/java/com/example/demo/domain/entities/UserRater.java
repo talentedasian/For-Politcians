@@ -1,9 +1,8 @@
 package com.example.demo.domain.entities;
 
-import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.enums.PoliticalParty;
 
-import java.util.*;
+import java.util.Objects;
 
 public class UserRater {
 
@@ -15,10 +14,12 @@ public class UserRater {
 
 	private final AccountNumber userAccountNumber;
 
-	private final Map<PoliticianNumber, RateLimit> rateLimit;
-
 	public String returnUserAccountNumber() {
 		return userAccountNumber.accountNumber();
+	}
+
+	public AccountNumber accountNumber() {
+		return this.userAccountNumber;
 	}
 
 	public String email() {
@@ -33,17 +34,11 @@ public class UserRater {
 		return politicalParties;
 	}
 
-	public List<RateLimit> getRateLimits() {
-		return List.copyOf(rateLimit.values());
-	}
-
-	public UserRater(String facebookName, PoliticalParty politicalParties, String email,
-					 AccountNumber userAccountNumber, Map<PoliticianNumber, RateLimit> rateLimit) {
+	UserRater(String facebookName, PoliticalParty politicalParties, String email, AccountNumber userAccountNumber) {
 		this.facebookName = facebookName;
 		this.politicalParties = politicalParties;
 		this.email = email;
 		this.userAccountNumber = userAccountNumber;
-		this.rateLimit = rateLimit;
 	}
 
 	@Override
@@ -69,8 +64,7 @@ public class UserRater {
 		if (getClass() != obj.getClass())
 			return false;
 		UserRater other = (UserRater) obj;
-		if (!Objects.equals(new AccountNumber(other.returnUserAccountNumber()), userAccountNumber)) return false;
-		return Objects.equals(other.rateLimit, rateLimit);
+		return Objects.equals(other.userAccountNumber, userAccountNumber);
 	}
 
 	public boolean canRate(UserRateLimitService service, PoliticianNumber politicianNumber) {
@@ -93,10 +87,6 @@ public class UserRater {
 
 		private String userAccountNumber;
 
-		private RateLimitRepository repo;
-
-		private Map<PoliticianNumber, RateLimit> rateLimit = null;
-
 		public Builder setName(String name) {
 			this.name = name;
 			return this;
@@ -117,24 +107,10 @@ public class UserRater {
 			return this;
 		}
 
-		public Builder setRateLimit(List<RateLimit> rateLimits) {
-			Map<PoliticianNumber, RateLimit> map = new HashMap<>();
-			if (rateLimits == null) {
-				this.rateLimit = map;
-				return this;
-			}
-			rateLimits.stream()
-					.forEach(it -> map.put(new PoliticianNumber(it.politicianNumber()), it));
-			this.rateLimit = map;
-			return this;
-		}
-
 		public UserRater build() {
-			return new UserRater(name, politicalParty, email, new AccountNumber(userAccountNumber), rateLimit);
+			return new UserRater(name, politicalParty, email, new AccountNumber(userAccountNumber));
 		}
-
 
 	}
-
 	
 }

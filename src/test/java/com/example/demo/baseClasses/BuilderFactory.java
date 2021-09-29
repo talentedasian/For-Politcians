@@ -14,7 +14,6 @@ public class BuilderFactory {
                 .setName("Random Name")
                 .setEmail("test@gmail.com")
                 .setPoliticalParty(PoliticalParty.DDS)
-                .setRateLimit(null)
                 .build();
     }
 

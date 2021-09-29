@@ -48,7 +48,6 @@ public class UserRaterJpaEntity {
                 .setName(name)
                 .setPoliticalParty(politicalParties)
                 .setEmail(email)
-                .setRateLimit(List.of())
                 .build();
     }
 

@@ -114,7 +114,7 @@ public class CitizensRatingPoliticiansTest {
         firstRating.ratePolitician(fakeDomainService);
         secondRating.ratePolitician(fakeDomainService);
 
-        secondRating.deleteRating();
+        secondRating.deleteRatingOnPolitician();
 
         assertThat(politicians.countsOfRatings())
                 .isEqualTo(1);
