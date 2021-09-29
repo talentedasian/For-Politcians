@@ -48,11 +48,7 @@ public class PoliticiansRating {
 		this.politician = politician;
 	}
 
-	public PoliticiansRating() {
-		super();
-	}
-
-	public PoliticiansRating(Integer id, double rating, UserRater rater, Politicians politician) {
+	PoliticiansRating(Integer id, double rating, UserRater rater, Politicians politician) {
 		super();
 		this.id = id;
 		this.rating = rating;
@@ -86,15 +82,6 @@ public class PoliticiansRating {
 		if (other.id == null) return false;
 		if (other.rater == null) return false;
 		return other.id.equals(id) && other.rater.equals(rater);
-	}
-
-	public PoliticiansRating(Integer id, double rating, UserRater rater, Politicians politician, RateLimitRepository rateLimitRepository) {
-		super();
-		this.id = id;
-		this.rating = rating;
-		this.rater = rater;
-		this.politician = politician;
-		this.rateLimitRepo = rateLimitRepository;
 	}
 
 	public void ratePolitician(UserRateLimitService rateLimitService) throws UserRateLimitedOnPoliticianException {
@@ -160,9 +147,9 @@ public class PoliticiansRating {
 
 		public PoliticiansRating build() {
 			try {
-				return new PoliticiansRating(Integer.valueOf(id),rating, rater, politician, rateLimitRepo);
+				return new PoliticiansRating(Integer.valueOf(id),rating, rater, politician);
 			} catch (NumberFormatException e) {
-				return new PoliticiansRating(null, rating, rater, politician, rateLimitRepo);
+				return new PoliticiansRating(null, rating, rater, politician);
 			}
 		}
 

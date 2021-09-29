@@ -1,5 +1,6 @@
 package com.example.demo.adapter.out.jpa;
 
+import com.example.demo.domain.Score;
 import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.PoliticiansRating;
 
@@ -76,11 +77,22 @@ public class PoliticiansRatingJpaEntity {
     }
 
     public PoliticiansRating toRatingNullPolitician() {
-        return rater == null ? null : new PoliticiansRating(id, rating, rater.toUserRater(), null);
+        return rater == null ? null
+                : new PoliticiansRating.Builder()
+                .setId(String.valueOf(id))
+                .setRating(Score.of(rating))
+                .setRater(rater.toUserRater())
+                .setPolitician(null)
+                .build();
     }
 
     public PoliticiansRating toRating() {
-        return new PoliticiansRating(id, rating, rater.toUserRater(), politician.toPoliticians());
+        return new PoliticiansRating.Builder()
+                .setId(String.valueOf(id))
+                .setRating(Score.of(rating))
+                .setRater(rater.toUserRater())
+                .setPolitician(politician.toPoliticians())
+                .build();
     }
 
     private static PoliticiansJpaEntity fromPoliticians(Politicians politician) {
