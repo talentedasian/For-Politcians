@@ -19,8 +19,8 @@ import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.create
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static java.net.URI.create;
-import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -69,6 +69,16 @@ public class RateLimitHttpAdapterTest extends BaseSpringHateoasTest {
 
                     .andExpect(jsonPath("_templates.default", notNullValue()))
                     .andExpect(jsonPath("_templates.default.target", containsStringIgnoringCase(linkToRateAPolitician)));
+    }
+
+    @Test
+    public void shouldReturn401UnauthorizedWhenJwtIsNotPresent() throws Exception{
+        mvc.perform(get(create("/rate-limit/" + POL_NUMBER().politicianNumber())))
+                .andExpect(status().isUnauthorized())
+
+                    .andExpect(jsonPath("code", equalTo("401")))
+                    .andExpect(jsonPath("err", equalToIgnoringCase("no jwt found from authorization header")))
+                    .andExpect(jsonPath("additional_information", containsStringIgnoringCase("requires a jwt to be present")));
     }
 
     @TestConfiguration
