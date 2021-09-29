@@ -1,11 +1,15 @@
 package com.example.demo.adapter.web;
 
 import com.example.demo.BaseSpringHateoasTest;
+import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.RateLimit;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 
 import java.time.LocalDate;
 
@@ -46,6 +50,15 @@ public class RateLimitResponseHttpAdapterTest extends BaseSpringHateoasTest {
 
                 .andExpect(jsonPath("id", equalTo(accountNumber)))
                 .andExpect(jsonPath("politician_number", equalTo(politicianNumber.politicianNumber())));
+    }
+
+    @TestConfiguration
+    static class Configuration {
+        @Bean
+        @Primary
+        public RateLimitRepository inMemory() {
+            return new InMemoryRateLimitRepository();
+        }
     }
 
 }
