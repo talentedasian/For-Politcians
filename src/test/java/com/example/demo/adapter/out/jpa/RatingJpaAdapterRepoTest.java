@@ -64,13 +64,13 @@ public class RatingJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase {
 
         PoliticiansRating savedRating = ratingRepo.save(rating);
 
-        assertThat(savedRating.getRater())
-                .isEqualTo(rating.getRater());
+        assertThat(savedRating.whoRated())
+                .isEqualTo(rating.whoRated());
 
-        assertThat(savedRating.getRating())
+        assertThat(savedRating.score())
                 .isEqualTo(scoreForPolitician.rating());
 
-        assertThat(savedRating.getPolitician())
+        assertThat(savedRating.whoWasRated())
                 .isEqualTo(presidential);
     }
 

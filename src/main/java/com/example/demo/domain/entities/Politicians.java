@@ -126,10 +126,10 @@ public class Politicians {
 	void rate(PoliticiansRating rating) {
 		addCountsOfTotalRating();
 
-		double calculatedAverageRating = calculateAverageRating(Score.of(rating.getRating())).averageRating();
+		double calculatedAverageRating = calculateAverageRating(Score.of(rating.score())).averageRating();
 		changeAverageRating(AverageRating.of(BigDecimal.valueOf(calculatedAverageRating)));
 
-		changeTotalRatingAccumulated(Score.of(rating.getRating()));
+		changeTotalRatingAccumulated(Score.of(rating.score()));
 
 		politiciansRating.add(rating);
 	}

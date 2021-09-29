@@ -105,7 +105,7 @@ public class RatingApplicationServiceTest {
         polRepo.save(politician);
         service.saveRatings(actualRatingForPolitician);
 
-        Optional<PoliticiansRating> ratingQueried = service.findById(String.valueOf(actualRatingForPolitician.getId()));
+        Optional<PoliticiansRating> ratingQueried = service.findById(String.valueOf(actualRatingForPolitician.id()));
 
         //THEN
         assertThat(ratingQueried)

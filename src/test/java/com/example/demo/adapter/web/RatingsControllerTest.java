@@ -65,7 +65,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
         polRepo.save(politician);
         PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
 
-        final String inappropriateAccountNumber = String.valueOf(savedRating.getId());
+        final String inappropriateAccountNumber = String.valueOf(savedRating.id());
         mvc.perform(get(create("/api/ratings/ratings/" + inappropriateAccountNumber)))
                 .andExpect(status().isBadRequest());
     }
@@ -75,7 +75,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
         polRepo.save(politician);
         PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
 
-        final String inappropriateAccountNumber = String.valueOf(savedRating.getId());
+        final String inappropriateAccountNumber = String.valueOf(savedRating.id());
         MvcResult response = mvc.perform(get(create("/api/ratings/ratings/" + inappropriateAccountNumber))).andReturn();
 
         assertThat(response)
@@ -117,11 +117,11 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
         polRepo.save(politician);
         PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
 
-        mvc.perform(get(create("/api/ratings/rating/" + savedRating.getId())))
+        mvc.perform(get(create("/api/ratings/rating/" + savedRating.id())))
                 .andExpect(status().isOk())
 
-                    .andExpect(jsonPath("rating", equalTo(savedRating.getRating())))
-                    .andExpect(jsonPath("id", equalTo(savedRating.getId().toString())))
+                    .andExpect(jsonPath("rating", equalTo(savedRating.score())))
+                    .andExpect(jsonPath("id", equalTo(savedRating.id().toString())))
                     .andExpect(jsonPath("politician.id", equalTo(politician.retrievePoliticianNumber())));
     }
 
@@ -130,7 +130,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
         polRepo.save(politician);
         PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
 
-        mvc.perform(get(create("/api/ratings/rating/" + savedRating.getId())))
+        mvc.perform(get(create("/api/ratings/rating/" + savedRating.id())))
                 .andExpect(content().contentType(MediaTypes.HAL_FORMS_JSON))
 
                     .andDo(document("rating", links(halLinks(),
@@ -151,7 +151,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
 
         String targetLink = linkTo(methodOn(RatingsController.class).saveRating(null, null)).withSelfRel().getHref();
 
-        mvc.perform(get(create("/api/ratings/rating/" + savedRating.getId()))
+        mvc.perform(get(create("/api/ratings/rating/" + savedRating.id()))
                         .header("Authorization", "Bearer " + jwt))
                 .andExpect(content().contentType(MediaTypes.HAL_FORMS_JSON))
 
@@ -168,7 +168,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
 
         String jwt = createJwtWithFixedExpirationDate("t@gmail.com", ACC_NUMBER().accountNumber(), "Jake");
 
-        mvc.perform(get(create("/api/ratings/rating/" + savedRating.getId()))
+        mvc.perform(get(create("/api/ratings/rating/" + savedRating.id()))
                         .header("Authorization", "Bearer " + jwt))
                 .andExpect(content().contentType(MediaTypes.HAL_FORMS_JSON))
 

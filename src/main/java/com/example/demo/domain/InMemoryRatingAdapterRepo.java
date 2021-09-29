@@ -19,42 +19,42 @@ public class InMemoryRatingAdapterRepo implements RatingRepository {
 
     @Override
     public PoliticiansRating save(PoliticiansRating rating) {
-        database.put(rating.getId().toString(), rating);
-        return database.get(rating.getId().toString());
+        database.put(rating.id().toString(), rating);
+        return database.get(rating.id().toString());
     }
 
     @Override
     public List<PoliticiansRating> findByRater_Email(String email) {
         return List.copyOf(database.values()).stream()
-                .filter(it -> it.getRater().email().equals(email))
+                .filter(it -> it.whoRated().email().equals(email))
                 .toList();
     }
 
     @Override
     public long countByPolitician_Id(Integer id) {
         return List.copyOf(database.values()).stream()
-                .filter(it -> it.getPolitician().retrievePoliticianNumber().equals(id.toString()))
+                .filter(it -> it.whoWasRated().retrievePoliticianNumber().equals(id.toString()))
                 .count();
     }
 
     @Override
     public List<PoliticiansRating> findByRater_UserAccountNumber(String accountNumber) {
         return List.copyOf(database.values()).stream()
-                .filter(it -> it.getRater().returnUserAccountNumber().equals(accountNumber))
+                .filter(it -> it.whoRated().returnUserAccountNumber().equals(accountNumber))
                 .toList();
     }
 
     @Override
     public void deleteByRater_UserAccountNumber(String accountNumber) {
         List.copyOf(database.values()).stream()
-            .filter(it -> it.getRater().returnUserAccountNumber().equals(accountNumber))
-            .forEach(it -> database.remove(it.getId().toString()));
+            .filter(it -> it.whoRated().returnUserAccountNumber().equals(accountNumber))
+            .forEach(it -> database.remove(it.id().toString()));
     }
 
     @Override
     public boolean existsByRater_UserAccountNumber(String accountNumber) {
         return List.copyOf(database.values()).stream()
-                .filter(it -> it.getRater().returnUserAccountNumber().equals(accountNumber))
+                .filter(it -> it.whoRated().returnUserAccountNumber().equals(accountNumber))
                 .count() > 1;
     }
 

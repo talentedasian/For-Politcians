@@ -44,7 +44,7 @@ public class RatingDTO extends RepresentationModel<RatingDTO>{
 	}
 
 	public static RatingDTO from(PoliticiansRating rating) {
-		return new RatingDTO(rating.getRating(), UserRaterDto.from(rating.getRater()), new PoliticiansDtoMapper().mapToDTO(rating.getPolitician()), rating.getId().toString());
+		return new RatingDTO(rating.score(), UserRaterDto.from(rating.whoRated()), new PoliticiansDtoMapper().mapToDTO(rating.whoWasRated()), rating.id().toString());
 	}
 
 }

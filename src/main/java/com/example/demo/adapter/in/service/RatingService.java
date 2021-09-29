@@ -42,7 +42,7 @@ public class RatingService {
 
 		PoliticiansRating savedRating = ratingRepo.save(rating);
 		try {
-			politicianService.updatePolitician(rating.getPolitician());
+			politicianService.updatePolitician(rating.whoWasRated());
 		} catch (PoliticianNotPersistableException e) {
 			Logger.getLogger("PoliticiansLogger").warning("""
 					Save method should have not thrown an exception because politician should already be in the database before

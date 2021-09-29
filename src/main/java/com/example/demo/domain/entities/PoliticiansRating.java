@@ -1,57 +1,37 @@
 package com.example.demo.domain.entities;
 
-import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.Score;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 
 public class PoliticiansRating {
 
-	private RateLimitRepository rateLimitRepo;
-
 	private Integer id;
 
-	private Double rating; 
+	private Score rating;
 
 	private UserRater rater;
 
 	private Politicians politician;
 	
-	public Integer getId() {
+	public Integer id() {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public double score() {
+		return rating.rating();
 	}
 
-	public double getRating() {
-		return rating;
-	}
-
-	public UserRater getRater() {
+	public UserRater whoRated() {
 		return rater;
 	}
 
-	public void setRater(UserRater rater) {
-		this.rater = rater;
-	}
-
-	public RateLimitRepository getRateLimitRepo() {
-		return rateLimitRepo;
-	}
-
-	public Politicians getPolitician() {
+	public Politicians whoWasRated() {
 		return politician;
 	}
 
-	public void setPolitician(Politicians politician) {
-		this.politician = politician;
-	}
-
-	PoliticiansRating(Integer id, double rating, UserRater rater, Politicians politician) {
-		super();
+	PoliticiansRating(Integer id, Score score, UserRater rater, Politicians politician) {
 		this.id = id;
-		this.rating = rating;
+		this.rating = score;
 		this.rater = rater;
 		this.politician = politician;
 	}
@@ -102,13 +82,11 @@ public class PoliticiansRating {
 	public static class Builder {
 		private String id;
 
-		private double rating;
+		private Score rating;
 
 		private UserRater rater;
 
 		private Politicians politician;
-
-		private RateLimitRepository rateLimitRepo;
 
 		public Builder () {}
 
@@ -126,7 +104,7 @@ public class PoliticiansRating {
 		}
 
 		public Builder setRating(Score rating) {
-			this.rating = rating.rating();
+			this.rating = rating;
 			return this;
 		}
 
@@ -140,14 +118,9 @@ public class PoliticiansRating {
 			return this;
 		}
 
-		public Builder setRepo(RateLimitRepository repo) {
-			rateLimitRepo = repo;
-			return this;
-		}
-
 		public PoliticiansRating build() {
 			try {
-				return new PoliticiansRating(Integer.valueOf(id),rating, rater, politician);
+				return new PoliticiansRating(Integer.valueOf(id), rating, rater, politician);
 			} catch (NumberFormatException e) {
 				return new PoliticiansRating(null, rating, rater, politician);
 			}

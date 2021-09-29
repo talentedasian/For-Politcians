@@ -65,13 +65,13 @@ public class PoliticiansRatingJpaEntity {
     PoliticiansRatingJpaEntity() {}
 
     public static PoliticiansRatingJpaEntity from(PoliticiansRating politicianRating) {
-        Politicians politicianFromRating = politicianRating.getPolitician();
+        Politicians politicianFromRating = politicianRating.whoWasRated();
         var politician = politicianFromRating == null ? null : fromPoliticians(politicianFromRating);
         var entity = new PoliticiansRatingJpaEntity();
-        entity.setId(politicianRating.getId());
-        entity.setRating(politicianRating.getRating());
+        entity.setId(politicianRating.id());
+        entity.setRating(politicianRating.score());
         entity.setPolitician(politician);
-        entity.setRater(UserRaterJpaEntity.from(politicianRating.getRater()));
+        entity.setRater(UserRaterJpaEntity.from(politicianRating.whoRated()));
 
         return entity;
     }
