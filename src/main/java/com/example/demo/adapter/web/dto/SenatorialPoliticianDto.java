@@ -47,6 +47,7 @@ public class SenatorialPoliticianDto extends PoliticianDto {
     }
 
     @Override
+    @ExcludeFromJacocoGeneratedCoverage
     public boolean equals(Object obj) {
         if (this == obj)
             return true;

@@ -1,5 +1,6 @@
 package com.example.demo.adapter.out.jpa;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
@@ -43,44 +44,20 @@ public class PoliticiansJpaEntity {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getFirstName() {
         return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String name() {
         return fullName;
     }
 
-    public String getFullName() {
-        return toPoliticians().fullName();
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
     public List<PoliticiansRatingJpaEntity> getPoliticiansRating() {
         return politiciansRating;
-    }
-
-    public void setPoliticiansRating(List<PoliticiansRatingJpaEntity> politiciansRating) {
-        this.politiciansRating = politiciansRating;
     }
 
     public RatingJpaEntity getRatingJpaEntity() {
@@ -89,10 +66,6 @@ public class PoliticiansJpaEntity {
 
     public int getTotalCountRating() {
         return totalCountRating;
-    }
-
-    public void setTotalCountRating(int totalCountRating) {
-        this.totalCountRating = totalCountRating;
     }
 
     PoliticiansJpaEntity() {}
@@ -154,6 +127,7 @@ public class PoliticiansJpaEntity {
     }
 
     @Override
+    @ExcludeFromJacocoGeneratedCoverage
     public String toString() {
         return "PoliticiansJpaEntity{" +
                 "id='" + id + '\'' +

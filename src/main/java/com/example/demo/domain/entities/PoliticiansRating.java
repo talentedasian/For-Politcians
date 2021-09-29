@@ -1,5 +1,6 @@
 package com.example.demo.domain.entities;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.Score;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 
@@ -74,6 +75,7 @@ public class PoliticiansRating {
 	}
 
 	@Override
+	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
 		return "PoliticiansRating [id=" + id + ", rating=" + rating.rating() + ", rater=" + rater +
 				", politician=" + politician + "]";

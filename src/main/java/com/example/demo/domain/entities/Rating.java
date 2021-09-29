@@ -1,5 +1,6 @@
 package com.example.demo.domain.entities;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.averageCalculator.Calculator;
 
@@ -58,6 +59,7 @@ public class Rating {
 	}
 	
 	@Override
+	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
 		return "Rating [totalRating=" + totalRating + ", averageRating=" + averageRating + "]";
 	}

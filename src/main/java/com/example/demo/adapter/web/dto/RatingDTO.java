@@ -1,5 +1,6 @@
 package com.example.demo.adapter.web.dto;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import org.springframework.hateoas.RepresentationModel;
@@ -39,6 +40,7 @@ public class RatingDTO extends RepresentationModel<RatingDTO>{
 	}
 
 	@Override
+	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
 		return "RatingDTO [rating=" + rating + ", rater=" + rater + ", politician=" + politician + ", id=" + id + "]";
 	}

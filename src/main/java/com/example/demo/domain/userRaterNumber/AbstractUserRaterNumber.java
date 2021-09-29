@@ -1,5 +1,6 @@
 package com.example.demo.domain.userRaterNumber;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.entityNumber.EntityNumberInterface;
 
 public abstract class AbstractUserRaterNumber implements EntityNumberInterface{
@@ -35,6 +36,7 @@ public abstract class AbstractUserRaterNumber implements EntityNumberInterface{
 	}
 
 	@Override
+	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
 		return "AbstractUserRaterNumber [firstName=" + firstName + ", lastName=" + lastName + ", accountNumber="
 				+ accountNumber + ", loginMechanism=" + loginMechanism + "]";

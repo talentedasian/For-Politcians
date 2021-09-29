@@ -1,5 +1,6 @@
 package com.example.demo.adapter.in.dtoRequest;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -32,38 +33,24 @@ public class AddPoliticianDTORequest {
 		return type;
 	}
 
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	public String getFirstName() {
 		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
 	}
 
 	public String getLastName() {
 		return lastName;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
 	public BigDecimal getRating() {
 		return rating;
 	}
 
-	public void setRating(BigDecimal rating) {
-		this.rating = rating;
-	}
-
+	@ExcludeFromJacocoGeneratedCoverage
 	public AddPoliticianDTORequest() {
 		super();
 	}
 
+	@ExcludeFromJacocoGeneratedCoverage
 	public AddPoliticianDTORequest(@NotNull String firstName, @NotNull String lastName,
 			@NotNull BigDecimal rating, @NotNull String type) {
 		this.firstName = firstName;
@@ -73,6 +60,7 @@ public class AddPoliticianDTORequest {
 	}
 
 	@Override
+	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
 		return "AddPoliticianDTORequest{" +
 				"firstName='" + firstName + '\'' +

@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import org.springframework.util.Assert;
 
 import java.util.Collections;
@@ -134,6 +135,7 @@ public class PagedObject<T> {
     }
 
     @Override
+    @ExcludeFromJacocoGeneratedCoverage
     public String toString() {
         return "PagedObject{" +
                 "Content { " + content +

@@ -1,5 +1,7 @@
 package com.example.demo.domain.entities;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -50,6 +52,7 @@ public class RateLimit {
 	}
 
 	@Override
+	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
 		return "RateLimit [id=" + id + ", politicianNumber=" + politicianNumber + "]";
 	}

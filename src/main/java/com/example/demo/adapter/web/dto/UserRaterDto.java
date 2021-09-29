@@ -1,5 +1,6 @@
 package com.example.demo.adapter.web.dto;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.entities.UserRater;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -24,6 +25,7 @@ public class UserRaterDto {
     }
 
     @Override
+    @ExcludeFromJacocoGeneratedCoverage
     public String toString() {
         return "UserRaterDto{" +
                 "accountNumber='" + accountNumber + '\'' +

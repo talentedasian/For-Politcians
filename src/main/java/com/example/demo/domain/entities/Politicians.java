@@ -1,5 +1,6 @@
 package com.example.demo.domain.entities;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.Score;
 import com.example.demo.domain.TotalRatingAccumulated;
@@ -70,6 +71,7 @@ public class Politicians {
 	}
 
 	@Override
+	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
 		return "Politicians{ " +
 				"name= " + name +

@@ -1,5 +1,6 @@
 package com.example.demo.adapter.web.dto;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.entities.RateLimit;
 import com.example.demo.domain.entities.PoliticianNumber;
 
@@ -31,7 +32,8 @@ public class RateLimitJpaEntity {
 		return politicianNumber;
 	}
 
-	protected RateLimitJpaEntity() {}
+	@ExcludeFromJacocoGeneratedCoverage
+	RateLimitJpaEntity() {}
 
 	protected RateLimitJpaEntity(LocalDate dateCreated, String accountNumber, String politicianNumber) {
 		super();
@@ -46,26 +48,7 @@ public class RateLimitJpaEntity {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-
-		RateLimitJpaEntity that = (RateLimitJpaEntity) o;
-
-		if (!accountNumber.equals(that.accountNumber)) return false;
-		if (!politicianNumber.equals(that.politicianNumber)) return false;
-		return dateCreated.equals(that.dateCreated);
-	}
-
-	@Override
-	public int hashCode() {
-		int result = accountNumber.hashCode();
-		result = 31 * result + politicianNumber.hashCode();
-		result = 31 * result + dateCreated.hashCode();
-		return result;
-	}
-
-	@Override
+	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
 		return "RateLimitJpaEntity{" +
 				"id=" + id +

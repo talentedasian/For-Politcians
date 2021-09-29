@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
@@ -72,6 +73,7 @@ public class TotalRatingAccumulated {
     }
 
     @Override
+    @ExcludeFromJacocoGeneratedCoverage
     public String toString() {
         return "TotalRatingAccumulated { " + totalRating + " }";
     }

@@ -1,5 +1,6 @@
 package com.example.demo.adapter.out.jpa;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.entities.Name;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.Politicians;
@@ -29,11 +30,8 @@ public class PresidentialJpaEntity extends PoliticiansJpaEntity{
         return mostSignificantLawSigned;
     }
 
-    public void setMostSignificantLawSigned(String mostSignificantLawSigned) {
-        this.mostSignificantLawSigned = mostSignificantLawSigned;
-    }
-
     @Override
+    @ExcludeFromJacocoGeneratedCoverage
     public String toString() {
         return super.toString() + ", {mostSignificantLawSigned=" + mostSignificantLawSigned + "}";
     }

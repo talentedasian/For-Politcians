@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import org.springframework.util.Assert;
 
 public class Page {
@@ -56,6 +57,7 @@ public class Page {
     }
 
     @Override
+    @ExcludeFromJacocoGeneratedCoverage
     public String toString() {
         return "Page{ " + pageNumber + " }";
     }

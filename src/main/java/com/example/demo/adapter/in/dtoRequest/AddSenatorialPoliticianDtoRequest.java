@@ -1,5 +1,6 @@
 package com.example.demo.adapter.in.dtoRequest;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.math.BigDecimal;
@@ -15,27 +16,22 @@ public class AddSenatorialPoliticianDtoRequest extends AddPoliticianDTORequest {
         return monthsOfService;
     }
 
-    public void setMonthsOfService(int monthsOfService) {
-        this.monthsOfService = monthsOfService;
-    }
-
     public String getlawMade() {
         return lawMade;
     }
 
-    public void setlawMade(String lawMade) {
-        this.lawMade = lawMade;
-    }
-
+    @ExcludeFromJacocoGeneratedCoverage
     public AddSenatorialPoliticianDtoRequest(String firstName, String lastName, BigDecimal rating, int monthsOfService, String lawMade) {
         super(firstName, lastName, rating, "Senatorial");
         this.monthsOfService = monthsOfService;
         this.lawMade = lawMade;
     }
 
+    @ExcludeFromJacocoGeneratedCoverage
     public AddSenatorialPoliticianDtoRequest() {}
 
     @Override
+    @ExcludeFromJacocoGeneratedCoverage
     public String toString() {
         return "AddSenatorialPoliticianDtoRequest{" +
                 "monthsOfService=" + monthsOfService +

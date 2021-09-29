@@ -1,5 +1,6 @@
 package com.example.demo.adapter.in.dtoRequest;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.validation.constraints.NotNull;
@@ -14,12 +15,10 @@ public class AddPresidentialPoliticianDTORequest extends AddPoliticianDTORequest
         return mostSignificantLawSigned;
     }
 
-    public void setMostSignificantLawSigned(String mostSignificantLawSigned) {
-        this.mostSignificantLawSigned = mostSignificantLawSigned;
-    }
-
+    @ExcludeFromJacocoGeneratedCoverage
     public AddPresidentialPoliticianDTORequest() {}
 
+    @ExcludeFromJacocoGeneratedCoverage
     public AddPresidentialPoliticianDTORequest(@NotNull String firstName, @NotNull String lastName,
                            @NotNull BigDecimal rating, String mostSignificantLawSigned) {
         super(firstName, lastName, rating, "Presidential");
@@ -27,6 +26,7 @@ public class AddPresidentialPoliticianDTORequest extends AddPoliticianDTORequest
     }
 
     @Override
+    @ExcludeFromJacocoGeneratedCoverage
     public String toString() {
         return super.toString() + ", {" +
                 "mostSignificantLawSigned='" + mostSignificantLawSigned + '\'' +

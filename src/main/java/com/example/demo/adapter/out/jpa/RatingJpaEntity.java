@@ -1,8 +1,8 @@
 package com.example.demo.adapter.out.jpa;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.TotalRatingAccumulated;
-import com.example.demo.domain.entities.Rating;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -49,6 +49,7 @@ public class RatingJpaEntity {
     }
 
     @Override
+    @ExcludeFromJacocoGeneratedCoverage
     public String toString() {
         return "RatingJpaEntity{" +
                 "totalRating=" + totalRating +
@@ -68,13 +69,11 @@ public class RatingJpaEntity {
     }
 
     @Override
+    @ExcludeFromJacocoGeneratedCoverage
     public int hashCode() {
         int result = totalRating != null ? totalRating.hashCode() : 0;
         result = 31 * result + (averageRating != null ? averageRating.hashCode() : 0);
         return result;
     }
 
-    public Rating toRating() {
-        return new Rating(totalRating, averageRating);
-    }
 }

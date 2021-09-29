@@ -1,5 +1,6 @@
 package com.example.demo.adapter.in.web.jwt;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDateTime;
@@ -68,6 +69,7 @@ public class JwtDto extends RepresentationModel<JwtDto>{
 	}
 
 	@Override
+	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
 		return "JwtDto [jwt=" + jwt + ", id=" + id + ", subject=" + subject + ", expiration=" + expiration + ", fullName=" + name + "]";
 	}

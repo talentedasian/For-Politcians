@@ -1,5 +1,6 @@
 package com.example.demo.domain.entities;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.enums.PoliticalParty;
 
 import java.util.Objects;
@@ -42,6 +43,7 @@ public class UserRater {
 	}
 
 	@Override
+	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
 		return "UserRater [facebookName=" + facebookName + ", politicalParties=" + politicalParties + ", email=" + email
 				+ ", userAccountNumber=" + userAccountNumber + "]";

@@ -1,5 +1,6 @@
 package com.example.demo.adapter.out.jpa;
 
+import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.entities.Politicians;
 
@@ -34,13 +35,14 @@ public class SenatorialJpaEntity extends PoliticiansJpaEntity {
     SenatorialJpaEntity() {}
 
     protected SenatorialJpaEntity(PoliticiansJpaEntity politician, String mostSignificantLawMade, Integer totalMonthsOfServiceAsSenator) {
-        super(politician.getId(), politician.getFirstName(), politician.getLastName(), politician.getFullName(),
+        super(politician.getId(), politician.getFirstName(), politician.getLastName(), politician.name(),
                 politician.getRatingJpaEntity(), politician.getTotalCountRating(), politician.getPoliticiansRating());
         this.totalMonthsOfServiceAsSenator = totalMonthsOfServiceAsSenator;
         this.mostSignificantLawMade = mostSignificantLawMade;
     }
 
     @Override
+    @ExcludeFromJacocoGeneratedCoverage
     public String toString() {
         return super.toString() + ", {mostSignificantLawMade=" + mostSignificantLawMade + ", totalMonthsOfService=" + totalMonthsOfServiceAsSenator + "}";
     }
