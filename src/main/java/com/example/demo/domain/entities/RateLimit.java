@@ -1,13 +1,10 @@
 package com.example.demo.domain.entities;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class RateLimit {
 
-	private transient static final Map<String, RateLimit> cache = new HashMap<>();
 	public static final long RATE_LIMIT = 7;
 
 	private String id;
