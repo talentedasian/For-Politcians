@@ -1,6 +1,5 @@
 package com.example.demo.domain.entities;
 
-import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.Score;
 import com.example.demo.domain.TotalRatingAccumulated;
@@ -189,7 +188,6 @@ public class Politicians {
 	}
 	
 	public static class PoliticiansBuilder {
-		private RatingRepository ratingRepo;
 		
 		private Integer id;
 		
@@ -197,11 +195,7 @@ public class Politicians {
 		
 		private String lastName;
 		
-		private String fullName;
-		
 		private List<PoliticiansRating> politiciansRating;
-
-		private Rating rating;
 		
 		private final String politicianNumber;
 
@@ -250,8 +244,7 @@ public class Politicians {
 					.setLastName(lastName)
 					.setAverageRating(averageRating)
 					.setTotalRating(totalRating)
-					.setPoliticiansRating(politiciansRating)
-					.setRatingRepository(ratingRepo);
+					.setPoliticiansRating(politiciansRating);
 			return builder;
 		}
 
@@ -267,11 +260,6 @@ public class Politicians {
 
 		public PoliticiansBuilder setAverageRating(double averageRating) {
 			this.averageRating = AverageRating.of(BigDecimal.valueOf(averageRating));
-			return this;
-		}
-
-		public PoliticiansBuilder setRatingRepository(RatingRepository ratingRepo) {
-			this.ratingRepo = ratingRepo;
 			return this;
 		}
 
