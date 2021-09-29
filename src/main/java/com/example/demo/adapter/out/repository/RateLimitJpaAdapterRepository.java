@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,7 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
     }
 
     @Override
+    @Transactional
     public RateLimit save(RateLimit rateLimit) {
         var dto = RateLimitJpaEntity.of(rateLimit);
 

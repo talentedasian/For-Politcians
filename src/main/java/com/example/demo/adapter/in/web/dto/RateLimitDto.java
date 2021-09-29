@@ -34,7 +34,13 @@ public class RateLimitDto extends RepresentationModel<RateLimitDto> {
     }
 
     public static RateLimitDto from(RateLimit rateLimit) {
-        return new RateLimitDto(rateLimit.id(), rateLimit.politicianNumber(), rateLimit.daysLeftOfBeingRateLimited().longValue());
+        Integer integer;
+        try {
+            integer = rateLimit.daysLeftOfBeingRateLimited();
+        } catch(IllegalStateException e) {
+            integer = 0;
+        }
+        return new RateLimitDto(rateLimit.id(), rateLimit.politicianNumber(), integer.longValue());
     }
 
 

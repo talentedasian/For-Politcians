@@ -5,9 +5,12 @@ import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.RateLimit;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -15,15 +18,22 @@ import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.create
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static java.net.URI.create;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class RateLimitControllerTest extends BaseSpringHateoasTest {
+@Transactional
+public class RateLimitLinkHttpAdapterTest extends BaseSpringHateoasTest {
 
     @Autowired RateLimitRepository rateLimitRepository;
+
+    @BeforeEach
+    public void teardown() {
+        rateLimitRepository.deleteUsingIdAndPoliticianNumber(ACC_NUMBER().accountNumber(), POL_NUMBER());
+    }
 
     @Test
     public void shouldReturn200OkWithSelfAndPoliticianLink() throws Exception{
@@ -44,9 +54,11 @@ public class RateLimitControllerTest extends BaseSpringHateoasTest {
     }
 
     @Test
+    @Rollback
     public void shouldReturnHalFormTemplateDefaultWhereTargetLinkIsTheLinkToRatePoliticiansWhenNotRateLimited() throws Exception{
         AccountNumber ACCOUNT_NUMBER = ACC_NUMBER();
         PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
+        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER.accountNumber(), POLITICIAN_NUMBER, LocalDate.now().minusDays(9)));
 
         String jwt = createJwtWithFixedExpirationDate("test@gmail.com", ACCOUNT_NUMBER.accountNumber(), "random name");
 
