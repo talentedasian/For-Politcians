@@ -1,1 +1,3 @@
 [ ] test default rate limit service
+[ ] test rate limit http adapter
+[*] use chrono unit instead of manual calculations

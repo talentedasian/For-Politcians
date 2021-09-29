@@ -55,7 +55,7 @@ public class DefaultRateLimitServiceTest {
     }
 
     @Test
-    public void shouldThrow0DaysLeftToRateWhenUserIsNotRateLimitedButHasExistingRateLimitOnPolitician() throws Exception{
+    public void shouldThrow0DaysLeftToRateWhenUserHasExistingExpiredRateLimitOnPolitician() throws Exception{
         LocalDate expiredDate = LocalDate.now(ZoneId.of("GMT+8")).minusDays(10);
         String ACCOUNT_NUMBER = ACC_NUMBER().accountNumber();
         PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
@@ -71,14 +71,13 @@ public class DefaultRateLimitServiceTest {
     }
 
     @Test
-    public void shouldReturnExpectedDaysLeftToRateWhenUserHasExistingAndNonExpiredRateLimitOnPolitician() throws Exception{
+    public void shouldReturnExpectedDaysLeftToRateWhenUserHasExistingNonExpiredRateLimitOnPolitician() throws Exception{
         long daysTillRateLimitExpiration = 5;
-        long fiveDaysLeftInAWeek = RateLimit.RATE_LIMIT - daysTillRateLimitExpiration;
-        LocalDate expiredDate = LocalDate.now(ZoneId.of("GMT+8")).minusDays(fiveDaysLeftInAWeek);
+        LocalDate fiveDaysLeftInAWeek = LocalDate.now(ZoneId.of("GMT+8")).minusDays(2);
         String ACCOUNT_NUMBER = ACC_NUMBER().accountNumber();
         PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
 
-        rateLimitRepo.save(new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, expiredDate));
+        rateLimitRepo.save(new RateLimit(ACCOUNT_NUMBER, POLITICIAN_NUMBER, fiveDaysLeftInAWeek));
 
         var domainService = new DefaultRateLimitDomainService(rateLimitRepo);
         long daysLeftToRate = domainService.daysLeftToRateForUser(AccountNumber.of(ACCOUNT_NUMBER), POLITICIAN_NUMBER);
