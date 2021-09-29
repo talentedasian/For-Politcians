@@ -33,6 +33,16 @@ public class ExpirationDateTest {
     }
 
     @Test
+    public void shouldReturn5AsDaysTillExpirationWithAWeekAsExpirationWhen2DaysHasPassed() throws Exception{
+        final String DAYS_TO_EXPIRE = "5";
+
+        var expirationDate = new ExpirationDate(LocalDate.now(ZoneId.of("GMT+8")).minusDays(2));
+
+        assertThat(expirationDate.daysLeftTillExpiration(7))
+                .isEqualTo(DAYS_TO_EXPIRE);
+    }
+
+    @Test
     public void shouldReturn20AsDaysTillExpirationWhenExpirationDateIs20DaysAhead() {
         final long DAYS_TO_EXPIRE = 20;
 

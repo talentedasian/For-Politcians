@@ -1,4 +1,4 @@
-package com.example.demo.collaboration;
+package com.example.demo.domain.collaboration;
 
 import com.example.demo.adapter.in.service.PoliticiansService;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;

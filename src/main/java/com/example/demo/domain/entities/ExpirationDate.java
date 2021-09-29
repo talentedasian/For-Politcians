@@ -3,6 +3,8 @@ package com.example.demo.domain.entities;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 
 public record ExpirationDate(LocalDate dateCreated) {
 
@@ -20,7 +22,11 @@ public record ExpirationDate(LocalDate dateCreated) {
     public String daysLeftTillExpiration(long daysLeftTillExpiration) {
         checkForNegativeNumber(daysLeftTillExpiration);
         Assert.state(!isExpired(daysLeftTillExpiration), "should be not be expired when getting days left till expiration");
-        return String.valueOf(expirationDate(daysLeftTillExpiration).getDayOfYear() - dateCreated.getDayOfYear());
+        return daysToExpirationDate(daysLeftTillExpiration);
+    }
+
+    private String daysToExpirationDate(long daysLeftTillExpiration) {
+        return String.valueOf(ChronoUnit.DAYS.between(LocalDate.now(ZoneId.of("GMT+8")), expirationDate(daysLeftTillExpiration)));
     }
 
     private void checkForNegativeNumber(long number) {

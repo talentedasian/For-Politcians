@@ -32,6 +32,11 @@ public class DefaultRateLimitDomainService implements UserRateLimitService {
     @Override
     public long daysLeftToRateForUser(AccountNumber accountNumber, PoliticianNumber politicianNumber) {
         Optional<RateLimit> rateLimit = rateLimitRepository.findUsingIdAndPoliticianNumber(accountNumber.accountNumber(), politicianNumber);
-        return rateLimit.isEmpty() ? 0 : rateLimit.get().daysLeftOfBeingRateLimited();
+        if (rateLimit.isEmpty()) return 0;
+        try {
+            return rateLimit.get().daysLeftOfBeingRateLimited();
+        } catch(IllegalStateException e) {
+            return 0;
+        }
     }
 }

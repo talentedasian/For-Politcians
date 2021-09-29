@@ -8,7 +8,7 @@ import java.util.Objects;
 public class RateLimit {
 
 	private transient static final Map<String, RateLimit> cache = new HashMap<>();
-	private static final long RATE_LIMIT = 7;
+	public static final long RATE_LIMIT = 7;
 
 	private String id;
 
