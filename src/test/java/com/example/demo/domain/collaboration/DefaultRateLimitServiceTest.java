@@ -55,7 +55,7 @@ public class DefaultRateLimitServiceTest {
     }
 
     @Test
-    public void shouldThrow0DaysLeftToRateWhenUserHasExistingExpiredRateLimitOnPolitician() throws Exception{
+    public void shouldReturnDaysLeftToRateWhenUserHasExistingExpiredRateLimitOnPolitician() throws Exception{
         LocalDate expiredDate = LocalDate.now(ZoneId.of("GMT+8")).minusDays(10);
         String ACCOUNT_NUMBER = ACC_NUMBER().accountNumber();
         PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
