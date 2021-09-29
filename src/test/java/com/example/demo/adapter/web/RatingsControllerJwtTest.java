@@ -56,7 +56,7 @@ public class RatingsControllerJwtTest extends BaseSpringHateoasTest {
                 .andExpect(status().isUnauthorized())
 
                     .andExpect(jsonPath("code", equalTo("401")))
-                    .andExpect(jsonPath("err", equalTo("is expired")));
+                    .andExpect(jsonPath("err", containsStringIgnoringCase("is expired")));
     }
 
 }
