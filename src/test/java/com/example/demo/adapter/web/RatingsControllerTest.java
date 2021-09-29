@@ -2,7 +2,6 @@ package com.example.demo.adapter.web;
 
 import com.example.demo.BaseSpringHateoasTest;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
-import com.example.demo.adapter.in.web.RatingsController;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.RateLimitRepository;
@@ -29,8 +28,6 @@ import static java.math.BigDecimal.valueOf;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -149,7 +146,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
 
         String jwt = createJwtWithFixedExpirationDate("t@gmail.com", ACC_NUMBER().accountNumber(), "Jake");
 
-        String targetLink = linkTo(methodOn(RatingsController.class).saveRating(null, null)).withSelfRel().getHref();
+        String targetLink = "/api/ratings/rating";
 
         mvc.perform(get(create("/api/ratings/rating/" + savedRating.id()))
                         .header("Authorization", "Bearer " + jwt))

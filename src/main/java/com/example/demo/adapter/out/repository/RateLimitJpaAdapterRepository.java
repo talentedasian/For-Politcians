@@ -33,7 +33,6 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
 
     @Override
     public Optional<RateLimit> findUsingIdAndPoliticianNumber(String id, PoliticianNumber politicianNumber) {
-        System.out.println(rateRepo.findAll() + " all haha ouch");
         var queriedDto = rateRepo.findByAccountNumberAndPoliticianNumber(id, politicianNumber.politicianNumber());
 
         return queriedDto.isPresent() ? Optional.of(queriedDto.get().toRateLimit()) : Optional.empty();

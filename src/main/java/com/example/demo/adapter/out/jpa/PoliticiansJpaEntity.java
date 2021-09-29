@@ -176,7 +176,7 @@ public class PoliticiansJpaEntity {
         if (!Objects.equals(lastName, that.lastName)) return false;
         if (!Objects.equals(fullName, that.fullName)) return false;
         if (!Objects.equals(ratingJpaEntity, that.ratingJpaEntity)) return false;
-        return Objects.equals(politiciansRating, that.politiciansRating);
+        return politiciansRating.equals(that.politiciansRating);
     }
 
     @Override
