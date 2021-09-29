@@ -3,6 +3,7 @@ package com.example.demo.adapter.in.web;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.dto.RateLimitDto;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -23,36 +24,47 @@ public class RateLimitAssembler implements SimpleRepresentationModelAssembler<Ra
         RateLimitDto content = resource.getContent();
         if (content == null) return;
 
-        resource.add(linkTo(methodOn(PoliticianController.class)
-                .politicianById(content.getPoliticianNumber()))
-                .withRel("politician"));
+        addPoliticianLink(resource, content);
 
-        Link selfLink = null;
-        
-        try {
-            selfLink = linkTo(methodOn(RateLimitController.class)
-                    .findRateLimitOnCurrentUser(content.getPoliticianNumber(), null))
-                    .withSelfRel();
-        } catch (UserRateLimitedOnPoliticianException e) {
-            e.printStackTrace();
-        }
+        Link selfLink = getSelfLink(content);
 
         var rateLimit = content.toRateLimit();
         if (rateLimit.isNotRateLimited()) {
             try {
-                Link linkToRatePolitician = Affordances.of(selfLink)
-                        .afford(HttpMethod.POST)
-                        .withTarget(linkTo(methodOn(RatingsController.class).saveRating(null, null)).withSelfRel())
-                        .withInput(AddRatingDTORequest.class)
-                        .withInputMediaType(MediaType.APPLICATION_JSON)
-                        .toLink();
-
-                resource.add(linkToRatePolitician);
+                addAffordanceToRatePolitician(resource, selfLink);
             } catch (UserRateLimitedOnPoliticianException e) {
                 e.printStackTrace();
                 return;
             }
         }
+    }
+
+    @NotNull
+    private EntityModel<RateLimitDto> addPoliticianLink(EntityModel<RateLimitDto> resource, RateLimitDto content) {
+        return resource.add(linkTo(methodOn(PoliticianController.class)
+                .politicianById(content.getPoliticianNumber()))
+                .withRel("politician"));
+    }
+
+    private Link getSelfLink(RateLimitDto content) {
+        try {
+            return linkTo(methodOn(RateLimitController.class)
+                    .findRateLimitOnCurrentUser(content.getPoliticianNumber(), null))
+                    .withSelfRel();
+        } catch (UserRateLimitedOnPoliticianException e) {
+            return null;
+        }
+    }
+
+    private void addAffordanceToRatePolitician(EntityModel<RateLimitDto> resource, Link selfLink) throws UserRateLimitedOnPoliticianException {
+        Link linkToRatePolitician = Affordances.of(selfLink)
+                .afford(HttpMethod.POST)
+                .withTarget(linkTo(methodOn(RatingsController.class).saveRating(null, null)).withSelfRel())
+                .withInput(AddRatingDTORequest.class)
+                .withInputMediaType(MediaType.APPLICATION_JSON)
+                .toLink();
+
+        resource.add(linkToRatePolitician);
     }
 
     @Override
