@@ -2,11 +2,9 @@ package com.example.demo.adapter.out.repository;
 
 import com.example.demo.adapter.web.dto.RateLimitJpaEntity;
 import com.example.demo.domain.RateLimitRepository;
-import com.example.demo.domain.entities.RateLimit;
 import com.example.demo.domain.entities.PoliticianNumber;
+import com.example.demo.domain.entities.RateLimit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,13 +33,8 @@ public class RateLimitJpaAdapterRepository implements RateLimitRepository {
 
     @Override
     public Optional<RateLimit> findUsingIdAndPoliticianNumber(String id, PoliticianNumber politicianNumber) {
-        var dto = new RateLimitJpaEntity(id, politicianNumber.politicianNumber());
-
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withIgnorePaths("id")
-                .withIgnorePaths("daysLeft");
-
-        var queriedDto = rateRepo.findOne(Example.of(dto, matcher));
+        System.out.println(rateRepo.findAll() + " all haha ouch");
+        var queriedDto = rateRepo.findByAccountNumberAndPoliticianNumber(id, politicianNumber.politicianNumber());
 
         return queriedDto.isPresent() ? Optional.of(queriedDto.get().toRateLimit()) : Optional.empty();
     }

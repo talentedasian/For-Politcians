@@ -6,7 +6,6 @@ import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.RateLimit;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 
 import java.time.LocalDate;
 
@@ -23,7 +22,6 @@ public class RateLimitResponseHttpAdapterTest extends BaseSpringHateoasTest {
     @Autowired RateLimitRepository rateLimitRepository;
 
     @Test
-    @Rollback
     public void shouldReturn0AsDaysLeftToRateWhenUserIsNotRateLimited() throws Exception{
         String accountNumber = ACC_NUMBER().accountNumber();
 

@@ -1,16 +1,17 @@
 package com.example.demo.adapter.web;
 
 import com.example.demo.BaseSpringHateoasTest;
+import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.RateLimit;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.hateoas.MediaTypes;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -25,15 +26,14 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Transactional
-public class RateLimitLinkHttpAdapterTest extends BaseSpringHateoasTest {
+/*
+ TESTS USES IN MEMORY FOR NOW SINCE INDIVIDUAL TESTS DO NOT ROLLBACK
+ THE ENTITIES BEING SAVED IN THE DATABASE
+ */
+
+public class RateLimitHttpAdapterTest extends BaseSpringHateoasTest {
 
     @Autowired RateLimitRepository rateLimitRepository;
-
-    @BeforeEach
-    public void teardown() {
-        rateLimitRepository.deleteUsingIdAndPoliticianNumber(ACC_NUMBER().accountNumber(), POL_NUMBER());
-    }
 
     @Test
     public void shouldReturn200OkWithSelfAndPoliticianLink() throws Exception{
@@ -54,7 +54,6 @@ public class RateLimitLinkHttpAdapterTest extends BaseSpringHateoasTest {
     }
 
     @Test
-    @Rollback
     public void shouldReturnHalFormTemplateDefaultWhereTargetLinkIsTheLinkToRatePoliticiansWhenNotRateLimited() throws Exception{
         AccountNumber ACCOUNT_NUMBER = ACC_NUMBER();
         PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
@@ -70,6 +69,15 @@ public class RateLimitLinkHttpAdapterTest extends BaseSpringHateoasTest {
 
                     .andExpect(jsonPath("_templates.default", notNullValue()))
                     .andExpect(jsonPath("_templates.default.target", containsStringIgnoringCase(linkToRateAPolitician)));
+    }
+
+    @TestConfiguration
+    static class Configuration {
+        @Bean
+        @Primary
+        public RateLimitRepository inMemory() {
+            return new InMemoryRateLimitRepository();
+        }
     }
 
 }

@@ -1,7 +1,7 @@
 package com.example.demo.domain;
 
-import com.example.demo.domain.entities.RateLimit;
 import com.example.demo.domain.entities.PoliticianNumber;
+import com.example.demo.domain.entities.RateLimit;
 
 import java.util.List;
 import java.util.Optional;
