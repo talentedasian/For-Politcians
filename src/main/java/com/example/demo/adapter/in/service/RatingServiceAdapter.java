@@ -37,10 +37,10 @@ public class RatingServiceAdapter {
     }
 
     public RatingDTO saveRatings(AddRatingDTORequest dtoRequest, HttpServletRequest req) throws UserRateLimitedOnPoliticianException {
+        Claims jwts = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
+
         Politicians politician = polRepo.findByPoliticianNumber(dtoRequest.getId())
                 .orElseThrow(PoliticianNotFoundException::new);
-
-        Claims jwts = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
 
         var rater = new UserRater.Builder()
                 .setName(jwts.get("fullName", String.class))

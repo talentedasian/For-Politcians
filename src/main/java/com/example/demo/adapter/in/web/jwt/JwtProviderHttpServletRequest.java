@@ -34,7 +34,7 @@ public class JwtProviderHttpServletRequest {
 				// RefreshJwtFilter does appropriate refreshing of JsonWeb Tokens
 				throw new RefreshTokenException(e.getClaims());
 			}
-			throw new JwtExpiredException(e.getMessage(), e);
+			throw new JwtExpiredException("JWT found is expired", e);
 		}  catch (SignatureException e) {
 			throw new JwtTamperedExpcetion("Jwt is tampered. Server might have restarted without prior knowledge");
 		}
