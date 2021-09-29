@@ -18,8 +18,6 @@ public class Politicians {
 
 	private List<PoliticiansRating> politiciansRating = new ArrayList<>();
 
-	private Rating rating;
-
 	private AverageRating averageRating;
 
 	private final PoliticianNumber politicianNumber;
@@ -43,10 +41,6 @@ public class Politicians {
 		this.politiciansRating = politiciansRating;
 	}
 
-	public Rating getRating() {
-		return this.rating;
-	}
-
 	public double averageRating() {
 		return doesPoliticianHaveRating() ? 0 : averageRating.averageRating();
 	}
@@ -59,21 +53,16 @@ public class Politicians {
 		return this.averageRating;
 	}
 
-	public void setRating(Rating rating) {
-		this.rating = rating;
-	}
-	
 	public Politicians.Type getType() {
 		return type;
 	}
 
 
-	Politicians(Name name,List<PoliticiansRating> politiciansRating, Rating rating, AverageRating averageRating,
-						  TotalRatingAccumulated totalRatingAccumulated, PoliticianNumber politicianNumber, Type polType) {
+	Politicians(Name name, List<PoliticiansRating> politiciansRating, AverageRating averageRating,
+				TotalRatingAccumulated totalRatingAccumulated, PoliticianNumber politicianNumber, Type polType) {
 		this.name = name;
 		this.politiciansRating.addAll(politiciansRating == null ? List.of() : politiciansRating);
 		this.totalCountsOfRating = politiciansRating.size();
-		this.rating = rating;
 		this.averageRating = averageRating;
 		this.politicianNumber = politicianNumber;
 		this.type = polType;
@@ -85,7 +74,7 @@ public class Politicians {
 	public String toString() {
 		return "Politicians{ " +
 				"name= " + name +
-				", rating= " + rating +
+				", rating= " + averageRating +
 				", totalCountsOfRating= " + totalCountsOfRating +
 				", politicianNumber= " + politicianNumber +
 				", totalRatingAccumulated= "  + totalRatingAccumulated +
@@ -100,14 +89,17 @@ public class Politicians {
 		Politicians that = (Politicians) o;
 
 		if (!politicianNumber.equals(that.politicianNumber)) return false;
-		if (rating == null) return that.rating == null;
-		return Objects.equals(rating.averageRating, that.rating.averageRating);
+		return Objects.equals(averageRating, that.averageRating)
+				&& totalRatingAccumulated.equals(that.totalRatingAccumulated)
+				&& totalCountsOfRating == that.totalCountsOfRating;
 	}
 
 	@Override
 	public int hashCode() {
-		int result = rating != null ? rating.hashCode() : 0;
+		int result = averageRating != null ? averageRating.hashCode() : 0;
 		result = 31 * result + politicianNumber.hashCode();
+		result = 31 * result + totalRatingAccumulated.hashCode();
+		result = 31 * result + totalCountsOfRating;
 		return result;
 	}
 
@@ -289,7 +281,7 @@ public class Politicians {
 			if (totalRating != null)
 				this.totalRatingAccumulated = TotalRatingAccumulated.of(totalRating, averageRating);
 
-			return new Politicians(name, politiciansRating, rating, averageRating, totalRatingAccumulated, new PoliticianNumber(politicianNumber), null);
+			return new Politicians(name, politiciansRating, averageRating, totalRatingAccumulated, new PoliticianNumber(politicianNumber), null);
 		}
 	}
 	

@@ -27,7 +27,7 @@ public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 	}
 	
 	private PoliticianDto mapToPoliticianDTO(Politicians entity) {
-		Double rating = entity.getRating().getAverageRating();
+		Double rating = entity.averageRating();
 		Rating satisfactionRate = Rating.mapToSatisfactionRate(rating);
 		
 		return new PoliticianDto(

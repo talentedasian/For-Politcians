@@ -18,6 +18,7 @@ import static com.example.demo.baseClasses.BuilderFactory.createRater;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static com.example.demo.domain.AverageRating.NO_RATING_YET;
+import static java.math.BigDecimal.ZERO;
 import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -61,6 +62,25 @@ public class PoliticiansTest {
 				.build();
 
 		assertEquals("Test Name", politicianWithFirstAndLastName.fullName());
+	}
+
+	@Test
+	public void testEquality() throws Exception{
+		String FIRST_NAME = "Random";
+		var politicianThatsGoingToBeCompared = new PoliticiansBuilder(POL_NUMBER())
+				.setTotalRating(ZERO)
+				.setFirstName(FIRST_NAME)
+				.build();
+
+		var politicianToCompare = new PoliticiansBuilder(POL_NUMBER())
+				.setTotalRating(ZERO)
+				.setAverageRating(NO_RATING_YET)
+				.setFirstName(FIRST_NAME)
+				.setLastName("Any")
+				.build();
+
+		assertThat(politicianThatsGoingToBeCompared)
+				.isEqualTo(politicianToCompare);
 	}
 
 	@Test
@@ -139,7 +159,7 @@ public class PoliticiansTest {
 		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
 		Politicians politician = politicianBuilder
-				.setTotalRating(BigDecimal.ZERO)
+				.setTotalRating(ZERO)
 				.setAverageRating(NO_RATING_YET).build();
 		var rating = createPolRating(Score.of(2.243), rater, politician);
 
@@ -198,7 +218,7 @@ public class PoliticiansTest {
 		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
 		Politicians politician = politicianBuilder
-				.setTotalRating(BigDecimal.ZERO)
+				.setTotalRating(ZERO)
 				.setAverageRating(NO_RATING_YET).build();
 		var rating = createPolRating(Score.of(2.243), rater, politician);
 

@@ -10,7 +10,7 @@ import static com.example.demo.domain.AverageRating.NO_RATING_YET;
 
 public class TotalRatingAccumulated {
 
-    public static final TotalRatingAccumulated ZERO = new TotalRatingAccumulated(BigDecimal.ZERO, AverageRating.NO_RATING_YET);
+    public static final TotalRatingAccumulated ZERO = new TotalRatingAccumulated(BigDecimal.ZERO, NO_RATING_YET);
     private static final int MAXIMUM_DECIMAL_DIGITS = 3;
 
     private final BigDecimal totalRating;
@@ -54,6 +54,21 @@ public class TotalRatingAccumulated {
 
     public BigDecimal totalRating() {
         return this.totalRating;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TotalRatingAccumulated that = (TotalRatingAccumulated) o;
+
+        return totalRating.equals(that.totalRating);
+    }
+
+    @Override
+    public int hashCode() {
+        return totalRating.hashCode();
     }
 
     @Override
