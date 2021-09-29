@@ -38,7 +38,7 @@ public class PoliticiansRating {
 
 	@Override
 	public String toString() {
-		return "PoliticiansRating [id=" + id + ", rating=" + rating + ", rater=" + rater +
+		return "PoliticiansRating [id=" + id + ", rating=" + rating.rating() + ", rater=" + rater +
 				", politician=" + politician + "]";
 	}
 
