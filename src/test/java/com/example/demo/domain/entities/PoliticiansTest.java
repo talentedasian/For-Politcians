@@ -41,7 +41,6 @@ public class PoliticiansTest {
 	public void testNullLastNameInBuilder() {
 		var politicianWithNoLastName = new PoliticiansBuilder(POLITICIAN_NUMBER)
 				.setFirstName("Test")
-				.setFullName()
 				.build();
 
 		assertEquals("Test", politicianWithNoLastName.fullName());
@@ -59,7 +58,6 @@ public class PoliticiansTest {
 	@Test
 	public void testFullNameInBuilder() {
 		var politicianWithFirstAndLastName = politicianBuilder
-				.setFullName()
 				.build();
 
 		assertEquals("Test Name", politicianWithFirstAndLastName.fullName());

@@ -238,21 +238,7 @@ public class Politicians {
 			return this;
 		}
 
-		public PoliticiansBuilder setFullName() {
-			if (firstName == null && lastName == null) {
-				throw new IllegalArgumentException("First and Last fullName cannot be null");
-			}
-			
-			if (lastName == null) {
-				this.fullName = firstName;
-				return this;
-			}
-			
-			this.fullName = firstName + " " + lastName;
-			return this;
-		}
-
-		public PoliticiansBuilder setPoliticiansRating(List<PoliticiansRating> politiciansRating) {
+        public PoliticiansBuilder setPoliticiansRating(List<PoliticiansRating> politiciansRating) {
 			if (politiciansRating == null) {
 				this.politiciansRating = new ArrayList<>();
 				return this;
@@ -274,10 +260,7 @@ public class Politicians {
 					.setTotalRating(totalRating)
 					.setPoliticiansRating(politiciansRating)
 					.setRatingRepository(ratingRepo);
-			if (firstName.isEmpty() || firstName == null) {
-				return builder;
-			}
-			return builder.setFullName();
+			return builder;
 		}
 
 		public PoliticiansBuilder setTotalRating(BigDecimal totalRatingAccumulated) {

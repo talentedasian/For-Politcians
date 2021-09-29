@@ -70,8 +70,7 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
         politicianBuilder = new PoliticiansBuilder(POLITICIAN_NUMBER)
                 .setPoliticiansRating(null)
                 .setFirstName(FIRST_NAME)
-                .setLastName(LAST_NAME)
-                .setFullName();
+                .setLastName(LAST_NAME);
     }
 
     @AfterEach

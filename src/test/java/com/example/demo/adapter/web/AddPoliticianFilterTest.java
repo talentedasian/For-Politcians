@@ -55,7 +55,6 @@ public class AddPoliticianFilterTest {
 		politician = new SenatorialBuilder(new Politicians.PoliticiansBuilder(POL_NUMBER())
 					.setFirstName("Test")
 					.setLastName("Name")
-					.setFullName()
 					.build())
 				.setTotalMonthsOfService(12)
 				.build();

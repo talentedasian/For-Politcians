@@ -40,7 +40,6 @@ public class CitizensRatingPoliticiansTest {
                 .setPoliticiansRating(null)
                 .setFirstName("Random")
                 .setLastName("Name")
-                .setFullName()
                 .setTotalRating(ZERO);
 
         politicians = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder).build();

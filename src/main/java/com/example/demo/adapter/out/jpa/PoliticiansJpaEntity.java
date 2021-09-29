@@ -208,7 +208,6 @@ public class PoliticiansJpaEntity {
         return new Politicians.PoliticiansBuilder(new PoliticianNumber(id))
                 .setFirstName(firstName)
                 .setLastName(lastName)
-                .setFullName()
                 .setPoliticiansRating(toPoliticiansRating(politiciansRating))
                 .setTotalRating(BigDecimal.valueOf(ratingJpaEntity.totalRating))
                 .setAverageRating(ratingJpaEntity.getAverageRating() == 0 ? AverageRating.NO_RATING_YET

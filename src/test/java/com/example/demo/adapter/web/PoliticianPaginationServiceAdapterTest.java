@@ -40,8 +40,7 @@ public class PoliticianPaginationServiceAdapterTest {
         politicianBuilder = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
                 .setPoliticiansRating(null)
                 .setFirstName(FIRST_NAME)
-                .setLastName(LAST_NAME)
-                .setFullName();
+                .setLastName(LAST_NAME);
 
         polRepo = new InMemoryPoliticianAdapterRepo();
     }
