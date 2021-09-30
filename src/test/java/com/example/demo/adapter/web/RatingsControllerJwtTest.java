@@ -59,4 +59,19 @@ public class RatingsControllerJwtTest extends BaseSpringHateoasTest {
                     .andExpect(jsonPath("err", containsStringIgnoringCase("is expired")));
     }
 
+    @Test
+    public void shouldReturn401UnAuthorizedWhenAuthorizationHeaderValueDoesNotStartWithBearer() throws Exception{
+        String id = ACC_NUMBER().accountNumber();
+        String jwt = JwtJjwtProviderAdapater.createJwtWithDynamicExpirationDate("test@gmail.com", id, LocalDate.now());
+
+        mvc.perform(post(create("/api/ratings/rating"))
+                        .header("Authorization", "B " + jwt)
+                        .content(requestContent)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+
+                    .andExpect(jsonPath("code", equalTo("401")))
+                    .andExpect(jsonPath("err", containsStringIgnoringCase("must start with Bearer")));
+    }
+
 }

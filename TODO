@@ -1,7 +1,7 @@
-[ ] test default rate limit service
+[ ] Replace the rateLimitRepo being used in the http adapter tests from an inMemory to a concrete jpa repo
+[ ] get to 65% code coverage
+[*] test default rate limit service
 [*] test rate limit http adapter
 [*] use chrono unit instead of manual calculations
 [*] test rate limit http adapter response
-[ ] Replace the rateLimitRepo being used in the http adapter tests from an inMemory to a concrete jpa repo
-
-[ ] get to 65% code coverage
+[ ] Revamp the JWT classes used for decoding and creating JWTs
