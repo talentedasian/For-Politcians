@@ -5,3 +5,4 @@
 [*] use chrono unit instead of manual calculations
 [*] test rate limit http adapter response
 [ ] Revamp the JWT classes used for decoding and creating JWTs
+[ ] Test refresh jwt exceptions in http adapter level in all endpoints that use it
