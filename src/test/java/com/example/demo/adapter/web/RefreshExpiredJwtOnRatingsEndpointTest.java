@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static java.net.URI.create;
@@ -39,7 +40,7 @@ public class RefreshExpiredJwtOnRatingsEndpointTest extends BaseSpringHateoasTes
 
     @Test
     public void shouldReturn401UnauthorizedForExpiredJwtWhenJwtIsNotRefreshable() throws Exception{
-        var expiredAndNotRefreshableJwtDate = LocalDate.now().minusDays(1);
+        var expiredAndNotRefreshableJwtDate = LocalDate.now(ZoneId.of("GMT+8")).minusDays(1);
 
         String jwt = JwtJjwtProviderAdapater.createJwtWithDynamicExpirationDate(SUB, ID, expiredAndNotRefreshableJwtDate);
 
@@ -55,7 +56,7 @@ public class RefreshExpiredJwtOnRatingsEndpointTest extends BaseSpringHateoasTes
 
     @Test
     public void shouldGiveNewJwtInCookieWhenJwtIsExpiredButStillRefreshable() throws Exception{
-        LocalDateTime expiredButRefreshableJwt = LocalDateTime.now().minusMinutes(43);
+        LocalDateTime expiredButRefreshableJwt = LocalDateTime.now(ZoneId.of("GMT+8")).minusMinutes(43);
         String jwt = JwtJjwtProviderAdapater.createJwtWithDynamicExpirationDate(SUB, ID, expiredButRefreshableJwt);
 
         mvc.perform(post(create("/api/ratings/rating"))
