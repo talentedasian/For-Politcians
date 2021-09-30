@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 
+import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -20,10 +20,10 @@ public class ExpirationDateTest {
     public void shouldReturn7AsDaysTillExpirationWhenExpirationDateIs7Days() {
         final long DAYS_TO_EXPIRE = 7;
 
-        var expirationDate = new ExpirationDate(LocalDate.now());
+        var expirationDate = new ExpirationDate(now());
 
         assertThat(expirationDate.expirationDate(DAYS_TO_EXPIRE))
-                .isEqualTo(LocalDate.now().plusDays(DAYS_TO_EXPIRE));
+                .isEqualTo(now().plusDays(DAYS_TO_EXPIRE));
 
         assertThat(expirationDate.isExpired(DAYS_TO_EXPIRE))
                 .isFalse();
@@ -36,7 +36,7 @@ public class ExpirationDateTest {
     public void shouldReturn5AsDaysTillExpirationWithAWeekAsExpirationWhen2DaysHasPassed() throws Exception{
         final String DAYS_TO_EXPIRE = "5";
 
-        var expirationDate = new ExpirationDate(LocalDate.now().minusDays(2));
+        var expirationDate = new ExpirationDate(now().minusDays(2));
 
         assertThat(expirationDate.daysLeftTillExpiration(7))
                 .isEqualTo(DAYS_TO_EXPIRE);
@@ -46,10 +46,10 @@ public class ExpirationDateTest {
     public void shouldReturn20AsDaysTillExpirationWhenExpirationDateIs20DaysAhead() {
         final long DAYS_TO_EXPIRE = 20;
 
-        var expirationDate = new ExpirationDate(LocalDate.now(ZoneId.of("GMT+8")));
+        var expirationDate = new ExpirationDate(now(ZoneId.of("GMT+8")));
 
         assertThat(expirationDate.expirationDate(DAYS_TO_EXPIRE))
-                .isEqualTo(LocalDate.now().plusDays(DAYS_TO_EXPIRE));
+                .isEqualTo(now().plusDays(DAYS_TO_EXPIRE));
 
         assertThat(expirationDate.isExpired(DAYS_TO_EXPIRE))
                 .isFalse();
@@ -62,7 +62,7 @@ public class ExpirationDateTest {
     public void shouldThrowIllegalStateExceptionWhenDaysLeftTillExpirationIs0() {
         final long DAYS_TO_EXPIRE = 0;
 
-        var expirationDate = new ExpirationDate(LocalDate.now());
+        var expirationDate = new ExpirationDate(now());
 
         assertThrows(IllegalStateException.class, () -> expirationDate.daysLeftTillExpiration(DAYS_TO_EXPIRE));
     }
@@ -71,7 +71,7 @@ public class ExpirationDateTest {
     public void shouldNotBeExpiredIfDaysToExpireIs0AndDatePassedIsToday() {
         final long DAYS_TO_EXPIRE = 0;
 
-        var expirationDate = new ExpirationDate(LocalDate.now());
+        var expirationDate = new ExpirationDate(now());
 
         assertThat(expirationDate.isExpired(DAYS_TO_EXPIRE))
                 .isTrue();
@@ -81,7 +81,7 @@ public class ExpirationDateTest {
     public void shouldBeExpiredIfDaysToExpireIs1AndDatePassedIsToday() {
         final long DAYS_TO_EXPIRE = 1;
 
-        var expirationDate = new ExpirationDate(LocalDate.now());
+        var expirationDate = new ExpirationDate(now());
 
         assertThat(expirationDate.isExpired(DAYS_TO_EXPIRE))
                 .isFalse();
@@ -90,7 +90,7 @@ public class ExpirationDateTest {
     @ParameterizedTest
     @ValueSource(longs = { 2 , 100 , 20 , 7 , 55 , 420 })
     public void shouldBeExpiredIfDaysToExpireIsGreaterThan1AndDatePassedIsToday(long DAYS_TO_EXPIRE) {
-        var expirationDate = new ExpirationDate(LocalDate.now());
+        var expirationDate = new ExpirationDate(now());
 
         assertThat(expirationDate.isExpired(DAYS_TO_EXPIRE))
                 .isFalse();
@@ -99,7 +99,7 @@ public class ExpirationDateTest {
     @ParameterizedTest
     @ValueSource(longs = { -2 , -100 , -20 , -7 , -55 , -420 })
     public void shouldThrowIfArgumentsPassedIsANegativeNumber(long DAYS_TO_EXPIRE) {
-        var expirationDate = new ExpirationDate(LocalDate.now());
+        var expirationDate = new ExpirationDate(now());
 
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> expirationDate.isExpired(DAYS_TO_EXPIRE));
 

@@ -4,14 +4,11 @@ import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
 public record ExpirationDate(LocalDate dateCreated) {
 
-    public ExpirationDate(LocalDate dateCreated) {
-        this.dateCreated = LocalDate.ofInstant(dateCreated.atStartOfDay().toInstant(ZoneOffset.of("+8")), ZoneId.of("GMT+8"));
-    }
+    public static final ZoneId PHILIPPINES_TIME = ZoneId.of("GMT+8");
 
     public LocalDate expirationDate(long daysToExpire) {
         checkForNegativeNumber(daysToExpire);
