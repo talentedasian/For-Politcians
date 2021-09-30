@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
 
@@ -26,6 +27,20 @@ public class JwtJjwtProviderAdapater {
 
 	public static String createJwtWithDynamicExpirationDate(String sub, String id, LocalDate expirationDate) {
 		Date date = Date.from(expirationDate.atStartOfDay().toInstant(ZoneOffset.of("+8")));
+
+		String jwts = Jwts.builder()
+				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
+				.setSubject(sub)
+				.setId(id)
+				.setExpiration(date)
+				.setHeaderParam("login_mechanism", "facebook")
+				.compact();
+
+		return jwts;
+	}
+
+	public static String createJwtWithDynamicExpirationDate(String sub, String id, LocalDateTime expiration) {
+		Date date = Date.from(expiration.toInstant(ZoneOffset.of("+8")));
 
 		String jwts = Jwts.builder()
 				.signWith(JwtKeys.getJwtKeyPair().getPrivate())

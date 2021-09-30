@@ -1,6 +1,8 @@
 package com.example.demo;
 
 import com.example.demo.baseClasses.BaseClassTestsThatUsesDatabase;
+import com.example.demo.filter.AddPoliticianFilter;
+import com.example.demo.filter.RefreshJwtFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcConfigurer;
+import org.springframework.test.web.servlet.setup.MockMvcConfigurerAdapter;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -29,6 +34,7 @@ public class BaseSpringHateoasTest extends BaseClassTestsThatUsesDatabase {
 	@BeforeEach
 	public void setUp(RestDocumentationContextProvider restDocumentation) {
 		this.mvc = MockMvcBuilders.webAppContextSetup(applicationContext)
+				.addFilters(new RefreshJwtFilter(), new AddPoliticianFilter())
 				.apply(documentationConfiguration(restDocumentation)
 						.operationPreprocessors()
 							.withRequestDefaults(prettyPrint())) 
