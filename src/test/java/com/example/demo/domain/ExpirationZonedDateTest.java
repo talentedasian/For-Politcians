@@ -2,6 +2,8 @@ package com.example.demo.domain;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -25,8 +27,8 @@ public class ExpirationZonedDateTest {
 
     @Test
     public void shouldThrowIllegalStateExceptionWhenRetrievingDaysLeftToExpireIfExpired() throws Exception{
-        long expiredDate = -2;
-        var expirationDate = ExpirationZonedDate.of(expiredDate);
+        long expiredDate = 2;
+        var expirationDate = ExpirationZonedDate.ofBehind(expiredDate);
 
         assertThatThrownBy(() -> expirationDate.daysLeftTillExpiration(1))
                 .isInstanceOf(IllegalStateException.class);
@@ -44,15 +46,15 @@ public class ExpirationZonedDateTest {
     public void shouldReturn5AsDaysTillExpirationWithAWeekAsExpirationWhen2DaysHasPassed() throws Exception{
         final String DAYS_TO_EXPIRE = "5";
 
-        long dateExpiresWithinAWeekAnd2DaysHasPassed = -2;
-        var expirationDate = ExpirationZonedDate.of(dateExpiresWithinAWeekAnd2DaysHasPassed);
+        long dateExpiresWithinAWeekAnd2DaysHasPassed = 2;
+        var expirationDate = ExpirationZonedDate.ofBehind(dateExpiresWithinAWeekAnd2DaysHasPassed);
 
         assertThat(expirationDate.daysLeftTillExpiration(7))
                 .isEqualTo(DAYS_TO_EXPIRE);
     }
 
     @Test
-    public void ifCurrentDateIsAfterExpirationDateThenIsNotExpired() throws Exception{
+    public void ifCurrentDateIsBeforeExpirationDateThenIsNotExpired() throws Exception{
         var expirationDate = ExpirationZonedDate.now();
 
         assertThat(expirationDate.isExpired(7))
@@ -63,10 +65,22 @@ public class ExpirationZonedDateTest {
     public void shouldReturnExpectedDaysLeftTillRatingWithExpirationDateBeingNextYear() throws Exception{
         long daysToJanuary1FromNovember31 = 61;
         long daysToNovember1FromNow = 31;
-        var expirationDate = ExpirationZonedDate.of(daysToNovember1FromNow);
+        var expirationDate = ExpirationZonedDate.ofAhead(daysToNovember1FromNow);
 
         assertThat(expirationDate.daysLeftTillExpiration(daysToJanuary1FromNovember31))
                 .isEqualTo(String.valueOf(daysToJanuary1FromNovember31 + daysToNovember1FromNow));
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = { -1, -9, -321321, -423543, -60564, -5235, -421, -94})
+    public void shouldThrowIllegalStateExceptionIfAheadIsNegative(long negativeDaysAhead) throws Exception{
+        assertThatThrownBy(() -> ExpirationZonedDate.ofAhead(negativeDaysAhead));
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = { -1, -9, -321, -4, -982, -231, -421, -94})
+    public void shouldThrowIllegalStateExceptionIfBehindIsNegative(long negativeDaysBehind) throws Exception{
+        assertThatThrownBy(() -> ExpirationZonedDate.ofBehind(negativeDaysBehind));
     }
 
 }

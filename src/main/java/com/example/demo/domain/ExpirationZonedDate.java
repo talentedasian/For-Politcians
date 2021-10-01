@@ -23,16 +23,18 @@ public class ExpirationZonedDate {
         return this.dateCreated;
     }
 
-    /**
-     *  Takes in how many days ahead or behind to use for
-     *  the creation date.
-     *
-     * @param daysAheadOrBehindFromNow days ahead or behind from current day.
-     * @return ExpirationZonedDate that is days ahead or behind today as date created.
-     */
-    public static ExpirationZonedDate of(long daysAheadOrBehindFromNow) {
-        LocalDate now = LocalDate.now(zoneId);
-        return new ExpirationZonedDate(now.plusDays(daysAheadOrBehindFromNow));
+    public static ExpirationZonedDate ofAhead(long daysAhead) {
+        throwIllegalStateExceptionIfDaysNegative(daysAhead);
+        return new ExpirationZonedDate(LocalDate.now(zoneId).plusDays(daysAhead));
+    }
+
+    public static ExpirationZonedDate ofBehind(long daysBehind) {
+        throwIllegalStateExceptionIfDaysNegative(daysBehind);
+        return new ExpirationZonedDate(LocalDate.now(zoneId).minusDays(daysBehind));
+    }
+
+    private static void throwIllegalStateExceptionIfDaysNegative(long days) {
+        Assert.state(days >= 0, "Days cannot be negative");
     }
 
     /**
