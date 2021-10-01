@@ -20,7 +20,7 @@ public record ExpirationDate(LocalDate dateCreated) {
 
     public boolean isExpired(long daysBeforeExpiration) {
         checkForNegativeNumber(daysBeforeExpiration);
-        return this.dateCreated == null || LocalDate.now().minusDays(daysBeforeExpiration).isAfter(dateCreated)
+        return this.dateCreated == null || LocalDate.now().isAfter(expirationDate(daysBeforeExpiration))
                 || LocalDate.now().minusDays(daysBeforeExpiration).isEqual(dateCreated);
     }
 
