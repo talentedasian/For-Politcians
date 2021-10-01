@@ -1,12 +1,9 @@
 package com.example.demo.adapter.in.web.dto;
 
 import com.example.demo.domain.entities.RateLimit;
-import com.example.demo.domain.entities.PoliticianNumber;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.springframework.hateoas.RepresentationModel;
-
-import java.time.LocalDate;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class RateLimitDto extends RepresentationModel<RateLimitDto> {
@@ -44,16 +41,7 @@ public class RateLimitDto extends RepresentationModel<RateLimitDto> {
     }
 
 
-    public RateLimit toRateLimit() {
-        var dateNow = LocalDate.now();
-
-        if (daysLeftToRateAgain == 0l) {
-            return new RateLimit(id, new PoliticianNumber(politicianNumber), dateNow.minusDays(7));
-        }
-
-        var dateCreated = Integer.signum(Long.valueOf(daysLeftToRateAgain).intValue()) == 0 ?
-                   dateNow.minusDays(7).plusDays(daysLeftToRateAgain) : dateNow.minusDays(7).minusDays(Math.abs(daysLeftToRateAgain));
-
-        return new RateLimit(id, new PoliticianNumber(politicianNumber), dateCreated);
+    public boolean isNotRateLimited() {
+        return daysLeftToRateAgain == 0;
     }
 }

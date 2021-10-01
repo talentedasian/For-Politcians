@@ -2,6 +2,7 @@ package com.example.demo.adapter.web;
 
 import com.example.demo.BaseSpringHateoasTest;
 import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
+import com.example.demo.domain.ExpirationZonedDate;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.domain.entities.PoliticianNumber;
@@ -12,8 +13,6 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.hateoas.MediaTypes;
-
-import java.time.LocalDate;
 
 import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
@@ -39,7 +38,7 @@ public class RateLimitHttpAdapterTest extends BaseSpringHateoasTest {
     public void shouldReturn200OkWithSelfAndPoliticianLink() throws Exception{
         AccountNumber ACCOUNT_NUMBER = ACC_NUMBER();
         PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
-        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER.accountNumber(), POLITICIAN_NUMBER, LocalDate.now()));
+        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER.accountNumber(), POLITICIAN_NUMBER, ExpirationZonedDate.now()));
 
         String jwt = createJwtWithFixedExpirationDate("test@gmail.com", ACCOUNT_NUMBER.accountNumber(), "random name");
 
@@ -57,7 +56,7 @@ public class RateLimitHttpAdapterTest extends BaseSpringHateoasTest {
     public void shouldReturnHalFormTemplateDefaultWhereTargetLinkIsTheLinkToRatePoliticiansWhenNotRateLimited() throws Exception{
         AccountNumber ACCOUNT_NUMBER = ACC_NUMBER();
         PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
-        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER.accountNumber(), POLITICIAN_NUMBER, LocalDate.now().minusDays(9)));
+        rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER.accountNumber(), POLITICIAN_NUMBER, ExpirationZonedDate.ofBehind(9)));
 
         String jwt = createJwtWithFixedExpirationDate("test@gmail.com", ACCOUNT_NUMBER.accountNumber(), "random name");
 

@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 /**
  * Handles expirations in GMT+8.
@@ -64,4 +65,23 @@ public class ExpirationZonedDate {
         return !isExpired(daysToExpire);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ExpirationZonedDate that = (ExpirationZonedDate) o;
+
+        return Objects.equals(dateCreated, that.dateCreated);
+    }
+
+    @Override
+    public int hashCode() {
+        return dateCreated != null ? dateCreated.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "ExpirationZonedDate dateCreated= " + dateCreated;
+    }
 }

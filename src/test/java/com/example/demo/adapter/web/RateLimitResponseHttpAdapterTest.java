@@ -2,6 +2,7 @@ package com.example.demo.adapter.web;
 
 import com.example.demo.BaseSpringHateoasTest;
 import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
+import com.example.demo.domain.ExpirationZonedDate;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.RateLimit;
@@ -10,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
-
-import java.time.LocalDate;
 
 import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
@@ -41,7 +40,7 @@ public class RateLimitResponseHttpAdapterTest extends BaseSpringHateoasTest {
     public void shouldReturnCorrectAccountNumberAndPoliticianNumber() throws Exception{
         String accountNumber = ACC_NUMBER().accountNumber();
         PoliticianNumber politicianNumber = POL_NUMBER();
-        rateLimitRepository.save(new RateLimit(accountNumber, politicianNumber, LocalDate.now().minusDays(9)));
+        rateLimitRepository.save(new RateLimit(accountNumber, politicianNumber, ExpirationZonedDate.ofBehind(9)));
 
         String jwt = createJwtWithFixedExpirationDate("test@gmail.com", accountNumber, "random");
 

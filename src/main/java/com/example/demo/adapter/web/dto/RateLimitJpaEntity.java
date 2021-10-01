@@ -1,11 +1,13 @@
 package com.example.demo.adapter.web.dto;
 
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
+import com.example.demo.domain.ExpirationZonedDate;
 import com.example.demo.domain.entities.RateLimit;
 import com.example.demo.domain.entities.PoliticianNumber;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 public class RateLimitJpaEntity {
@@ -63,7 +65,9 @@ public class RateLimitJpaEntity {
 	}
 
 	public RateLimit toRateLimit() {
-		return new RateLimit(accountNumber, new PoliticianNumber(politicianNumber), dateCreated);
+		long daysBetween = LocalDate.now(ExpirationZonedDate.zoneId).until(dateCreated, ChronoUnit.DAYS);
+		var date = daysBetween < 0 ? ExpirationZonedDate.ofBehind(Math.abs(daysBetween)) : ExpirationZonedDate.ofAhead(daysBetween);
+		return new RateLimit(accountNumber, new PoliticianNumber(politicianNumber), date);
 	}
 
 }

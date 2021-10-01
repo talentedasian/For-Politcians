@@ -1,6 +1,6 @@
 package com.example.demo.domain.entities;
 
-import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
+import com.example.demo.domain.ExpirationZonedDate;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -13,7 +13,7 @@ public class RateLimit {
 
 	private PoliticianNumber politicianNumber;
 
-	private ExpirationDate expirationDate;
+	private ExpirationZonedDate expirationZonedDate;
 
 	public String id() {
 		return id;
@@ -32,19 +32,13 @@ public class RateLimit {
 	}
 
 	public LocalDate expirationDate() {
-		return expirationDate.expirationDate(RATE_LIMIT);
+		return expirationZonedDate.expirationDate(RATE_LIMIT);
 	}
 
-	public RateLimit(String id, PoliticianNumber politicianNumber, LocalDate expirationDate) {
+	public RateLimit (String id, PoliticianNumber politicianNumber, ExpirationZonedDate expirationDate) {
 		this.id = id;
 		this.politicianNumber = politicianNumber;
-		this.expirationDate = new ExpirationDate(expirationDate);
-	}
-
-	public RateLimit(String id, PoliticianNumber politicianNumber, ExpirationDate expirationDate) {
-		this.id = id;
-		this.politicianNumber = politicianNumber;
-		this.expirationDate = expirationDate;
+		this.expirationZonedDate = expirationDate;
 	}
 
 	public RateLimit() {
@@ -52,9 +46,12 @@ public class RateLimit {
 	}
 
 	@Override
-	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
-		return "RateLimit [id=" + id + ", politicianNumber=" + politicianNumber + "]";
+		return "RateLimit { " +
+				"id='" + id +
+				", politicianNumber=" + politicianNumber +
+				", expirationZonedDate=" + expirationZonedDate +
+				" } ";
 	}
 
 	@Override
@@ -67,27 +64,27 @@ public class RateLimit {
 		if (!Objects.equals(id, rateLimit.id)) return false;
 		if (!Objects.equals(politicianNumber, rateLimit.politicianNumber))
 			return false;
-		return Objects.equals(expirationDate, rateLimit.expirationDate);
+		return Objects.equals(expirationZonedDate, rateLimit.expirationZonedDate);
 	}
 
 	@Override
 	public int hashCode() {
 		int result = id != null ? id.hashCode() : 0;
 		result = 31 * result + (politicianNumber != null ? politicianNumber.hashCode() : 0);
-		result = 31 * result + (expirationDate != null ? expirationDate.hashCode() : 0);
+		result = 31 * result + (expirationZonedDate != null ? expirationZonedDate.hashCode() : 0);
 		return result;
 	}
 
 	public boolean isNotRateLimited() {
-		return expirationDate == null || expirationDate.isExpired(RATE_LIMIT);
+		return expirationZonedDate == null || expirationZonedDate.isExpired(RATE_LIMIT);
 	}
 
 	public Integer daysLeftOfBeingRateLimited() {
-		return Integer.valueOf(expirationDate.daysLeftTillExpiration(RATE_LIMIT));
+		return Integer.valueOf(expirationZonedDate.daysLeftTillExpiration(RATE_LIMIT));
 	}
 
 	public LocalDate dateCreated() {
-		return expirationDate.dateCreated();
+		return expirationZonedDate.dateCreated();
 	}
 
 }

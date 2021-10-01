@@ -2,6 +2,7 @@ package com.example.demo.domain.collaboration;
 
 import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.domain.DefaultRateLimitDomainService;
+import com.example.demo.domain.ExpirationZonedDate;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.domain.entities.PoliticianNumber;
@@ -11,9 +12,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDate;
-import java.time.ZoneId;
 
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
@@ -32,7 +30,7 @@ public class DefaultRateLimitServiceTest {
 
     @Test
     public void shouldDeleteExistingRateLimitWhenRateLimitingUser() throws Exception{
-        LocalDate expiredDate = LocalDate.now(ZoneId.of("GMT+8")).minusDays(8);
+        ExpirationZonedDate expiredDate = ExpirationZonedDate.ofBehind(8);
         String ACCOUNT_NUMBER = ACC_NUMBER().accountNumber();
         PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
 
@@ -56,7 +54,7 @@ public class DefaultRateLimitServiceTest {
 
     @Test
     public void shouldReturnDaysLeftToRateWhenUserHasExistingExpiredRateLimitOnPolitician() throws Exception{
-        LocalDate expiredDate = LocalDate.now(ZoneId.of("GMT+8")).minusDays(10);
+        ExpirationZonedDate expiredDate = ExpirationZonedDate.ofBehind(10);
         String ACCOUNT_NUMBER = ACC_NUMBER().accountNumber();
         PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
 
@@ -73,7 +71,7 @@ public class DefaultRateLimitServiceTest {
     @Test
     public void shouldReturnExpectedDaysLeftToRateWhenUserHasExistingNonExpiredRateLimitOnPolitician() throws Exception{
         long daysTillRateLimitExpiration = 5;
-        LocalDate fiveDaysLeftInAWeek = LocalDate.now(ZoneId.of("GMT+8")).minusDays(2);
+        ExpirationZonedDate fiveDaysLeftInAWeek = ExpirationZonedDate.ofBehind(2);
         String ACCOUNT_NUMBER = ACC_NUMBER().accountNumber();
         PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
 

@@ -28,7 +28,8 @@ public class RateLimitAssembler implements SimpleRepresentationModelAssembler<Ra
 
         Link selfLink = getSelfLink(content);
 
-        var rateLimit = content.toRateLimit();
+        var rateLimit = content;
+        resource.add(selfLink);
         if (rateLimit.isNotRateLimited()) {
             try {
                 addAffordanceToRatePolitician(resource, selfLink);
