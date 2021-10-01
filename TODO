@@ -6,4 +6,5 @@
 [*] test rate limit http adapter response
 [ ] Revamp the JWT classes used for decoding and creating JWTs
 [ ] Test refresh jwt exceptions in http adapter level in all endpoints that use it
-[ ] Expiration Date should convert all dates to a date with a zone id of gmt+8
+[*] Expiration Date should convert all dates to a date with a zone id of gmt+8
+[ ] Add gmt+8 for all expiration dates for jwt
