@@ -50,7 +50,6 @@ public class PoliticiansService {
 		Adapters that use the service must not use this method yet.
 		Updating politicians is only done on lower levels of code and not on the user side.
 	 */
-	@Transactional
 	public Politicians updatePolitician(Politicians politician) throws PoliticianNotPersistableException {
 		return politiciansRepo.update(politician);
 	}

@@ -2,6 +2,7 @@ package com.example.demo.adapter.web;
 
 import com.example.demo.BaseSpringHateoasTest;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
+import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.RateLimitRepository;
@@ -17,7 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate;
 import static com.example.demo.baseClasses.MockMvcAssertions.assertThat;
@@ -38,6 +39,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
 
     @Autowired RatingRepository ratingRepo;
     @Autowired PoliticiansRepository polRepo;
+    @Autowired PoliticiansJpaRepository jpaR;
     @Autowired RateLimitRepository rateLimitRepo;
     @Autowired UserRateLimitService rateLimitService;
 
@@ -54,12 +56,11 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
             .build();
     PoliticiansRating politiciansRating = new PoliticiansRating.Builder(politician)
             .setRater(rater)
-            .setRating(Score.of(1))
+            .setRating(Score.of(1.321321))
             .build();
 
     @Test
     public void shouldThrowBadRequestWithInappropriateRaterAccountNumber() throws Exception{
-        polRepo.save(politician);
         PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
 
         final String inappropriateAccountNumber = String.valueOf(savedRating.id());
@@ -69,7 +70,6 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
 
     @Test
     public void shouldReturnInappropriateAccountNumberAsBody() throws Exception{
-        polRepo.save(politician);
         PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
 
         final String inappropriateAccountNumber = String.valueOf(savedRating.id());
@@ -111,7 +111,6 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
 
     @Test
     public void shouldReturnRatingWithPolitician() throws Exception{
-        polRepo.save(politician);
         PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
 
         mvc.perform(get(create("/api/ratings/rating/" + savedRating.id())))
@@ -124,7 +123,6 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
 
     @Test
     public void shouldHaveSelfLink_RateLimitLink_And_PoliticianLink() throws Exception{
-        polRepo.save(politician);
         PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
 
         mvc.perform(get(create("/api/ratings/rating/" + savedRating.id())))
@@ -139,7 +137,6 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
     @Test
     @Transactional
     public void shouldHaveHalTemplateToRatePoliticianAgainWhenJwtIsPresentAndUserIsNotRateLimited() throws Exception{
-        polRepo.save(politician);
         PoliticiansRating savedRating = ratingRepo.save(politiciansRating);
         //make sure user is not rate limited
         rateLimitRepo.deleteUsingIdAndPoliticianNumber(ACC_NUMBER().accountNumber(), PoliticianNumber.of(politician.retrievePoliticianNumber()));

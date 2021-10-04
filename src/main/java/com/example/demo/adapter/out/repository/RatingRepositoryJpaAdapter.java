@@ -26,7 +26,6 @@ public class RatingRepositoryJpaAdapter implements RatingRepository {
     @Override
     public PoliticiansRating save(PoliticiansRating rating) {
         PoliticiansRatingJpaEntity entity = repo.save(PoliticiansRatingJpaEntity.from(rating));
-
         return entity.toRating();
     }
 

@@ -162,7 +162,7 @@ public class Politicians {
 	}
 
 	public String fullName() {
-		return name.fullName();
+		return name == null ? null : name.fullName();
 	}
 
 	public String firstName() {

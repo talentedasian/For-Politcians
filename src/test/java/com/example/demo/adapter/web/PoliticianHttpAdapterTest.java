@@ -1,7 +1,6 @@
 package com.example.demo.adapter.web;
 
 import com.example.demo.BaseSpringHateoasTest;
-import com.example.demo.adapter.out.jpa.PoliticiansJpaEntity;
 import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.domain.AverageRating;
@@ -10,14 +9,14 @@ import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterEach;
+import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
 
@@ -31,12 +30,14 @@ import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculato
 import static java.math.BigDecimal.valueOf;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Transactional
 public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
     final String presidentialBasePath = "_embedded.presidentialPoliticianDtoList";
@@ -69,11 +70,6 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
                 .setPoliticiansRating(null)
                 .setFirstName(FIRST_NAME)
                 .setLastName(LAST_NAME);
-    }
-
-    @AfterEach
-    public void teardown() {
-        jpaRepo.deleteAll();
     }
 
     @Test
@@ -165,12 +161,18 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
     @Test
     public void shouldReturnExpectedItemSizeWhenItemSizeIsLessThanTheCountOfAllInTheDatabase() throws Exception{
-       jpaRepo.saveAll(pagedPoliticianSetupPresidential(30, politicianBuilder).stream().map(PoliticiansJpaEntity::from).toList());
+       pagedPoliticianSetupPresidential(30, politicianBuilder).stream().forEach(it -> {
+           try {
+               polRepo.save(it);
+           } catch (PoliticianNotPersistableException e) {
+               e.printStackTrace();
+           }
+       });
 
        mvc.perform(get(URI.create("/api/politicians/politicians?page=0&items=20")))
                .andExpect(status().isOk())
 
-                    .andExpect(jsonPath(presidentialBasePath, Matchers.hasSize(20)))
+                    .andExpect(jsonPath(presidentialBasePath, hasSize(20)))
 
                .andDo(document("politician", links(halLinks(),
                        linkWithRel("self").description("Link that points to all politicians with pagination"))));
@@ -178,14 +180,27 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
     @Test
     public void shouldReturnExpectedItemSizeForPolymorphicPaginatedQuery() throws Exception{
-        jpaRepo.saveAll(pagedPoliticianSetupPresidential(10, politicianBuilder).stream().map(PoliticiansJpaEntity::from).toList());
-        jpaRepo.saveAll(pagedPoliticianSetupSenatorial(19, politicianBuilder).stream().map(PoliticiansJpaEntity::from).toList());
+        jpaRepo.deleteAll();
+        pagedPoliticianSetupPresidential(10, politicianBuilder).stream().forEach(it -> {
+            try {
+                polRepo.save(it);
+            } catch (PoliticianNotPersistableException e) {
+                e.printStackTrace();
+            }
+        });
+        pagedPoliticianSetupSenatorial(19, politicianBuilder).stream().forEach(it -> {
+            try {
+                polRepo.save(it);
+            } catch (PoliticianNotPersistableException e) {
+                e.printStackTrace();
+            }
+        });
 
         mvc.perform(get(URI.create("/api/politicians/politicians?page=0&items=40")))
                 .andExpect(status().isOk())
 
-                .andExpect(jsonPath(presidentialBasePath, Matchers.hasSize(10)))
-                .andExpect(jsonPath(senatorialBasePath, Matchers.hasSize(19)))
+                .andExpect(jsonPath(presidentialBasePath, hasSize(10)))
+                .andExpect(jsonPath(senatorialBasePath, hasSize(19)))
 
                 .andDo(document("politician", links(halLinks(),
                         linkWithRel("self").description("Link that points to all politicians with pagination"))));

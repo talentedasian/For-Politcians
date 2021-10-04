@@ -20,7 +20,7 @@ public record Score(double rating) {
     }
 
     private boolean isRatingGreaterThanMinimum(double rating) {
-        return rating > MINIMUM;
+        return rating >= MINIMUM;
     }
 
     public static Score of(double rating) {

@@ -6,9 +6,12 @@ import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.baseClasses.FakeDomainService;
 import com.example.demo.domain.Score;
-import com.example.demo.domain.entities.*;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.entities.Politicians;
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.entities.UserRateLimitService;
+import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class RatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
-    @Autowired RatingRepository ratingRepo;
     @Autowired PoliticiansRepository polRepo;
+    @Autowired RatingRepository ratingRepo;
     @Autowired UserRateLimitService rateLimitService;
 
     PresidentialPolitician politician = new PresidentialBuilder(new Politicians.PoliticiansBuilder(POL_NUMBER())
@@ -52,9 +55,9 @@ public class RatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
     @Test
     public void whenRatingPolitician_RatingShouldImmediatelyReflectOnPolitician() throws Exception{
+        polRepo.save(politician);
         double EXPECTED_AVERAGE_RATING_AFTER_RATE = 3.803D;
 
-        polRepo.save(politician);
         politiciansRating.ratePolitician(rateLimitService);
         politiciansRating.ratePolitician(rateLimitService);
         politiciansRating.ratePolitician(rateLimitService);

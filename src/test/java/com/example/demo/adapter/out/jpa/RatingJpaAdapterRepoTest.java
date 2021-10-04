@@ -34,7 +34,6 @@ public class RatingJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase {
 
     @BeforeEach
     public void setup() {
-
         ratingRepo = new RatingRepositoryJpaAdapter(ratingJpaRepository);
     }
 
@@ -53,16 +52,19 @@ public class RatingJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase {
 
     @Test public void //TRYING THIS FORMAT OUT
     should_convert_and_save_to_database() throws Exception{
-        polJpaRepository.saveAndFlush(PoliticiansJpaEntity.from(presidential));
+        PoliticiansJpaEntity savedPolitician = polJpaRepository.saveAndFlush(PoliticiansJpaEntity.from(presidential));
 
         Score scoreForPolitician = Score.of(1);
         var rating = new PoliticiansRating.Builder()
                 .setRater(BuilderFactory.createRater(ACC_NUMBER().accountNumber()))
-                .setPolitician(presidential)
+                .setPolitician(savedPolitician.toPoliticians())
                 .setRating(scoreForPolitician)
                 .build();
 
         PoliticiansRating savedRating = ratingRepo.save(rating);
+
+        assertThat(savedRating.id())
+                .isNotNull();
 
         assertThat(savedRating.whoRated())
                 .isEqualTo(rating.whoRated());
