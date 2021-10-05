@@ -45,7 +45,7 @@ public class Politicians {
 		return doesPoliticianHaveRating() ? 0 : averageRating.averageRating();
 	}
 
-	private boolean doesPoliticianHaveRating() {
+	public boolean doesPoliticianHaveRating() {
 		return AverageRating.hasRating(averageRating);
 	}
 
@@ -126,7 +126,7 @@ public class Politicians {
 	}
 
 	void rate(PoliticiansRating rating) {
-		addCountsOfTotalRating();
+		incrementTotalCountsOfRating();
 
 		double calculatedAverageRating = calculateAverageRating(Score.of(rating.score())).averageRating();
 		changeAverageRating(AverageRating.of(BigDecimal.valueOf(calculatedAverageRating)));
@@ -136,7 +136,7 @@ public class Politicians {
 		politiciansRating.add(rating);
 	}
 
-	private void addCountsOfTotalRating() {
+	private void incrementTotalCountsOfRating() {
 		totalCountsOfRating++;
 	}
 
