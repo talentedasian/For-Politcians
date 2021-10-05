@@ -22,7 +22,7 @@ public class PoliticianTypes {
 		@Override
 		@ExcludeFromJacocoGeneratedCoverage
 		public String toString() {
-			return "Politicians [name=" + fullName() + ", rating=" + averageRating() + ", politicianNumber=" + retrievePoliticianNumber()
+			return "Politicians [name=" + fullName() + ", rating=" + average() + ", politicianNumber=" + retrievePoliticianNumber()
 					+ ", mostSignificantLawMSigned=" + mostSignificantLawSigned + ", type=" + Type.PRESIDENTIAL +  "]";
 		}
 

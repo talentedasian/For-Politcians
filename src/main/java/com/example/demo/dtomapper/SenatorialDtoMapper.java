@@ -11,9 +11,6 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-/*
-	Callers must use only the superclass PoliticiansDtoMapper.
- */
 final class SenatorialDtoMapper extends PoliticiansDtoMapper {
 
     @Override
@@ -41,7 +38,7 @@ final class SenatorialDtoMapper extends PoliticiansDtoMapper {
         Double rating = entity.averageRating();
         Rating satisfactionRate = Rating.mapToSatisfactionRate(rating);
 
-        return new SenatorialPoliticianDto(entity, satisfactionRate, entity.getTotalMonthsOfServiceAsSenator(),entity.getMostSignificantLawMade());
+        return SenatorialPoliticianDto.of(entity, satisfactionRate, entity.getTotalMonthsOfServiceAsSenator(),entity.getMostSignificantLawMade());
     }
 
 }

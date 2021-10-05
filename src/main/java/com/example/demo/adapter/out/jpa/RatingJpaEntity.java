@@ -18,7 +18,7 @@ public class RatingJpaEntity {
     protected Double averageRating;
 
     public static RatingJpaEntity from(TotalRatingAccumulated totalRatingAccumulated, final AverageRating averageRating) {
-        double rating = AverageRating.hasRating(averageRating) ? 0 : averageRating.averageRating();
+        double rating = AverageRating.hasRating(averageRating) ? averageRating.averageRating() : 0;
         return new RatingJpaEntity(totalRatingAccumulated.totalRatingAsDouble(), rating);
     }
 

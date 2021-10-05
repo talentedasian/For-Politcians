@@ -29,7 +29,7 @@ public enum Rating {
 	public abstract double calculate(BigDecimal totalRating, int count);
 
 	public static Rating mapToSatisfactionRate(Double rating) {
-		if (rating < 5D) {
+		if (rating < 5D || rating == null) {
 			Rating satisfaction = Rating.LOW;
 			return satisfaction;
 		} else if (rating < 8.89D) {

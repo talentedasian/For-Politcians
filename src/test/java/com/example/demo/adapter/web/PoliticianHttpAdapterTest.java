@@ -15,12 +15,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
 
-import static com.example.demo.baseClasses.MockMvcAssertions.assertThat;
 import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
 import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupSenatorial;
 import static com.example.demo.domain.entities.Politicians.Type.PRESIDENTIAL;
@@ -30,6 +28,7 @@ import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculato
 import static java.math.BigDecimal.valueOf;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -73,30 +72,33 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
     }
 
     @Test
+    public void shouldReturnLinks_SelfAndRatePolitician() throws Exception{
+        var presidential = new PresidentialBuilder(politicianBuilder).build();
+
+        polRepo.save(presidential);
+
+        mvc.perform(get("/api/politicians/politician"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaTypes.HAL_FORMS_JSON))
+
+                    .andDo(document("politician", links(halLinks(),
+                            linkWithRel("self").description("Link that points to politician resource"),
+                            linkWithRel("rate-politician").description("Link that rates politicians"))));
+        }
+
+    @Test
     public void shouldSaveToDatabaseGivenWithCorrectAuthorization() throws Exception{
         var politician = new PresidentialBuilder(politicianBuilder)
                 .setMostSignificantLawPassed("Random Law").build();
 
-        MvcResult response = mvc.perform(post(create("/api/politicians/politician"))
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Politician-Access", "password")
-                .content(requestContent))
+        mvc.perform(post(create("/api/politicians/politician"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Politician-Access", "password")
+                        .content(requestContent))
+                .andExpect(status().isCreated())
 
-                    .andDo(document("politician", links(halLinks(),
-                            linkWithRel("self").description("Link that points to politician resource"),
-                            linkWithRel("rate-politician").description("Link that rates politicians"))))
-
-                .andReturn();
-
-        assertThat(response)
-                .hasPath("id")
-                    .isEqualTo(POLITICIAN_NUMBER.politicianNumber())
-                .hasPath("name")
-                    .isEqualTo(politician.fullName())
-                .hasPath("rating")
-                    .isEqualTo(politician.averageRating())
-                .hasPath("most_significant_law_signed")
-                    .isEqualTo(politician.getMostSignificantLawSigned());
+                    .andExpect(jsonPath("id", notNullValue()))
+                    .andExpect(jsonPath("rating", equalTo("N/A")));
     }
 
     @Test
@@ -106,25 +108,13 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
         polRepo.save(politician);
 
-        MvcResult response = mvc.perform(get(create("/api/politicians/politician/" + POLITICIAN_NUMBER.politicianNumber()))
-                        .contentType(MediaTypes.HAL_FORMS_JSON))
-                .andExpect(status().isOk())
+        mvc.perform(get(create("/api/politicians/politician/" + POLITICIAN_NUMBER.politicianNumber()))
+                    .contentType(MediaTypes.HAL_FORMS_JSON))
+            .andExpect(status().isOk())
 
-                .andDo(document("politician", links(halLinks(),
-                        linkWithRel("self").description("Link that points to politician resource"),
-                        linkWithRel("rate-politician").description("Link that rates politicians"))))
-
-                .andReturn();
-
-        assertThat(response)
-                .hasPath("id")
-                .isEqualTo(POLITICIAN_NUMBER.politicianNumber())
-                .hasPath("name")
-                .isEqualTo(politician.fullName())
-                .hasPath("rating")
-                .isEqualTo(politician.averageRating())
-                .hasPath("most_significant_law_signed")
-                .isEqualTo(politician.getMostSignificantLawSigned());
+                .andExpect(jsonPath("id", equalTo(politician.retrievePoliticianNumber())))
+                .andExpect(jsonPath("rating", equalTo("N/A")))
+                .andExpect(jsonPath("type", equalTo("PRESIDENTIAL")));
     }
 
     @Test
@@ -147,12 +137,12 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
                     .andExpect(jsonPath(presidentialBasePath.concat("[0].id"), equalTo(presidential.retrievePoliticianNumber())))
                     .andExpect(jsonPath(presidentialBasePath.concat("[0].name"), equalTo(presidential.fullName())))
-                    .andExpect(jsonPath(presidentialBasePath.concat("[0].rating"), equalTo(presidential.averageRating())))
+                    .andExpect(jsonPath(presidentialBasePath.concat("[0].rating"), equalTo("N/A")))
                     .andExpect(jsonPath(presidentialBasePath.concat("[0].satisfaction_rate"), equalTo(LOW.toString())))
                     .andExpect(jsonPath(presidentialBasePath.concat("[0].most_significant_law_signed"), equalTo(presidential.getMostSignificantLawSigned())))
                     .andExpect(jsonPath(senatorialBasePath.concat("[0].id"), equalTo(senatorial.retrievePoliticianNumber())))
                     .andExpect(jsonPath(senatorialBasePath.concat("[0].name"), equalTo(senatorial.fullName())))
-                    .andExpect(jsonPath(senatorialBasePath.concat("[0].rating"), equalTo(senatorial.averageRating())))
+                    .andExpect(jsonPath(senatorialBasePath.concat("[0].rating"), equalTo(String.valueOf(senatorial.averageRating()))))
                     .andExpect(jsonPath(senatorialBasePath.concat("[0].satisfaction_rate"), equalTo(HIGH.toString())))
 
                 .andDo(document("politician", links(halLinks(),

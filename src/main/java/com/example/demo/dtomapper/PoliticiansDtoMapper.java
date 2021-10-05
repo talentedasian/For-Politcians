@@ -9,6 +9,8 @@ import java.util.List;
 
 public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 
+	public static final String NO_RATING = "N/A";
+
 	@Override
 	public PoliticianDto mapToDTO(Politicians entity) {
 		switch(entity.getType()) {
@@ -27,13 +29,14 @@ public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 	}
 	
 	private PoliticianDto mapToPoliticianDTO(Politicians entity) {
-		Double rating = entity.averageRating();
-		Rating satisfactionRate = Rating.mapToSatisfactionRate(rating);
+		double averageRating = entity.averageRating();
+		String stringRepresentationOfAverageRating = entity.hasRating() ? String.valueOf(averageRating) : "N/A";
+		Rating satisfactionRate = Rating.mapToSatisfactionRate(averageRating);
 		
 		return new PoliticianDto(
 				entity.firstName() + " " + entity.lastName(),
 				entity.retrievePoliticianNumber(),
-				rating,
+				stringRepresentationOfAverageRating,
 				satisfactionRate,
 				"Presidential");
 	}

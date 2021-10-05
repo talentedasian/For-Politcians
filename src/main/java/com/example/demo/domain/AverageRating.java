@@ -11,7 +11,7 @@ public record AverageRating(double rating) {
     public static final AverageRating NO_RATING_YET = null;
     public static final AverageRating ONE = new AverageRating(1);
 
-    private static final double MINIMUM = 0;
+    private static final double MINIMUM = 0.01;
     private static final int MAXIMUM = 10;
 
     public AverageRating {
@@ -71,6 +71,6 @@ public record AverageRating(double rating) {
     }
 
     public static boolean hasRating(AverageRating averageRating) {
-        return Objects.equals(averageRating, NO_RATING_YET);
+        return !Objects.equals(averageRating, NO_RATING_YET);
     }
 }

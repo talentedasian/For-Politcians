@@ -42,10 +42,10 @@ public class Politicians {
 	}
 
 	public double averageRating() {
-		return doesPoliticianHaveRating() ? 0 : averageRating.averageRating();
+		return averageRating.averageRating();
 	}
 
-	public boolean doesPoliticianHaveRating() {
+	public boolean hasRating() {
 		return AverageRating.hasRating(averageRating);
 	}
 
@@ -56,7 +56,6 @@ public class Politicians {
 	public Politicians.Type getType() {
 		return type;
 	}
-
 
 	Politicians(Name name, List<PoliticiansRating> politiciansRating, AverageRating averageRating,
 				TotalRatingAccumulated totalRatingAccumulated, PoliticianNumber politicianNumber, Type polType) {

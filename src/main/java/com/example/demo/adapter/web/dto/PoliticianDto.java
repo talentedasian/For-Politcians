@@ -2,7 +2,6 @@ package com.example.demo.adapter.web.dto;
 
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.enums.Rating;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
@@ -11,10 +10,9 @@ public class PoliticianDto {
 
 	private final String name, id;
 	
-	private final Double rating;
+	private final String rating;
 	
-	@JsonProperty(value = "satisfaction_rate")
-	private Rating satisfactionRate;
+	private final Rating satisfactionRate;
 
 	private final String type;
 	
@@ -30,11 +28,15 @@ public class PoliticianDto {
 		return id;
 	}
 	
-	public Double getRating() {
+	public String getRating() {
 		return rating;
 	}
 
-	public PoliticianDto(String name, String id, Double rating, Rating satisfactionRate, String type) {
+	public String getType() {
+		return type;
+	}
+
+	public PoliticianDto(String name, String id, String rating, Rating satisfactionRate, String type) {
 		this.name = name;
 		this.id = id;
 		this.rating = rating;
