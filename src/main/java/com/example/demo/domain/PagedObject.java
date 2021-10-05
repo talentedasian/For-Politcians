@@ -26,12 +26,6 @@ public class PagedObject<T> {
         this.itemsToFetch = itemsToFetch;
     }
 
-    public static <Z> PagedObject<Z> of(List<Z> values, long total) {
-        isValuesNotNull(values);
-        isValuesLessThanOrEqual(values.size(), (int) total);
-        return new PagedObject<Z>(values, Page.asZero(), total, 10);
-    }
-
     public static <Z> PagedObject<Z> of(List<Z> values, long total, int itemsToFetch, Page page) {
         isValuesNotNull(values);
         isValuesLessThanOrEqual(values.size(), (int) total);

@@ -77,7 +77,7 @@ public class RatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
                     .header("Authorization", "Bearer " + jwt))
                 .andExpect(status().isCreated())
 
-                    .andExpect(jsonPath("politician.rating", equalTo(EXPECTED_AVERAGE_RATING_AFTER_RATE)));
+                    .andExpect(jsonPath("politician.rating", equalTo(String.valueOf(EXPECTED_AVERAGE_RATING_AFTER_RATE))));
     }
 
     @TestConfiguration

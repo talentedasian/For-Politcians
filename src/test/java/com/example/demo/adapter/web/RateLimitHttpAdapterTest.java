@@ -1,7 +1,6 @@
 package com.example.demo.adapter.web;
 
 import com.example.demo.BaseSpringHateoasTest;
-import com.example.demo.adapter.out.repository.InMemoryRateLimitRepository;
 import com.example.demo.domain.ExpirationZonedDate;
 import com.example.demo.domain.RateLimitRepository;
 import com.example.demo.domain.entities.AccountNumber;
@@ -9,10 +8,8 @@ import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.RateLimit;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
@@ -25,11 +22,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/*
- TESTS USES IN MEMORY FOR NOW SINCE INDIVIDUAL TESTS DO NOT ROLLBACK
- THE ENTITIES BEING SAVED IN THE DATABASE
- */
-
+@Transactional
 public class RateLimitHttpAdapterTest extends BaseSpringHateoasTest {
 
     @Autowired RateLimitRepository rateLimitRepository;
@@ -78,15 +71,6 @@ public class RateLimitHttpAdapterTest extends BaseSpringHateoasTest {
                     .andExpect(jsonPath("code", equalTo("401")))
                     .andExpect(jsonPath("err", equalToIgnoringCase("no jwt found from authorization header")))
                     .andExpect(jsonPath("additional_information", containsStringIgnoringCase("requires a jwt to be present")));
-    }
-
-    @TestConfiguration
-    static class Configuration {
-        @Bean
-        @Primary
-        public RateLimitRepository inMemory() {
-            return new InMemoryRateLimitRepository();
-        }
     }
 
 }

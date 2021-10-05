@@ -33,6 +33,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class RateLimitedRatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
+    @TestConfiguration
+    static class Config{
+        @Bean
+        @Primary
+        UserRateLimitService noRateService() {
+            return FakeDomainService.noRateService();
+        }
+    }
+
     @Autowired RatingRepository ratingRepo;
     @Autowired PoliticiansRepository polRepo;
     @Autowired UserRateLimitService rateLimitService;
@@ -40,9 +49,6 @@ public class RateLimitedRatingPoliticianHttpAdapterTest extends BaseSpringHateoa
     PresidentialPolitician politician = new PresidentialBuilder(new Politicians.PoliticiansBuilder(POL_NUMBER())
                 .setFirstName("Fake"))
             .build();
-
-    @Autowired
-    UserRateLimitService service;
 
     @Test
     public void shouldHaveReturnTooManyRequestsAndLinkToRateLimit() throws Exception{
@@ -82,15 +88,6 @@ public class RateLimitedRatingPoliticianHttpAdapterTest extends BaseSpringHateoa
 
                     .andExpect(jsonPath("err", containsStringIgnoringCase("can rate again after 7 days")))
                     .andExpect(jsonPath("code", equalTo("429")));
-    }
-
-    @TestConfiguration
-    static class Config{
-        @Bean
-        @Primary
-        UserRateLimitService noRateService() {
-            return FakeDomainService.noRateService();
-        }
     }
 
 }
