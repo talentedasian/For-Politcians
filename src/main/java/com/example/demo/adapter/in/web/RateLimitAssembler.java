@@ -3,7 +3,6 @@ package com.example.demo.adapter.in.web;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.dto.RateLimitDto;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -40,7 +39,6 @@ public class RateLimitAssembler implements SimpleRepresentationModelAssembler<Ra
         }
     }
 
-    @NotNull
     private EntityModel<RateLimitDto> addPoliticianLink(EntityModel<RateLimitDto> resource, RateLimitDto content) {
         return resource.add(linkTo(methodOn(PoliticianController.class)
                 .politicianById(content.getPoliticianNumber()))
