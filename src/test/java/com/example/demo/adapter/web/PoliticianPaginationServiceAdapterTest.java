@@ -1,7 +1,6 @@
 package com.example.demo.adapter.web;
 
 import com.example.demo.adapter.in.web.PoliticianServiceAdapter;
-import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.web.dto.PoliticianDto;
 import com.example.demo.domain.InMemoryPoliticianAdapterRepo;
 import com.example.demo.domain.Page;
@@ -29,7 +28,7 @@ public class PoliticianPaginationServiceAdapterTest {
     final String FIRST_NAME = "Mirriam";
     final String LAST_NAME = "Defensor";
 
-    PoliticiansRepository polRepo;
+    InMemoryPoliticianAdapterRepo polRepo;
 
     Politicians.PoliticiansBuilder politicianBuilder;
 
@@ -56,7 +55,7 @@ public class PoliticianPaginationServiceAdapterTest {
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-        pagedSetup(30);
+        pagedSetupForExistingSession(30);
 
         Page pageZero = Page.asZero();
         service.allPoliticiansWithPage(pageZero, 20, mockRequest);
@@ -69,15 +68,15 @@ public class PoliticianPaginationServiceAdapterTest {
                 .isEqualTo(300);
     }
 
-    @Test       // INFO : NEXT PAGE MEANS JUST QUERYING FOR A PAGE INCREMENTED FROM THE LAST EXISTING SESSION AND STILL HAVING THE
-                // SAME ITEMS TO FETCH
-    public void queryingForNextPageShouldReturnCorrectPagedObjectAndStillRetainSessionAttributesFromBefore() throws Exception{
+                // INFO : NEXT PAGE MEANS JUST QUERYING FOR A PAGE INCREMENTED FROM THE LAST EXISTING SESSION AND STILL HAVING THE
+    @Test       // SAME ITEMS TO FETCH
+    public void queryingForNextPageShouldReturnPagedObjectFromInitialSessionCreation() throws Exception{
         PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
         int numberOfTimes = 30;
-        pagedSetup(numberOfTimes);
+        pagedSetupForExistingSession(numberOfTimes);
 
         Page pageZero = Page.asZero();
 
@@ -102,7 +101,7 @@ public class PoliticianPaginationServiceAdapterTest {
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
         int numberOfTimes = 30;
-        pagedSetup(numberOfTimes);
+        pagedSetupForExistingSession(numberOfTimes);
 
         Page pageZero = Page.asZero();
 
@@ -127,12 +126,14 @@ public class PoliticianPaginationServiceAdapterTest {
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
         int numberOfTimes = 50;
-        pagedSetup(numberOfTimes);
+        pagedSetupForExistingSession(numberOfTimes);
 
         Page pageZero = Page.asZero();
 
-        service.allPoliticiansWithPage(pageZero, 20, mockRequest);
-        service.allPoliticiansWithPage(pageZero, 10, mockRequest);
+        int itemsToFetchOnInitialRequest = 20;
+        int differentItemsToFetchWithSession = 10;
+        service.allPoliticiansWithPage(pageZero, itemsToFetchOnInitialRequest, mockRequest);
+        service.allPoliticiansWithPage(pageZero, differentItemsToFetchWithSession, mockRequest);
 
         HttpSession session = mockRequest.getSession(false);
         assertThat((long) session.getAttribute("total-page"))
@@ -151,11 +152,11 @@ public class PoliticianPaginationServiceAdapterTest {
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-        pagedSetup(100);
+        pagedSetupForExistingSession(100);
 
-        Page pageZero = Page.of(6);
+        Page nonExistentPage = Page.of(6);
 
-        service.allPoliticiansWithPage(pageZero, 20, mockRequest);
+        service.allPoliticiansWithPage(nonExistentPage, 20, mockRequest);
 
         HttpSession session = mockRequest.getSession(false);
 
@@ -174,7 +175,7 @@ public class PoliticianPaginationServiceAdapterTest {
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
         int numberOfTimes = 100;
-        pagedSetup(numberOfTimes);
+        pagedSetupForExistingSession(numberOfTimes);
 
         Page pageZero = Page.of(0);
 
@@ -185,6 +186,8 @@ public class PoliticianPaginationServiceAdapterTest {
 
         assertThat((long) session.getAttribute("total"))
                 .isEqualTo(numberOfTimes);
+        assertThat(polRepo.countQueries())
+                .isEqualTo(1);
     }
 
     @Test
@@ -194,14 +197,15 @@ public class PoliticianPaginationServiceAdapterTest {
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
         int numberOfTimes = 214214;
-        pagedSetup(numberOfTimes);
+        pagedSetupForExistingSession(numberOfTimes);
 
         Page pageZero = Page.of(0);
 
-        service.allPoliticiansWithPage(pageZero, 20, mockRequest);
-        service.allPoliticiansWithPage(pageZero.nextPage(), 20, mockRequest);
-        service.allPoliticiansWithPage(pageZero.nextPage(3), 20, mockRequest);
-        service.allPoliticiansWithPage(pageZero.nextPage(321), 20, mockRequest);
+        int itemsToFetch = 20;
+        service.allPoliticiansWithPage(pageZero, itemsToFetch, mockRequest);
+        service.allPoliticiansWithPage(pageZero.nextPage(), itemsToFetch, mockRequest);
+        service.allPoliticiansWithPage(pageZero.nextPage(3), itemsToFetch, mockRequest);
+        service.allPoliticiansWithPage(pageZero.nextPage(321), itemsToFetch, mockRequest);
 
         HttpSession session = mockRequest.getSession(false);
 
@@ -215,26 +219,28 @@ public class PoliticianPaginationServiceAdapterTest {
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-        pagedSetup(100);
+        int totalPoliticiansInDatabase = 100;
+        pagedSetupForExistingSession(totalPoliticiansInDatabase);
 
         Page pageZero = Page.of(0);
         Page lastPage = Page.of(4);
 
-        service.allPoliticiansWithPage(pageZero, 20, mockRequest);
-        List<PoliticianDto> politicianDtos = service.allPoliticiansWithPage(lastPage, 20, mockRequest);
+        int itemsToFetch = 20;
+        service.allPoliticiansWithPage(pageZero, itemsToFetch, mockRequest);
+        List<PoliticianDto> politicianDtos = service.allPoliticiansWithPage(lastPage, itemsToFetch, mockRequest);
 
         HttpSession session = mockRequest.getSession(false);
 
-        List<PoliticianDto> expectedContent = pagedPoliticianSetupPresidential(100, politicianBuilder).stream().skip(80)
+        List<PoliticianDto> expectedContent = pagedPoliticianSetupPresidential(totalPoliticiansInDatabase, politicianBuilder)
+                .stream().skip(totalPoliticiansInDatabase - itemsToFetch)
                 .map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
 
         PagedObject<Politicians> pagedObject = (PagedObject<Politicians>) session.getAttribute("paged-objects");
 
         assertThat(politicianDtos)
                 .isEqualTo(expectedContent);
-
         assertThat(pagedObject)
-                .isEqualTo(polRepo.findAllByPage(lastPage, 20, 100l));
+                .isEqualTo(polRepo.findAllByPage(lastPage, itemsToFetch, totalPoliticiansInDatabase));
     }
 
     @Test
@@ -243,7 +249,8 @@ public class PoliticianPaginationServiceAdapterTest {
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-        pagedSetupForExistingSession(100, polRepo);
+        int totalPoliticiansInDatabase = 100;
+        pagedSetupForExistingSession(totalPoliticiansInDatabase);
 
         int itemsToFetch = 20;
         int differentItemsToFetch = 10;
@@ -267,7 +274,7 @@ public class PoliticianPaginationServiceAdapterTest {
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-        pagedSetupForExistingSession(100, inMemoryRepo);
+        pagedSetupForExistingSession(100);
 
         Page lastPage = Page.of(4);
 
@@ -282,33 +289,45 @@ public class PoliticianPaginationServiceAdapterTest {
 
     @Test
     public void shouldNotQueryAgainForCountWhenUserHasSessionAndRequestsForLastPageWithExactAmountOfItemsToFetchAsLastRequest() throws Exception{
-        var inMemoryRepo = new InMemoryPoliticianAdapterRepo();
-        PoliticianServiceAdapter service = new PoliticianServiceAdapter(inMemoryRepo);
+        PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
 
         MockHttpServletRequest mockRequest = new MockHttpServletRequest();
 
-        pagedSetupForExistingSession(100, inMemoryRepo);
+        pagedSetupForExistingSession(100);
 
         Page lastPage = Page.of(4);
 
-        service.allPoliticiansWithPage(Page.asZero(), 20, mockRequest);
-        service.allPoliticiansWithPage(lastPage, 20, mockRequest);
+        int itemsToFetch = 20;
+        service.allPoliticiansWithPage(Page.asZero(), itemsToFetch, mockRequest);
+        service.allPoliticiansWithPage(lastPage, itemsToFetch, mockRequest);
 
-        assertThat(inMemoryRepo.countQueries())
+        assertThat(polRepo.countQueries())
                 .isEqualTo(1);
     }
 
-    void pagedSetupForExistingSession(int numberOfTimes, PoliticiansRepository repo) {
-        pagedPoliticianSetupPresidential(numberOfTimes, politicianBuilder).stream().forEach(it -> {
-            try {
-                repo.save(it);
-            } catch (PoliticianNotPersistableException e) {
-                e.printStackTrace();
-            }
-        });
+    @Test
+    public void queryingForADifferentPageAfterExistingSessionShouldReturnPagedObjectWithPageRequested() throws Exception{
+        PoliticianServiceAdapter service = new PoliticianServiceAdapter(polRepo);
+
+        MockHttpServletRequest mockRequest = new MockHttpServletRequest();
+
+        pagedSetupForExistingSession(100);
+
+        int itemsToFetch = 20;
+        service.allPoliticiansWithPage(Page.asZero(), itemsToFetch, mockRequest);
+        Page differentPageRequested = Page.of(3);
+        service.allPoliticiansWithPage(differentPageRequested, itemsToFetch, mockRequest);
+
+        HttpSession session = mockRequest.getSession(false);
+
+        PagedObject<Politicians> pagedObject = (PagedObject<Politicians>) session.getAttribute("paged-objects");
+
+        int currentPage = pagedObject.currentPageNumber();
+        assertThat(currentPage)
+                .isEqualTo(differentPageRequested.pageNumber());
     }
 
-    void pagedSetup(int numberOfTimes) {
+    void pagedSetupForExistingSession(int numberOfTimes) {
         pagedPoliticianSetupPresidential(numberOfTimes, politicianBuilder).stream().forEach(it -> {
             try {
                 polRepo.save(it);

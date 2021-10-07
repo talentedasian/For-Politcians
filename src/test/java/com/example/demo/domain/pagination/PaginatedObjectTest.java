@@ -7,14 +7,16 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertThrows;
 
 @Tag("Domain")
-public class TotalPaginatedObjectTest {
+public class PaginatedObjectTest {
 
     @Test
     public void shouldThrowIllegalStateExceptionWhenCreatingPagedObjectWithNullValues() throws Exception{
@@ -165,7 +167,7 @@ public class TotalPaginatedObjectTest {
     }
 
     @Test
-    public void throwsNotLastPageExceptionWhenQueryResultSizeIsLessThanTotalModuloOfItemsToFetch() throws Exception{
+    public void throwsNotLastPageExceptionWhenQueryResultSizeIsLessThanTheSizeForLastPage() throws Exception{
         PagedObject<String> pagedObject = PagedObject.of(List.of("random"), 30, 9);
 
         assertThrows(NotLastPageException.class,
@@ -181,13 +183,20 @@ public class TotalPaginatedObjectTest {
     }
 
     @Test
-    public void shouldReturnFalseWhenPagedObjectDoesContainValue() throws Exception{
+    public void shouldReturnTrueWhenContentsOfPagedObjectIsEmpty() throws Exception{
         boolean hasValueAtAll = PagedObject.of(List.of("any value"), 1, 1).doesCurrentPageExist();
 
         assertThat(hasValueAtAll)
                 .isTrue();
     }
 
+    @Test
+    public void shouldReturnFalseWhenContentsOfPagedObjectIsEmpty() throws Exception{
+        boolean hasValueAtAll = PagedObject.of(Collections.emptyList(), 1, 1).doesCurrentPageExist();
+
+        assertThat(hasValueAtAll)
+                .isFalse();
+    }
 
     @Test
     public void hasPageReturnsTrueWhenTotalIsLargerThanItemsToSkip() throws Exception{
@@ -230,27 +239,103 @@ public class TotalPaginatedObjectTest {
     }
 
     @Test
-    public void testNextPage() throws Exception{
+    public void testPageToThatReturnsPageRequestedAndResultInAPagedObject() throws Exception{
         int numberOfTimesToCreate = 20;
         List<String> contents = createList(numberOfTimesToCreate);
         int itemsToFetch = 4;
         List<String> firstPageContent = contents.stream().limit(itemsToFetch).toList();
         List<String> nextPageContent = contents.stream().skip(itemsToFetch).limit(itemsToFetch).toList();
 
-
         PagedObject<String> pagedObject = PagedObject.of(firstPageContent, numberOfTimesToCreate, itemsToFetch);
 
-        assertThat(pagedObject.nextPage(() -> nextPageContent))
-                .isEqualTo(PagedObject.of(nextPageContent, numberOfTimesToCreate, itemsToFetch, Page.of(1)));
+        Page secondPage = Page.of(1);
+        assertThat(pagedObject.toPage(() -> nextPageContent, secondPage))
+                .isEqualTo(PagedObject.of(nextPageContent, numberOfTimesToCreate, itemsToFetch, secondPage));
     }
 
     @Test
-    public void shouldThrowIllegalStateExceptionWhenCallingNextPageAndThereIsNoNextPage() throws Exception{
+    public void testHasPageForInNextPage() throws Exception{
+        int total = 100;
+        List<String> contents = createList(total);
+
+        PagedObject<String> pagedObject = PagedObject.of(contents, total, 20, Page.of(3));
+        Page lastPage = Page.of(4);
+
+        assertThat(pagedObject.hasPageFor(lastPage))
+                .isTrue();
+    }
+
+    @Test
+    public void shouldNotThrowLastPageExceptionWhenTotalPagesModuloItemsToFetchIsZero() throws Exception{
+        int total = 100;
+        List<String> contents = createList(total);
+        List<String> lastPageContents = contents.stream().skip(80).toList();
+
+        PagedObject<String> pagedObject = PagedObject.of(contents, total, 20, Page.of(3));
+        Page lastPage = Page.of(4);
+
+        assertThat(pagedObject.lastPage(() -> lastPageContents))
+                .isEqualTo(PagedObject.of(lastPageContents, total, 20, lastPage));
+    }
+
+    @Test
+    public void shouldNotThrowIllegalStateExceptionWithLastPage() throws Exception{
+        int total = 5;
+        List<String> contents = createList(total);
+        List<String> lastPageContents = contents.stream().skip(4).toList();
+
+        int itemsToFetch = 1;
+        PagedObject<String> pagedObject = PagedObject.of(contents, total, itemsToFetch);
+        Page lastPage = Page.of(4);
+
+        assertThat(pagedObject.lastPage(() -> lastPageContents))
+                .isEqualTo(PagedObject.of(lastPageContents, total, itemsToFetch, lastPage));
+    }
+
+    @Test
+    public void shouldThrowIllegalStateExceptionInToPageWhenContentSizeAndItemsToFetchIsNotEqual() throws Exception{
+        int total = 100;
+        int itemsToFetch = 23;
+        List<String> contents = createList(total);
+        List<String> nextPageContentsWithSizeNotEqualToItemsToFetch = createList(itemsToFetch + 1);
+
+
+        PagedObject<String> pagedObject = PagedObject.of(contents, total, itemsToFetch);
+        Page anyPageThatIsNotLastPage = Page.of(2);
+
+        assertThatThrownBy(() -> pagedObject.toPage(() -> nextPageContentsWithSizeNotEqualToItemsToFetch, anyPageThatIsNotLastPage))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Content size must be equal to itemsToFetch");
+    }
+
+    @Test
+    public void shouldThrowNotLastPageExceptionWhenPagedObjectHasOnly1PageThenRequestsForLastPage() throws Exception{
+        PagedObject pagedObject = PagedObject.of(List.of(), 1, 1);
+
+        assertThatThrownBy(() -> pagedObject.lastPage(() -> List.of("random")))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("Currently on the last page");
+    }
+
+    @Test
+    public void testHasPageForWithLastPagePlus1() throws Exception{
+        int total = 233;
+        List<String> contents = createList(total);
+
+        PagedObject<String> pagedObject = PagedObject.of(contents, total, 3, Page.of(3));
+        Page firstNonExistentPage = Page.of(79);
+
+        assertThat(pagedObject.hasPageFor(firstNonExistentPage))
+                .isFalse();
+    }
+
+    @Test
+    public void shouldThrowIllegalStateExceptionWhenNextPageIsNonExistent() throws Exception{
         List<String> contents = createList(500);
 
         PagedObject<String> pagedObject = PagedObject.of(contents, 1000, 200, Page.of(4));
 
-        assertThrows(IllegalStateException.class, () -> pagedObject.nextPage(() -> List.of()));
+        assertThrows(IllegalStateException.class, () -> pagedObject.toPage(() -> List.of(), Page.of(501)));
     }
 
     private List<String> createList(int numberOfTimesToCreate) {

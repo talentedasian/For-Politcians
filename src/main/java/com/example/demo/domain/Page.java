@@ -12,7 +12,7 @@ public class Page {
     }
 
     public static Page of(int pageNumber) {
-        Assert.state(!(pageNumber < 0), "Page number should not be less than 0");
+        Assert.state((pageNumber >= 0), "Page number should not be less than 0");
 
         return new Page(pageNumber);
     }

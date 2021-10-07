@@ -81,7 +81,7 @@ public class PoliticianServiceAdapter {
         if (doesRequestQueryForLastPage(session, page)) {
             session.setAttribute(pagedObjectAttribute, pagedObjectFromSession.lastPage(() -> query.valuesAsList()));
         } else {
-            session.setAttribute(pagedObjectAttribute, pagedObjectFromSession.nextPage(() -> query.valuesAsList()));
+            session.setAttribute(pagedObjectAttribute, pagedObjectFromSession.toPage(() -> query.valuesAsList(), page));
         }
 
         return query.values().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
