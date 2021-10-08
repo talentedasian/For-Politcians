@@ -14,7 +14,7 @@ public class SenatorialPoliticianDto extends PoliticianDto {
 
     private final String mostSignificantLawMade;
 
-    public int getMonthsOfService() {
+    public Integer getMonthsOfService() {
         return this.monthsOfService;
     }
 

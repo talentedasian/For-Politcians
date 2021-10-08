@@ -9,7 +9,6 @@ import com.example.demo.domain.entities.Name;
 import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.Politicians;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
-import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -328,13 +327,7 @@ public class PoliticianPaginationServiceAdapterTest {
     }
 
     void pagedSetupForExistingSession(int numberOfTimes) {
-        pagedPoliticianSetupPresidential(numberOfTimes, politicianBuilder).stream().forEach(it -> {
-            try {
-                polRepo.save(it);
-            } catch (PoliticianNotPersistableException e) {
-                e.printStackTrace();
-            }
-        });
+        PaginationSetup.pagedSetupPresidential(numberOfTimes, politicianBuilder, polRepo);
     }
 
 }

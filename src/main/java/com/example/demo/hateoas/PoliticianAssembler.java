@@ -34,7 +34,6 @@ public class PoliticianAssembler implements SimpleRepresentationModelAssembler<P
 
 	@Override
 	public void addLinks(CollectionModel<EntityModel<PoliticianDto>> resources) {
-
 	}
 
 }

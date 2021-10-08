@@ -9,9 +9,7 @@ import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
-import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
@@ -20,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
 
-import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
-import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupSenatorial;
+import static com.example.demo.adapter.web.PaginationSetup.pagedSetupPresidential;
+import static com.example.demo.adapter.web.PaginationSetup.pagedSetupSenatorial;
 import static com.example.demo.domain.entities.Politicians.Type.PRESIDENTIAL;
 import static com.example.demo.domain.enums.Rating.HIGH;
 import static com.example.demo.domain.enums.Rating.LOW;
@@ -68,6 +66,7 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
     public void setup() {
         politicianBuilder = new PoliticiansBuilder(POLITICIAN_NUMBER)
                 .setPoliticiansRating(null)
+                .setAverageRating(AverageRating.ONE)
                 .setFirstName(FIRST_NAME)
                 .setLastName(LAST_NAME);
     }
@@ -114,7 +113,7 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
             .andExpect(status().isOk())
 
                 .andExpect(jsonPath("id", equalTo(politician.retrievePoliticianNumber())))
-                .andExpect(jsonPath("rating", equalTo("N/A")))
+                .andExpect(jsonPath("rating", equalTo(String.valueOf(politician.averageRating()))))
                 .andExpect(jsonPath("type", equalTo("PRESIDENTIAL")));
     }
 
@@ -138,65 +137,39 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
 
                     .andExpect(jsonPath(presidentialBasePath.concat("[0].id"), equalTo(presidential.retrievePoliticianNumber())))
                     .andExpect(jsonPath(presidentialBasePath.concat("[0].name"), equalTo(presidential.fullName())))
-                    .andExpect(jsonPath(presidentialBasePath.concat("[0].rating"), equalTo("N/A")))
+                    .andExpect(jsonPath(presidentialBasePath.concat("[0].rating"), equalTo(String.valueOf(presidential.averageRating()))))
                     .andExpect(jsonPath(presidentialBasePath.concat("[0].satisfaction_rate"), equalTo(LOW.toString())))
                     .andExpect(jsonPath(presidentialBasePath.concat("[0].most_significant_law_signed"), equalTo(presidential.getMostSignificantLawSigned())))
                     .andExpect(jsonPath(senatorialBasePath.concat("[0].id"), equalTo(senatorial.retrievePoliticianNumber())))
                     .andExpect(jsonPath(senatorialBasePath.concat("[0].name"), equalTo(senatorial.fullName())))
                     .andExpect(jsonPath(senatorialBasePath.concat("[0].rating"), equalTo(String.valueOf(senatorial.averageRating()))))
-                    .andExpect(jsonPath(senatorialBasePath.concat("[0].satisfaction_rate"), equalTo(HIGH.toString())))
-
-                .andDo(document("politician", links(halLinks(),
-                        linkWithRel("self").description("Link that points to all politicians"))));
+                    .andExpect(jsonPath(senatorialBasePath.concat("[0].satisfaction_rate"), equalTo(HIGH.toString())));
     }
 
     @Test
-    @Disabled("Disable until pagination is properly implemented")
     public void shouldReturnExpectedItemSizeWhenItemSizeIsLessThanTheCountOfAllInTheDatabase() throws Exception{
-       pagedPoliticianSetupPresidential(30, politicianBuilder).stream().forEach(it -> {
-           try {
-               polRepo.save(it);
-           } catch (PoliticianNotPersistableException e) {
-               e.printStackTrace();
-           }
-       });
+        int totalCounts = 30;
+        pagedSetupPresidential(totalCounts, politicianBuilder, polRepo);
 
-       mvc.perform(get(URI.create("/api/politicians/politicians?page=0&items=20")))
+        int sizeLessThanTotalCounts = 20;
+        mvc.perform(get(URI.create("/api/politicians/politicians?page=0&items=" + sizeLessThanTotalCounts)))
                .andExpect(status().isOk())
 
-                    .andExpect(jsonPath(presidentialBasePath, hasSize(20)))
-
-               .andDo(document("politician", links(halLinks(),
-                       linkWithRel("self").description("Link that points to all politicians with pagination"))));
+                    .andExpect(jsonPath(presidentialBasePath, hasSize(sizeLessThanTotalCounts)));
     }
 
     @Test
-    @Disabled("Disable until pagination is properly implemented")
     public void shouldReturnExpectedItemSizeForPolymorphicPaginatedQuery() throws Exception{
-        jpaRepo.deleteAll();
-        pagedPoliticianSetupPresidential(10, politicianBuilder).stream().forEach(it -> {
-            try {
-                polRepo.save(it);
-            } catch (PoliticianNotPersistableException e) {
-                e.printStackTrace();
-            }
-        });
-        pagedPoliticianSetupSenatorial(19, politicianBuilder).stream().forEach(it -> {
-            try {
-                polRepo.save(it);
-            } catch (PoliticianNotPersistableException e) {
-                e.printStackTrace();
-            }
-        });
+        pagedSetupPresidential(10, politicianBuilder, polRepo);
+        pagedSetupSenatorial(19, politicianBuilder, polRepo);
 
-        mvc.perform(get(URI.create("/api/politicians/politicians?page=0&items=40")))
+        int anySize = 40;
+        int firstPage = 0;
+        mvc.perform(get(URI.create("/api/politicians/politicians?page=" + firstPage + "&items=" + anySize)))
                 .andExpect(status().isOk())
 
-                .andExpect(jsonPath(presidentialBasePath, hasSize(10)))
-                .andExpect(jsonPath(senatorialBasePath, hasSize(19)))
-
-                .andDo(document("politician", links(halLinks(),
-                        linkWithRel("self").description("Link that points to all politicians with pagination"))));
+                    .andExpect(jsonPath(presidentialBasePath, hasSize(10)))
+                    .andExpect(jsonPath(senatorialBasePath, hasSize(19)));
     }
 
 }

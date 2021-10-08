@@ -2,10 +2,9 @@ package com.example.demo.dtomapper;
 
 import com.example.demo.adapter.web.dto.PoliticianDto;
 import com.example.demo.adapter.web.dto.PresidentialPoliticianDto;
-import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
+import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.enums.Rating;
-import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -30,10 +29,7 @@ class PresidentialDtoMapper extends PoliticiansDtoMapper {
 		}
 
 		return entity.stream()
-				.peek(politicians -> {
-						Assert.state(politicians instanceof PresidentialPolitician, "entity must be presidential");
-				})
-				.map(politicians -> mapToDto((PresidentialPolitician) politicians))
+				.map(politicians -> mapToDTO(politicians))
 				.collect(toList());
 	}
 

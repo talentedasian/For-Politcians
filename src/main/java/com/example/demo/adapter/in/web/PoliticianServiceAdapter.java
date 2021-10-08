@@ -92,7 +92,6 @@ public class PoliticianServiceAdapter {
     }
 
     private List<PoliticianDto> responseAndSession(HttpSession session, Page page, int itemsToFetch) {
-
         Long total = (Long) session.getAttribute("total");
         PagedObject<Politicians> allWithPage = service.findAllWithPage(page, itemsToFetch, total);
 
@@ -103,7 +102,6 @@ public class PoliticianServiceAdapter {
         session.setMaxInactiveInterval(300);
 
         return allWithPage.values().map(it -> new PoliticiansDtoMapper().mapToDTO(it)).toList();
-
     }
 
     private boolean doesRequestNotHaveExistingSession(Object totalPage) {

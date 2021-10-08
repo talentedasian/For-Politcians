@@ -82,8 +82,10 @@ public class PoliticianTypes {
 		@Override
 		@ExcludeFromJacocoGeneratedCoverage
 		public String toString() {
-			return "Politicians [name=" + fullName() + ", rating=" + averageRating() + ", politicianNumber=" + retrievePoliticianNumber()
-					+ ", totalMonthsOfServiceAsSenator=" + totalMonthsOfServiceAsSenator + ", mostSignificantLawMade=" + mostSignificantLawMade
+			return "Politicians [name=" + fullName() + ", rating=" + (average() == null ? 0 : averageRating())
+					+ ", politicianNumber=" + retrievePoliticianNumber()
+					+ ", totalMonthsOfServiceAsSenator=" + totalMonthsOfServiceAsSenator +
+					", mostSignificantLawMade=" + mostSignificantLawMade
 					+ ", type=" + Type.SENATORIAL +  "]";
 		}
 
