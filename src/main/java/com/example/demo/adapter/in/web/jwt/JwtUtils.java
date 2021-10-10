@@ -3,6 +3,7 @@ package com.example.demo.adapter.in.web.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import org.togetherjava.tjbot.commands.utility.JwtExpiration;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -26,6 +27,20 @@ public class JwtUtils {
 
 	public static String dynamicExpirationDate(String sub, String id, LocalDateTime expiration) {
 		Date date = Date.from(expiration.toInstant(ZoneOffset.of("+8")));
+
+		String jwts = Jwts.builder()
+				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
+				.setSubject(sub)
+				.setId(id)
+				.setExpiration(date)
+				.setHeaderParam("login_mechanism", "facebook")
+				.compact();
+
+		return jwts;
+	}
+
+	public static String dynamicExpirationDate(String sub, String id, JwtExpiration expiration) {
+		Date date = Date.from(expiration.created());
 
 		String jwts = Jwts.builder()
 				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
