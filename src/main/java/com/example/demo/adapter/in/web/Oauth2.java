@@ -3,7 +3,7 @@ package com.example.demo.adapter.in.web;
 import com.example.demo.adapter.web.dto.RatingDTO;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.jwt.JwtDto;
-import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
+import com.example.demo.adapter.in.web.jwt.JwtUtils;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -41,7 +41,7 @@ public class Oauth2 {
 			.filter(cookie -> cookie.getName().equalsIgnoreCase("accessJwt"))
 			.forEach(jwtCookie -> cookieMap.put("jwt", jwtCookie.getValue()));
 		
-		Claims jwt = JwtJjwtProviderAdapater.decodeJwt(cookieMap.get("jwt")).getBody();
+		Claims jwt = JwtUtils.decodeJwt(cookieMap.get("jwt")).getBody();
 
 		JwtDto jwtResponse = new JwtDto();
 		jwtResponse.setExpiration(convertToLocalDateTimeViaInstant(jwt.getExpiration()));

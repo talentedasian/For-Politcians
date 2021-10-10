@@ -1,6 +1,6 @@
 package com.example.demo.adapter;
 
-import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
+import com.example.demo.adapter.in.web.jwt.JwtUtils;
 import com.example.demo.adapter.web.dto.FacebookUserInfo;
 import com.example.demo.domain.oauth2.CustomOauth2AuthorizedClientsRepository;
 import com.example.demo.domain.oauth2.FacebookOauth2UserInfoUtility;
@@ -56,15 +56,15 @@ public class CustomOauth2AuthorizedRequestRepoTest {
 	
 	@Test
 	public void shouldReturnJwtAsCookieWhenSuccessfulOauthProcess() throws URISyntaxException {
-		String jwt = JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate(SUBJECT, ID, NAME);
+		String jwt = JwtUtils.fixedExpirationDate(SUBJECT, ID, NAME);
 		
 		when(facebookClient.fetchUserInfo(any())).thenReturn(userInfo);
 		OAuth2AuthorizedClient authorizedClient = new OAuth2AuthorizedClient(reg, "anonymous", accessToken);
 		
 		customRepo.saveAuthorizedClient(authorizedClient, principal, req, res);
 
-		Claims decodedJwt = JwtJjwtProviderAdapater.decodeJwt(jwt).getBody();
-		Claims jwtFromSuccessfulOauthProcess = JwtJjwtProviderAdapater.decodeJwt(res.getCookie("accessJwt").getValue()).getBody();
+		Claims decodedJwt = JwtUtils.decodeJwt(jwt).getBody();
+		Claims jwtFromSuccessfulOauthProcess = JwtUtils.decodeJwt(res.getCookie("accessJwt").getValue()).getBody();
 
 		assertThat(decodedJwt.getSubject())
 				.isEqualTo(jwtFromSuccessfulOauthProcess.getSubject());

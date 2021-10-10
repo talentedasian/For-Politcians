@@ -20,7 +20,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate;
+import static com.example.demo.adapter.in.web.jwt.JwtUtils.fixedExpirationDate;
 import static com.example.demo.baseClasses.MockMvcAssertions.assertThat;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
@@ -96,7 +96,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
         String NAME = "Jake";
         String ID = ACC_NUMBER().accountNumber();
         String EMAIL = "t@gmail.com";
-        String jwt = createJwtWithFixedExpirationDate(EMAIL, ID, NAME);
+        String jwt = fixedExpirationDate(EMAIL, ID, NAME);
 
         mvc.perform(post(create("/api/ratings/rating/"))
                         .content(requestJsonString)
@@ -141,7 +141,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
         //make sure user is not rate limited
         rateLimitRepo.deleteUsingIdAndPoliticianNumber(ACC_NUMBER().accountNumber(), PoliticianNumber.of(politician.retrievePoliticianNumber()));
 
-        String jwt = createJwtWithFixedExpirationDate("t@gmail.com", ACC_NUMBER().accountNumber(), "Jake");
+        String jwt = fixedExpirationDate("t@gmail.com", ACC_NUMBER().accountNumber(), "Jake");
 
         String targetLink = "/api/ratings/rating";
 
@@ -160,7 +160,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
         rateLimitService.rateLimitUser(AccountNumber.of(rater.returnUserAccountNumber()),
                 PoliticianNumber.of(politician.retrievePoliticianNumber()));
 
-        String jwt = createJwtWithFixedExpirationDate("t@gmail.com", ACC_NUMBER().accountNumber(), "Jake");
+        String jwt = fixedExpirationDate("t@gmail.com", ACC_NUMBER().accountNumber(), "Jake");
 
         mvc.perform(get(create("/api/ratings/rating/" + savedRating.id()))
                         .header("Authorization", "Bearer " + jwt))

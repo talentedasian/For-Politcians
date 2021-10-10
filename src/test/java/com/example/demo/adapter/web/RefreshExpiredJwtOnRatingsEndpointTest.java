@@ -2,7 +2,7 @@ package com.example.demo.adapter.web;
 
 import com.example.demo.BaseSpringHateoasTest;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
-import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
+import com.example.demo.adapter.in.web.jwt.JwtUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -40,9 +40,9 @@ public class RefreshExpiredJwtOnRatingsEndpointTest extends BaseSpringHateoasTes
 
     @Test
     public void shouldReturn401UnauthorizedForExpiredJwtWhenJwtIsNotRefreshable() throws Exception{
-        var expiredAndNotRefreshableJwtDate = LocalDate.now(ZoneId.of("GMT+8")).minusDays(1);
+        var expiredAndNotRefreshableJwtDate = LocalDateTime.now(ZoneId.of("GMT+8")).minusDays(1);
 
-        String jwt = JwtJjwtProviderAdapater.createJwtWithDynamicExpirationDate(SUB, ID, expiredAndNotRefreshableJwtDate);
+        String jwt = JwtUtils.dynamicExpirationDate(SUB, ID, expiredAndNotRefreshableJwtDate);
 
         mvc.perform(post(create("/api/ratings/rating"))
                         .header("Authorization", "Bearer " + jwt)
@@ -57,7 +57,7 @@ public class RefreshExpiredJwtOnRatingsEndpointTest extends BaseSpringHateoasTes
     @Test
     public void shouldGiveNewJwtInCookieWhenJwtIsExpiredButStillRefreshable() throws Exception{
         LocalDateTime expiredButRefreshableJwt = LocalDateTime.now(ZoneId.of("GMT+8")).minusMinutes(43);
-        String jwt = JwtJjwtProviderAdapater.createJwtWithDynamicExpirationDate(SUB, ID, expiredButRefreshableJwt);
+        String jwt = JwtUtils.dynamicExpirationDate(SUB, ID, expiredButRefreshableJwt);
 
         mvc.perform(post(create("/api/ratings/rating"))
                         .header("Authorization", "Bearer " + jwt)

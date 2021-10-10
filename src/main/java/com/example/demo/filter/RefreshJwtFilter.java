@@ -11,7 +11,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import com.example.demo.exceptions.RefreshTokenException;
-import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
+import com.example.demo.adapter.in.web.jwt.JwtUtils;
 
 public class RefreshJwtFilter implements Filter{
 
@@ -25,7 +25,7 @@ public class RefreshJwtFilter implements Filter{
 		} catch (Exception ex) {
 			if (ex.getCause() instanceof RefreshTokenException) {
 				RefreshTokenException e = (RefreshTokenException) ex.getCause();
-				String jwt = JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate(e.getClaims().getSubject(),
+				String jwt = JwtUtils.fixedExpirationDate(e.getClaims().getSubject(),
 						e.getClaims().getId(), e.getClaims().get("fullName", String.class));
 								
 				Cookie jwtCookie = new Cookie("accessJwt", jwt);

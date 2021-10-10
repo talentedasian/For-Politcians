@@ -1,7 +1,7 @@
 package com.example.demo.adapter.web;
 
-import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
+import com.example.demo.adapter.in.web.jwt.JwtUtils;
 import com.example.demo.exceptions.RefreshTokenException;
 import com.example.demo.filter.RefreshJwtFilter;
 import org.junit.jupiter.api.Test;
@@ -17,8 +17,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -35,8 +33,7 @@ public class RefreshingJwtTest {
 	@Test
 	public void shouldReturnFreshJwtWithOneHourExpiration() throws Exception {
 		LocalDateTime dateTime = LocalDateTime.now();
-		Date date = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
-		String jwt = JwtJjwtProviderAdapater.createJwtWithDynamicExpirationDate("nanay@gmail.com", "nanay", date);
+		String jwt = JwtUtils.dynamicExpirationDate("nanay@gmail.com", "nanay", dateTime);
 		
 		when(req.getHeader("Authorization")).thenReturn("Bearer " + jwt);
 		

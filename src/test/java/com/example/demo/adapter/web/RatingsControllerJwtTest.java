@@ -2,14 +2,14 @@ package com.example.demo.adapter.web;
 
 import com.example.demo.BaseSpringHateoasTest;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
-import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
+import com.example.demo.adapter.in.web.jwt.JwtUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static java.net.URI.create;
@@ -45,9 +45,9 @@ public class RatingsControllerJwtTest extends BaseSpringHateoasTest {
 
     @Test
     public void shouldReturn401UnAuthorizedWhenJwtIsExpiredAndCannotBeAutomaticallyRefreshed() throws Exception{
-        LocalDate cannotBeRefreshedExpiredJwt = LocalDate.now().minusDays(9);
+        LocalDateTime cannotBeRefreshedExpiredJwt = LocalDateTime.now().minusDays(9);
         String id = ACC_NUMBER().accountNumber();
-        String jwt = JwtJjwtProviderAdapater.createJwtWithDynamicExpirationDate("test@gmail.com", id, cannotBeRefreshedExpiredJwt);
+        String jwt = JwtUtils.dynamicExpirationDate("test@gmail.com", id, cannotBeRefreshedExpiredJwt);
 
         mvc.perform(post(create("/api/ratings/rating"))
                         .header("Authorization", "Bearer " + jwt)
@@ -62,7 +62,7 @@ public class RatingsControllerJwtTest extends BaseSpringHateoasTest {
     @Test
     public void shouldReturn401UnAuthorizedWhenAuthorizationHeaderValueDoesNotStartWithBearer() throws Exception{
         String id = ACC_NUMBER().accountNumber();
-        String jwt = JwtJjwtProviderAdapater.createJwtWithDynamicExpirationDate("test@gmail.com", id, LocalDate.now());
+        String jwt = JwtUtils.dynamicExpirationDate("test@gmail.com", id, LocalDateTime.now());
 
         mvc.perform(post(create("/api/ratings/rating"))
                         .header("Authorization", "B " + jwt)

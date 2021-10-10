@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate;
+import static com.example.demo.adapter.in.web.jwt.JwtUtils.fixedExpirationDate;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static com.example.demo.domain.enums.PoliticalParty.GREY_ZONE;
@@ -69,7 +69,7 @@ public class RatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
         var requestObject = new AddRatingDTORequest(valueOf(9.21D), politician.retrievePoliticianNumber(), GREY_ZONE.toString());
         String requestJsonString = new ObjectMapper().writeValueAsString(requestObject);
 
-        String jwt = createJwtWithFixedExpirationDate("t@gmail.com", ACC_NUMBER().accountNumber(), "Jake");
+        String jwt = fixedExpirationDate("t@gmail.com", ACC_NUMBER().accountNumber(), "Jake");
 
         mvc.perform(post(create("/api/ratings/rating"))
                     .content(requestJsonString)

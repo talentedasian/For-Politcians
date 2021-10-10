@@ -1,7 +1,7 @@
 package com.example.demo.domain.oauth2;
 
 import com.example.demo.adapter.web.dto.FacebookUserInfo;
-import com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater;
+import com.example.demo.adapter.in.web.jwt.JwtUtils;
 import com.example.demo.domain.userRaterNumber.facebook.FacebookAccountNumberCalculator;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,7 +106,7 @@ public class CustomOauth2AuthorizedClientsRepository implements OAuth2Authorized
 		FacebookUserInfo userInfo = userInfoEndpointUtil.fetchUserInfo(authorizedClient);
 
 		String accountNumber = FacebookAccountNumberCalculator.with(userInfo.getName(), userInfo.getId()).calculateEntityNumber().getAccountNumber();
-		String jwt = JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate(
+		String jwt = JwtUtils.fixedExpirationDate(
 				userInfo.getEmail(),
 				accountNumber,
 				userInfo.getName());

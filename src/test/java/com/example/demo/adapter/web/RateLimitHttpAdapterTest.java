@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.demo.adapter.in.web.jwt.JwtJjwtProviderAdapater.createJwtWithFixedExpirationDate;
+import static com.example.demo.adapter.in.web.jwt.JwtUtils.fixedExpirationDate;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
 import static java.net.URI.create;
@@ -33,7 +33,7 @@ public class RateLimitHttpAdapterTest extends BaseSpringHateoasTest {
         PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
         rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER.accountNumber(), POLITICIAN_NUMBER, ExpirationZonedDate.now()));
 
-        String jwt = createJwtWithFixedExpirationDate("test@gmail.com", ACCOUNT_NUMBER.accountNumber(), "random name");
+        String jwt = fixedExpirationDate("test@gmail.com", ACCOUNT_NUMBER.accountNumber(), "random name");
 
         mvc.perform(get(create("/rate-limit/" + POLITICIAN_NUMBER.politicianNumber()))
                     .header("Authorization", "Bearer " + jwt))
@@ -51,7 +51,7 @@ public class RateLimitHttpAdapterTest extends BaseSpringHateoasTest {
         PoliticianNumber POLITICIAN_NUMBER = POL_NUMBER();
         rateLimitRepository.save(new RateLimit(ACCOUNT_NUMBER.accountNumber(), POLITICIAN_NUMBER, ExpirationZonedDate.ofBehind(9)));
 
-        String jwt = createJwtWithFixedExpirationDate("test@gmail.com", ACCOUNT_NUMBER.accountNumber(), "random name");
+        String jwt = fixedExpirationDate("test@gmail.com", ACCOUNT_NUMBER.accountNumber(), "random name");
 
         String linkToRateAPolitician = "/api/ratings/rating";
         mvc.perform(get(create("/rate-limit/" + POLITICIAN_NUMBER.politicianNumber()))

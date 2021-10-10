@@ -4,14 +4,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
 
-public class JwtJjwtProviderAdapater {
+public class JwtUtils {
 
-	public static String createJwtWithFixedExpirationDate(String sub, String id, String name) {
+	public static String fixedExpirationDate(String sub, String id, String name) {
 		
 		String jwts = Jwts.builder()
 				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
@@ -25,21 +24,7 @@ public class JwtJjwtProviderAdapater {
 		return jwts;
 	}
 
-	public static String createJwtWithDynamicExpirationDate(String sub, String id, LocalDate expirationDate) {
-		Date date = Date.from(expirationDate.atStartOfDay().toInstant(ZoneOffset.of("+8")));
-
-		String jwts = Jwts.builder()
-				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
-				.setSubject(sub)
-				.setId(id)
-				.setExpiration(date)
-				.setHeaderParam("login_mechanism", "facebook")
-				.compact();
-
-		return jwts;
-	}
-
-	public static String createJwtWithDynamicExpirationDate(String sub, String id, LocalDateTime expiration) {
+	public static String dynamicExpirationDate(String sub, String id, LocalDateTime expiration) {
 		Date date = Date.from(expiration.toInstant(ZoneOffset.of("+8")));
 
 		String jwts = Jwts.builder()
@@ -52,20 +37,7 @@ public class JwtJjwtProviderAdapater {
 
 		return jwts;
 	}
-	
-	public static String createJwtWithDynamicExpirationDate(String sub, String id, Date expirationDate) {
-		
-		String jwts = Jwts.builder()
-				.signWith(JwtKeys.getJwtKeyPair().getPrivate())
-				.setSubject(sub)
-				.setId(id)
-				.setExpiration(expirationDate)
-				.setHeaderParam("login_mechanism", "facebook")
-				.compact();
-		
-		return jwts;
-	}
-	
+
 	public static Jws<Claims> decodeJwt(String jwt) {
 		return Jwts.parserBuilder()
 				.setSigningKey(JwtKeys.getJwtKeyPair().getPublic())
