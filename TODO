@@ -2,7 +2,6 @@
 [ ] Test refresh jwt exceptions in http adapter level in all endpoints that use it
 [ ] Add appropriate exceptions for pagination exceptions
 [ ] Use current time of GMT+8 in JwtUtils as expiration
-[ ] Use the ExpirationDate class for JwtUtils expiration dates
 [ ] Add class for encapsulating JWT data
 [*] Replace the rateLimitRepo being used in the http adapter tests from an inMemory to a concrete jpa repo
 [*] get to 65% code coverage
