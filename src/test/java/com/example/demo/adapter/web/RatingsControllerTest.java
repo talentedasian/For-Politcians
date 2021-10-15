@@ -102,6 +102,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
                         .content(requestJsonString)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + jwt))
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaTypes.HAL_FORMS_JSON))
 
                 .andExpect(jsonPath("rater.account_number", equalTo(ID)))
