@@ -58,7 +58,7 @@ public class RatingServiceAdapter {
                 .setRater(rater)
                 .build();
 
-        return RatingDTO.from(service.saveRatings(rating, ratingJpaRepository));
+        return RatingDTO.from(service.saveRatings(rating));
     }
 
     public List<RatingDTO> findRatingsUsingFacebookEmail(String email) {

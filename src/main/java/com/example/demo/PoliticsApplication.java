@@ -57,16 +57,14 @@ public class PoliticsApplication implements CommandLineRunner{
 				.setAccountNumber("FLOPM-00000000000000")
 				.build();
 		var rating = new PoliticiansRating.Builder()
-				.setId("1")
 				.setRating(Score.of(7.4313))
 				.setRater(rater)
 				.setPolitician(presidential)
 				.build();
 
-		int i = 0;
-		while (i < 50000)
-			i++;
-		ratingRepo.save(rating);
+		for (int i = 0; i < 10000; i++) {
+			ratingRepo.save(rating);
+		}
 	}
 
 }
