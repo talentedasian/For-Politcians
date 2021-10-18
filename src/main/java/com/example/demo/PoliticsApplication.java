@@ -1,16 +1,14 @@
 package com.example.demo;
 
+import com.example.demo.adapter.in.service.RatingService;
 import com.example.demo.adapter.in.web.jwt.JwtUtils;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.Score;
-import com.example.demo.domain.entities.PoliticianNumber;
+import com.example.demo.domain.entities.*;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
-import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
-import com.example.demo.domain.entities.PoliticiansRating;
-import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -61,9 +59,22 @@ public class PoliticsApplication implements CommandLineRunner{
 				.setRater(rater)
 				.setPolitician(presidential)
 				.build();
+		RatingService ratingService = new RatingService(ratingRepo, repo, new UserRateLimitService() {
+					public boolean isUserNotRateLimited(AccountNumber accountNumber, PoliticianNumber politicianNumber) {
+						return true;
+					}
 
+					public void rateLimitUser(AccountNumber userAccountNumber, PoliticianNumber polNumber) {
+
+					}
+
+					public long daysLeftToRateForUser(AccountNumber accountNumber, PoliticianNumber politicianNumber) {
+						return 0;
+					}
+
+				});
 		for (int i = 0; i < 10000; i++) {
-			ratingRepo.save(rating);
+			ratingService.saveRatings(rating);
 		}
 	}
 
