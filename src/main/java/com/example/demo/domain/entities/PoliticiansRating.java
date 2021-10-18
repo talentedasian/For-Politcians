@@ -1,5 +1,6 @@
 package com.example.demo.domain.entities;
 
+import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.Score;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
@@ -40,6 +41,17 @@ public class PoliticiansRating {
 	public void ratePolitician(UserRateLimitService rateLimitService) throws UserRateLimitedOnPoliticianException {
 		if (rater.canRate(rateLimitService, politician.politicianNumber())) {
 			politician.rate(this);
+			rater.rateLimitUser(rateLimitService, politician.politicianNumber());
+			return;
+		}
+
+		long daysLeft = rater.daysLeftToRate(rateLimitService, PoliticianNumber.of(politician.retrievePoliticianNumber()));
+		throw new UserRateLimitedOnPoliticianException(daysLeft, politician.politicianNumber());
+	}
+
+	public void ratePolitician(UserRateLimitService rateLimitService, RatingJpaRepository repo) throws UserRateLimitedOnPoliticianException {
+		if (rater.canRate(rateLimitService, politician.politicianNumber())) {
+			politician.rate(this, repo);
 			rater.rateLimitUser(rateLimitService, politician.politicianNumber());
 			return;
 		}

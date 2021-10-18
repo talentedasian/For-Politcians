@@ -1,6 +1,7 @@
 package com.example.demo.adapter.in.service;
 
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
+import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.domain.entities.PoliticiansRating;
@@ -38,6 +39,15 @@ public class RatingService {
 		rating.ratePolitician(userRateLimitService);
 
 		PoliticiansRating savedRating = ratingRepo.save(rating);
+		politiciansRepo.update(rating.whoWasRated());
+
+		return savedRating;
+	}
+
+	public PoliticiansRating saveRatings(PoliticiansRating rating, RatingJpaRepository repo) throws UserRateLimitedOnPoliticianException {
+		PoliticiansRating savedRating = ratingRepo.save(rating);
+		rating.ratePolitician(userRateLimitService, repo);
+
 		politiciansRepo.update(rating.whoWasRated());
 
 		return savedRating;

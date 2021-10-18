@@ -5,16 +5,18 @@ import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.PoliticiansRating;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
+@Table(name = "rating_entity")
 public class PoliticiansRatingJpaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(nullable = false, precision = 3, scale = 2)
-    private double rating;
+    @Column(nullable = false, precision = 4, scale = 3)
+    private BigDecimal rating;
 
     @Column(nullable = false)
     private UserRaterJpaEntity rater;
@@ -32,11 +34,11 @@ public class PoliticiansRatingJpaEntity {
     }
 
     public double getRating() {
-        return rating;
+        return rating.doubleValue();
     }
 
     public void setRating(double rating) {
-        this.rating = rating;
+        this.rating = BigDecimal.valueOf(rating);
     }
 
     public UserRaterJpaEntity getRater() {
@@ -57,7 +59,7 @@ public class PoliticiansRatingJpaEntity {
 
     PoliticiansRatingJpaEntity(Integer id, Double rating, UserRaterJpaEntity rater, PoliticiansJpaEntity politician) {
         this.id = id;
-        this.rating = rating;
+        this.rating = BigDecimal.valueOf(rating);
         this.rater = rater;
         this.politician = politician;
     }
@@ -80,7 +82,7 @@ public class PoliticiansRatingJpaEntity {
         return rater == null ? null
                 : new PoliticiansRating.Builder()
                 .setId(String.valueOf(id))
-                .setRating(Score.of(rating))
+                .setRating(Score.of(rating.doubleValue()))
                 .setRater(rater.toUserRater())
                 .setPolitician(null)
                 .build();
@@ -89,7 +91,7 @@ public class PoliticiansRatingJpaEntity {
     public PoliticiansRating toRating() {
         return new PoliticiansRating.Builder()
                 .setId(String.valueOf(id))
-                .setRating(Score.of(rating))
+                .setRating(Score.of(rating.doubleValue()))
                 .setRater(rater.toUserRater())
                 .setPolitician(politician.toPoliticians())
                 .build();

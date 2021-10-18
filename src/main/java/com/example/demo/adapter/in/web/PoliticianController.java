@@ -53,7 +53,6 @@ public class PoliticianController {
 	
 	@GetMapping
 	public ResponseEntity<CollectionModel<EntityModel<PoliticianDto>>> allPoliticians() {
-		System.out.println("haha tangina gumagana");
 		List<PoliticianDto> allPoliticians = politiciansService.allPoliticians();
 		
 		CollectionModel<EntityModel<PoliticianDto>> response = assembler.toCollectionModel(allPoliticians);

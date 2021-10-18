@@ -1,5 +1,7 @@
 package com.example.demo.domain.entities;
 
+import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
+import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.Score;
@@ -116,12 +118,32 @@ public class Politicians {
 		return AverageRating.of(BigDecimal.valueOf(ratingToAdd.rating()));
 	}
 
+	public AverageRating calculateAverageRating(Score ratingToAdd, PoliticiansJpaRepository repo) {
+		if (isAverageRatingPresent()) {
+			BigDecimal totalScoreAccumulated = calculateTotalRatingsAccumulated(ratingToAdd).totalRating();
+			return AverageRating.of(totalScoreAccumulated,totalCountsOfRating, averageRating);
+		}
+
+		return AverageRating.of(BigDecimal.valueOf(ratingToAdd.rating()));
+	}
+
 	public TotalRatingAccumulated calculateTotalRatingsAccumulated(Score ratingToAdd) {
 		return totalRatingAccumulated.addTotalRating(ratingToAdd);
 	}
 
 	public boolean isAverageRatingPresent() {
 		return averageRating != NO_RATING_YET;
+	}
+
+	void rate(PoliticiansRating rating, RatingJpaRepository repo) {
+		incrementTotalCountsOfRating();
+
+		double calculatedAverageRating = repo.calculateRating(politicianNumber.politicianNumber());
+		changeAverageRating(AverageRating.of(BigDecimal.valueOf(calculatedAverageRating)));
+
+		changeTotalRatingAccumulated(Score.of(rating.score()));
+
+		politiciansRating.add(rating);
 	}
 
 	void rate(PoliticiansRating rating) {

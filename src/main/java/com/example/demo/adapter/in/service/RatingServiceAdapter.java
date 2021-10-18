@@ -3,6 +3,7 @@ package com.example.demo.adapter.in.service;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
+import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.adapter.web.dto.RatingDTO;
 import com.example.demo.domain.Score;
@@ -25,8 +26,10 @@ public class RatingServiceAdapter {
 
     private final RatingService service;
     private final PoliticiansRepository polRepo;
+    private final RatingJpaRepository ratingJpaRepository;
 
-    public RatingServiceAdapter(RatingRepository ratingRepo, UserRateLimitService rateLimitService, PoliticiansRepository polRepo) {
+    public RatingServiceAdapter(RatingRepository ratingRepo, UserRateLimitService rateLimitService, PoliticiansRepository polRepo, RatingJpaRepository ratingJpaRepository) {
+        this.ratingJpaRepository = ratingJpaRepository;
         this.service = new RatingService(ratingRepo, polRepo, rateLimitService);
         this.polRepo = polRepo;
     }
@@ -55,7 +58,7 @@ public class RatingServiceAdapter {
                 .setRater(rater)
                 .build();
 
-        return RatingDTO.from(service.saveRatings(rating));
+        return RatingDTO.from(service.saveRatings(rating, ratingJpaRepository));
     }
 
     public List<RatingDTO> findRatingsUsingFacebookEmail(String email) {
