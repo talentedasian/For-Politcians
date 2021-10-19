@@ -2,6 +2,7 @@ package com.example.demo.adapter.in.web;
 
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.service.RatingServiceAdapter;
+import com.example.demo.adapter.in.web.jwt.JwtUtils;
 import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.adapter.web.dto.RatingDTO;
 import com.example.demo.domain.entities.AccountNumber;
@@ -73,6 +74,8 @@ public class RatingsController {
 
 	@GetMapping("/ratings/count")
 	public long count() {
+		String jwt = JwtUtils.fixedExpirationDate("test@gmail.com", "FLOPM-00000000000000", "test name");
+		System.out.println(jwt + " tanginamo");
 		return jpaRepo.count();
 	}
 

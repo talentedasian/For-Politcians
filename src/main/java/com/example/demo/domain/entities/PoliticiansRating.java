@@ -38,17 +38,6 @@ public class PoliticiansRating {
 		this.politician = politician;
 	}
 
-	public void ratePolitician(UserRateLimitService rateLimitService) throws UserRateLimitedOnPoliticianException {
-		if (rater.canRate(rateLimitService, politician.politicianNumber())) {
-			politician.rate(this);
-			rater.rateLimitUser(rateLimitService, politician.politicianNumber());
-			return;
-		}
-
-		long daysLeft = rater.daysLeftToRate(rateLimitService, PoliticianNumber.of(politician.retrievePoliticianNumber()));
-		throw new UserRateLimitedOnPoliticianException(daysLeft, politician.politicianNumber());
-	}
-
 	public void ratePolitician(UserRateLimitService rateLimitService, RatingJpaRepository repo) throws UserRateLimitedOnPoliticianException {
 		if (rater.canRate(rateLimitService, politician.politicianNumber())) {
 			politician.rate(this, repo);

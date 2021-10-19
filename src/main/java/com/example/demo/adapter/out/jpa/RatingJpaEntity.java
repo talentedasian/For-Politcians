@@ -2,7 +2,6 @@ package com.example.demo.adapter.out.jpa;
 
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.AverageRating;
-import com.example.demo.domain.TotalRatingAccumulated;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -10,28 +9,16 @@ import java.util.Objects;
 
 @Embeddable
 public class RatingJpaEntity {
-
-    @Column(nullable = false, precision = 3, scale = 3)
-    protected Double totalRating;
-
     @Column(nullable = false, precision = 3, scale = 4)
     protected Double averageRating;
 
-    public static RatingJpaEntity from(TotalRatingAccumulated totalRatingAccumulated, final AverageRating averageRating) {
+    public static RatingJpaEntity from(final AverageRating averageRating) {
         double rating = AverageRating.hasRating(averageRating) ? averageRating.averageRating() : 0;
-        return new RatingJpaEntity(totalRatingAccumulated.totalRatingAsDouble(), rating);
-    }
-
-    public double getTotalRating() {
-        return totalRating;
+        return new RatingJpaEntity(rating);
     }
 
     public double getAverageRating() {
         return averageRating;
-    }
-
-    public void setTotalRating(Double totalRating) {
-        this.totalRating = totalRating;
     }
 
     public void setAverageRating(Double averageRating) {
@@ -42,9 +29,8 @@ public class RatingJpaEntity {
         super();
     }
 
-    public RatingJpaEntity(Double totalRating, Double averageRating) {
+    public RatingJpaEntity(Double averageRating) {
         super();
-        this.totalRating = totalRating;
         this.averageRating = averageRating;
     }
 
@@ -52,7 +38,6 @@ public class RatingJpaEntity {
     @ExcludeFromJacocoGeneratedCoverage
     public String toString() {
         return "RatingJpaEntity{" +
-                "totalRating=" + totalRating +
                 ", averageRating=" + averageRating +
                 '}';
     }
@@ -64,15 +49,13 @@ public class RatingJpaEntity {
 
         RatingJpaEntity that = (RatingJpaEntity) o;
 
-        if (!Objects.equals(totalRating, that.totalRating)) return false;
         return Objects.equals(averageRating, that.averageRating);
     }
 
     @Override
     @ExcludeFromJacocoGeneratedCoverage
     public int hashCode() {
-        int result = totalRating != null ? totalRating.hashCode() : 0;
-        result = 31 * result + (averageRating != null ? averageRating.hashCode() : 0);
+        int result = averageRating != null ? averageRating.hashCode() : 0;
         return result;
     }
 

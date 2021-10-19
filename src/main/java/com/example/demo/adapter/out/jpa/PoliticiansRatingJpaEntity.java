@@ -12,7 +12,8 @@ import java.math.BigDecimal;
 public class PoliticiansRatingJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "seqGen", sequenceName = "seq", initialValue = 1)
     private Integer id;
 
     @Column(nullable = false, precision = 4, scale = 3)

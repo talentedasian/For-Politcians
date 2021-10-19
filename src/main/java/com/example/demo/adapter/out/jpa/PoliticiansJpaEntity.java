@@ -34,9 +34,6 @@ public class PoliticiansJpaEntity {
     @Column(nullable = false)
     private RatingJpaEntity ratingJpaEntity;
 
-    @Column(nullable = false, name = "total_count_of_rating")
-    private int totalCountRating;
-
     @OneToMany(mappedBy = "politician", fetch = FetchType.EAGER)
     private List<PoliticiansRatingJpaEntity> politiciansRating;
 
@@ -64,21 +61,16 @@ public class PoliticiansJpaEntity {
         return ratingJpaEntity;
     }
 
-    public int getTotalCountRating() {
-        return totalCountRating;
-    }
-
     PoliticiansJpaEntity() {}
 
     PoliticiansJpaEntity(String id, String firstName, String lastName, String fullName,
-                                RatingJpaEntity ratingJpaEntity, int totalCountRating,
+                                RatingJpaEntity ratingJpaEntity,
                                 List<PoliticiansRatingJpaEntity> politiciansRating) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.fullName = fullName;
         this.ratingJpaEntity = ratingJpaEntity;
-        this.totalCountRating = totalCountRating;
         this.politiciansRating = politiciansRating;
     }
 
@@ -86,8 +78,8 @@ public class PoliticiansJpaEntity {
         AverageRating averageRating = politician.average();
         var jpaEntity = new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
                 politician.lastName(), politician.fullName(),
-                RatingJpaEntity.from(politician.totalRatingAccumulated(), averageRating),
-                politician.totalCountsOfRatings(), fromPoliticiansRating(politician.getPoliticiansRating()));
+                RatingJpaEntity.from(averageRating),
+                fromPoliticiansRating(politician.getPoliticiansRating()));
 
         switch (politician.getType()) {
             case PRESIDENTIAL -> {
@@ -107,8 +99,8 @@ public class PoliticiansJpaEntity {
         AverageRating averageRating = politician.average();
         var jpaEntity = new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
                 politician.lastName(), politician.fullName(),
-                RatingJpaEntity.from(politician.totalRatingAccumulated(), averageRating),
-                politician.totalCountsOfRatings(), null);
+                RatingJpaEntity.from(averageRating),
+                 null);
         if (politician.getType() == null) {
             return jpaEntity;
         }
@@ -183,7 +175,6 @@ public class PoliticiansJpaEntity {
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setPoliticiansRating(toPoliticiansRating(politiciansRating))
-                .setTotalRating(BigDecimal.valueOf(ratingJpaEntity.totalRating))
                 .setAverageRating(ratingJpaEntity.getAverageRating() == 0 ? AverageRating.NO_RATING_YET
                         : AverageRating.of(BigDecimal.valueOf(ratingJpaEntity.getAverageRating())))
                 .build();

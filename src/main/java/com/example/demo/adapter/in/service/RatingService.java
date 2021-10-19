@@ -35,15 +35,6 @@ public class RatingService {
 		return ratingRepo.findById(accountNumber.accountNumber());
 	}
 
-	public PoliticiansRating saveRatings(PoliticiansRating rating) throws UserRateLimitedOnPoliticianException {
-		rating.ratePolitician(userRateLimitService);
-
-		PoliticiansRating savedRating = ratingRepo.save(rating);
-		politiciansRepo.update(rating.whoWasRated());
-
-		return savedRating;
-	}
-
 	public PoliticiansRating saveRatings(PoliticiansRating rating, RatingJpaRepository repo) throws UserRateLimitedOnPoliticianException {
 		PoliticiansRating savedRating = ratingRepo.save(rating);
 		rating.ratePolitician(userRateLimitService, repo);

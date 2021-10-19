@@ -1,14 +1,18 @@
 package com.example.demo;
 
-import com.example.demo.adapter.in.service.RatingService;
 import com.example.demo.adapter.in.web.jwt.JwtUtils;
-import com.example.demo.adapter.out.repository.PoliticiansRepository;
-import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.adapter.out.jpa.PoliticiansJpaEntity;
+import com.example.demo.adapter.out.jpa.PoliticiansRatingJpaEntity;
+import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
+import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.domain.Score;
-import com.example.demo.domain.entities.*;
+import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -17,11 +21,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootApplication
 public class PoliticsApplication implements CommandLineRunner{
 
-	@Autowired PoliticiansRepository repo;
-	@Autowired RatingRepository ratingRepo;
+	@Autowired PoliticiansJpaRepository repo;
+	@Autowired RatingJpaRepository ratingRepo;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PoliticsApplication.class, args);
@@ -46,7 +53,7 @@ public class PoliticsApplication implements CommandLineRunner{
 				.setMostSignificantLawPassed("Rice Tarification Law")
 				.build();
 
-		repo.save(presidential);
+		repo.saveAndFlush(PoliticiansJpaEntity.from(presidential));
 
 		var rater = new UserRater.Builder()
 				.setEmail("test@gmail.com")
@@ -59,22 +66,14 @@ public class PoliticsApplication implements CommandLineRunner{
 				.setRater(rater)
 				.setPolitician(presidential)
 				.build();
-		RatingService ratingService = new RatingService(ratingRepo, repo, new UserRateLimitService() {
-					public boolean isUserNotRateLimited(AccountNumber accountNumber, PoliticianNumber politicianNumber) {
-						return true;
-					}
+		List<PoliticiansRatingJpaEntity> rateList = new ArrayList<>();
 
-					public void rateLimitUser(AccountNumber userAccountNumber, PoliticianNumber polNumber) {
-
-					}
-
-					public long daysLeftToRateForUser(AccountNumber accountNumber, PoliticianNumber politicianNumber) {
-						return 0;
-					}
-
-				});
-		for (int i = 0; i < 100000; i++) {
-			ratingService.saveRatings(rating);
+		for (int i = 0; i < 10001; i++) {
+			if (i % 1000 == 0) {
+				ratingRepo.saveAll(rateList);
+				rateList.clear();
+			}
+			rateList.add(PoliticiansRatingJpaEntity.from(rating));
 		}
 	}
 
