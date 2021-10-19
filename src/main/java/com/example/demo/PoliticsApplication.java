@@ -1,14 +1,17 @@
 package com.example.demo;
 
-import com.example.demo.adapter.in.service.RatingService;
-import com.example.demo.adapter.in.web.jwt.JwtUtils;
+import com.example.demo.adapter.out.jpa.PoliticiansRatingJpaEntity;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
-import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.adapter.out.repository.RatingJpaRepository;
+import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.Score;
-import com.example.demo.domain.entities.*;
+import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
+import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.Politicians.PoliticiansBuilder;
+import com.example.demo.domain.entities.PoliticiansRating;
+import com.example.demo.domain.entities.UserRater;
 import com.example.demo.domain.enums.PoliticalParty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -17,11 +20,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootApplication
 public class PoliticsApplication implements CommandLineRunner{
 
 	@Autowired PoliticiansRepository repo;
-	@Autowired RatingRepository ratingRepo;
+	@Autowired RatingJpaRepository ratingRepo;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PoliticsApplication.class, args);
@@ -29,8 +36,6 @@ public class PoliticsApplication implements CommandLineRunner{
 	
 	@Bean
 	public RestTemplate template() {
-		String jwt = JwtUtils.fixedExpirationDate("test@gmail.com", "FLOPM-00000000000000", "test name");
-		System.out.println(jwt + " tanginamo");
 		RestTemplate restTemplate = new RestTemplate();
 		
 		return restTemplate;
@@ -41,6 +46,8 @@ public class PoliticsApplication implements CommandLineRunner{
 		Politicians politician = new PoliticiansBuilder(PoliticianNumber.of(PoliticianNumber.pattern))
 				.setFirstName("Random")
 				.setLastName("Name")
+				.setAverageRating(AverageRating.of(BigDecimal.valueOf(7.431)))
+				.setTotalRating(BigDecimal.valueOf(74310))
 				.build();
 		PresidentialPolitician presidential = new PresidentialBuilder(politician)
 				.setMostSignificantLawPassed("Rice Tarification Law")
@@ -59,22 +66,14 @@ public class PoliticsApplication implements CommandLineRunner{
 				.setRater(rater)
 				.setPolitician(presidential)
 				.build();
-		RatingService ratingService = new RatingService(ratingRepo, repo, new UserRateLimitService() {
-					public boolean isUserNotRateLimited(AccountNumber accountNumber, PoliticianNumber politicianNumber) {
-						return true;
-					}
+		List<PoliticiansRatingJpaEntity> rateList = new ArrayList<>();
+		for (int i = 0; i < 10001; i++) {
+			if (i % 500 == 0) {
+				ratingRepo.saveAllAndFlush(rateList);
+				rateList.clear();
+			}
 
-					public void rateLimitUser(AccountNumber userAccountNumber, PoliticianNumber polNumber) {
-
-					}
-
-					public long daysLeftToRateForUser(AccountNumber accountNumber, PoliticianNumber politicianNumber) {
-						return 0;
-					}
-
-				});
-		for (int i = 0; i < 100000; i++) {
-			ratingService.saveRatings(rating);
+			rateList.add(PoliticiansRatingJpaEntity.from(rating));
 		}
 	}
 

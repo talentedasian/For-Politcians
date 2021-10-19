@@ -1,6 +1,5 @@
 package com.example.demo.domain.entities;
 
-import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
 import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.AverageRating;
@@ -110,15 +109,6 @@ public class Politicians {
 	}
 
 	public AverageRating calculateAverageRating(Score ratingToAdd) {
-		if (isAverageRatingPresent()) {
-			BigDecimal totalScoreAccumulated = calculateTotalRatingsAccumulated(ratingToAdd).totalRating();
-			return AverageRating.of(totalScoreAccumulated,totalCountsOfRating, averageRating);
-		}
-
-		return AverageRating.of(BigDecimal.valueOf(ratingToAdd.rating()));
-	}
-
-	public AverageRating calculateAverageRating(Score ratingToAdd, PoliticiansJpaRepository repo) {
 		if (isAverageRatingPresent()) {
 			BigDecimal totalScoreAccumulated = calculateTotalRatingsAccumulated(ratingToAdd).totalRating();
 			return AverageRating.of(totalScoreAccumulated,totalCountsOfRating, averageRating);

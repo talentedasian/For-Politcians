@@ -15,7 +15,7 @@ public record AverageRating(double rating) {
     private static final int MAXIMUM = 10;
 
     public AverageRating {
-        Assert.state(isRatingGreaterThanMinimum(rating), "rating must not be less than 0");
+        Assert.state(isRatingGreaterThanMinimum(rating), "rating must not be less than 0.01");
         maximumRatingValidation(rating);
     }
 
