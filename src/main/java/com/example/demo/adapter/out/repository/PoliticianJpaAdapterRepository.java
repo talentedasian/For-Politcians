@@ -6,6 +6,7 @@ import com.example.demo.domain.PagedObject;
 import com.example.demo.domain.entities.Politicians;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +44,7 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<Politicians> findByPoliticianNumber(String polNumber) {
         Optional<PoliticiansJpaEntity> entity = repo.findById(polNumber);

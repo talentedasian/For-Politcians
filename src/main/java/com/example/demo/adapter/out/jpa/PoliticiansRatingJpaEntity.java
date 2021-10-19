@@ -22,7 +22,7 @@ public class PoliticiansRatingJpaEntity {
     @Column(nullable = false)
     private UserRaterJpaEntity rater;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "politician_id")
     private PoliticiansJpaEntity politician;
 

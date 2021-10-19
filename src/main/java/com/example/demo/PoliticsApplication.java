@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.example.demo.adapter.in.web.jwt.JwtUtils;
 import com.example.demo.adapter.out.jpa.PoliticiansJpaEntity;
 import com.example.demo.adapter.out.jpa.PoliticiansRatingJpaEntity;
 import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
@@ -38,8 +37,6 @@ public class PoliticsApplication implements CommandLineRunner{
 	
 	@Bean
 	public RestTemplate template() {
-		String jwt = JwtUtils.fixedExpirationDate("test@gmail.com", "FLOPM-00000000000000", "test name");
-		System.out.println(jwt + " tanginamo");
 		RestTemplate restTemplate = new RestTemplate();
 		
 		return restTemplate;
@@ -50,8 +47,8 @@ public class PoliticsApplication implements CommandLineRunner{
 		Politicians politician = new PoliticiansBuilder(PoliticianNumber.of(PoliticianNumber.pattern))
 				.setFirstName("Random")
 				.setLastName("Name")
-				.setTotalRating(BigDecimal.valueOf(74310))
 				.setAverageRating(AverageRating.of(BigDecimal.valueOf(7.431)))
+				.setTotalRating(BigDecimal.valueOf(743100))
 				.build();
 		PresidentialPolitician presidential = new PresidentialBuilder(politician)
 				.setMostSignificantLawPassed("Rice Tarification Law")
@@ -71,12 +68,12 @@ public class PoliticsApplication implements CommandLineRunner{
 				.setPolitician(presidential)
 				.build();
 		List<PoliticiansRatingJpaEntity> rateList = new ArrayList<>();
-
-		for (int i = 0; i < 10001; i++) {
-			if (i % 1000 == 0) {
+		for (int i = 0; i < 100001; i++) {
+			if (i % 500 == 0) {
 				ratingRepo.saveAll(rateList);
 				rateList.clear();
 			}
+
 			rateList.add(PoliticiansRatingJpaEntity.from(rating));
 		}
 	}

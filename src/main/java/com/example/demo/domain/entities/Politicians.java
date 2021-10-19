@@ -92,6 +92,7 @@ public class Politicians {
 
 	public AverageRating calculateAverageRating(Score ratingToAdd, RatingJpaRepository repo) {
 		return AverageRating.of(BigDecimal.valueOf(repo.calculateRating(politicianNumber.politicianNumber())));
+
 	}
 
 	public boolean isAverageRatingPresent() {
