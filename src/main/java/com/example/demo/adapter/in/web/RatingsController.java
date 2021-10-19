@@ -73,10 +73,10 @@ public class RatingsController {
 	}
 
 	@GetMapping("/ratings/count")
-	public long count() {
+	public String count() {
 		String jwt = JwtUtils.fixedExpirationDate("test@gmail.com", "FLOPM-00000000000000", "test name");
 		System.out.println(jwt + " tanginamo");
-		return jpaRepo.count();
+		return String.valueOf(jpaRepo.count() + " " + jwt);
 	}
 
 }

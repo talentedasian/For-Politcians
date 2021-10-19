@@ -5,6 +5,7 @@ import com.example.demo.adapter.out.jpa.PoliticiansJpaEntity;
 import com.example.demo.adapter.out.jpa.PoliticiansRatingJpaEntity;
 import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
 import com.example.demo.adapter.out.repository.RatingJpaRepository;
+import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.Score;
 import com.example.demo.domain.entities.PoliticianNumber;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician;
@@ -21,6 +22,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,12 +50,14 @@ public class PoliticsApplication implements CommandLineRunner{
 		Politicians politician = new PoliticiansBuilder(PoliticianNumber.of(PoliticianNumber.pattern))
 				.setFirstName("Random")
 				.setLastName("Name")
+				.setTotalRating(BigDecimal.valueOf(74310))
+				.setAverageRating(AverageRating.of(BigDecimal.valueOf(7.431)))
 				.build();
 		PresidentialPolitician presidential = new PresidentialBuilder(politician)
 				.setMostSignificantLawPassed("Rice Tarification Law")
 				.build();
 
-		repo.saveAndFlush(PoliticiansJpaEntity.from(presidential));
+		repo.save(PoliticiansJpaEntity.from(presidential));
 
 		var rater = new UserRater.Builder()
 				.setEmail("test@gmail.com")
