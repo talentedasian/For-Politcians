@@ -1,7 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.adapter.out.jpa.PoliticiansJpaEntity;
 import com.example.demo.adapter.out.jpa.PoliticiansRatingJpaEntity;
-import com.example.demo.adapter.out.repository.PoliticiansRepository;
+import com.example.demo.adapter.out.repository.PoliticiansJpaRepository;
 import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.Score;
@@ -27,7 +28,8 @@ import java.util.List;
 @SpringBootApplication
 public class PoliticsApplication implements CommandLineRunner{
 
-	@Autowired PoliticiansRepository repo;
+	@Autowired
+	PoliticiansJpaRepository repo;
 	@Autowired RatingJpaRepository ratingRepo;
 
 	public static void main(String[] args) {
@@ -47,13 +49,13 @@ public class PoliticsApplication implements CommandLineRunner{
 				.setFirstName("Random")
 				.setLastName("Name")
 				.setAverageRating(AverageRating.of(BigDecimal.valueOf(7.431)))
-				.setTotalRating(BigDecimal.valueOf(74310))
+				.setTotalRating(BigDecimal.valueOf(743100))
 				.build();
 		PresidentialPolitician presidential = new PresidentialBuilder(politician)
 				.setMostSignificantLawPassed("Rice Tarification Law")
 				.build();
 
-		repo.save(presidential);
+		repo.save(PoliticiansJpaEntity.from(presidential));
 
 		var rater = new UserRater.Builder()
 				.setEmail("test@gmail.com")
@@ -67,9 +69,9 @@ public class PoliticsApplication implements CommandLineRunner{
 				.setPolitician(presidential)
 				.build();
 		List<PoliticiansRatingJpaEntity> rateList = new ArrayList<>();
-		for (int i = 0; i < 10001; i++) {
+		for (int i = 0; i < 100001; i++) {
 			if (i % 500 == 0) {
-				ratingRepo.saveAllAndFlush(rateList);
+				ratingRepo.saveAll(rateList);
 				rateList.clear();
 			}
 

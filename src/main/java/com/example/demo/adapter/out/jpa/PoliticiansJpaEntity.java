@@ -37,7 +37,7 @@ public class PoliticiansJpaEntity {
     @Column(nullable = false, name = "total_count_of_rating")
     private int totalCountRating;
 
-    @OneToMany(mappedBy = "politician", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "politician", fetch = FetchType.LAZY)
     private List<PoliticiansRatingJpaEntity> politiciansRating;
 
     public String getId() {
@@ -153,16 +153,6 @@ public class PoliticiansJpaEntity {
         return politiciansRating.equals(that.politiciansRating);
     }
 
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (fullName != null ? fullName.hashCode() : 0);
-        result = 31 * result + (ratingJpaEntity != null ? ratingJpaEntity.hashCode() : 0);
-        result = 31 * result + (politiciansRating != null ? politiciansRating.hashCode() : 0);
-        return result;
-    }
 
     private static List<PoliticiansRatingJpaEntity> fromPoliticiansRating(List<PoliticiansRating> entities) {
     return entities.stream()
@@ -171,11 +161,12 @@ public class PoliticiansJpaEntity {
     }
 
     private List<PoliticiansRating> toPoliticiansRating(List<PoliticiansRatingJpaEntity> entities) {
-        if(entities == null) return List.of();
-        List<PoliticiansRating> result = entities.stream()
-                .map(entity -> entity.toRatingNullPolitician())
-                .toList();
-        return result.contains(null) ? List.of() : result;
+//        if(entities == null) return List.of();
+//        List<PoliticiansRating> result = entities.stream()
+//                .map(entity -> entity.toRatingNullPolitician())
+//                .toList();
+//        return result.contains(null) ? List.of() : result;
+        return List.of();
     }
 
     public Politicians toPoliticians() {
