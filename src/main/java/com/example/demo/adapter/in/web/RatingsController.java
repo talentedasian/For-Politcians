@@ -2,6 +2,7 @@ package com.example.demo.adapter.in.web;
 
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.service.RatingServiceAdapter;
+import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.adapter.web.dto.RatingDTO;
 import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
@@ -24,10 +25,12 @@ public class RatingsController {
 	
 	private final RatingServiceAdapter ratingService;
 	private final RatingAssembler assembler;
+	private final RatingJpaRepository jpaRepo;
 
-	public RatingsController(RatingServiceAdapter ratingService, RatingAssembler assembler) {
+	public RatingsController(RatingServiceAdapter ratingService, RatingAssembler assembler, RatingJpaRepository jpaRepo) {
 		this.ratingService = ratingService;
 		this.assembler = assembler;
+		this.jpaRepo = jpaRepo;
 	}
 
 	@Operation(security = { @SecurityRequirement(name = "add-rating") })
@@ -66,6 +69,11 @@ public class RatingsController {
 		CollectionModel<EntityModel<RatingDTO>> response = assembler.toCollectionModel(politicianRatingQueried);
 
 		return new ResponseEntity<CollectionModel<EntityModel<RatingDTO>>>(response, HttpStatus.OK);
+	}
+
+	@GetMapping("/ratings/count")
+	public long count() {
+		return jpaRepo.count();
 	}
 
 }
