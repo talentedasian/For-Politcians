@@ -1,6 +1,5 @@
 package com.example.demo.domain.entities;
 
-import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.Score;
@@ -70,6 +69,19 @@ public class Politicians {
 				? TotalRatingAccumulated.ZERO : totalRatingAccumulated;
 	}
 
+	Politicians(Name name, List<PoliticiansRating> politiciansRating, AverageRating averageRating,
+				TotalRatingAccumulated totalRatingAccumulated, PoliticianNumber politicianNumber, Type polType, int totalCountsOfRating) {
+		this.name = name;
+		this.politiciansRating.addAll(politiciansRating == null ? List.of() : politiciansRating);
+		this.totalCountsOfRating = politiciansRating.size();
+		this.averageRating = averageRating;
+		this.politicianNumber = politicianNumber;
+		this.type = polType;
+		this.totalRatingAccumulated = (totalRatingAccumulated == null)
+				? TotalRatingAccumulated.ZERO : totalRatingAccumulated;
+		this.totalCountsOfRating = totalCountsOfRating;
+	}
+
 	@Override
 	@ExcludeFromJacocoGeneratedCoverage
 	public String toString() {
@@ -125,17 +137,6 @@ public class Politicians {
 		return averageRating != NO_RATING_YET;
 	}
 
-	void rate(PoliticiansRating rating, RatingJpaRepository repo) {
-		incrementTotalCountsOfRating();
-
-		double calculatedAverageRating = repo.calculateRating(politicianNumber.politicianNumber());
-		changeAverageRating(AverageRating.of(BigDecimal.valueOf(calculatedAverageRating)));
-
-		changeTotalRatingAccumulated(Score.of(rating.score()));
-
-		politiciansRating.add(rating);
-	}
-
 	void rate(PoliticiansRating rating) {
 		incrementTotalCountsOfRating();
 
@@ -150,6 +151,11 @@ public class Politicians {
 	private void incrementTotalCountsOfRating() {
 		totalCountsOfRating++;
 	}
+
+	public void setTotalCountsOfRating(int totalCountsOfRating) {
+		this.totalCountsOfRating = totalCountsOfRating;
+	}
+
 
 	private void changeTotalRatingAccumulated(Score score) {
 		this.totalRatingAccumulated = calculateTotalRatingsAccumulated(score);
@@ -217,6 +223,7 @@ public class Politicians {
 		private BigDecimal totalRating;
 
 		private AverageRating averageRating;
+		private int totalCount;
 
 		public PoliticiansBuilder(PoliticianNumber politicianNumber) {
 			this.politicianNumber = politicianNumber.politicianNumber();
@@ -282,7 +289,12 @@ public class Politicians {
 			if (totalRating != null)
 				this.totalRatingAccumulated = TotalRatingAccumulated.of(totalRating, averageRating);
 
-			return new Politicians(name, politiciansRating, averageRating, totalRatingAccumulated, new PoliticianNumber(politicianNumber), null);
+			return new Politicians(name, politiciansRating, averageRating, totalRatingAccumulated, new PoliticianNumber(politicianNumber), null, totalCount);
+		}
+
+		public PoliticiansBuilder setTotalCount(int totalCount) {
+			this.totalCount = totalCount;
+			return this;
 		}
 	}
 	

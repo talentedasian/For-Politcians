@@ -76,7 +76,7 @@ public class RatingsController {
 	public String count() {
 		String jwt = JwtUtils.fixedExpirationDate("test@gmail.com", "FLOPM-00000000000000", "test name");
 		System.out.println(jwt + " tanginamo");
-		return String.valueOf(jpaRepo.count() + " " + jwt);
+		return jpaRepo.count() + " " + jwt;
 	}
 
 }

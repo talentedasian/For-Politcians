@@ -49,9 +49,10 @@ public class PoliticsApplication implements CommandLineRunner{
 				.setFirstName("Random")
 				.setLastName("Name")
 				.setAverageRating(AverageRating.of(BigDecimal.valueOf(7.431)))
-				.setTotalRating(BigDecimal.valueOf(743100))
+				.setTotalRating(BigDecimal.valueOf(743130))
+				.setTotalCount(100000)
 				.build();
-		PresidentialPolitician presidential = new PresidentialBuilder(politician)
+			PresidentialPolitician presidential = new PresidentialBuilder(politician)
 				.setMostSignificantLawPassed("Rice Tarification Law")
 				.build();
 
@@ -70,7 +71,7 @@ public class PoliticsApplication implements CommandLineRunner{
 				.build();
 		List<PoliticiansRatingJpaEntity> rateList = new ArrayList<>();
 		for (int i = 0; i < 100001; i++) {
-			if (i % 500 == 0) {
+			if (i % 1000 == 0) {
 				ratingRepo.saveAll(rateList);
 				rateList.clear();
 			}

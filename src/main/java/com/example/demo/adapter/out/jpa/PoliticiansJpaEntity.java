@@ -177,6 +177,7 @@ public class PoliticiansJpaEntity {
                 .setTotalRating(BigDecimal.valueOf(ratingJpaEntity.totalRating))
                 .setAverageRating(ratingJpaEntity.getAverageRating() == 0 ? AverageRating.NO_RATING_YET
                         : AverageRating.of(BigDecimal.valueOf(ratingJpaEntity.getAverageRating())))
+                .setTotalCount(totalCountRating)
                 .build();
     }
 }
