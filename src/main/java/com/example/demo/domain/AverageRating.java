@@ -1,6 +1,5 @@
 package com.example.demo.domain;
 
-import com.example.demo.domain.enums.Rating;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
@@ -32,42 +31,11 @@ public record AverageRating(double rating) {
     }
 
     public static AverageRating of(BigDecimal averageRating) {
-        return of(averageRating, 1, new AverageRating(averageRating.doubleValue()));
-    }
-
-    public static AverageRating of(BigDecimal totalScoreAccumulated, int count, AverageRating previousAverageRating) {
-        if (isTotalScoreAccumulatedZero(totalScoreAccumulated))
-            throw new IllegalStateException("total rating accumulated must be greater than 0");
-        if (isCountZero(count))
-            throw new IllegalStateException("count must be greater than 0");
-
-        double averageRatingCalculated = calculateAverageRating(totalScoreAccumulated, count, previousAverageRating);
-
-        return new AverageRating(averageRatingCalculated);
-    }
-
-    private static double calculateAverageRating(BigDecimal totalScoreAccumulated, int count, AverageRating previousAverageRating) {
-        return determineRatingClassification(previousAverageRating).calculate(totalScoreAccumulated, count);
-    }
-
-    private static Rating determineRatingClassification(AverageRating previousAverageRating) {
-        return Rating.mapToSatisfactionRate(previousAverageRating.averageRating());
-    }
-
-    private static boolean isCountZero(int count) {
-        return count == 0;
-    }
-
-    private static boolean isTotalScoreAccumulatedZero(BigDecimal totalScoreAccumulated) {
-        return totalScoreAccumulated.compareTo(BigDecimal.ZERO) == 0;
+        return new AverageRating(averageRating.doubleValue());
     }
 
     public double averageRating() {
         return this.rating;
-    }
-
-    public boolean isAverageRatingLow() {
-        return Rating.mapToSatisfactionRate(rating).equals(Rating.LOW);
     }
 
     public static boolean hasRating(AverageRating averageRating) {

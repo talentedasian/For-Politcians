@@ -3,8 +3,6 @@ package com.example.demo.domain.entities;
 import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.AverageRating;
-import com.example.demo.domain.Score;
-import com.example.demo.domain.TotalRatingAccumulated;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -90,11 +88,6 @@ public class Politicians {
 		return result;
 	}
 
-	public AverageRating calculateAverageRating(Score ratingToAdd, RatingJpaRepository repo) {
-		return AverageRating.of(BigDecimal.valueOf(repo.calculateRating(politicianNumber.politicianNumber())));
-
-	}
-
 	public boolean isAverageRatingPresent() {
 		return averageRating != NO_RATING_YET;
 	}
@@ -159,8 +152,6 @@ public class Politicians {
 		
 		private final String politicianNumber;
 
-		private TotalRatingAccumulated totalRatingAccumulated;
-
 		private BigDecimal totalRating;
 
 		private AverageRating averageRating;
@@ -221,8 +212,6 @@ public class Politicians {
 		public Politicians build() {
 			var name = new Name(firstName, lastName);
 			if (politiciansRating == null) politiciansRating = List.of();
-			if (totalRating != null)
-				this.totalRatingAccumulated = TotalRatingAccumulated.of(totalRating, averageRating);
 
 			return new Politicians(name, politiciansRating, averageRating, new PoliticianNumber(politicianNumber), null);
 		}
