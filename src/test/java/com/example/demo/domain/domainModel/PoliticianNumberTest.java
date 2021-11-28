@@ -1,8 +1,13 @@
 package com.example.demo.domain.domainModel;
 
+import com.example.demo.domain.averageCalculator.LowSatisfactionAverageCalculator;
 import com.example.demo.domain.entities.PoliticianNumber;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;

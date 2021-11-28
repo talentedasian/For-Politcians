@@ -3,7 +3,6 @@ package com.example.demo.adapter.in.service;
 import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
-import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.adapter.web.dto.RatingDTO;
 import com.example.demo.domain.Score;
@@ -20,16 +19,17 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 public class RatingServiceAdapter {
 
     private final RatingService service;
     private final PoliticiansRepository polRepo;
-    private final RatingJpaRepository ratingJpaRepository;
+    private final Lock lock = new ReentrantLock(true);
 
-    public RatingServiceAdapter(RatingRepository ratingRepo, UserRateLimitService rateLimitService, PoliticiansRepository polRepo, RatingJpaRepository ratingJpaRepository) {
-        this.ratingJpaRepository = ratingJpaRepository;
+    public RatingServiceAdapter(RatingRepository ratingRepo, UserRateLimitService rateLimitService, PoliticiansRepository polRepo) {
         this.service = new RatingService(ratingRepo, polRepo, rateLimitService);
         this.polRepo = polRepo;
     }
@@ -39,11 +39,8 @@ public class RatingServiceAdapter {
                 .orElseThrow(() -> new RatingsNotFoundException("Rating with " + id + " not found")));
     }
 
-    public RatingDTO saveRatings(AddRatingDTORequest dtoRequest, HttpServletRequest req) throws UserRateLimitedOnPoliticianException {
+    public RatingDTO saveRatings(AddRatingDTORequest dtoRequest, HttpServletRequest req) throws UserRateLimitedOnPoliticianException, InterruptedException {
         Claims jwts = JwtProviderHttpServletRequest.decodeJwt(req).getBody();
-
-        Politicians politician = polRepo.findByPoliticianNumber(dtoRequest.getId())
-                .orElseThrow(PoliticianNotFoundException::new);
 
         var rater = new UserRater.Builder()
                 .setName(jwts.get("fullName", String.class))
@@ -53,12 +50,16 @@ public class RatingServiceAdapter {
                 .build();
 
         PoliticiansRating rating = new PoliticiansRating.Builder()
-                .setPolitician(politician)
                 .setRating(Score.of(dtoRequest.getRating().doubleValue()))
                 .setRater(rater)
                 .build();
 
-        return RatingDTO.from(service.saveRatings(rating));
+        synchronized (lock) {
+            Politicians politician = polRepo.findByPoliticianNumber(dtoRequest.getId())
+                    .orElseThrow(PoliticianNotFoundException::new);
+            rating.setPolitician(politician);
+            return RatingDTO.from(service.saveRatings(rating));
+        }
     }
 
     public List<RatingDTO> findRatingsUsingFacebookEmail(String email) {

@@ -26,7 +26,7 @@ public class PoliticianAssembler implements SimpleRepresentationModelAssembler<P
 		try {
 			resource.add(linkTo(methodOn(RatingsController.class).saveRating(null, null))
 					.withRel("rate-politician"));
-		} catch (UserRateLimitedOnPoliticianException e) {
+		} catch (UserRateLimitedOnPoliticianException | InterruptedException e) {
 			LoggerFactory.getLogger("Politician-Assembler").warn("Method not supposed to throw this exception");
 		}
 

@@ -34,7 +34,7 @@ public class Oauth2 {
 
 	@SuppressWarnings("deprecation")
 	@GetMapping
-	public ResponseEntity<RepresentationModel<JwtDto>> returnCredentials(HttpServletRequest req) throws UserRateLimitedOnPoliticianException  {
+	public ResponseEntity<RepresentationModel<JwtDto>> returnCredentials(HttpServletRequest req) throws UserRateLimitedOnPoliticianException, InterruptedException {
 		Map<String, String> cookieMap = new HashMap<>();
 		
 		Arrays.stream(req.getCookies())

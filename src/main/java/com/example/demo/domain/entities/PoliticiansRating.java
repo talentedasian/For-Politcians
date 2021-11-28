@@ -82,7 +82,11 @@ public class PoliticiansRating {
 				", politician=" + politician + "]";
 	}
 
-	public static class Builder {
+	public void setPolitician(Politicians politician) {
+		this.politician = politician;
+	}
+
+    public static class Builder {
 		private String id;
 
 		private Score rating;

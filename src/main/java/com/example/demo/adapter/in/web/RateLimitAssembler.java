@@ -32,7 +32,7 @@ public class RateLimitAssembler implements SimpleRepresentationModelAssembler<Ra
         if (rateLimit.isNotRateLimited()) {
             try {
                 addAffordanceToRatePolitician(resource, selfLink);
-            } catch (UserRateLimitedOnPoliticianException e) {
+            } catch (UserRateLimitedOnPoliticianException | InterruptedException e) {
                 e.printStackTrace();
                 return;
             }
@@ -55,7 +55,7 @@ public class RateLimitAssembler implements SimpleRepresentationModelAssembler<Ra
         }
     }
 
-    private void addAffordanceToRatePolitician(EntityModel<RateLimitDto> resource, Link selfLink) throws UserRateLimitedOnPoliticianException {
+    private void addAffordanceToRatePolitician(EntityModel<RateLimitDto> resource, Link selfLink) throws UserRateLimitedOnPoliticianException, InterruptedException {
         Link linkToRatePolitician = Affordances.of(selfLink)
                 .afford(HttpMethod.POST)
                 .withTarget(linkTo(methodOn(RatingsController.class).saveRating(null, null)).withSelfRel())

@@ -36,7 +36,7 @@ public class RatingsController {
 
 	@Operation(security = { @SecurityRequirement(name = "add-rating") })
 	@PostMapping("/rating")
-	public ResponseEntity<EntityModel<RatingDTO>> saveRating(@Valid @RequestBody AddRatingDTORequest request, HttpServletRequest req) throws UserRateLimitedOnPoliticianException {
+	public ResponseEntity<EntityModel<RatingDTO>> saveRating(@Valid @RequestBody AddRatingDTORequest request, HttpServletRequest req) throws UserRateLimitedOnPoliticianException, InterruptedException {
 		RatingDTO politicianRatingSaved = ratingService.saveRatings(request, req);
 		
 		EntityModel<RatingDTO> response = assembler.toModel(politicianRatingSaved);

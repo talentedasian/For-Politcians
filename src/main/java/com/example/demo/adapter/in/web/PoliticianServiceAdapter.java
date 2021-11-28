@@ -31,6 +31,7 @@ public class PoliticianServiceAdapter {
     public PoliticianDto findPoliticianUsingNumber(String polNumber) {
         Politicians politician = service.findPoliticianByNumber(polNumber)
                 .orElseThrow(() -> new PoliticianNotFoundException("Politician does not exist by " + polNumber));
+        System.out.println(politician.totalCountsOfRatings() + " total ratings haha");
         return new PoliticiansDtoMapper().mapToDTO(politician);
     }
 

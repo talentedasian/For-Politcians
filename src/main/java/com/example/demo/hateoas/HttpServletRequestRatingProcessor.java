@@ -52,7 +52,7 @@ public class HttpServletRequestRatingProcessor implements RepresentationModelPro
                     .withTarget(linkTo(methodOn(RatingsController.class).saveRating(null, null)).withRel("rate-politician"))
                     .withName("rate-politician")
                     .toLink();
-        } catch (UserRateLimitedOnPoliticianException e) {
+        } catch (UserRateLimitedOnPoliticianException | InterruptedException e) {
             e.printStackTrace(); // LOG THIS INTO A FILE
         }
         return model.add(linkToRate);
