@@ -24,7 +24,6 @@ import static com.example.demo.domain.entities.Politicians.Type.PRESIDENTIAL;
 import static com.example.demo.domain.enums.Rating.HIGH;
 import static com.example.demo.domain.enums.Rating.LOW;
 import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
-import static java.math.BigDecimal.valueOf;
 import static java.net.URI.create;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -123,8 +122,7 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
                 .setMostSignificantLawPassed("Random Law").build();
         var senatorial = new SenatorialBuilder(politicianBuilder
                             .setPoliticianNumber(POLITICIAN_NUMBER.politicianNumber() + "1")
-                            .setAverageRating(AverageRating.of(valueOf(9)))
-                            .setTotalRating(valueOf(2)))
+                            .setAverageRating(AverageRating.of(("9"))))
                 .setTotalMonthsOfService(44).build();
 
         polRepo.save(presidential);

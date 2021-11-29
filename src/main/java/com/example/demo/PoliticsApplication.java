@@ -21,7 +21,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +47,7 @@ public class PoliticsApplication implements CommandLineRunner{
 		Politicians politician = new PoliticiansBuilder(PoliticianNumber.of(PoliticianNumber.pattern))
 				.setFirstName("Random")
 				.setLastName("Name")
-				.setAverageRating(AverageRating.of(BigDecimal.valueOf(7.431)))
-				.setTotalRating(BigDecimal.valueOf(743130))
+				.setAverageRating(AverageRating.of("7.431"))
 				.setTotalCount(100000)
 				.build();
 			PresidentialPolitician presidential = new PresidentialBuilder(politician)

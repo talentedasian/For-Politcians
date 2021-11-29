@@ -24,7 +24,7 @@ public final class PresidentialPoliticianDto extends PoliticianDto {
 	}
 
 	public static PresidentialPoliticianDto of(Politicians entity, Rating satisfactionRate, String lawSigned) {
-		String rating = entity.hasRating() ? String.valueOf(entity.averageRating()) : NO_RATING;
+		String rating = entity.hasRating() ? entity.averageRating() : NO_RATING;
 		return new PresidentialPoliticianDto(entity.fullName(), entity.retrievePoliticianNumber(), rating, satisfactionRate, lawSigned);
 	}
 

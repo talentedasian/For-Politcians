@@ -44,8 +44,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
     @Autowired UserRateLimitService rateLimitService;
 
     PresidentialPolitician politician = new PresidentialBuilder(new Politicians.PoliticiansBuilder(POL_NUMBER())
-                .setFirstName("Fake")
-                .setTotalRating(valueOf(4)))
+                .setFirstName("Fake"))
             .build();
 
     UserRater rater = new UserRater.Builder()

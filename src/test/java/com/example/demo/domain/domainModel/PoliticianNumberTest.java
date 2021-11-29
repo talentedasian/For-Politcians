@@ -76,4 +76,22 @@ public class PoliticianNumberTest {
                 .isEqualTo(EXPECTED_POLITICIAN_NUMBER);
     }
 
+    @Test
+    public void test() throws Exception{
+        LowSatisfactionAverageCalculator calc = new LowSatisfactionAverageCalculator("6.6663641", 3);
+
+//                .isEqualTo(wilfred(List.of("1.324","3.2312321","2.111132")));
+    }
+
+    public String wilfred(List<String> summands) {
+        BigDecimal mean = BigDecimal.ZERO;
+        for (int i = 0; i < summands.size(); i++) {
+            BigDecimal difference = new BigDecimal(summands.get(i)).subtract(mean);
+            BigDecimal delta = difference.divide(new BigDecimal(i + 1), 3, RoundingMode.CEILING);
+            mean = delta.add(mean);
+        }
+
+        return mean.toString();
+    }
+
 }

@@ -32,7 +32,6 @@ public class RatingPoliticiansTest {
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
             .setPoliticiansRating(null)
-            .setTotalRating(BigDecimal.ZERO)
             .setAverageRating(AverageRating.ONE);
 
     @BeforeEach

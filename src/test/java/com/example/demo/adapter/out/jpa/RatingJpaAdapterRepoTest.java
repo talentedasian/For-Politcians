@@ -18,8 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import testAnnotations.DatabaseTest;
 
-import java.math.BigDecimal;
-
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,7 +42,6 @@ public class RatingJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase {
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
             .setPoliticiansRating(null)
-            .setTotalRating(BigDecimal.ZERO)
             .setAverageRating(AverageRating.ONE);
 
     PresidentialPolitician presidential = new PresidentialBuilder(politicianBuilder).build();

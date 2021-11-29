@@ -18,38 +18,18 @@ public class AverageRatingTest {
     @Test
     public void shouldReturnAverageRatingSet() throws Exception{
         BigDecimal VALID_AVERAGE_RATING = valueOf(2.321);
-        double averageRating = AverageRating.of(VALID_AVERAGE_RATING).rating();
+        String averageRating = new AverageRating(VALID_AVERAGE_RATING).averageRating();
 
         assertThat(averageRating)
-                .isEqualTo(VALID_AVERAGE_RATING.doubleValue());
-    }
-
-    @Test
-    public void shouldRoundOffTo3Digits() throws Exception{
-        double EXPECTED_AVERAGE_RATING = 9.32;
-
-        BigDecimal AVERAGE_RATING_WITH_MORE_THAN_3_DIGITS = valueOf(9.3245);
-        double averageRating = AverageRating.of(AVERAGE_RATING_WITH_MORE_THAN_3_DIGITS).rating();
-
-        assertThat(averageRating)
-                .isEqualTo(EXPECTED_AVERAGE_RATING);
-    }
-
-    @Test
-    public void shouldScoreHasExceededMaximumValueException() throws Exception{
-        ThrowableAssert.ThrowingCallable shouldThrowAverageRating = () -> AverageRating.of(valueOf(2131));
-
-        assertThatThrownBy(shouldThrowAverageRating)
-                .isInstanceOf(AverageRatingHasExceededMaximumValueException.class);
+                .isEqualTo(VALID_AVERAGE_RATING.toString());
     }
 
     @Test
     public void shouldReturnExpectedAverageRatingCalculatedWithSpecifiedParametersForHighRating() throws Exception{
-        double EXPECTED_AVERAGE_RATING = 5.70;
+        String EXPECTED_AVERAGE_RATING = "8.71";
 
-        AverageRating PREVIOUS_AVERAGE_RATING = AverageRating.of(valueOf(9.32131));
-        BigDecimal TOTAL_RATING_ACCUMULATED = valueOf(51.321);
-        double averageRating = AverageRating.of(TOTAL_RATING_ACCUMULATED, 9, PREVIOUS_AVERAGE_RATING).rating();
+        AverageRating PREVIOUS_AVERAGE_RATING = new AverageRating(valueOf(9.32131));
+        String averageRating = AverageRating.of(9,PREVIOUS_AVERAGE_RATING, "3.231").averageRating();
 
         assertThat(averageRating)
                 .isEqualTo(EXPECTED_AVERAGE_RATING);
@@ -57,11 +37,10 @@ public class AverageRatingTest {
 
     @Test
     public void shouldReturnExpectedAverageRatingCalculatedWithSpecifiedParametersForDecentRating() throws Exception{
-        double EXPECTED_AVERAGE_RATING = 7.84;
+        String EXPECTED_AVERAGE_RATING = "6.49";
 
-        AverageRating PREVIOUS_AVERAGE_RATING = AverageRating.of(valueOf(6.42));
-        BigDecimal TOTAL_RATING_ACCUMULATED = valueOf(321.3234);
-        double averageRating = AverageRating.of(TOTAL_RATING_ACCUMULATED, 41, PREVIOUS_AVERAGE_RATING).rating();
+        AverageRating PREVIOUS_AVERAGE_RATING = new AverageRating(valueOf(6.42));
+        String averageRating = AverageRating.of(41, PREVIOUS_AVERAGE_RATING, "9.3122").averageRating();
 
         assertThat(averageRating)
                 .isEqualTo(EXPECTED_AVERAGE_RATING);
@@ -69,41 +48,19 @@ public class AverageRatingTest {
 
     @Test
     public void shouldReturnExpectedAverageRatingCalculatedWithSpecifiedParametersForLowRating() throws Exception{
-        double EXPECTED_AVERAGE_RATING = 4.827;
+        String EXPECTED_AVERAGE_RATING = "2.131";
 
-        AverageRating PREVIOUS_AVERAGE_RATING = AverageRating.of(valueOf(2.131));
-        BigDecimal TOTAL_RATING_ACCUMULATED = valueOf(2891.23123);
-        double averageRating = AverageRating.of(TOTAL_RATING_ACCUMULATED, 599, PREVIOUS_AVERAGE_RATING).rating();
+        AverageRating PREVIOUS_AVERAGE_RATING = new AverageRating(valueOf(2.131));
+        String averageRating = AverageRating.of(599, PREVIOUS_AVERAGE_RATING, "1.9922").averageRating();
 
         assertThat(averageRating)
                 .isEqualTo(EXPECTED_AVERAGE_RATING);
     }
 
     @Test
-    public void shouldReturn0IfTotalRatingAccumulatedIs0() throws Exception{
-        BigDecimal ZERO_RATING_ACCUMULATED = BigDecimal.ZERO;
-
-        assertThatThrownBy(() -> AverageRating.of(ZERO_RATING_ACCUMULATED, 0, AverageRating.of(valueOf(1d))))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("must be greater than 0");
-    }
-
-    @Test
-    public void shouldReturn0IfCountIs0() throws Exception{
-        int zeroCount = 0;
-
-        assertThatThrownBy(() -> AverageRating.of(BigDecimal.TEN, zeroCount, AverageRating.of(valueOf(1d))))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("count must be greater than 0");
-    }
-
-    @Test
     public void shouldThrowScoreHasExceededMaximumValueExceptionIfAverageRatingExceeds10() throws Exception{
-        BigDecimal TOTAL_RATING_ACCUMULATED = valueOf(2891.23123);
-
         ThrowableAssert.ThrowingCallable shouldThrowAverageRating =
-                () -> AverageRating.of(TOTAL_RATING_ACCUMULATED, 200, AverageRating.of(valueOf(2.131))).rating();
-
+                () -> new AverageRating(new BigDecimal("100.1"));
 
         assertThatThrownBy(shouldThrowAverageRating)
                 .isInstanceOf(AverageRatingHasExceededMaximumValueException.class);

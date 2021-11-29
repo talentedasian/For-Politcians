@@ -6,17 +6,17 @@ import org.springframework.util.Assert;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public record AverageRating(double rating) {
+public record AverageRating(BigDecimal rating) {
 
     public static final AverageRating NO_RATING_YET = null;
-    public static final AverageRating ONE = new AverageRating(1);
+    public static final AverageRating ONE = new AverageRating(BigDecimal.ONE);
 
     private static final double MINIMUM = 0.01;
     private static final int MAXIMUM = 10;
 
     public AverageRating {
-        Assert.state(isRatingGreaterThanMinimum(rating), "rating must not be less than 0.01");
-        maximumRatingValidation(rating);
+        Assert.state(isRatingGreaterThanMinimum(rating.doubleValue()), "rating must not be less than 0.01");
+        maximumRatingValidation(rating.doubleValue());
     }
 
     private void maximumRatingValidation(double rating) {
@@ -31,43 +31,32 @@ public record AverageRating(double rating) {
         return rating >= MINIMUM;
     }
 
-    public static AverageRating of(BigDecimal averageRating) {
-        return of(averageRating, 1, new AverageRating(averageRating.doubleValue()));
+    public static AverageRating of(String newSummand) {
+        return new AverageRating(new BigDecimal(newSummand));
     }
 
-    public static AverageRating of(BigDecimal totalScoreAccumulated, int count, AverageRating previousAverageRating) {
-        if (isTotalScoreAccumulatedZero(totalScoreAccumulated))
-            throw new IllegalStateException("total rating accumulated must be greater than 0");
-        if (isCountZero(count))
-            throw new IllegalStateException("count must be greater than 0");
+    public static AverageRating of(int count, AverageRating previousAverageRating, String newSummand) {
+        String averageRatingCalculated = calculateAverageRating(count, previousAverageRating, newSummand);
 
-        double averageRatingCalculated = calculateAverageRating(totalScoreAccumulated, count, previousAverageRating);
-
-        return new AverageRating(averageRatingCalculated);
+        return new AverageRating(new BigDecimal(averageRatingCalculated));
     }
 
-    private static double calculateAverageRating(BigDecimal totalScoreAccumulated, int count, AverageRating previousAverageRating) {
-        return determineRatingClassification(previousAverageRating).calculate(totalScoreAccumulated, count);
+    private static String calculateAverageRating(int count, AverageRating previousAverageRating, String newSummand) {
+        return determineRatingClassification(previousAverageRating).calculate(previousAverageRating.averageRating(), count, newSummand);
     }
 
     private static Rating determineRatingClassification(AverageRating previousAverageRating) {
-        return Rating.mapToSatisfactionRate(previousAverageRating.averageRating());
+        return hasRating(previousAverageRating)
+                ? Rating.mapToSatisfactionRate(previousAverageRating.rating().doubleValue())
+                : Rating.LOW;
     }
 
-    private static boolean isCountZero(int count) {
-        return count == 0;
-    }
-
-    private static boolean isTotalScoreAccumulatedZero(BigDecimal totalScoreAccumulated) {
-        return totalScoreAccumulated.compareTo(BigDecimal.ZERO) == 0;
-    }
-
-    public double averageRating() {
-        return this.rating;
+    public String averageRating() {
+        return this.rating.toString();
     }
 
     public boolean isAverageRatingLow() {
-        return Rating.mapToSatisfactionRate(rating).equals(Rating.LOW);
+        return Rating.mapToSatisfactionRate(rating.doubleValue()).equals(Rating.LOW);
     }
 
     public static boolean hasRating(AverageRating averageRating) {

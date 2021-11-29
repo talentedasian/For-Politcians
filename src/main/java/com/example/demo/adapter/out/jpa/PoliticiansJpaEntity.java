@@ -31,8 +31,8 @@ public class PoliticiansJpaEntity {
     @Column(nullable = false, name = "politician_full_name")
     private String fullName;
 
-    @Column(nullable = false)
-    private RatingJpaEntity ratingJpaEntity;
+    @Column(nullable = false, name = "rating")
+    private BigDecimal averageRating;
 
     @Column(nullable = false, name = "total_count_of_rating")
     private int totalCountRating;
@@ -60,10 +60,6 @@ public class PoliticiansJpaEntity {
         return politiciansRating;
     }
 
-    public RatingJpaEntity getRatingJpaEntity() {
-        return ratingJpaEntity;
-    }
-
     public int getTotalCountRating() {
         return totalCountRating;
     }
@@ -71,13 +67,12 @@ public class PoliticiansJpaEntity {
     PoliticiansJpaEntity() {}
 
     PoliticiansJpaEntity(String id, String firstName, String lastName, String fullName,
-                                RatingJpaEntity ratingJpaEntity, int totalCountRating,
-                                List<PoliticiansRatingJpaEntity> politiciansRating) {
+                            String rating, int totalCountRating, List<PoliticiansRatingJpaEntity> politiciansRating) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.fullName = fullName;
-        this.ratingJpaEntity = ratingJpaEntity;
+        this.averageRating = new BigDecimal(rating);
         this.totalCountRating = totalCountRating;
         this.politiciansRating = politiciansRating;
     }
@@ -85,8 +80,7 @@ public class PoliticiansJpaEntity {
     public static PoliticiansJpaEntity from(Politicians politician) {
         AverageRating averageRating = politician.average();
         var jpaEntity = new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
-                politician.lastName(), politician.fullName(),
-                RatingJpaEntity.from(politician.totalRatingAccumulated(), averageRating),
+                politician.lastName(), politician.fullName(), politician.averageRating(),
                 politician.totalCountsOfRatings(), fromPoliticiansRating(politician.getPoliticiansRating()));
 
         switch (politician.getType()) {
@@ -106,8 +100,7 @@ public class PoliticiansJpaEntity {
     public static PoliticiansJpaEntity fromWithNullRating(Politicians politician) {
         AverageRating averageRating = politician.average();
         var jpaEntity = new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
-                politician.lastName(), politician.fullName(),
-                RatingJpaEntity.from(politician.totalRatingAccumulated(), averageRating),
+                politician.lastName(), politician.fullName(), politician.averageRating(),
                 politician.totalCountsOfRatings(), null);
         if (politician.getType() == null) {
             return jpaEntity;
@@ -134,7 +127,7 @@ public class PoliticiansJpaEntity {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", fullName='" + fullName + '\'' +
-                ", ratingJpaEntity=" + ratingJpaEntity +
+                ", rating='" + averageRating.toString() +
                 ", politiciansRating=" + politiciansRating +
                 '}';
     }
@@ -149,7 +142,7 @@ public class PoliticiansJpaEntity {
         if (!Objects.equals(firstName, that.firstName)) return false;
         if (!Objects.equals(lastName, that.lastName)) return false;
         if (!Objects.equals(fullName, that.fullName)) return false;
-        if (!Objects.equals(ratingJpaEntity, that.ratingJpaEntity)) return false;
+        if (averageRating.compareTo(that.averageRating) != 0) return false;
         return politiciansRating.equals(that.politiciansRating);
     }
 
@@ -174,10 +167,12 @@ public class PoliticiansJpaEntity {
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setPoliticiansRating(toPoliticiansRating(politiciansRating))
-                .setTotalRating(BigDecimal.valueOf(ratingJpaEntity.totalRating))
-                .setAverageRating(ratingJpaEntity.getAverageRating() == 0 ? AverageRating.NO_RATING_YET
-                        : AverageRating.of(BigDecimal.valueOf(ratingJpaEntity.getAverageRating())))
+                .setAverageRating(new AverageRating(averageRating))
                 .setTotalCount(totalCountRating)
                 .build();
+    }
+
+    protected String getRating() {
+        return averageRating.toString();
     }
 }

@@ -3,9 +3,7 @@ package com.example.demo.domain.entities;
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.Score;
-import com.example.demo.domain.TotalRatingAccumulated;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,8 +22,6 @@ public class Politicians {
 
 	private final Politicians.Type type;
 
-	private TotalRatingAccumulated totalRatingAccumulated;
-
 	// count of ratings regardless of deletion of ratings.
 	private int totalCountsOfRating;
 
@@ -41,7 +37,7 @@ public class Politicians {
 		this.politiciansRating = politiciansRating;
 	}
 
-	public double averageRating() {
+	public String averageRating() {
 		return averageRating.averageRating();
 	}
 
@@ -58,27 +54,12 @@ public class Politicians {
 	}
 
 	Politicians(Name name, List<PoliticiansRating> politiciansRating, AverageRating averageRating,
-				TotalRatingAccumulated totalRatingAccumulated, PoliticianNumber politicianNumber, Type polType) {
+				PoliticianNumber politicianNumber, Type polType, int totalCountsOfRating) {
 		this.name = name;
 		this.politiciansRating.addAll(politiciansRating == null ? List.of() : politiciansRating);
-		this.totalCountsOfRating = politiciansRating.size();
 		this.averageRating = averageRating;
 		this.politicianNumber = politicianNumber;
 		this.type = polType;
-		this.totalRatingAccumulated = (totalRatingAccumulated == null)
-				? TotalRatingAccumulated.ZERO : totalRatingAccumulated;
-	}
-
-	Politicians(Name name, List<PoliticiansRating> politiciansRating, AverageRating averageRating,
-				TotalRatingAccumulated totalRatingAccumulated, PoliticianNumber politicianNumber, Type polType, int totalCountsOfRating) {
-		this.name = name;
-		this.politiciansRating.addAll(politiciansRating == null ? List.of() : politiciansRating);
-		this.totalCountsOfRating = politiciansRating.size();
-		this.averageRating = averageRating;
-		this.politicianNumber = politicianNumber;
-		this.type = polType;
-		this.totalRatingAccumulated = (totalRatingAccumulated == null)
-				? TotalRatingAccumulated.ZERO : totalRatingAccumulated;
 		this.totalCountsOfRating = totalCountsOfRating;
 	}
 
@@ -90,7 +71,6 @@ public class Politicians {
 				", rating= " + averageRating +
 				", totalCountsOfRating= " + totalCountsOfRating +
 				", politicianNumber= " + politicianNumber +
-				", totalRatingAccumulated= "  + totalRatingAccumulated +
 				", type=" + type + " }";
 	}
 
@@ -102,16 +82,14 @@ public class Politicians {
 		Politicians that = (Politicians) o;
 
 		if (!politicianNumber.equals(that.politicianNumber)) return false;
-		return Objects.equals(averageRating, that.averageRating)
-				&& totalRatingAccumulated.equals(that.totalRatingAccumulated)
-				&& totalCountsOfRating == that.totalCountsOfRating;
+		return totalCountsOfRating == that.totalCountsOfRating
+				&& Objects.equals(averageRating, that.averageRating);
 	}
 
 	@Override
 	public int hashCode() {
 		int result = averageRating != null ? averageRating.hashCode() : 0;
 		result = 31 * result + politicianNumber.hashCode();
-		result = 31 * result + totalRatingAccumulated.hashCode();
 		result = 31 * result + totalCountsOfRating;
 		return result;
 	}
@@ -122,15 +100,10 @@ public class Politicians {
 
 	public AverageRating calculateAverageRating(Score ratingToAdd) {
 		if (isAverageRatingPresent()) {
-			BigDecimal totalScoreAccumulated = calculateTotalRatingsAccumulated(ratingToAdd).totalRating();
-			return AverageRating.of(totalScoreAccumulated,totalCountsOfRating, averageRating);
+			return AverageRating.of(totalCountsOfRating, averageRating, ratingToAdd.ratingExact());
 		}
 
-		return AverageRating.of(BigDecimal.valueOf(ratingToAdd.rating()));
-	}
-
-	public TotalRatingAccumulated calculateTotalRatingsAccumulated(Score ratingToAdd) {
-		return totalRatingAccumulated.addTotalRating(ratingToAdd);
+		return AverageRating.of(ratingToAdd.ratingExact());
 	}
 
 	public boolean isAverageRatingPresent() {
@@ -138,14 +111,12 @@ public class Politicians {
 	}
 
 	void rate(PoliticiansRating rating) {
-		incrementTotalCountsOfRating();
-
-		double calculatedAverageRating = calculateAverageRating(Score.of(rating.score())).averageRating();
-		changeAverageRating(AverageRating.of(BigDecimal.valueOf(calculatedAverageRating)));
-
-		changeTotalRatingAccumulated(Score.of(rating.score()));
+		AverageRating calculatedAverageRating = calculateAverageRating(Score.of(rating.score()));
+		changeAverageRating(calculatedAverageRating);
 
 		politiciansRating.add(rating);
+
+		incrementTotalCountsOfRating();
 	}
 
 	private void incrementTotalCountsOfRating() {
@@ -155,12 +126,6 @@ public class Politicians {
 	public void setTotalCountsOfRating(int totalCountsOfRating) {
 		this.totalCountsOfRating = totalCountsOfRating;
 	}
-
-
-	private void changeTotalRatingAccumulated(Score score) {
-		this.totalRatingAccumulated = calculateTotalRatingsAccumulated(score);
-	}
-
 	private void changeAverageRating(AverageRating averageRating) {
 		this.averageRating = averageRating;
 	}
@@ -194,10 +159,6 @@ public class Politicians {
 		return this.politicianNumber;
     }
 
-	public TotalRatingAccumulated totalRatingAccumulated() {
-		return totalRatingAccumulated;
-	}
-
 	public enum Type {
 		PRESIDENTIAL("presidential, PRESIDENTIAL"), SENATORIAL("senatorial, SENATORIAL"),
 		MAYOR("mayorial, MAYORIAL");
@@ -217,10 +178,6 @@ public class Politicians {
 		private List<PoliticiansRating> politiciansRating;
 		
 		private final String politicianNumber;
-
-		private TotalRatingAccumulated totalRatingAccumulated;
-
-		private BigDecimal totalRating;
 
 		private AverageRating averageRating;
 		private int totalCount;
@@ -263,14 +220,8 @@ public class Politicians {
 					.setFirstName(firstName)
 					.setLastName(lastName)
 					.setAverageRating(averageRating)
-					.setTotalRating(totalRating)
 					.setPoliticiansRating(politiciansRating);
 			return builder;
-		}
-
-		public PoliticiansBuilder setTotalRating(BigDecimal totalRatingAccumulated) {
-			this.totalRating = totalRatingAccumulated;
-			return this;
 		}
 
 		public PoliticiansBuilder setAverageRating(AverageRating averageRating) {
@@ -278,18 +229,11 @@ public class Politicians {
 			return this;
 		}
 
-		public PoliticiansBuilder setAverageRating(double averageRating) {
-			this.averageRating = AverageRating.of(BigDecimal.valueOf(averageRating));
-			return this;
-		}
-
 		public Politicians build() {
 			var name = new Name(firstName, lastName);
 			if (politiciansRating == null) politiciansRating = List.of();
-			if (totalRating != null)
-				this.totalRatingAccumulated = TotalRatingAccumulated.of(totalRating, averageRating);
 
-			return new Politicians(name, politiciansRating, averageRating, totalRatingAccumulated, new PoliticianNumber(politicianNumber), null, totalCount);
+			return new Politicians(name, politiciansRating, averageRating, new PoliticianNumber(politicianNumber), null, totalCount);
 		}
 
 		public PoliticiansBuilder setTotalCount(int totalCount) {

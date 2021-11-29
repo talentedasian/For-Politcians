@@ -28,7 +28,6 @@ class PresidentialDTOUnwrapper extends PoliticianDTOUnwrapper {
         Politicians politician = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
                 .setFirstName(dto.getFirstName())
                 .setLastName(dto.getLastName())
-                .setTotalRating(ZERO)
                 .setAverageRating(AverageRating.NO_RATING_YET)
                 .setPoliticiansRating(null)
                 .build();

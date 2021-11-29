@@ -30,7 +30,7 @@ public class SenatorialPoliticianDto extends PoliticianDto {
     }
 
     public static SenatorialPoliticianDto of(Politicians entity, Rating satisfactionRate, int monthsOfService, String lawMade) {
-        String rating = entity.hasRating() ? String.valueOf(entity.averageRating()) : NO_RATING;
+        String rating = entity.hasRating() ? entity.averageRating() : NO_RATING;
         return new SenatorialPoliticianDto(entity.fullName(), entity.retrievePoliticianNumber(), rating,
                 satisfactionRate, monthsOfService, lawMade);
     }

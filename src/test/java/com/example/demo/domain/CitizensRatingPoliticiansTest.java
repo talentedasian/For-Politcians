@@ -15,7 +15,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
 import static com.example.demo.baseClasses.BuilderFactory.createRater;
-import static java.math.BigDecimal.ZERO;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /*
@@ -39,15 +38,14 @@ public class CitizensRatingPoliticiansTest {
         politicianBuilder = new PoliticiansBuilder(POLITICIAN_NUMBER)
                 .setPoliticiansRating(null)
                 .setFirstName("Random")
-                .setLastName("Name")
-                .setTotalRating(ZERO);
+                .setLastName("Name");
 
         politicians = new PoliticianTypes.PresidentialPolitician.PresidentialBuilder(politicianBuilder).build();
     }
 
     @Test
-    public void ratingShouldBeCalculatedAsExpectedWhenRatePoliticianCalled() throws UserRateLimitedOnPoliticianException {
-        double EXPECTED_CALCULATED_AVERAGE_RATING = 2.733;
+    public void ratingShouldBeCalculatedAsExpectedWhenPoliticianHasNoRatingYet() throws UserRateLimitedOnPoliticianException {
+        String EXPECTED_CALCULATED_AVERAGE_RATING = "2.734";
 
         var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
@@ -64,7 +62,7 @@ public class CitizensRatingPoliticiansTest {
 
     @Test
     public void ratingShouldBeCalculatedAsExpectedWhenRatePoliticianCalledMoreThan2Times() throws UserRateLimitedOnPoliticianException {
-        double EXPECTED_CALCULATED_AVERAGE_RATING = 3.897;
+        String EXPECTED_CALCULATED_AVERAGE_RATING = "3.897";
 
         var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");

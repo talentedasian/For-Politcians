@@ -19,7 +19,7 @@ public class PresidentialJpaEntity extends PoliticiansJpaEntity{
 
     protected PresidentialJpaEntity(PoliticiansJpaEntity politician, String mostSignificantLawSigned) {
         super(  politician.getId(), politician.getFirstName(), politician.getLastName(),
-                Name.of(politician.getFirstName(), politician.getLastName()).fullName(), politician.getRatingJpaEntity(),
+                Name.of(politician.getFirstName(), politician.getLastName()).fullName(), politician.getRating(),
                 politician.getTotalCountRating(), politician.getPoliticiansRating() );
         this.mostSignificantLawSigned = mostSignificantLawSigned;
     }

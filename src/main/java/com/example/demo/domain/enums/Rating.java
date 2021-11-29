@@ -4,43 +4,38 @@ import com.example.demo.domain.averageCalculator.DecentSatisfactionAverageCalcul
 import com.example.demo.domain.averageCalculator.HighSatisfactionAverageCalculator;
 import com.example.demo.domain.averageCalculator.LowSatisfactionAverageCalculator;
 
-import java.math.BigDecimal;
-
 public enum Rating {
 
 	LOW {
-		public double calculate(BigDecimal totalRating, int count) {
-			return new LowSatisfactionAverageCalculator(totalRating.doubleValue(), count).calculateAverage();
+		public String calculate(String rating, int count, String newSummand) {
+			return new LowSatisfactionAverageCalculator(rating.toString(), count).calculateAverage(newSummand);
 		}
 	},
 
 	DECENT {
-		public double calculate(BigDecimal totalRating, int count) {
-			return new DecentSatisfactionAverageCalculator(totalRating.doubleValue(), count).calculateAverage();
+		public String calculate(String rating, int count, String newSummand) {
+			return new DecentSatisfactionAverageCalculator(rating.toString(), count).calculateAverage(newSummand);
 		}
 	},
 
 	HIGH {
-		public double calculate(BigDecimal totalRating, int count) {
-			return new HighSatisfactionAverageCalculator(totalRating.doubleValue(), count).calculateAverage();
+		public String calculate(String rating, int count, String newSummand) {
+			return new HighSatisfactionAverageCalculator(rating, count).calculateAverage(newSummand);
 		}
 	};
 
-	public abstract double calculate(BigDecimal totalRating, int count);
+	public abstract String calculate(String totalRating, int count, String newSummand);
 
 	public static Rating mapToSatisfactionRate(Double rating) {
 		if (rating < 5D || rating == null) {
-			Rating satisfaction = Rating.LOW;
-			return satisfaction;
+			return LOW;
 		} else if (rating < 8.89D) {
-			Rating satisfaction = Rating.DECENT;
-			return satisfaction;
+			return DECENT;
 		} else if (rating >= 8.89D) {
-			Rating satisfaction = Rating.HIGH;
-			return satisfaction;
+			return HIGH;
 		}
 
-		return null;
+		return LOW;
 	}
 	
 }

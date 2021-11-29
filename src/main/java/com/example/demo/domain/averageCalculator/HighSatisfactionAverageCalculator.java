@@ -2,7 +2,6 @@ package com.example.demo.domain.averageCalculator;
 
 import com.example.demo.domain.enums.Rating;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class HighSatisfactionAverageCalculator extends AverageCalculator{
@@ -13,21 +12,13 @@ public class HighSatisfactionAverageCalculator extends AverageCalculator{
 		return satisfactionRating;
 	}
 
-	public HighSatisfactionAverageCalculator(double totalRating, double count) {
-		super(totalRating, count);
+	public HighSatisfactionAverageCalculator(String averageRating, int count) {
+		super(averageRating, count);
 	}
 
 	@Override
-	public double calculateAverage() {
-		return calculateUtil();
-	}
-	
-	private double calculateUtil() {
-		double averageRating = BigDecimal.valueOf(getTotalRating() / (getCount()))
-				.setScale(2, RoundingMode.DOWN)
-				.doubleValue();
-		
-		return averageRating;
+	public String calculateAverage(String summand) {
+		return wilfred(2, RoundingMode.FLOOR, summand);
 	}
 
 }

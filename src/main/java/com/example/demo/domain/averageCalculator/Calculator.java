@@ -2,6 +2,6 @@ package com.example.demo.domain.averageCalculator;
 
 public interface Calculator {
 
-    double calculateAverage();
+    String calculateAverage(String summand);
 
 }

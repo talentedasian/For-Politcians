@@ -26,4 +26,8 @@ public record Score(double rating) {
     public static Score of(double rating) {
         return new Score(rating);
     }
+
+    public String ratingExact() {
+        return String.valueOf(rating);
+    }
 }

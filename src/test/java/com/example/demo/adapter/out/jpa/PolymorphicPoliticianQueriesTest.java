@@ -8,15 +8,12 @@ import com.example.demo.domain.AverageRating;
 import com.example.demo.domain.entities.PoliticianTypes.PresidentialPolitician.PresidentialBuilder;
 import com.example.demo.domain.entities.PoliticianTypes.SenatorialPolitician.SenatorialBuilder;
 import com.example.demo.domain.entities.Politicians;
-import com.example.demo.domain.entities.Rating;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import testAnnotations.DatabaseTest;
 
-import static java.math.BigDecimal.ZERO;
-import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DatabaseTest
@@ -35,7 +32,6 @@ public class PolymorphicPoliticianQueriesTest extends BaseClassTestsThatUsesData
     Politicians politician = new Politicians.PoliticiansBuilder(NumberTestFactory.POL_NUMBER())
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
-            .setTotalRating(ZERO)
             .setAverageRating(AverageRating.NO_RATING_YET)
             .setPoliticiansRating(null)
             .build();

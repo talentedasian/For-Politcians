@@ -21,8 +21,6 @@ import java.util.Optional;
 import static com.example.demo.baseClasses.BuilderFactory.createRater;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
 import static com.example.demo.baseClasses.NumberTestFactory.POL_NUMBER;
-import static java.math.BigDecimal.ONE;
-import static java.math.BigDecimal.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Tag("Domain")
@@ -52,8 +50,7 @@ public class RatingApplicationServiceTest {
 
         PresidentialPolitician politician = new PresidentialBuilder(new PoliticiansBuilder(POL_NUMBER())
                         .setPoliticiansRating(toIncreaseTotalCount)
-                        .setTotalRating(valueOf(4))
-                        .setAverageRating(AverageRating.of(valueOf(4.9898))))
+                        .setAverageRating(AverageRating.of("4.9898")))
                 .build();
 
         var raterWhoRates = createRater(ACC_NUMBER().accountNumber().concat("1"));
@@ -93,7 +90,6 @@ public class RatingApplicationServiceTest {
         PresidentialPolitician politician = new PresidentialBuilder(new PoliticiansBuilder(POL_NUMBER())
                     .setFirstName("Fake")
                     .setPoliticiansRating(List.of(justToIncreaseSize))
-                    .setTotalRating(ONE)
                     .setAverageRating(AverageRating.ONE))
                 .build();
 

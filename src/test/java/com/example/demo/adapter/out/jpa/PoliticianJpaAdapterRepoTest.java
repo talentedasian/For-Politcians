@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import testAnnotations.DatabaseTest;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static com.example.demo.baseClasses.MultiplePoliticianSetup.pagedPoliticianSetupPresidential;
@@ -53,7 +52,6 @@ public class PoliticianJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase
             .setFirstName(FIRST_NAME)
             .setLastName(LAST_NAME)
             .setPoliticiansRating(null)
-            .setTotalRating(BigDecimal.ZERO)
             .setAverageRating(AverageRating.ONE);
 
     @Test
