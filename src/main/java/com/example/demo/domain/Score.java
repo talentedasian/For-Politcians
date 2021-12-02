@@ -5,25 +5,32 @@ import org.springframework.util.Assert;
 /**
  * A score is the rating that a user has for a politician e.g. 2.131
  */
-public record Score(double rating) {
+public record Score(String rating) {
 
-    static final double MINIMUM = 0.1;
+    // MINIMUM is actually 0.1
+    static final int MINIMUM = 0;
     static final int MAXIMUM = 10;
 
     public Score {
-        Assert.state(isRatingGreaterThanMinimum(rating), "score must be greater than 0");
-        if (!isRatingLessThanMaximum(rating)) throw new ScoreHasExceededMaximumValueException();
+        Assert.state(isOnMin(rating), "score must be greater than 0");
+        if (!isOnMax(rating)) throw new ScoreHasExceededMaximumValueException();
     }
 
-    private boolean isRatingLessThanMaximum(double rating) {
-        return rating < MAXIMUM;
+    private boolean isOnMax(String rating) {
+        try {
+            return Integer.parseInt(rating) <= MAXIMUM;
+        } catch(NumberFormatException e) {
+            if (Integer.parseInt(rating.substring(0,1)) <= MAXIMUM) return true;
+            return !rating.substring(0,2).contains(".");
+        }
     }
 
-    private boolean isRatingGreaterThanMinimum(double rating) {
-        return rating >= MINIMUM;
+    private boolean isOnMin(String rating) {
+        if (rating.contains("-")) return false;
+        return Integer.parseInt(rating.substring(0,1)) > MINIMUM;
     }
 
-    public static Score of(double rating) {
+    public static Score of(String rating) {
         return new Score(rating);
     }
 }

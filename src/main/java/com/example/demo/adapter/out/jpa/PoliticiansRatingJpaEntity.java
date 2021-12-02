@@ -38,8 +38,8 @@ public class PoliticiansRatingJpaEntity {
         return rating.doubleValue();
     }
 
-    public void setRating(double rating) {
-        this.rating = BigDecimal.valueOf(rating);
+    public void setRating(String rating) {
+        this.rating = new BigDecimal(rating);
     }
 
     public UserRaterJpaEntity getRater() {
@@ -83,7 +83,7 @@ public class PoliticiansRatingJpaEntity {
         return rater == null ? null
                 : new PoliticiansRating.Builder()
                 .setId(String.valueOf(id))
-                .setRating(Score.of(rating.doubleValue()))
+                .setRating(Score.of(rating.toString()))
                 .setRater(rater.toUserRater())
                 .setPolitician(null)
                 .build();
@@ -92,7 +92,7 @@ public class PoliticiansRatingJpaEntity {
     public PoliticiansRating toRating() {
         return new PoliticiansRating.Builder()
                 .setId(String.valueOf(id))
-                .setRating(Score.of(rating.doubleValue()))
+                .setRating(Score.of(rating.toString()))
                 .setRater(rater.toUserRater())
                 .setPolitician(politician.toPoliticians())
                 .build();

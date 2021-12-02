@@ -56,7 +56,7 @@ public class RatingsControllerTest extends BaseSpringHateoasTest {
             .build();
     PoliticiansRating politiciansRating = new PoliticiansRating.Builder(politician)
             .setRater(rater)
-            .setRating(Score.of(1.321321))
+            .setRating(Score.of("1.321321"))
             .build();
 
     @Test

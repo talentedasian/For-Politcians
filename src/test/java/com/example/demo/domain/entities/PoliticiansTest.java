@@ -97,10 +97,10 @@ public class PoliticiansTest {
 	public void shouldReturnAverageWithValueOfTheScoreToAddAsAverageRatingWhenPoliticianHasNoAverageRatingYet() throws Exception{
 		Politicians politician = politicianBuilder.build();
 
-		Score score = Score.of(2.232);
+		Score score = Score.of("2.232");
 
 		assertThat(politician.calculateAverageRating(score))
-				.isEqualTo(AverageRating.of(valueOf(score.rating())));
+				.isEqualTo(AverageRating.of(new BigDecimal(score.rating())));
 	}
 
 	@Test
@@ -141,7 +141,7 @@ public class PoliticiansTest {
 		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
 		Politicians politician = politicianBuilder.build();
-		var rating = createPolRating(Score.of(2.243), rater, politician);
+		var rating = createPolRating(Score.of("2.243"), rater, politician);
 
 		politician.rate(rating);
 		politician.rate(rating);
@@ -161,7 +161,7 @@ public class PoliticiansTest {
 		Politicians politician = politicianBuilder
 				.setTotalRating(ZERO)
 				.setAverageRating(NO_RATING_YET).build();
-		var rating = createPolRating(Score.of(2.243), rater, politician);
+		var rating = createPolRating(Score.of("2.243"), rater, politician);
 
 		politician.rate(rating);
 		politician.rate(rating);
@@ -178,7 +178,7 @@ public class PoliticiansTest {
 
 		var rater = createRater(ACC_NUMBER().accountNumber());
 
-		var justHereToIncreaseTotalCountsOfRating = createPolRating(Score.of(1), rater, politicianBuilder.build());
+		var justHereToIncreaseTotalCountsOfRating = createPolRating(Score.of("1"), rater, politicianBuilder.build());
 
 		Politicians politician = politicianBuilder
 				.setTotalRating(valueOf(3))
@@ -186,8 +186,8 @@ public class PoliticiansTest {
 				.setPoliticiansRating(List.of(justHereToIncreaseTotalCountsOfRating, justHereToIncreaseTotalCountsOfRating))
 				.build();
 
-		assertThat(politician.calculateAverageRating(Score.of(1)))
-				.isEqualTo(AverageRating.of(valueOf(EXPECTED_AVERAGE_RATING)));
+		assertThat(politician.calculateAverageRating(Score.of("1")))
+				.isEqualTo(AverageRating.of(EXPECTED_AVERAGE_RATING));
 	}
 
 	@Test
@@ -196,14 +196,14 @@ public class PoliticiansTest {
 
 		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
-		var justHereToPutIncreaseSize = createPolRating(Score.of(1), rater, politicianBuilder.build());
+		var justHereToPutIncreaseSize = createPolRating(Score.of("1"), rater, politicianBuilder.build());
 
 		Politicians politician = politicianBuilder
 				.setAverageRating(AverageRating.of(valueOf(2.231)))
 				.setTotalRating(valueOf(3))
 				.setPoliticiansRating(List.of(justHereToPutIncreaseSize, justHereToPutIncreaseSize, justHereToPutIncreaseSize)).build();
 
-		var actualRating = createPolRating(Score.of(3.2232), rater, politician);
+		var rating = createPolRating(Score.of("3.2232"), rater, politician);
 
 		politician.rate(actualRating);
 
@@ -220,7 +220,7 @@ public class PoliticiansTest {
 		Politicians politician = politicianBuilder
 				.setTotalRating(ZERO)
 				.setAverageRating(NO_RATING_YET).build();
-		var rating = createPolRating(Score.of(2.243), rater, politician);
+		var rating = createPolRating(Score.of("2.243"), rater, politician);
 
 		politician.rate(rating);
 		politician.rate(rating);
@@ -237,14 +237,14 @@ public class PoliticiansTest {
 
 		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
-		var justHereToPutIncreaseSize = createPolRating(Score.of(1), rater, politicianBuilder.build());
+		var justHereToPutIncreaseSize = createPolRating(Score.of("1"), rater, politicianBuilder.build());
 
 		Politicians politician = politicianBuilder
 				.setAverageRating(AverageRating.of(valueOf(2.231)))
 				.setTotalRating(valueOf(3))
 				.setPoliticiansRating(List.of(justHereToPutIncreaseSize, justHereToPutIncreaseSize, justHereToPutIncreaseSize)).build();
 
-		TotalRatingAccumulated totalRatingAccumulated = politician.calculateTotalRatingsAccumulated(Score.of(1.2289));
+		TotalRatingAccumulated totalRatingAccumulated = politician.calculateTotalRatingsAccumulated(Score.of("1.2289"));
 
 		assertThat(totalRatingAccumulated.totalRating().doubleValue())
 				.isEqualTo(EXPECTED_AVERAGE_RATING);

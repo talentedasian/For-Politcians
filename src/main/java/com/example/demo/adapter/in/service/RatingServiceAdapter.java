@@ -50,7 +50,7 @@ public class RatingServiceAdapter {
                 .build();
 
         PoliticiansRating rating = new PoliticiansRating.Builder()
-                .setRating(Score.of(dtoRequest.getRating().doubleValue()))
+                .setRating(Score.of(dtoRequest.getRating()))
                 .setRater(rater)
                 .build();
 

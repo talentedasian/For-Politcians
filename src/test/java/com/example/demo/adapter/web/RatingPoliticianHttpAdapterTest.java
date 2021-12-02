@@ -50,7 +50,7 @@ public class RatingPoliticianHttpAdapterTest extends BaseSpringHateoasTest {
             .build();
     PoliticiansRating politiciansRating = new PoliticiansRating.Builder(politician)
             .setRater(rater)
-            .setRating(Score.of(2))
+            .setRating(Score.of("2"))
             .build();
 
     @Test

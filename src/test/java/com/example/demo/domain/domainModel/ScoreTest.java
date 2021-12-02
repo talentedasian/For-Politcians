@@ -13,8 +13,8 @@ public class ScoreTest {
 
     @Test
     public void returnScoreSet() throws Exception{
-        double VALID_SCORE = 9d;
-        double score = com.example.demo.domain.Score.of(VALID_SCORE).rating();
+        String VALID_SCORE = "9";
+        String score = com.example.demo.domain.Score.of(VALID_SCORE).rating();
 
         assertThat(score)
                 .isEqualTo(VALID_SCORE);
@@ -22,22 +22,22 @@ public class ScoreTest {
 
     @Test
     public void throwIllegalStateExceptionIf0() throws Exception{
-        assertThatThrownBy(() -> Score.of(0)).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> Score.of("0")).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void throwIllegalStateExceptionIfScoreIsLessThan0() throws Exception{
-        assertThatThrownBy(() -> Score.of(-321)).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> Score.of("-321")).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void throwScoreHasExceededMaximumValueExceptionIfScoreIsGreaterThan10() throws Exception{
-        assertThatThrownBy(() -> Score.of(11)).isInstanceOf(ScoreHasExceededMaximumValueException.class);
+        assertThatThrownBy(() -> Score.of("11")).isInstanceOf(ScoreHasExceededMaximumValueException.class);
     }
 
     @Test
     public void throwScoreHasExceededMaximumValueExceptionIfScoreIsGreaterThan10RegardlessOfHowLargeItIs() throws Exception{
-        assertThatThrownBy(() -> Score.of(3217321)).isInstanceOf(ScoreHasExceededMaximumValueException.class);
+        assertThatThrownBy(() -> Score.of("3217321")).isInstanceOf(ScoreHasExceededMaximumValueException.class);
     }
 
 }
