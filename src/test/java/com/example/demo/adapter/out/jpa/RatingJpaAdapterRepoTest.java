@@ -51,7 +51,7 @@ public class RatingJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase {
     should_convert_and_save_to_database() throws Exception{
         PoliticiansJpaEntity savedPolitician = polJpaRepository.saveAndFlush(PoliticiansJpaEntity.from(presidential));
 
-        Score scoreForPolitician = Score.of(1);
+        Score scoreForPolitician = Score.of("1");
         var rating = new PoliticiansRating.Builder()
                 .setRater(BuilderFactory.createRater(ACC_NUMBER().accountNumber()))
                 .setPolitician(savedPolitician.toPoliticians())
@@ -77,7 +77,7 @@ public class RatingJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase {
     public void testAverageFunctionQuery() throws Exception{
         PoliticiansJpaEntity savedPolitician = polJpaRepository.saveAndFlush(PoliticiansJpaEntity.from(presidential));
 
-        Score scoreForPolitician = Score.of(1);
+        Score scoreForPolitician = Score.of("1");
         var rating = new PoliticiansRating.Builder()
                 .setRater(BuilderFactory.createRater(ACC_NUMBER().accountNumber()))
                 .setPolitician(savedPolitician.toPoliticians())
@@ -86,7 +86,7 @@ public class RatingJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase {
         var rating2 = new PoliticiansRating.Builder()
                 .setRater(BuilderFactory.createRater(ACC_NUMBER().accountNumber()))
                 .setPolitician(savedPolitician.toPoliticians())
-                .setRating(Score.of(9.2234423))
+                .setRating(Score.of("9.2234423"))
                 .build();
 
         ratingRepo.save(rating);

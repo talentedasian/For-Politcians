@@ -88,7 +88,7 @@ public class PoliticiansTest {
 	public void shouldReturnAverageWithValueOfTheScoreToAddAsAverageRatingWhenPoliticianHasNoAverageRatingYet() throws Exception{
 		Politicians politician = politicianBuilder.build();
 
-		Score score = Score.of(2.232);
+		Score score = Score.of("2.232");
 
 		assertThat(politician.calculateAverageRating(score))
 				.isEqualTo(AverageRating.of(score.ratingExact()));
@@ -99,7 +99,7 @@ public class PoliticiansTest {
 		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
 		Politicians politician = politicianBuilder.build();
-		var rating = createPolRating(Score.of(2.243), rater, politician);
+		var rating = createPolRating(Score.of("2.243"), rater, politician);
 
 		politician.rate(rating);
 		politician.rate(rating);
@@ -118,7 +118,7 @@ public class PoliticiansTest {
 
 		Politicians politician = politicianBuilder
 				.setAverageRating(NO_RATING_YET).build();
-		var rating = createPolRating(Score.of(2.243), rater, politician);
+		var rating = createPolRating(Score.of("2.243"), rater, politician);
 
 		politician.rate(rating);
 		politician.rate(rating);
@@ -138,7 +138,7 @@ public class PoliticiansTest {
 				.setTotalCount(2)
 				.build();
 
-		assertThat(politician.calculateAverageRating(Score.of(1)))
+		assertThat(politician.calculateAverageRating(Score.of("1")))
 				.isEqualTo(AverageRating.of(EXPECTED_AVERAGE_RATING));
 	}
 
@@ -153,7 +153,7 @@ public class PoliticiansTest {
 				.setTotalCount(4)
 				.build();
 
-		var rating = createPolRating(Score.of(3.2232), rater, politician);
+		var rating = createPolRating(Score.of("3.2232"), rater, politician);
 
 		politician.rate(rating);
 
@@ -169,7 +169,7 @@ public class PoliticiansTest {
 
 		Politicians politician = politicianBuilder
 				.setAverageRating(NO_RATING_YET).build();
-		var rating = createPolRating(Score.of(2.243), rater, politician);
+		var rating = createPolRating(Score.of("2.243"), rater, politician);
 
 		politician.rate(rating);
 		politician.rate(rating);

@@ -7,7 +7,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 public class RatingDTO extends RepresentationModel<RatingDTO>{
 
-	private final Double rating;
+	private final String rating;
 	
 	private final UserRaterDto rater;
 	
@@ -15,7 +15,7 @@ public class RatingDTO extends RepresentationModel<RatingDTO>{
 	
 	private final String id;
 
-	public Double getRating() {
+	public String getRating() {
 		return rating;
 	}
 
@@ -31,7 +31,7 @@ public class RatingDTO extends RepresentationModel<RatingDTO>{
 		return id;
 	}
 
-	public RatingDTO(Double rating, UserRaterDto rater, PoliticianDto politician, String id) {
+	public RatingDTO(String rating, UserRaterDto rater, PoliticianDto politician, String id) {
 		super();
 		this.rating = rating;
 		this.rater = rater;

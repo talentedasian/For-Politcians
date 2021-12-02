@@ -10,8 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-
 import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
 import static com.example.demo.baseClasses.BuilderFactory.createRater;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
@@ -47,7 +45,7 @@ public class RatingPoliticiansTest {
 
         var rater = createRater(ACC_NUMBER().accountNumber());
 
-        var rating = createPolRating(Score.of(4.97654d), rater, politician);
+        var rating = createPolRating(Score.of("4.97654"), rater, politician);
 
         rating.ratePolitician(defaultRateLimitDomainService);
 
@@ -62,7 +60,7 @@ public class RatingPoliticiansTest {
 
         var rater = createRater(ACC_NUMBER().accountNumber());
 
-        var rating = createPolRating(Score.of(4.97654d), rater, politician);
+        var rating = createPolRating(Score.of("4.97654"), rater, politician);
 
         rating.ratePolitician(defaultRateLimitDomainService);
 

@@ -1,6 +1,5 @@
 package com.example.demo.domain.entities;
 
-import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.annotations.ExcludeFromJacocoGeneratedCoverage;
 import com.example.demo.domain.Score;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
@@ -19,7 +18,7 @@ public class PoliticiansRating {
 		return id;
 	}
 
-	public double score() {
+	public String score() {
 		return rating.rating();
 	}
 

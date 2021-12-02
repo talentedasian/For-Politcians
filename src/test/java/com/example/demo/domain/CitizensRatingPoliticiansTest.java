@@ -50,8 +50,8 @@ public class CitizensRatingPoliticiansTest {
         var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
 
-        var firstRating = createPolRating(Score.of(2.243), rater, politicians);
-        var fourScaledRatingForHalfDownRoundingMode = createPolRating(Score.of(3.22326), raterThatsNotRateLimited, politicians);
+        var firstRating = createPolRating(Score.of("2.243"), rater, politicians);
+        var fourScaledRatingForHalfDownRoundingMode = createPolRating(Score.of("3.22326"), raterThatsNotRateLimited, politicians);
 
         firstRating.ratePolitician(fakeDomainService);
         fourScaledRatingForHalfDownRoundingMode.ratePolitician(fakeDomainService);
@@ -68,9 +68,9 @@ public class CitizensRatingPoliticiansTest {
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
         var secondRaterThatsNotRateLimited = createRater("FLPOM-000120312");
 
-        var firstRating = createPolRating(Score.of(2.243), rater, politicians);
-        var fourScaledRating = createPolRating(Score.of(3.22326), raterThatsNotRateLimited, politicians);
-        var threeScaledRating = createPolRating(Score.of(6.223), secondRaterThatsNotRateLimited, politicians);
+        var firstRating = createPolRating(Score.of("2.243"), rater, politicians);
+        var fourScaledRating = createPolRating(Score.of("3.22326"), raterThatsNotRateLimited, politicians);
+        var threeScaledRating = createPolRating(Score.of("6.223"), secondRaterThatsNotRateLimited, politicians);
 
         firstRating.ratePolitician(fakeDomainService);
         fourScaledRating.ratePolitician(fakeDomainService);
@@ -88,8 +88,8 @@ public class CitizensRatingPoliticiansTest {
 
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
 
-        var firstRating = createPolRating(Score.of(2.243), rater, politicians);
-        var secondRating = createPolRating(Score.of(3.22326), raterThatsNotRateLimited, politicians);
+        var firstRating = createPolRating(Score.of("2.243"), rater, politicians);
+        var secondRating = createPolRating(Score.of("3.22326"), raterThatsNotRateLimited, politicians);
 
         firstRating.ratePolitician(fakeDomainService);
         secondRating.ratePolitician(fakeDomainService);
@@ -106,8 +106,8 @@ public class CitizensRatingPoliticiansTest {
 
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
 
-        var firstRating = createPolRating(Score.of(2.243), rater, politicians);
-        var secondRating = createPolRating(Score.of(3.2232), raterThatsNotRateLimited, politicians);
+        var firstRating = createPolRating(Score.of("2.243"), rater, politicians);
+        var secondRating = createPolRating(Score.of("3.2232"), raterThatsNotRateLimited, politicians);
 
         firstRating.ratePolitician(fakeDomainService);
         secondRating.ratePolitician(fakeDomainService);

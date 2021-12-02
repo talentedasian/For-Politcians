@@ -22,8 +22,8 @@ public class AddRatingDTORequest {
 	@JsonProperty(value = "political_party")
 	private String politicalParty;
 
-	public BigDecimal getRating() {
-		return rating;
+	public String getRating() {
+		return rating.toString();
 	}
 
 	public void setRating(BigDecimal rating) {
