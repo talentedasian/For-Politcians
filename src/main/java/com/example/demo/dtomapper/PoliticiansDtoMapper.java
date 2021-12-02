@@ -29,9 +29,9 @@ public class PoliticiansDtoMapper implements PoliticianDTOMapper{
 	}
 	
 	private PoliticianDto mapToPoliticianDTO(Politicians entity) {
-		double averageRating = entity.averageRating();
-		String stringRepresentationOfAverageRating = entity.hasRating() ? String.valueOf(averageRating) : "N/A";
-		Rating satisfactionRate = Rating.mapToSatisfactionRate(averageRating);
+		String avgRating = entity.averageRating();
+		String stringRepresentationOfAverageRating = entity.hasRating() ? avgRating : "N/A";
+		Rating satisfactionRate = Rating.mapToSatisfactionRate(Double.parseDouble(avgRating));
 		
 		return new PoliticianDto(
 				entity.firstName() + " " + entity.lastName(),

@@ -100,7 +100,7 @@ public class PoliticiansTest {
 		Score score = Score.of("2.232");
 
 		assertThat(politician.calculateAverageRating(score))
-				.isEqualTo(AverageRating.of(new BigDecimal(score.rating())));
+				.isEqualTo(AverageRating.of(score.rating()));
 	}
 
 	@Test
@@ -129,7 +129,7 @@ public class PoliticiansTest {
 		BigDecimal totalRatingAccumulated = valueOf(2.3234);
 		Politicians politician = politicianBuilder
 				.setTotalRating(totalRatingAccumulated)
-				.setAverageRating(2.233)
+				.setAverageRating(AverageRating.of("2.233"))
 				.build();
 
 		assertThat(politician.totalRatingAccumulated().totalRating().doubleValue())
@@ -174,16 +174,14 @@ public class PoliticiansTest {
 
 	@Test
 	public void testCalculateAverageRatingMethodThatAlreadyHasARatingBeforeHand() throws Exception{
-		double EXPECTED_AVERAGE_RATING = 2;
+		String EXPECTED_AVERAGE_RATING = "2";
 
 		var rater = createRater(ACC_NUMBER().accountNumber());
 
-		var justHereToIncreaseTotalCountsOfRating = createPolRating(Score.of("1"), rater, politicianBuilder.build());
-
 		Politicians politician = politicianBuilder
 				.setTotalRating(valueOf(3))
-				.setAverageRating(AverageRating.of(valueOf(2.231)))
-				.setPoliticiansRating(List.of(justHereToIncreaseTotalCountsOfRating, justHereToIncreaseTotalCountsOfRating))
+				.setAverageRating(AverageRating.of("2.231"))
+				.setTotalCount(2)
 				.build();
 
 		assertThat(politician.calculateAverageRating(Score.of("1")))
@@ -192,20 +190,19 @@ public class PoliticiansTest {
 
 	@Test
 	public void testAverageRating() throws Exception{
-		double EXPECTED_AVERAGE_RATING = 1.556;
+		String EXPECTED_AVERAGE_RATING = "1.556";
 
 		var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
 
-		var justHereToPutIncreaseSize = createPolRating(Score.of("1"), rater, politicianBuilder.build());
-
 		Politicians politician = politicianBuilder
-				.setAverageRating(AverageRating.of(valueOf(2.231)))
+				.setAverageRating(AverageRating.of("2.231"))
 				.setTotalRating(valueOf(3))
-				.setPoliticiansRating(List.of(justHereToPutIncreaseSize, justHereToPutIncreaseSize, justHereToPutIncreaseSize)).build();
+				.setTotalCount(3)
+				.build();
 
 		var rating = createPolRating(Score.of("3.2232"), rater, politician);
 
-		politician.rate(actualRating);
+		politician.rate(rating);
 
 		assertThat(politician.average().averageRating())
 				.isEqualTo(EXPECTED_AVERAGE_RATING);
@@ -240,7 +237,7 @@ public class PoliticiansTest {
 		var justHereToPutIncreaseSize = createPolRating(Score.of("1"), rater, politicianBuilder.build());
 
 		Politicians politician = politicianBuilder
-				.setAverageRating(AverageRating.of(valueOf(2.231)))
+				.setAverageRating(AverageRating.of("2.231"))
 				.setTotalRating(valueOf(3))
 				.setPoliticiansRating(List.of(justHereToPutIncreaseSize, justHereToPutIncreaseSize, justHereToPutIncreaseSize)).build();
 

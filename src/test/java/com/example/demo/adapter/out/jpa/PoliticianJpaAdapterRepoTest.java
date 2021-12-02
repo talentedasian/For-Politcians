@@ -54,7 +54,7 @@ public class PoliticianJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase
             .setLastName(LAST_NAME)
             .setPoliticiansRating(null)
             .setTotalRating(BigDecimal.ZERO)
-            .setAverageRating(AverageRating.ONE);
+            .setAverageRating(AverageRating.of("1"));
 
     @Test
     public void testCustomNativeQueryForFindingPoliticiansWithOffsetAndLimitForPostgresql() throws Exception{

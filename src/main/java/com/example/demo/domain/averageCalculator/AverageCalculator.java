@@ -1,20 +1,22 @@
 package com.example.demo.domain.averageCalculator;
 
+import java.math.BigDecimal;
+
 public abstract class AverageCalculator implements Calculator{
 	
-	private final double totalRating;
-	private final double count;
+	private final BigDecimal totalRating;
+	private final BigDecimal count;
 
-	public double getTotalRating() {
+	protected BigDecimal getTotalRating() {
 		return totalRating;
 	}
 
-	public double getCount() {
+	protected BigDecimal getCount() {
 		return count;
 	}
 
-	public AverageCalculator(double totalRating, double count) {
-		org.springframework.util.Assert.state(isNumberPositive(totalRating),
+	public AverageCalculator(BigDecimal totalRating, int count) {
+		org.springframework.util.Assert.state(totalRating.compareTo(BigDecimal.ZERO) > 0,
 				"total RatingJpaEntity must not be negative");
 		
 		if (!isNumberPositive(count)) {
@@ -22,7 +24,7 @@ public abstract class AverageCalculator implements Calculator{
 		}
 		
 		this.totalRating = totalRating;
-		this.count = count;
+		this.count = new BigDecimal(count);
 	}
 	
 	private boolean isNumberPositive(double number) {

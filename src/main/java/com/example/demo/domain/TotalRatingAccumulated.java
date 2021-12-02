@@ -11,7 +11,7 @@ import static com.example.demo.domain.AverageRating.NO_RATING_YET;
 
 public class TotalRatingAccumulated {
 
-    public static final TotalRatingAccumulated ZERO = new TotalRatingAccumulated(BigDecimal.ZERO, NO_RATING_YET);
+    public static final TotalRatingAccumulated ZERO = new TotalRatingAccumulated(BigDecimal.ZERO, null);
     private static final int MAXIMUM_DECIMAL_DIGITS = 3;
 
     private final BigDecimal totalRating;
@@ -50,7 +50,7 @@ public class TotalRatingAccumulated {
     }
 
     public TotalRatingAccumulated addTotalRating(Score scoreToAdd) {
-        return of(BigDecimal.valueOf(scoreToAdd.rating()).add(totalRating), averageRating);
+        return of(new BigDecimal(scoreToAdd.rating()).add(totalRating), averageRating);
     }
 
     public BigDecimal totalRating() {

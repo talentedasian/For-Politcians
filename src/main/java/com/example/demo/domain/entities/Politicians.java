@@ -41,7 +41,7 @@ public class Politicians {
 		this.politiciansRating = politiciansRating;
 	}
 
-	public double averageRating() {
+	public String averageRating() {
 		return averageRating.averageRating();
 	}
 
@@ -126,7 +126,7 @@ public class Politicians {
 			return AverageRating.of(totalScoreAccumulated,totalCountsOfRating, averageRating);
 		}
 
-		return AverageRating.of(BigDecimal.valueOf(ratingToAdd.rating()));
+		return AverageRating.of(ratingToAdd.rating());
 	}
 
 	public TotalRatingAccumulated calculateTotalRatingsAccumulated(Score ratingToAdd) {
@@ -140,8 +140,8 @@ public class Politicians {
 	void rate(PoliticiansRating rating) {
 		incrementTotalCountsOfRating();
 
-		double calculatedAverageRating = calculateAverageRating(Score.of(rating.score())).averageRating();
-		changeAverageRating(AverageRating.of(BigDecimal.valueOf(calculatedAverageRating)));
+		AverageRating calculatedAverageRating = calculateAverageRating(Score.of(rating.score()));
+		changeAverageRating(calculatedAverageRating);
 
 		changeTotalRatingAccumulated(Score.of(rating.score()));
 
@@ -275,11 +275,6 @@ public class Politicians {
 
 		public PoliticiansBuilder setAverageRating(AverageRating averageRating) {
 			this.averageRating = averageRating;
-			return this;
-		}
-
-		public PoliticiansBuilder setAverageRating(double averageRating) {
-			this.averageRating = AverageRating.of(BigDecimal.valueOf(averageRating));
 			return this;
 		}
 

@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static com.example.demo.baseClasses.BuilderFactory.createPolRating;
 import static com.example.demo.baseClasses.BuilderFactory.createRater;
 import static com.example.demo.baseClasses.NumberTestFactory.ACC_NUMBER;
@@ -31,7 +33,7 @@ public class RatingPoliticiansTest {
             .setLastName(LAST_NAME)
             .setPoliticiansRating(null)
             .setTotalRating(BigDecimal.ZERO)
-            .setAverageRating(AverageRating.ONE);
+            .setAverageRating(AverageRating.of("1"));
 
     @BeforeEach
     public void setup() {

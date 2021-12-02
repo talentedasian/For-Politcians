@@ -45,7 +45,7 @@ public class RatingJpaAdapterRepoTest extends BaseClassTestsThatUsesDatabase {
             .setLastName(LAST_NAME)
             .setPoliticiansRating(null)
             .setTotalRating(BigDecimal.ZERO)
-            .setAverageRating(AverageRating.ONE);
+            .setAverageRating(AverageRating.of("1.00"));
 
     PresidentialPolitician presidential = new PresidentialBuilder(politicianBuilder).build();
 

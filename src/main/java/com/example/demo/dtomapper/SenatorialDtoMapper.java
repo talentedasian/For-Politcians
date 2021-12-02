@@ -31,8 +31,9 @@ final class SenatorialDtoMapper extends PoliticiansDtoMapper {
     }
 
     private SenatorialPoliticianDto mapToDto(PoliticianTypes.SenatorialPolitician entity) {
-        Double rating = entity.averageRating();
-        Rating satisfactionRate = Rating.mapToSatisfactionRate(rating);
+        boolean polHasRating = entity.hasRating();
+        String rating = polHasRating ? entity.averageRating() : "N/A";
+        Rating satisfactionRate = polHasRating ? Rating.LOW : Rating.mapToSatisfactionRate(Double.parseDouble(rating));
 
         return SenatorialPoliticianDto.of(entity, satisfactionRate, entity.getTotalMonthsOfServiceAsSenator(),entity.getMostSignificantLawMade());
     }

@@ -47,7 +47,7 @@ public class CitizensRatingPoliticiansTest {
 
     @Test
     public void ratingShouldBeCalculatedAsExpectedWhenRatePoliticianCalled() throws UserRateLimitedOnPoliticianException {
-        double EXPECTED_CALCULATED_AVERAGE_RATING = 2.733;
+        String EXPECTED_CALCULATED_AVERAGE_RATING = "2.733";
 
         var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");
@@ -64,7 +64,7 @@ public class CitizensRatingPoliticiansTest {
 
     @Test
     public void ratingShouldBeCalculatedAsExpectedWhenRatePoliticianCalledMoreThan2Times() throws UserRateLimitedOnPoliticianException {
-        double EXPECTED_CALCULATED_AVERAGE_RATING = 3.897;
+        String EXPECTED_CALCULATED_AVERAGE_RATING = "3.897";
 
         var rater = createRater(NumberTestFactory.ACC_NUMBER().accountNumber());
         var raterThatsNotRateLimited = createRater("FLPOM-00003123");

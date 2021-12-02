@@ -13,19 +13,17 @@ public class DecentSatisfactionAverageCalculator extends AverageCalculator{
 		return satisfactionRating;
 	}
 
-	public DecentSatisfactionAverageCalculator(double totalRating, double count) {
+	public DecentSatisfactionAverageCalculator(BigDecimal totalRating, int count) {
 		super(totalRating, count);
 	}
 
 	@Override
-	public double calculateAverage() {
+	public BigDecimal calculateAverage() {
 		return calculateUtil();
 	}
 	
-	private double calculateUtil() {
-		double averageRating = BigDecimal.valueOf(getTotalRating() / (getCount()))
-				.setScale(2, RoundingMode.HALF_UP)
-				.doubleValue();
+	private BigDecimal calculateUtil() {
+		BigDecimal averageRating = getTotalRating().divide(getCount(), 2, RoundingMode.HALF_UP);
 		
 		return averageRating;
 	}

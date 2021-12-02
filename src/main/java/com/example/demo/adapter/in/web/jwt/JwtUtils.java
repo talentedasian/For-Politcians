@@ -3,7 +3,7 @@ package com.example.demo.adapter.in.web.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import org.togetherjava.tjbot.commands.utility.JwtExpiration;
+import com.example.demo.adapter.JwtExpiration;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

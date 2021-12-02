@@ -13,19 +13,17 @@ public class LowSatisfactionAverageCalculator extends AverageCalculator{
 		return satisfactonRate;
 	}
 
-	public LowSatisfactionAverageCalculator(double totalRating, double count) {
+	public LowSatisfactionAverageCalculator(BigDecimal totalRating, int count) {
 		super(totalRating, count);
 	}
 
 	@Override
-	public double calculateAverage() {
+	public BigDecimal calculateAverage() {
 		return calculateUtil();
 	}
 	
-	private double calculateUtil() {
-		double averageRating = BigDecimal.valueOf(getTotalRating() / (getCount()))
-				.setScale(3, RoundingMode.CEILING)
-				.doubleValue();
+	private BigDecimal calculateUtil() {
+		BigDecimal averageRating = getTotalRating().divide(getCount(), 3, RoundingMode.CEILING);
 
 		return averageRating;
 	}

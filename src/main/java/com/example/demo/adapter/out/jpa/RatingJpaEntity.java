@@ -6,46 +6,47 @@ import com.example.demo.domain.TotalRatingAccumulated;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
 public class RatingJpaEntity {
 
     @Column(nullable = false, precision = 3, scale = 3)
-    protected Double totalRating;
+    protected BigDecimal totalRating;
 
     @Column(nullable = false, precision = 3, scale = 4)
-    protected Double averageRating;
+    protected BigDecimal averageRating;
 
     public static RatingJpaEntity from(TotalRatingAccumulated totalRatingAccumulated, final AverageRating averageRating) {
-        double rating = AverageRating.hasRating(averageRating) ? averageRating.averageRating() : 0;
-        return new RatingJpaEntity(totalRatingAccumulated.totalRatingAsDouble(), rating);
+        String rating = AverageRating.hasRating(averageRating) ? averageRating.rating().toString() : "0";
+        return new RatingJpaEntity(totalRatingAccumulated.totalRating().toString(), rating);
     }
 
-    public double getTotalRating() {
-        return totalRating;
+    public String getTotalRating() {
+        return totalRating.toString();
     }
 
-    public double getAverageRating() {
-        return averageRating;
+    public String getAverageRating() {
+        return averageRating.toString();
     }
 
-    public void setTotalRating(Double totalRating) {
-        this.totalRating = totalRating;
+    public void setTotalRating(String totalRating) {
+        this.totalRating = new BigDecimal(totalRating);
     }
 
-    public void setAverageRating(Double averageRating) {
-        this.averageRating = averageRating;
+    public void setAverageRating(String averageRating) {
+        this.averageRating = new BigDecimal(averageRating);
     }
 
     public RatingJpaEntity() {
         super();
     }
 
-    public RatingJpaEntity(Double totalRating, Double averageRating) {
+    public RatingJpaEntity(String totalRating, String averageRating) {
         super();
-        this.totalRating = totalRating;
-        this.averageRating = averageRating;
+        this.totalRating = new BigDecimal(totalRating);
+        this.averageRating = new BigDecimal(averageRating);
     }
 
     @Override

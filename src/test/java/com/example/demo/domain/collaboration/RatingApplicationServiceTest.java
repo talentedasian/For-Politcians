@@ -53,7 +53,7 @@ public class RatingApplicationServiceTest {
         PresidentialPolitician politician = new PresidentialBuilder(new PoliticiansBuilder(POL_NUMBER())
                         .setPoliticiansRating(toIncreaseTotalCount)
                         .setTotalRating(valueOf(4))
-                        .setAverageRating(AverageRating.of(valueOf(4.9898))))
+                        .setAverageRating(AverageRating.of("4.9898")))
                 .build();
 
         var raterWhoRates = createRater(ACC_NUMBER().accountNumber().concat("1"));
@@ -94,7 +94,7 @@ public class RatingApplicationServiceTest {
                     .setFirstName("Fake")
                     .setPoliticiansRating(List.of(justToIncreaseSize))
                     .setTotalRating(ONE)
-                    .setAverageRating(AverageRating.ONE))
+                    .setAverageRating(AverageRating.of("1")))
                 .build();
 
         var actualRatingForPolitician = BuilderFactory.createPolRating(Score.of("5.99323"), rater, politician);

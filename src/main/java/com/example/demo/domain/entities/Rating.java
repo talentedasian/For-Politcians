@@ -12,13 +12,13 @@ public class Rating {
 
 	protected Double totalRating;
 
-	protected Double averageRating;
+	protected BigDecimal averageRating;
 	
 	public Double getTotalRating() {
 		return totalRating;
 	}
 
-	public Double getAverageRating() {
+	public BigDecimal getAverageRating() {
 		return averageRating;
 	}
 	
@@ -26,7 +26,7 @@ public class Rating {
 		super();
 	}
 
-	public Rating(Double totalRating, Double averageRating) {
+	public Rating(Double totalRating, BigDecimal averageRating) {
 		this.totalRating = totalRating;
 		this.averageRating = averageRating;
 	}
@@ -36,9 +36,9 @@ public class Rating {
 		this.averageRating = averageRating.rating();
 	}
 	
-	public double calculateAverage(double ratingToAdd, Calculator calculator){
+	public BigDecimal calculateAverage(double ratingToAdd, Calculator calculator){
 		calculateTotalRating(ratingToAdd);
-		double rating = calculator.calculateAverage();
+		BigDecimal rating = calculator.calculateAverage();
 		this.averageRating = rating;
 		
 		return rating;

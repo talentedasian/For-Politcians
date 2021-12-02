@@ -66,7 +66,7 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
     public void setup() {
         politicianBuilder = new PoliticiansBuilder(POLITICIAN_NUMBER)
                 .setPoliticiansRating(null)
-                .setAverageRating(AverageRating.ONE)
+                .setAverageRating(AverageRating.of("1"))
                 .setFirstName(FIRST_NAME)
                 .setLastName(LAST_NAME);
     }
@@ -123,7 +123,7 @@ public class PoliticianHttpAdapterTest extends BaseSpringHateoasTest {
                 .setMostSignificantLawPassed("Random Law").build();
         var senatorial = new SenatorialBuilder(politicianBuilder
                             .setPoliticianNumber(POLITICIAN_NUMBER.politicianNumber() + "1")
-                            .setAverageRating(AverageRating.of(valueOf(9)))
+                            .setAverageRating(AverageRating.of("9"))
                             .setTotalRating(valueOf(2)))
                 .setTotalMonthsOfService(44).build();
 

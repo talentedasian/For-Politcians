@@ -174,9 +174,9 @@ public class PoliticiansJpaEntity {
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setPoliticiansRating(toPoliticiansRating(politiciansRating))
-                .setTotalRating(BigDecimal.valueOf(ratingJpaEntity.totalRating))
-                .setAverageRating(ratingJpaEntity.getAverageRating() == 0 ? AverageRating.NO_RATING_YET
-                        : AverageRating.of(BigDecimal.valueOf(ratingJpaEntity.getAverageRating())))
+                .setTotalRating(ratingJpaEntity.totalRating)
+                .setAverageRating(ratingJpaEntity.averageRating.compareTo(BigDecimal.ZERO) == 0 ? AverageRating.NO_RATING_YET
+                        : AverageRating.of(ratingJpaEntity.getAverageRating()))
                 .setTotalCount(totalCountRating)
                 .build();
     }

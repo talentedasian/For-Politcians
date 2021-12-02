@@ -35,7 +35,7 @@ public class TotalRatingAccumulatedTest {
     public void shouldReturnExpectedTotalRatingBasedOnCurrentAverageRating() throws Exception{
         BigDecimal EXPECTED_CALCULATED_TOTAL_RATING_WITH_LOW_AVERAGE_RATING = valueOf(2.325);
 
-        TotalRatingAccumulated totalRatingAccumulated = TotalRatingAccumulated.of(valueOf(2.3242), AverageRating.of(valueOf(3.434)));
+        TotalRatingAccumulated totalRatingAccumulated = TotalRatingAccumulated.of(valueOf(2.3242), AverageRating.of("3.434"));
 
         assertThat(totalRatingAccumulated.totalRating())
                 .isEqualTo(EXPECTED_CALCULATED_TOTAL_RATING_WITH_LOW_AVERAGE_RATING);

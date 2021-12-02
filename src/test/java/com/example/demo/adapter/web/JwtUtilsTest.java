@@ -4,7 +4,7 @@ import com.example.demo.adapter.in.web.jwt.JwtUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
-import org.togetherjava.tjbot.commands.utility.JwtExpiration;
+import com.example.demo.adapter.JwtExpiration;
 
 import java.time.LocalDateTime;
 

@@ -48,7 +48,7 @@ public class PoliticsApplication implements CommandLineRunner{
 		Politicians politician = new PoliticiansBuilder(PoliticianNumber.of(PoliticianNumber.pattern))
 				.setFirstName("Random")
 				.setLastName("Name")
-				.setAverageRating(AverageRating.of(BigDecimal.valueOf(7.431)))
+				.setAverageRating(AverageRating.of("7.431"))
 				.setTotalRating(BigDecimal.valueOf(743130))
 				.setTotalCount(100000)
 				.build();
