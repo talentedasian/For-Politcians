@@ -34,7 +34,11 @@ public abstract class AverageCalculator implements Calculator{
 
 	protected String wilfred(int scale, RoundingMode roundingMode, String newSummand) {
 		var mean = new BigDecimal(averageRating);
-		var delta = new BigDecimal(newSummand).subtract(mean).divide(new BigDecimal(getCount() + 1), scale, roundingMode))
+
+		// avg += avg + (x - avg) / n
+		var delta = new BigDecimal(newSummand).subtract(mean)
+				.divide(new BigDecimal(getCount() + 1), scale, roundingMode);
+
 		return mean.add(delta).setScale(scale, roundingMode).toString();
 	}
 
