@@ -2,7 +2,7 @@ package com.example.demo.domain;
 
 public class AverageRatingHasExceededMaximumValueException extends RuntimeException{
 
-    public AverageRatingHasExceededMaximumValueException(double rating) {
+    public AverageRatingHasExceededMaximumValueException(String rating) {
         super(String.format(
                 """
                 Rating %s exceeded maximum average rating which is 10. This often 

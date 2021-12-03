@@ -5,31 +5,33 @@ import com.example.demo.domain.AverageRating;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Embeddable
 public class RatingJpaEntity {
+
     @Column(nullable = false, precision = 3, scale = 4)
-    protected Double averageRating;
+    protected BigDecimal averageRating;
 
     public static RatingJpaEntity from(final AverageRating averageRating) {
-        double rating = AverageRating.hasRating(averageRating) ? averageRating.averageRating() : 0;
+        BigDecimal rating = AverageRating.hasRating(averageRating) ? averageRating.rating() : BigDecimal.ZERO;
         return new RatingJpaEntity(rating);
     }
 
-    public double getAverageRating() {
+    public BigDecimal getAverageRating() {
         return averageRating;
     }
 
-    public void setAverageRating(Double averageRating) {
+    public void setAverageRating(BigDecimal averageRating) {
         this.averageRating = averageRating;
     }
 
-    public RatingJpaEntity() {
+    RatingJpaEntity() {
         super();
     }
 
-    public RatingJpaEntity(Double averageRating) {
+    RatingJpaEntity(BigDecimal averageRating) {
         super();
         this.averageRating = averageRating;
     }

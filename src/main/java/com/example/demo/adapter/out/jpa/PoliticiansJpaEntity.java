@@ -166,8 +166,8 @@ public class PoliticiansJpaEntity {
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setPoliticiansRating(toPoliticiansRating(politiciansRating))
-                .setAverageRating(ratingJpaEntity.getAverageRating() == 0 ? AverageRating.NO_RATING_YET
-                        : AverageRating.of(BigDecimal.valueOf(ratingJpaEntity.getAverageRating())))
+                .setAverageRating(ratingJpaEntity.averageRating.compareTo(BigDecimal.ZERO) == 0 ? AverageRating.NO_RATING_YET
+                        : AverageRating.of(ratingJpaEntity.averageRating))
                 .build();
     }
 }

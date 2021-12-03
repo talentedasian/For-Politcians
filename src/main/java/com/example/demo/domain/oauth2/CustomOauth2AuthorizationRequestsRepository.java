@@ -1,15 +1,14 @@
 package com.example.demo.domain.oauth2;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
-import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CustomOauth2AuthorizationRequestsRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest>{
 
@@ -33,7 +32,9 @@ public class CustomOauth2AuthorizationRequestsRepository implements Authorizatio
 		
 		Map<String, Object> attributes = new HashMap<>();
 		attributes.put(OAuth2ParameterNames.REGISTRATION_ID, "facebook");
-		OAuth2AuthorizationRequest oauth2AuthorizationRequest = OAuth2AuthorizationRequest.authorizationCode()
+
+
+		return OAuth2AuthorizationRequest.authorizationCode()
 				.clientId(clientId)
 				.attributes(attributes)
 				.authorizationUri(cookieHolder.get("authorizationUri"))
@@ -41,9 +42,6 @@ public class CustomOauth2AuthorizationRequestsRepository implements Authorizatio
 				.redirectUri(cookieHolder.get("redirectUri"))
 				.state(cookieHolder.get("state"))
 				.build();
-		
-		
-		return oauth2AuthorizationRequest;
 	}
 
 	@Override

@@ -48,7 +48,6 @@ public class PoliticsApplication implements CommandLineRunner{
 				.setFirstName("Random")
 				.setLastName("Name")
 				.setAverageRating(AverageRating.of(BigDecimal.valueOf(7.431)))
-				.setTotalRating(BigDecimal.valueOf(743100))
 				.build();
 		PresidentialPolitician presidential = new PresidentialBuilder(politician)
 				.setMostSignificantLawPassed("Rice Tarification Law")

@@ -34,8 +34,9 @@ class PresidentialDtoMapper extends PoliticiansDtoMapper {
 	}
 
 	private PresidentialPoliticianDto mapToDto(PresidentialPolitician entity) {
-		double rating = entity.hasRating() ? entity.averageRating() : 0;
-		Rating satisfactionRate = Rating.mapToSatisfactionRate(rating);
+		boolean hasRating = entity.hasRating();
+		String rating = hasRating ? entity.averageRating() : "N/A";
+		Rating satisfactionRate = hasRating ? Rating.LOW : Rating.mapToSatisfactionRate(Double.parseDouble(rating));
 		
 		return PresidentialPoliticianDto.of(entity, satisfactionRate, entity.getMostSignificantLawSigned());
 	}

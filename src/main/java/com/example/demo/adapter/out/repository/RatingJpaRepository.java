@@ -4,6 +4,7 @@ import com.example.demo.adapter.out.jpa.PoliticiansRatingJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface RatingJpaRepository extends JpaRepository<PoliticiansRatingJpaEntity, Integer> {
@@ -19,6 +20,6 @@ public interface RatingJpaRepository extends JpaRepository<PoliticiansRatingJpaE
     boolean existsByRater_UserAccountNumber(String accountNumber);
 
     @Query(value = "SELECT AVG(rating) FROM rating_entity r WHERE r.politician_id =  :politicianNumber", nativeQuery = true)
-    double calculateRating(String politicianNumber);
+    BigDecimal calculateRating(String politicianNumber);
 
 }

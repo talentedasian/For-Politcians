@@ -3,13 +3,14 @@ package com.example.demo.dtomapper;
 import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.adapter.in.dtoRequest.AddPresidentialPoliticianDTORequest;
 import com.example.demo.domain.AverageRating;
-import com.example.demo.domain.entities.*;
+import com.example.demo.domain.entities.Name;
+import com.example.demo.domain.entities.PoliticianNumber;
+import com.example.demo.domain.entities.PoliticianTypes;
+import com.example.demo.domain.entities.Politicians;
 import io.jsonwebtoken.lang.Assert;
 
 import static com.example.demo.domain.entities.Politicians.Type.PRESIDENTIAL;
 import static com.example.demo.domain.politicianNumber.PoliticianNumberCalculatorFactory.politicianCalculator;
-import static java.math.BigDecimal.ZERO;
-import static java.math.BigDecimal.valueOf;
 
 class PresidentialDTOUnwrapper extends PoliticianDTOUnwrapper {
 
@@ -28,7 +29,6 @@ class PresidentialDTOUnwrapper extends PoliticianDTOUnwrapper {
         Politicians politician = new Politicians.PoliticiansBuilder(POLITICIAN_NUMBER)
                 .setFirstName(dto.getFirstName())
                 .setLastName(dto.getLastName())
-                .setTotalRating(ZERO)
                 .setAverageRating(AverageRating.NO_RATING_YET)
                 .setPoliticiansRating(null)
                 .build();

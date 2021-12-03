@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.example.demo.domain.AverageRating.NO_RATING_YET;
-
 public class Politicians {
 
 	private final Name name;
@@ -35,7 +33,7 @@ public class Politicians {
 		this.politiciansRating = politiciansRating;
 	}
 
-	public double averageRating() {
+	public String averageRating() {
 		return averageRating.averageRating();
 	}
 
@@ -88,13 +86,9 @@ public class Politicians {
 		return result;
 	}
 
-	public boolean isAverageRatingPresent() {
-		return averageRating != NO_RATING_YET;
-	}
-
 	void rate(PoliticiansRating rating, RatingJpaRepository repo) {
-		double calculatedAverageRating = repo.calculateRating(politicianNumber.politicianNumber());
-		changeAverageRating(AverageRating.of(BigDecimal.valueOf(calculatedAverageRating)));
+		BigDecimal calculatedAverageRating = repo.calculateRating(politicianNumber.politicianNumber());
+		changeAverageRating(AverageRating.of(calculatedAverageRating));
 
 		politiciansRating.add(rating);
 	}
@@ -106,10 +100,6 @@ public class Politicians {
 	// INFO : DOES NOT CHANGE OVERALL BEHAVIOUR OF POLITICIAN. DELETING A RATING DOES NOT CHANGE THE TOTAL RATING AND THE AVERAGE RATING
 	public void deleteRate(PoliticiansRating secondRating) {
 		politiciansRating.remove(secondRating);
-	}
-
-	public long countsOfRatings() {
-		return politiciansRating == null ? 0 : politiciansRating.size();
 	}
 
 	public Name recordName() {
@@ -152,8 +142,6 @@ public class Politicians {
 		
 		private final String politicianNumber;
 
-		private BigDecimal totalRating;
-
 		private AverageRating averageRating;
 
 		public PoliticiansBuilder(PoliticianNumber politicianNumber) {
@@ -194,14 +182,8 @@ public class Politicians {
 					.setFirstName(firstName)
 					.setLastName(lastName)
 					.setAverageRating(averageRating)
-					.setTotalRating(totalRating)
 					.setPoliticiansRating(politiciansRating);
 			return builder;
-		}
-
-		public PoliticiansBuilder setTotalRating(BigDecimal totalRatingAccumulated) {
-			this.totalRating = totalRatingAccumulated;
-			return this;
 		}
 
 		public PoliticiansBuilder setAverageRating(AverageRating averageRating) {
