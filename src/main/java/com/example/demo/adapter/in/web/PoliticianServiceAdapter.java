@@ -12,6 +12,7 @@ import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -28,6 +29,7 @@ public class PoliticianServiceAdapter {
         this.repo = politiciansRepository;
     }
 
+    @Transactional(readOnly = true)
     public PoliticianDto findPoliticianUsingNumber(String polNumber) {
         Politicians politician = service.findPoliticianByNumber(polNumber)
                 .orElseThrow(() -> new PoliticianNotFoundException("Politician does not exist by " + polNumber));

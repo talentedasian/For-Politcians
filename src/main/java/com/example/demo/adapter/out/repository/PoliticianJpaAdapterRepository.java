@@ -5,6 +5,8 @@ import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
 import com.example.demo.domain.entities.Politicians;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,9 +34,16 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
 
     @Override
     public Politicians update(Politicians politician) {
-        PoliticiansJpaEntity entitySaved = repo.save(PoliticiansJpaEntity.fromWithNullRating(politician));
+        PoliticiansJpaEntity entitySaved = updateSave(politician);
 
         return entitySaved.toPoliticians();
+    }
+
+    @CachePut(cacheNames = "research")
+    public PoliticiansJpaEntity updateSave(Politicians politician) {
+        PoliticiansJpaEntity entitySaved = repo.save(PoliticiansJpaEntity.fromWithNullRating(politician));
+
+        return entitySaved;
     }
 
     @Override
@@ -47,9 +56,14 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
     @Transactional(readOnly = true)
     @Override
     public Optional<Politicians> findByPoliticianNumber(String polNumber) {
-        Optional<PoliticiansJpaEntity> entity = repo.findById(polNumber);
+        Optional<PoliticiansJpaEntity> entity = Optional.ofNullable(getById(polNumber));
 
         return entity.isEmpty() ? Optional.empty() : Optional.of(entity.get().toPoliticians());
+    }
+
+    @Cacheable(cacheNames = "research")
+    public PoliticiansJpaEntity getById(String polNumber) {
+        return repo.findById(polNumber).orElseThrow();
     }
 
     @Override

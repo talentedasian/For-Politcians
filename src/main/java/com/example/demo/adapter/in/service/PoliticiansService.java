@@ -12,6 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+/*
+	All transaction annotations shall be removed in branch 1.2.X.restful
+	or at least in any latest branch.
+ */
 public class PoliticiansService {
 
 	private final PoliticiansRepository politiciansRepo;
@@ -20,7 +24,6 @@ public class PoliticiansService {
 		this.politiciansRepo = politiciansRepo;
 	}
 
-	@Transactional(readOnly = true)
 	public Optional<Politicians> findPoliticianByNumber(String polNumber) {
 		return politiciansRepo.findByPoliticianNumber(polNumber);
 	}
