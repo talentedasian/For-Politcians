@@ -3,7 +3,8 @@
  import com.example.demo.adapter.in.dtoRequest.AddPoliticianDTORequest;
 import com.example.demo.adapter.web.dto.PoliticianDto;
 import com.example.demo.domain.Page;
-import com.example.demo.exceptions.PoliticianNotPersistableException;
+ import com.example.demo.dtomapper.PoliticiansDtoMapper;
+ import com.example.demo.exceptions.PoliticianNotPersistableException;
 import com.example.demo.hateoas.PoliticianAssembler;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class PoliticianController {
 	
 	@GetMapping("/politician/{id}")
 	public ResponseEntity<EntityModel<PoliticianDto>> politicianById(@PathVariable String id) {
-		PoliticianDto politicianQueried = politiciansService.findPoliticianUsingNumber(id);
+		PoliticianDto politicianQueried = new PoliticiansDtoMapper().mapToDTO(politiciansService.findPoliticianUsingNumber(id));
 		
 		EntityModel<PoliticianDto> response = assembler.toModel(politicianQueried);
 		

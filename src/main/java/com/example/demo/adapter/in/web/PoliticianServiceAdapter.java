@@ -11,6 +11,9 @@ import com.example.demo.dtomapper.PoliticianDTOUnwrapper;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.PoliticianNotPersistableException;
+import org.ehcache.Cache;
+import org.ehcache.core.spi.service.StatisticsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,11 +33,11 @@ public class PoliticianServiceAdapter {
     }
 
     @Transactional(readOnly = true)
-    public PoliticianDto findPoliticianUsingNumber(String polNumber) {
+    public Politicians findPoliticianUsingNumber(String polNumber) {
         Politicians politician = service.findPoliticianByNumber(polNumber)
                 .orElseThrow(() -> new PoliticianNotFoundException("Politician does not exist by " + polNumber));
-        System.out.println(politician.totalCountsOfRatings() + " total ratings haha");
-        return new PoliticiansDtoMapper().mapToDTO(politician);
+
+        return politician;
     }
 
     public List<PoliticianDto> findPoliticianUsingName(String lastName, String firstName) {
