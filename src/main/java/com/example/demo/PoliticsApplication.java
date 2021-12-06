@@ -70,12 +70,23 @@ public class PoliticsApplication implements CommandLineRunner{
 				.setPolitician(presidential)
 				.build();
 		List<PoliticiansRatingJpaEntity> rateList = new ArrayList<>();
-		for (int i = 0; i < 100001; i++) {
+		List<PoliticiansJpaEntity> polList = new ArrayList<>();
+		for (int i = 0; i < 10001; i++) {
 			if (i % 1000 == 0) {
 				ratingRepo.saveAll(rateList);
+				repo.saveAll(polList);
 				rateList.clear();
+				polList.clear();
 			}
 
+			PresidentialPolitician politician1 = new PresidentialBuilder(new PoliticiansBuilder(PoliticianNumber.of(PoliticianNumber.pattern.concat(String.valueOf(i))))
+					.setFirstName("Random")
+					.setLastName("Name")
+					.setAverageRating(AverageRating.of("7.431"))
+					.setTotalCount(100000))
+					.setMostSignificantLawPassed("Random Law")
+					.build();
+			polList.add(PoliticiansJpaEntity.from(politician1));
 			rateList.add(PoliticiansRatingJpaEntity.from(rating));
 		}
 	}
