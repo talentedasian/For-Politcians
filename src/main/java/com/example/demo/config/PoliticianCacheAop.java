@@ -1,12 +1,12 @@
 package com.example.demo.config;
 
 import com.example.demo.domain.entities.Politicians;
+import com.example.demo.exceptions.PoliticianNotFoundException;
+import com.github.benmanes.caffeine.cache.Cache;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.ehcache.Cache;
-import org.ehcache.core.spi.service.StatisticsService;
 
 import java.util.Optional;
 
@@ -14,32 +14,31 @@ import java.util.Optional;
 public class PoliticianCacheAop {
 
     private final Cache<String, Politicians> cache;
-    private final StatisticsService stats;
 
-    public PoliticianCacheAop(Cache<String, Politicians> cache, StatisticsService stats) {
+    public PoliticianCacheAop(Cache<String, Politicians> cache) {
         this.cache = cache;
-        this.stats = stats;
     }
 
     @Around("@annotation(com.example.demo.adapter.in.web.PolCache)")
     public Object doCaching(ProceedingJoinPoint jointP) throws Throwable {
         String polNumber = String.valueOf(jointP.getArgs()[0]);
-        System.out.println(stats.getCacheStatistics("research").getCacheHitPercentage() + " cache hit percentage");
-        if (cache.containsKey(polNumber))
-            return Optional.of(cache.get(polNumber));
+        Politicians cacheValue = cache.getIfPresent(polNumber);
+        boolean doesCacheContain = (cacheValue != null);
+        if (doesCacheContain) {
+            return Optional.of(cacheValue);
+        }
 
-        Object response = jointP.proceed();
-        System.out.println(response);
-        Politicians methodResponse = (((Optional<? extends Politicians>) response)).get();
+        Object returnObject = jointP.proceed();
+        Politicians methodResponse = (((Optional<? extends Politicians>) returnObject))
+                .orElseThrow(() -> PoliticianNotFoundException.withPolNumber(polNumber));
         cache.put(polNumber, methodResponse);
 
-        return response;
+        return returnObject;
     }
 
     @AfterReturning(pointcut = "execution (* com.example.demo.adapter.out.repository.PoliticianJpaAdapterRepository.update(..))",
                     returning = "politician")
     public void updateCacheValue(Politicians politician) throws Throwable {
-        System.out.println(cache.containsKey(politician.retrievePoliticianNumber()) + " contains ba to");
         cache.put(politician.retrievePoliticianNumber(), politician);
     }
 

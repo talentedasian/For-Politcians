@@ -28,6 +28,10 @@ public class PoliticianNotFoundException extends RuntimeException{
 		// TODO Auto-generated constructor stub
 	}
 
+	public static PoliticianNotFoundException withPolNumber(String polNumber) {
+		return new PoliticianNotFoundException(String.format("Politician with %s as politician number does not exist", polNumber));
+	}
+
 	public PoliticianNotFoundException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
