@@ -3,9 +3,7 @@ package com.example.demo.domain.entities;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-public class PoliticianNumber {
-
-    String politicianNumber;
+public record PoliticianNumber(String politicianNumber) {
 
 
     /*
@@ -54,10 +52,6 @@ public class PoliticianNumber {
     private void lastSectionOnlyContainsDigits() {
         Assert.state(politicianNumber.split("-")[2].matches("[0-9]+"),
                 "last section of politician number contains invalid characters. should only contain digits");
-    }
-
-    public String politicianNumber() {
-        return this.politicianNumber;
     }
 
 }

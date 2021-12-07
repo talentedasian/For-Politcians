@@ -70,7 +70,7 @@ public class Politicians {
 				"name= " + name +
 				", rating= " + averageRating +
 				", totalCountsOfRating= " + totalCountsOfRating +
-				", politicianNumber= " + politicianNumber +
+				", politicianNumber= " + politicianNumber.politicianNumber() +
 				", type=" + type + " }";
 	}
 
