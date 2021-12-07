@@ -27,7 +27,12 @@ public record Score(String rating) {
 
     private boolean isOnMin(String rating) {
         if (rating.contains("-")) return false;
-        return Integer.parseInt(rating.substring(0,1)) > MINIMUM;
+        try {
+            return Float.parseFloat(rating) > MINIMUM;
+        } catch(NumberFormatException e) {
+            if (Integer.parseInt(rating.substring(0,1)) > MINIMUM) return true;
+        }
+        return false;
     }
 
     public static Score of(String rating) {
