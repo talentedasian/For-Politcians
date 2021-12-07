@@ -81,7 +81,7 @@ public class PoliticiansJpaEntity {
         AverageRating averageRating = politician.average();
         var jpaEntity = new PoliticiansJpaEntity(politician.retrievePoliticianNumber(), politician.firstName(),
                 politician.lastName(), politician.fullName(), politician.averageRating(),
-                politician.totalCountsOfRatings(), fromPoliticiansRating(politician.getPoliticiansRating()));
+                politician.totalCountsOfRatings(), fromPoliticiansRating(politician.ratings()));
 
         switch (politician.getType()) {
             case PRESIDENTIAL -> {

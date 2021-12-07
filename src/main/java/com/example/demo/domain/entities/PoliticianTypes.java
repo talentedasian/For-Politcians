@@ -9,7 +9,7 @@ public class PoliticianTypes {
 		private final String mostSignificantLawSigned;
 
 		protected PresidentialPolitician(Politicians politician, String lawSigned) {
-			super(	politician.recordName(), politician.getPoliticiansRating(), politician.average(),
+			super(	politician.recordName(), politician.ratings(), politician.average(),
 					politician.politicianNumber(), Type.PRESIDENTIAL, politician.totalCountsOfRatings());
 			this.mostSignificantLawSigned = lawSigned;
 		}
@@ -71,7 +71,7 @@ public class PoliticianTypes {
 		}
 
 		protected SenatorialPolitician(Politicians politician, int monthsOfService, String lawMade) {
-			super(	politician.recordName(), politician.getPoliticiansRating(), politician.average(),
+			super(	politician.recordName(), politician.ratings(), politician.average(),
 					politician.politicianNumber(), Type.SENATORIAL, politician.totalCountsOfRatings());
 			this.totalMonthsOfServiceAsSenator = monthsOfService;
 			this.mostSignificantLawMade = lawMade;			 

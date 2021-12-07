@@ -72,7 +72,7 @@ public class PoliticsApplication implements CommandLineRunner{
 		for (int i = 0; i < 10001; i++) {
 			if (i % 1000 == 0) {
 				ratingRepo.saveAll(rateList);
-				repo.saveAll(polList);
+//				repo.saveAll(polList);
 				rateList.clear();
 				polList.clear();
 			}

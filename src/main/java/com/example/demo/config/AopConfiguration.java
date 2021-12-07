@@ -16,9 +16,9 @@ public class AopConfiguration {
 		return new PoliticiansLogger();
 	}
 
-//	@Bean
-//	public PoliticianCacheAop politicianCacheAop(Cache<String, Politicians> cache) {
-//		return new PoliticianCacheAop(cache);
-//	}
+	@Bean
+	public PoliticianCacheAop politicianCacheAop(Cache<String, Politicians> cache) {
+		return new PoliticianCacheAop(cache);
+	}
 
 }

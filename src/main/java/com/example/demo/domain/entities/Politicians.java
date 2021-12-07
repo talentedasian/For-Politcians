@@ -29,7 +29,7 @@ public class Politicians {
 		return politicianNumber == null ? null : politicianNumber.politicianNumber();
 	}
 
-	public List<PoliticiansRating> getPoliticiansRating() {
+	public List<PoliticiansRating> ratings() {
 		return List.copyOf(politiciansRating);
 	}
 
@@ -37,12 +37,12 @@ public class Politicians {
 		this.politiciansRating = politiciansRating;
 	}
 
-	public String averageRating() {
-		return averageRating.averageRating();
-	}
-
 	public boolean hasRating() {
 		return AverageRating.hasRating(averageRating);
+	}
+
+	public String averageRating() {
+		return averageRating.averageRating();
 	}
 
 	public AverageRating average() {
