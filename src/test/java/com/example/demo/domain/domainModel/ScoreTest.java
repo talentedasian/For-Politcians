@@ -5,8 +5,7 @@ import com.example.demo.domain.ScoreHasExceededMaximumValueException;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 @Tag("Domain")
 public class ScoreTest {
@@ -33,6 +32,11 @@ public class ScoreTest {
     @Test
     public void throwScoreHasExceededMaximumValueExceptionIfScoreIsGreaterThan10() throws Exception{
         assertThatThrownBy(() -> Score.of("11")).isInstanceOf(ScoreHasExceededMaximumValueException.class);
+    }
+
+    @Test
+    public void anythingLargerThan0AndIsWithinMaximumIsValid() throws Exception{
+        assertThatCode(() -> Score.of("0.1")).doesNotThrowAnyException();
     }
 
     @Test
