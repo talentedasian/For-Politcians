@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "rating_entity",
+@Table(name = "rating",
         indexes = {  @Index(columnList = "id"),  @Index(columnList = "politician_id", name = "rating_id")})
 public class PoliticiansRatingJpaEntity {
 
