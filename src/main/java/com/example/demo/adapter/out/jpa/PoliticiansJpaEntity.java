@@ -22,13 +22,13 @@ public class PoliticiansJpaEntity {
     @Column(unique = true)
     private String id;
 
-    @Column(nullable = false, name = "politician_first_name")
+    @Column(nullable = false, name = "first_name")
     private String firstName;
 
-    @Column(nullable = true, name = "politician_last_name")
+    @Column(nullable = true, name = "last_name")
     private String lastName;
 
-    @Column(nullable = false, name = "politician_full_name")
+    @Column(nullable = false, name = "full_name")
     private String fullName;
 
     @Column(nullable = false, name = "rating")
