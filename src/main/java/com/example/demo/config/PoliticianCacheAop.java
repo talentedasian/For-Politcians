@@ -19,7 +19,7 @@ public class PoliticianCacheAop {
         this.cache = cache;
     }
 
-    @Around("@annotation(com.example.demo.adapter.in.web.PolCache)")
+    @Around("@annotation(com.example.demo.adapter.in.cache.OptionalPolCache)")
     public Object doCaching(ProceedingJoinPoint jointP) throws Throwable {
         String polNumber = String.valueOf(jointP.getArgs()[0]);
         Politicians cacheValue = cache.getIfPresent(polNumber);
