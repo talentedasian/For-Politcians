@@ -1,4 +1,4 @@
-package com.example.demo.adapter.in.web;
+package com.example.demo.adapter.in.cache;
 
 import com.example.demo.config.PoliticianCacheAop;
 import com.example.demo.domain.entities.Politicians;
