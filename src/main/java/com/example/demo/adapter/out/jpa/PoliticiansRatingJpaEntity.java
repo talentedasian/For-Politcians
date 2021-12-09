@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class PoliticiansRatingJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(nullable = false, precision = 4, scale = 3)
