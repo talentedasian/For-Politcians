@@ -20,5 +20,3 @@ create table rating (
 	account_number text NOT NULL,
 	politician_id text references politicians(id)
 );
-
-

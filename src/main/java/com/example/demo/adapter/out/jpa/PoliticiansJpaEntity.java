@@ -31,7 +31,7 @@ public class PoliticiansJpaEntity {
     @Column(nullable = false, name = "full_name")
     private String fullName;
 
-    @Column(nullable = false, name = "rating")
+    @Column(nullable = false, name = "rating",precision = 4, scale = 3)
     private BigDecimal averageRating;
 
     @Column(nullable = false, name = "total_count_of_rating")

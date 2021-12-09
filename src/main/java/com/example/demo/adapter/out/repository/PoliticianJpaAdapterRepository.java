@@ -1,6 +1,5 @@
 package com.example.demo.adapter.out.repository;
 
-import com.example.demo.adapter.in.web.PolCache;
 import com.example.demo.adapter.out.jpa.PoliticiansJpaEntity;
 import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
@@ -45,7 +44,6 @@ public class PoliticianJpaAdapterRepository implements PoliticiansRepository {
                 .toList();
     }
 
-    @PolCache
     @Transactional(readOnly = true)
     @Override
     public Optional<Politicians> findByPoliticianNumber(String polNumber) {

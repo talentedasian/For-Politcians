@@ -18,7 +18,7 @@ public interface RatingJpaRepository extends JpaRepository<PoliticiansRatingJpaE
 
     boolean existsByRater_UserAccountNumber(String accountNumber);
 
-    @Query(value = "SELECT AVG(rating) FROM rating_entity r WHERE r.politician_id =  :politicianNumber", nativeQuery = true)
+    @Query(value = "SELECT AVG(rating) FROM rating r WHERE r.politician_id =  :politicianNumber", nativeQuery = true)
     double calculateRating(String politicianNumber);
 
 }
