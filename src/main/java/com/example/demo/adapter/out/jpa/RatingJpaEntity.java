@@ -12,10 +12,10 @@ import java.util.Objects;
 @Embeddable
 public class RatingJpaEntity {
 
-    @Column(nullable = false, precision = 3, scale = 3)
+    @Column(nullable = false)
     protected BigDecimal totalRating;
 
-    @Column(nullable = false, precision = 3, scale = 4)
+    @Column(nullable = false, precision = 4, scale = 3)
     protected BigDecimal averageRating;
 
     public static RatingJpaEntity from(TotalRatingAccumulated totalRatingAccumulated, final AverageRating averageRating) {
