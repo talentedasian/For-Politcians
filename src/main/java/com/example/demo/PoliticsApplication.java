@@ -67,7 +67,7 @@ public class PoliticsApplication implements CommandLineRunner{
 				.setPolitician(presidential)
 				.build();
 		List<PoliticiansRatingJpaEntity> rateList = new ArrayList<>();
-		for (int i = 0; i < 100001; i++) {
+		for (int i = 0; i < 10001; i++) {
 			if (i % 1000 == 0) {
 				ratingRepo.saveAll(rateList);
 				rateList.clear();

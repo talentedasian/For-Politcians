@@ -11,7 +11,7 @@ import java.util.Objects;
 @Embeddable
 public class RatingJpaEntity {
 
-    @Column(nullable = false, precision = 4, scale = 4)
+    @Column(nullable = false, precision = 4, scale = 3)
     protected BigDecimal averageRating;
 
     public static RatingJpaEntity from(final AverageRating averageRating) {

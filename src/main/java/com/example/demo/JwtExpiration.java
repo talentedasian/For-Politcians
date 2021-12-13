@@ -1,4 +1,4 @@
-package org.togetherjava.tjbot.commands.utility;
+package com.example.demo;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
