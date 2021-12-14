@@ -20,7 +20,7 @@ public class PoliticiansRating {
 	}
 
 	public double score() {
-		return rating.rating();
+		return rating.rating().doubleValue();
 	}
 
 	public UserRater whoRated() {
