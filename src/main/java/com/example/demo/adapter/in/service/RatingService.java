@@ -9,6 +9,7 @@ import com.example.demo.domain.entities.UserRateLimitService;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,6 +66,11 @@ public class RatingService {
 	}
 
 	public List<Politicians> findPoliticiansByAccNumber(AccountNumber accNumber, int page) {
-		return ratingRepo.findPoliticiansByAccNumber(accNumber, page);
+		List<Politicians> polQueried = ratingRepo.findPoliticiansByAccNumber(accNumber, page);
+		List<Politicians> result = new ArrayList();
+		polQueried.stream()
+				.filter(it -> !result.contains(it))
+				.forEach(it -> result.add(it));
+		return result;
 	}
 }
