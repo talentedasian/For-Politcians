@@ -1,6 +1,8 @@
 package com.example.demo.domain;
 
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.domain.entities.AccountNumber;
+import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.PoliticiansRating;
 
 import java.util.HashMap;
@@ -61,5 +63,10 @@ public class InMemoryRatingAdapterRepo implements RatingRepository {
     @Override
     public void deleteById(Integer id) {
         database.remove(id.toString());
+    }
+
+    @Override
+    public List<Politicians> findPoliticiansByAccNumber(AccountNumber accNumber, int page) {
+        return null;
     }
 }

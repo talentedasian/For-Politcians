@@ -68,5 +68,4 @@ public class PoliticiansService {
 	public PagedObject<Politicians> findAllWithPage(Page page, int numberOfItemsToFetch, final Long total) {
 		return politiciansRepo.findAllByPage(page, numberOfItemsToFetch, total == null ? politiciansRepo.count() : total);
 	}
-
 }
