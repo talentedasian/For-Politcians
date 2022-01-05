@@ -4,6 +4,7 @@ import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
 import com.example.demo.domain.entities.AccountNumber;
+import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.PoliticiansRating;
 import com.example.demo.domain.entities.UserRateLimitService;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
@@ -63,5 +64,8 @@ public class RatingService {
 	public void deleteByAccountNumber(String accountNumber) {
 		ratingRepo.deleteByRater_UserAccountNumber(accountNumber);
 	}
-	
+
+	public List<Politicians> findPoliticiansByAccNumber(AccountNumber accNumber, int page) {
+		return ratingRepo.findPoliticiansByAccNumber(accNumber, page);
+	}
 }

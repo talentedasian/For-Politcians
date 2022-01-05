@@ -1,6 +1,9 @@
 package com.example.demo.adapter.out.repository;
 
+import com.example.demo.adapter.out.jpa.PoliticiansJpaEntity;
 import com.example.demo.adapter.out.jpa.PoliticiansRatingJpaEntity;
+import com.example.demo.domain.entities.AccountNumber;
+import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.PoliticiansRating;
 import org.springframework.stereotype.Repository;
 
@@ -61,5 +64,19 @@ public class RatingRepositoryJpaAdapter implements RatingRepository {
     @Override
     public void deleteById(Integer id) {
         repo.deleteById(id);
+    }
+
+    @Override
+    public List<Politicians> findPoliticiansByAccNumber(AccountNumber accNumber, int page) {
+        int offset = ((page + 1) * 20);
+
+        List<PoliticiansRatingJpaEntity> polQueried = repo.findByRater_UserAccountNumberByPage(accNumber.accountNumber(), offset);
+        System.out.println(polQueried.size() + " eto ang size tangina");
+
+        return polQueried
+                .stream()
+                .map(PoliticiansRatingJpaEntity::getPolitician)
+                .map(PoliticiansJpaEntity::toPoliticians)
+                .toList();
     }
 }

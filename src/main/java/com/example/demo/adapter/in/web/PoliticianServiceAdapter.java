@@ -6,6 +6,7 @@ import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.web.dto.PoliticianDto;
 import com.example.demo.domain.Page;
 import com.example.demo.domain.PagedObject;
+import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.domain.entities.Politicians;
 import com.example.demo.dtomapper.PoliticianDTOUnwrapper;
 import com.example.demo.dtomapper.PoliticiansDtoMapper;
@@ -111,5 +112,4 @@ public class PoliticianServiceAdapter {
     private boolean checkIfRequestDoesNotHaveSameItemsToFetchAsLastRequest(int itemsToFetch, HttpSession session) {
         return ((int) session.getAttribute("items-to-fetch") != itemsToFetch);
     }
-
 }

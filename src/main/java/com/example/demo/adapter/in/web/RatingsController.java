@@ -4,9 +4,11 @@ import com.example.demo.adapter.in.dtoRequest.AddRatingDTORequest;
 import com.example.demo.adapter.in.service.RatingServiceAdapter;
 import com.example.demo.adapter.in.web.jwt.JwtUtils;
 import com.example.demo.adapter.out.repository.RatingJpaRepository;
+import com.example.demo.adapter.web.dto.PoliticianDto;
 import com.example.demo.adapter.web.dto.RatingDTO;
 import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
+import com.example.demo.hateoas.PoliticianAssembler;
 import com.example.demo.hateoas.RatingAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -62,7 +64,7 @@ public class RatingsController {
 		return new ResponseEntity<CollectionModel<EntityModel<RatingDTO>>>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/ratings/{accNumber}")
+	@GetMapping("/rated/{accNumber}")
 	public ResponseEntity<CollectionModel<EntityModel<RatingDTO>>> getRatingByRaterAccountNumber(@PathVariable String accNumber) {
 		if (!AccountNumber.isValid(accNumber)) throw new InappropriateAccountNumberException(accNumber);
 		List<RatingDTO> politicianRatingQueried = ratingService.findRatingsUsingAccountNumber(accNumber);
@@ -70,6 +72,18 @@ public class RatingsController {
 		CollectionModel<EntityModel<RatingDTO>> response = assembler.toCollectionModel(politicianRatingQueried);
 
 		return new ResponseEntity<CollectionModel<EntityModel<RatingDTO>>>(response, HttpStatus.OK);
+	}
+
+	@GetMapping("/ratings/{accountNumber}")
+	public ResponseEntity<CollectionModel<EntityModel<PoliticianDto>>> getPoliticiansRatedByRater(@PathVariable String accountNumber,
+																								  @RequestParam int page) {
+		if (!AccountNumber.isValid(accountNumber)) throw new InappropriateAccountNumberException(accountNumber);
+
+		List<PoliticianDto> polQueried = ratingService.findPoliticianByRater(AccountNumber.of(accountNumber), page);
+
+		CollectionModel<EntityModel<PoliticianDto>> response = new PoliticianAssembler().toCollectionModel(polQueried);
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@GetMapping("/ratings/count")

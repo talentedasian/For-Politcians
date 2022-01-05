@@ -1,5 +1,7 @@
 package com.example.demo.adapter.out.repository;
 
+import com.example.demo.domain.entities.AccountNumber;
+import com.example.demo.domain.entities.Politicians;
 import com.example.demo.domain.entities.PoliticiansRating;
 
 import java.util.List;
@@ -22,4 +24,6 @@ public interface RatingRepository{
 	boolean existsByRater_UserAccountNumber(String accountNumber);
 
 	void deleteById(Integer id);
+	
+    List<Politicians> findPoliticiansByAccNumber(AccountNumber accNumber, int page);
 }

@@ -170,4 +170,15 @@ public class PoliticiansJpaEntity {
                         : AverageRating.of(ratingJpaEntity.averageRating))
                 .build();
     }
+
+    public Politicians toPoliticiansNullRating() {
+        return new Politicians.PoliticiansBuilder(new PoliticianNumber(id))
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setPoliticiansRating(null)
+                .setAverageRating(ratingJpaEntity.averageRating.compareTo(BigDecimal.ZERO) == 0 ? AverageRating.NO_RATING_YET
+                        : AverageRating.of(ratingJpaEntity.averageRating))
+                .build();
+    }
+
 }

@@ -5,13 +5,12 @@ import com.example.demo.adapter.in.web.jwt.JwtProviderHttpServletRequest;
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
 import com.example.demo.adapter.out.repository.RatingJpaRepository;
 import com.example.demo.adapter.out.repository.RatingRepository;
+import com.example.demo.adapter.web.dto.PoliticianDto;
 import com.example.demo.adapter.web.dto.RatingDTO;
 import com.example.demo.domain.Score;
-import com.example.demo.domain.entities.Politicians;
-import com.example.demo.domain.entities.PoliticiansRating;
-import com.example.demo.domain.entities.UserRateLimitService;
-import com.example.demo.domain.entities.UserRater;
+import com.example.demo.domain.entities.*;
 import com.example.demo.domain.enums.PoliticalParty;
+import com.example.demo.dtomapper.PoliticiansDtoMapper;
 import com.example.demo.exceptions.PoliticianNotFoundException;
 import com.example.demo.exceptions.RatingsNotFoundException;
 import com.example.demo.exceptions.UserRateLimitedOnPoliticianException;
@@ -81,4 +80,10 @@ public class RatingServiceAdapter {
         service.deleteByAccountNumber(accountNumber);
     }
 
+    public List<PoliticianDto> findPoliticianByRater(AccountNumber accNumber, int page) {
+        return service.findPoliticiansByAccNumber(accNumber, page)
+                .stream()
+                .map(it -> new PoliticiansDtoMapper().mapToDTO(it))
+                .toList();
+    }
 }
