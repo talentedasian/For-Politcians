@@ -187,7 +187,7 @@ public class PoliticiansJpaEntity {
                 .setLastName(lastName)
                 .setPoliticiansRating(null)
                 .setAverageRating(ratingJpaEntity.averageRating.compareTo(BigDecimal.ZERO) == 0 ? AverageRating.NO_RATING_YET
-                        : AverageRating.of(ratingJpaEntity.averageRating))
+                        : AverageRating.of(ratingJpaEntity.getAverageRating()))
                 .build();
     }
 
