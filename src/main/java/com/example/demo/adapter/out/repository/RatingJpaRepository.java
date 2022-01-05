@@ -25,7 +25,7 @@ public interface RatingJpaRepository extends JpaRepository<PoliticiansRatingJpaE
             SELECT rating_entity.id, rating_entity.politician_id, rating_entity.email, rating_entity.account_number,
             rating_entity.party, rating_entity.rating, rating_entity.name, politicians.id,
             politicians.dtype, politicians.first_name, politicians.last_name,
-            politicians.full_name, politicians.average_rating, politicians.law_signed, politicians.law_made,
+            politicians.full_name, politicians.rating, politicians.law_signed, politicians.law_made,
             politicians.months_of_service FROM rating_entity
             LEFT JOIN politicians ON politicians.id = 'rating_entity.politician_id'
             WHERE account_number = :accountNumber
