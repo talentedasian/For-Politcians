@@ -71,7 +71,6 @@ public class RatingRepositoryJpaAdapter implements RatingRepository {
         int offset = ((page + 1) * 20);
 
         List<PoliticiansRatingJpaEntity> polQueried = repo.findByRater_UserAccountNumberByPage(accNumber.accountNumber(), offset);
-        System.out.println(polQueried.size() + " eto ang size tangina");
 
         return polQueried
                 .stream()
