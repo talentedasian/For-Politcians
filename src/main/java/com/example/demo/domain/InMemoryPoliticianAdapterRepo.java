@@ -1,6 +1,7 @@
 package com.example.demo.domain;
 
 import com.example.demo.adapter.out.repository.PoliticiansRepository;
+import com.example.demo.domain.entities.AccountNumber;
 import com.example.demo.domain.entities.Politicians;
 import com.example.demo.exceptions.PoliticianAlreadyExistsException;
 import com.example.demo.exceptions.PoliticianNotPersistableException;

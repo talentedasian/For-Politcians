@@ -20,7 +20,4 @@ public interface PoliticiansJpaRepository extends JpaRepository<PoliticiansJpaEn
             """,
             nativeQuery = true)
     List<PoliticiansJpaEntity> findAllWithPage(int itemsToSkip, int numberOfItemsToFetch);
-
-
-
 }
